@@ -167,7 +167,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/add_heat_wave_cluster.py.html>`__ to see an example of how to use add_heat_wave_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/add_heat_wave_cluster.py.html>`__ to see an example of how to use add_heat_wave_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -282,7 +282,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/create_db_system.py.html>`__ to see an example of how to use create_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/create_db_system.py.html>`__ to see an example of how to use create_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -385,7 +385,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/delete_db_system.py.html>`__ to see an example of how to use delete_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/delete_db_system.py.html>`__ to see an example of how to use delete_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -495,7 +495,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/delete_heat_wave_cluster.py.html>`__ to see an example of how to use delete_heat_wave_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/delete_heat_wave_cluster.py.html>`__ to see an example of how to use delete_heat_wave_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -605,7 +605,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/generate_heat_wave_cluster_memory_estimate.py.html>`__ to see an example of how to use generate_heat_wave_cluster_memory_estimate API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/generate_heat_wave_cluster_memory_estimate.py.html>`__ to see an example of how to use generate_heat_wave_cluster_memory_estimate API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -717,7 +717,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/get_db_system.py.html>`__ to see an example of how to use get_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/get_db_system.py.html>`__ to see an example of how to use get_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -828,7 +828,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/get_heat_wave_cluster.py.html>`__ to see an example of how to use get_heat_wave_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/get_heat_wave_cluster.py.html>`__ to see an example of how to use get_heat_wave_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -933,7 +933,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/get_heat_wave_cluster_memory_estimate.py.html>`__ to see an example of how to use get_heat_wave_cluster_memory_estimate API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/get_heat_wave_cluster_memory_estimate.py.html>`__ to see an example of how to use get_heat_wave_cluster_memory_estimate API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -1089,7 +1089,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/list_db_systems.py.html>`__ to see an example of how to use list_db_systems API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/list_db_systems.py.html>`__ to see an example of how to use list_db_systems API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1255,7 +1255,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/restart_db_system.py.html>`__ to see an example of how to use restart_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/restart_db_system.py.html>`__ to see an example of how to use restart_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -1377,7 +1377,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/restart_heat_wave_cluster.py.html>`__ to see an example of how to use restart_heat_wave_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/restart_heat_wave_cluster.py.html>`__ to see an example of how to use restart_heat_wave_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -1497,7 +1497,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/start_db_system.py.html>`__ to see an example of how to use start_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/start_db_system.py.html>`__ to see an example of how to use start_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -1617,7 +1617,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/start_heat_wave_cluster.py.html>`__ to see an example of how to use start_heat_wave_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/start_heat_wave_cluster.py.html>`__ to see an example of how to use start_heat_wave_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -1742,7 +1742,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/stop_db_system.py.html>`__ to see an example of how to use stop_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/stop_db_system.py.html>`__ to see an example of how to use stop_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -1864,7 +1864,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/stop_heat_wave_cluster.py.html>`__ to see an example of how to use stop_heat_wave_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/stop_heat_wave_cluster.py.html>`__ to see an example of how to use stop_heat_wave_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -1986,7 +1986,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/update_db_system.py.html>`__ to see an example of how to use update_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/update_db_system.py.html>`__ to see an example of how to use update_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -2100,7 +2100,7 @@ class DbSystemClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/mysql/update_heat_wave_cluster.py.html>`__ to see an example of how to use update_heat_wave_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/mysql/update_heat_wave_cluster.py.html>`__ to see an example of how to use update_heat_wave_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']

@@ -361,7 +361,7 @@ class GetAssistantVersionsResponse(_message.Message):
     def __init__(self, versions: _Optional[_Iterable[_Union[AssistantVersion, _Mapping]]] = ...) -> None: ...
 
 class CountAssistantsRequest(_message.Message):
-    __slots__ = ("filters", "graph_id", "metadata_json")
+    __slots__ = ("filters", "graph_id", "metadata_json", "name")
     class FiltersEntry(_message.Message):
         __slots__ = ("key", "value")
         KEY_FIELD_NUMBER: _ClassVar[int]
@@ -372,10 +372,12 @@ class CountAssistantsRequest(_message.Message):
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     GRAPH_ID_FIELD_NUMBER: _ClassVar[int]
     METADATA_JSON_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
     filters: _containers.MessageMap[str, AuthFilter]
     graph_id: str
     metadata_json: bytes
-    def __init__(self, filters: _Optional[_Mapping[str, AuthFilter]] = ..., graph_id: _Optional[str] = ..., metadata_json: _Optional[bytes] = ...) -> None: ...
+    name: str
+    def __init__(self, filters: _Optional[_Mapping[str, AuthFilter]] = ..., graph_id: _Optional[str] = ..., metadata_json: _Optional[bytes] = ..., name: _Optional[str] = ...) -> None: ...
 
 class TruncateRequest(_message.Message):
     __slots__ = ("runs", "threads", "assistants", "checkpointer", "store")

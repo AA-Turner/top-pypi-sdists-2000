@@ -26,7 +26,7 @@ class StorageComponentResource:
         self.id = "NA"
         self.storage_component = None
 
-    def query_all(self):
+    def query_all_default(self):
         logger = Log()
 
         gateway = OOGateway()
@@ -44,6 +44,158 @@ class StorageComponentResource:
         return gateway.http_pd(
             "POST", self.param.connection_info, url, self.token, data=None
         )
+
+    def query_all_no_params(self):
+        logger = Log()
+
+        gateway = OOGateway()
+
+        logger.writeDebug("param: {}".format(self.param.connection_info))
+        logger.writeDebug("param: {}".format(
+            self.param.connection_info.cluster_name))
+        logger.writeDebug("param: {}".format(
+            self.param.json_spec))
+
+        region = self.param.connection_info.region
+        cluster_name = self.param.connection_info.cluster_name
+        json_spec = self.param.json_spec
+        mapi_full_url = MAPI_FULL_URL_TEMPLATE_HTTPS.format(
+            region=region, cluster_name=cluster_name)
+
+        url = f"{mapi_full_url}/mapi/v1/storage_component/list?pageSize="
+        json_spec = {}
+        json_spec["pageSize"] = json_spec.get("pageSize", 100)
+        page_size = json_spec["pageSize"]
+        url += str(page_size)
+        logger.writeDebug("url_list_storage_components: {}".format(url))
+        storage_components = {}
+        storage_components.get("storageComponents", [])
+
+        loop = True
+        while loop:
+            storage_component_list = storage_components.get("storage_components", [])
+            response = gateway.http_pd(
+                "POST",
+                self.param.connection_info,
+                url,
+                self.token,
+                data=json_spec)
+            try:
+                logger.writeDebug(
+                    "Storage component MAPI Response : {}".format(response))
+            except Exception as e:
+                logger.writeDebug(
+                    "Exception: {}".format(e)
+                )
+            if response.get("page_token", None) is not None:
+                storage_component_list += response.get("storage_components", [])
+                storage_components["storage_components"] = storage_component_list
+                json_spec["pageToken"] = response["page_token"]
+                continue
+            else:
+                loop = False
+                storage_component_list += response.get("storage_components", [])
+                storage_components["storage_components"] = storage_component_list
+                break
+
+        logger.writeDebug("storage_components: {}".format(storage_components))
+
+        return storage_components
+
+    def query_all(self):
+        logger = Log()
+
+        gateway = OOGateway()
+
+        logger.writeDebug("param: {}".format(self.param.connection_info))
+        logger.writeDebug("param: {}".format(
+            self.param.connection_info.cluster_name))
+        logger.writeDebug("param: {}".format(
+            self.param.json_spec))
+
+        region = self.param.connection_info.region
+        cluster_name = self.param.connection_info.cluster_name
+        json_spec = self.param.json_spec
+        mapi_full_url = MAPI_FULL_URL_TEMPLATE_HTTPS.format(
+            region=region, cluster_name=cluster_name)
+
+        url = f"{mapi_full_url}/mapi/v1/storage_component/list?pageSize="
+        if json_spec is None:
+            json_spec = {}
+        json_spec["pageSize"] = json_spec.get("pageSize", 100)
+        page_size = json_spec["pageSize"]
+        url += str(page_size)
+        logger.writeDebug("url_list_storage_components: {}".format(url))
+        storage_components = {}
+        storage_components.get("storageComponents", [])
+
+        loop = True
+        while loop:
+            storage_component_list = storage_components.get("storage_components", [])
+            response = gateway.http_pd(
+                "POST",
+                self.param.connection_info,
+                url,
+                self.token,
+                data=json_spec)
+            try:
+                logger.writeDebug(
+                    "Storage component MAPI Response : {}".format(response))
+            except Exception as e:
+                logger.writeDebug(
+                    "Exception: {}".format(e)
+                )
+            if response.get("page_token", None) is not None:
+                storage_component_list += response.get("storage_components", [])
+                storage_components["storage_components"] = storage_component_list
+                json_spec["pageToken"] = response["page_token"]
+                continue
+            else:
+                loop = False
+                storage_component_list += response.get("storage_components", [])
+                storage_components["storage_components"] = storage_component_list
+                break
+
+        logger.writeDebug("storage_components: {}".format(storage_components))
+
+        return storage_components
+
+    def query_n(self):
+        logger = Log()
+
+        gateway = OOGateway()
+
+        logger.writeDebug("param: {}".format(self.param.connection_info))
+        logger.writeDebug("param: {}".format(
+            self.param.connection_info.cluster_name))
+        logger.writeDebug("param: {}".format(
+            self.param.json_spec))
+
+        region = self.param.connection_info.region
+        cluster_name = self.param.connection_info.cluster_name
+
+        mapi_full_url = MAPI_FULL_URL_TEMPLATE_HTTPS.format(
+            region=region, cluster_name=cluster_name)
+
+        url = f"{mapi_full_url}/mapi/v1/storage_component/list?pageSize="
+
+        json_spec = DictUtilities.snake_to_camel(self.param.json_spec)
+
+        logger.writeDebug("json_spec before setting pageSize: {}".format(json_spec))
+        json_spec["pageSize"] = json_spec.get("pageSize", 100)
+        json_spec.pop("query", None)
+        page_size = json_spec["pageSize"]
+        url += str(page_size)
+        logger.writeDebug("url_list_storage_components: {}".format(url))
+        storage_components = {}
+        storage_components.get("storageComponents", [])
+        response = gateway.http_pd(
+            "POST",
+            self.param.connection_info,
+            url,
+            self.token,
+            data=json_spec)
+        return response
 
     def get_capacity(self):
         logger = Log()
@@ -97,17 +249,31 @@ class StorageComponentResource:
         json_data["storageComponentConfig"] = storage_component_config
         spec_label = storage_component_config.get("label", "")
 
+        storage_type = json_data.get("storageType", None)
+
+        logger.writeDebug("storage_type : {}".format(storage_type))
+
         if self.id != "NA":
             if self.id is not None and self.id != "":
                 self.id = self.id.strip()
                 self.param.json_spec["id"] = self.id
                 return self.update()
 
+        if storage_type is not None and storage_type.strip() == "ARRAY":
+            return self.create_one_array()
+
         try:
-            storage_components = self.query_all()
+            storage_components = self.query_all_no_params()
         except Exception as e:
             logger.writeDebug(
                 "Failed to get the storage component: {}".format(e))
+
+        try:
+            storage_components = storage_components.get("storage_components", [])
+        except Exception as e:
+            logger.writeDebug(
+                "Failed to get the storage component array: {}".format(e))
+            storage_components = []
 
         logger.writeDebug(
             "Storage components are: {}".format(storage_components))
@@ -273,10 +439,18 @@ class StorageComponentResource:
         logger.writeDebug("param: {}".format(self.param.json_spec))
         spec_id = self.param.json_spec.get("id", "")
         try:
-            storage_components = self.query_all()
+            storage_components = self.query_all_no_params()
+            logger.writeDebug("inside activate storage component, storage_components : {}".format(storage_components))
         except Exception as e:
             logger.writeDebug(
                 "Failed to get the storage component: {}".format(e))
+
+        try:
+            storage_components = storage_components.get("storage_components", [])
+        except Exception as e:
+            logger.writeDebug(
+                "Failed to get the storage component array: {}".format(e))
+            storage_components = []
 
         logger.writeDebug("spec_id : {}".format(spec_id))
 
@@ -316,6 +490,7 @@ class StorageComponentResource:
                 self.token,
                 data=json_data)
         except urllib.error.HTTPError as e:
+            logger.writeDebug("Message from HTTPError: {}".format(e))
             ErrorUtilities.format_MAPI_http_error(e)
         except Exception as e:
             logger.writeDebug(
@@ -473,10 +648,17 @@ class StorageComponentResource:
                 self.param.connection_info.cluster_name))
         logger.writeDebug("param: {}".format(self.param.json_spec))
         try:
-            storage_components = self.query_all()
+            storage_components = self.query_all_no_params()
         except Exception as e:
             logger.writeDebug(
                 "Exception: {}".format(e))
+
+        try:
+            storage_components = storage_components.get("storage_components", [])
+        except Exception as e:
+            logger.writeDebug(
+                "Failed to get the storage components: {}".format(e))
+            storage_components = []
 
         for storage_component in storage_components:
             logger.writeDebug("storage_component:{}".format(storage_component))
@@ -519,4 +701,127 @@ class StorageComponentResource:
             )
             raise e
 
+        return response
+
+    def create_one_array(self):
+        logger = Log()
+        gateway = OOGateway()
+
+        logger.writeDebug("param: {}".format(self.param.connection_info))
+        logger.writeDebug(
+            "param: {}".format(
+                self.param.connection_info.cluster_name))
+        logger.writeDebug("param: {}".format(self.param.json_spec))
+
+        storage_components = None
+        spec_label = ""
+
+        region = self.param.connection_info.region
+        cluster_name = self.param.connection_info.cluster_name
+        mapi_full_url = MAPI_FULL_URL_TEMPLATE_HTTPS.format(
+            region=region, cluster_name=cluster_name)
+
+        json_data = DictUtilities.snake_to_camel(self.param.json_spec)
+        logger.writeDebug("json_data : {}".format(json_data))
+
+        storage_component_config = json_data.get(
+            "storageComponentConfig", None)
+        if storage_component_config:
+            logger.writeDebug("found storage_component field")
+            storage_component_config = DictUtilities.snake_to_camel(
+                storage_component_config)
+        logger.writeDebug(
+            "storageComponentConfig : {}".format(storage_component_config))
+        connection_ttl = storage_component_config.pop("connectionTtl", None)
+        storage_component_config["connectionTTL"] = connection_ttl
+        json_data["storageComponentConfig"] = storage_component_config
+        spec_label = storage_component_config.get("label", "")
+
+        storage_type = storage_component_config.get("storageType", None)
+        logger.writeDebug("storage_type_create_one_array : {}".format(storage_type))
+
+        if self.id != "NA":
+            if self.id is not None and self.id != "":
+                self.id = self.id.strip()
+                self.param.json_spec["id"] = self.id
+
+        try:
+            storage_components = self.query_all_no_params()
+        except Exception as e:
+            logger.writeDebug(
+                "Failed to get the storage component: {}".format(e))
+
+        logger.writeDebug(
+            "Storage components are: {}".format(storage_components))
+
+        try:
+            storage_components = storage_components.get("storage_components", [])
+        except Exception as e:
+            logger.writeDebug(
+                "Failed to get the storage component array: {}".format(e))
+            storage_components = []
+
+        existing_component = False
+        storage_component_item = None
+        logger.writeDebug("label of storage component: {}".format(spec_label))
+
+        logger.writeDebug("id of storage component: {}".format(self.id))
+
+        for storage_component in storage_components:
+            logger.writeDebug(storage_component)
+            logger.writeDebug("storage_component:{}".format(storage_component))
+            component_config = storage_component.get(
+                "storage_component_config", None)
+            label = None
+            if component_config is not None:
+                label = component_config.get("label", None)
+                logger.writeDebug("storage component label: {}".format(label))
+            if label:
+                if label.strip() == spec_label:
+                    storage_component_item = storage_component
+                    existing_component = True
+                    logger.writeDebug("storage component found as : {}".format(storage_component))
+                    break
+
+        if existing_component:
+            self.param.json_spec["id"] = storage_component_item.get("id", "")
+            self.storage_component = storage_component_item
+            return self.update()
+
+        url = f"{mapi_full_url}/mapi/v1/storage_component/create"
+
+        required_conf = StorageComponentConstants.CREATE_REQUIRED_FIELDS_ARRAY
+
+        logger.writeDebug("required_conf : {}".format(required_conf))
+
+        for item in required_conf:
+            item_value = storage_component_config.get(item, None)
+            if item_value is None:
+                key = StringUtilities.camel_to_snake(item)
+                raise ValueError(SCMC.FIELDS_MISSING_CREATE.value.format(key))
+
+        non_empty_fields = StorageComponentConstants.NON_EMPTY_FIELDS_ARRAY
+        for item in non_empty_fields:
+            item_value = storage_component_config.get(item, "")
+            item_value = item_value.strip()
+            if item_value == "":
+                key = StringUtilities.camel_to_snake(item)
+                raise ValueError(SCMC.FIELDS_MISSING_CREATE.value.format(key))
+
+        response = None
+        try:
+            response = gateway.http_pd(
+                "POST",
+                self.param.connection_info,
+                url,
+                self.token,
+                data=json_data)
+        except urllib.error.HTTPError as e:
+            ErrorUtilities.format_MAPI_http_error(e)
+        except Exception as e:
+            logger.writeDebug(
+                "Exception: {}".format(e)
+            )
+            raise e
+        response["changed"] = True
         return response

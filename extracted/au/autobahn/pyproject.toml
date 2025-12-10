@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=80.9.0", "wheel", "cffi>=1.14.5; platform_python_implementation == 'CPython'"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "cffi>=2.0.0", "setuptools>=70.0.0"]
+build-backend = "hatchling.build"
 
 [project]
 name = "autobahn"
-version = "25.11.1"
+version = "25.12.1"
 description = "WebSocket client & server library, WAMP real-time framework"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -41,8 +41,9 @@ classifiers = [
 ]
 
 dependencies = [
-    "txaio>=25.9.2",
+    "txaio>=25.12.2",
     "cryptography>=3.4.6",
+    "cffi>=2.0.0",  # Required for NVX native extensions; works on both CPython and PyPy
     "hyperlink>=21.0.0",
     "importlib-resources>=5.0.0; python_version < '3.10'",
     # WAMP serializers - batteries included for optimal WAMP protocol support
@@ -94,15 +95,13 @@ encryption = [
 
 # Support for WAMP-SCRAM authentication
 scram = [
-    "cffi>=1.14.5",
     "argon2-cffi>=20.1.0",
     "passlib>=1.7.4",
 ]
 
 # Support native vector (SIMD) acceleration included with Autobahn
-nvx = [
-    "cffi>=1.14.5",
-]
+# Note: cffi is now in base dependencies, this extra is kept for backwards compatibility
+nvx = []
 
 # WAMP serialization benchmarking (Python 3.11+ only, requires binary wheels)
 # vmprof has wheels for CPython 3.11 and PyPy3 on Linux/macOS/Windows
@@ -131,7 +130,8 @@ dev = [
     "bumpversion>=0.5.3",
     "codecov>=2.0.15",
     "humanize>=4.0.0",
-    "mypy>=0.610; python_version >= '3.4' and platform_python_implementation != 'PyPy'",
+    # Note: ty (Astral type checker) is installed via `uv tool install ty`
+    # It's a standalone Rust binary, not a Python package dependency
     "myst-parser>=4.0.1",
     "passlib",
     "pep8-naming>=0.3.3",
@@ -146,16 +146,48 @@ dev = [
     "pyyaml>=4.2b4",
     "qualname>=0.1.0",
     "ruff>=0.12.1",
+    "scour>=0.38",
     "sphinx-autoapi>=1.7.0",
     "sphinx>=1.7.1,<8",
     "sphinx-rtd-theme>=0.1.9",
     "sphinxcontrib-images>=0.9.1",
     "twine>=3.3.0",
     "twisted>=22.10.0",
-    "txaio>=25.9.2",
+    "txaio>=25.12.2",
     "watchdog>=0.8.3",
     "wheel>=0.36.2",
     "yapf==0.29.0",
+]
+
+# Documentation tools (used by RTD via .readthedocs.yaml)
+docs = [
+    # Core Sphinx + MyST
+    "sphinx>=8.2.3",
+    "myst-parser>=2.0",
+
+    # Theme
+    "furo>=2024.7.0",
+
+    # API docs (no-import parsing)
+    "sphinx-autoapi>=2.1.0",
+
+    # UX Enhancements
+    "sphinx-copybutton>=0.5",
+    "sphinx-design>=0.5",
+    "sphinxcontrib-images>=0.9",
+
+    # Spell checking
+    "sphinxcontrib-spelling>=8.0",
+    "pyenchant>=3.2",
+
+    # Static asset optimization
+    "scour>=0.38",
+
+    # Social previews
+    "sphinxext-opengraph>=0.9",
+
+    # MyST auto-linking
+    "linkify-it-py>=2.0.0",
 ]
 
 # Everything combined
@@ -173,16 +205,34 @@ asyncio = []
 [project.scripts]
 wamp = "autobahn.__main__:_main"
 
-[tool.setuptools.packages.find]
-include = ["autobahn*", "twisted.plugins", "flatbuffers*"]
+# Hatchling build configuration
+[tool.hatch.build.targets.wheel]
+packages = ["src/autobahn", "src/twisted"]
 
-[tool.setuptools]
-include-package-data = true
+# Include non-Python files in the wheel
+[tool.hatch.build.targets.wheel.force-include]
+# Include py.typed marker
+"src/autobahn/py.typed" = "autobahn/py.typed"
 
-[tool.setuptools.package-data]
-"autobahn.asyncio" = ["./test/*"]
-"autobahn.wamp.gen.schema" = ["*.bfbs"]
-"autobahn.wamp.flatbuffers" = ["*.fbs"]
+[tool.hatch.build.targets.sdist]
+# By default, hatchling includes all git-tracked files
+# Exclude build artifacts and large submodules from sdist
+exclude = [
+    "/.github",
+    "/docs/_build",
+    "/.venvs",
+    "/.uv-cache",
+    "/.coverage",
+    "/.pytest_cache",
+    "/.mypy_cache",
+    "/.ruff_cache",
+    # Exclude large git submodules - flatbuffers runtime is vendored at build time
+    "/deps/flatbuffers",
+]
+
+# Custom build hook for CFFI extension modules (NVX)
+[tool.hatch.build.hooks.custom]
+# Uses hatch_build.py by default
 
 
 [tool.rstfmt]
@@ -209,9 +259,9 @@ exclude = [
     ".tox",
     ".git",
     "__pycache__",
-    "autobahn/wamp/message_fbs.py",
-    "autobahn/wamp/gen/*",
-    "flatbuffers/*",  # Vendored Flatbuffers Python runtime
+    "src/autobahn/wamp/message_fbs.py",
+    "src/autobahn/wamp/gen/*",
+    "src/autobahn/flatbuffers/*",  # Vendored Flatbuffers Python runtime (copied from deps/flatbuffers at build time)
     "deps/*",  # Git submodules (includes deps/flatbuffers)
 ]
 

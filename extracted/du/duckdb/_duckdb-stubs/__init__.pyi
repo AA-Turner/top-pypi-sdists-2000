@@ -720,6 +720,8 @@ class DuckDBPyRelation:
         partition_by: pytyping.List[str] | None = None,
         write_partition_columns: bool | None = None,
         append: bool | None = None,
+        filename_pattern: str | None = None,
+        file_size_bytes: str | int | None = None,
     ) -> None: ...
     def to_table(self, table_name: str) -> None: ...
     def to_view(self, view_name: str, replace: bool = True) -> DuckDBPyRelation: ...
@@ -772,6 +774,8 @@ class DuckDBPyRelation:
         partition_by: pytyping.List[str] | None = None,
         write_partition_columns: bool | None = None,
         append: bool | None = None,
+        filename_pattern: str | None = None,
+        file_size_bytes: str | int | None = None,
     ) -> None: ...
     @property
     def alias(self) -> str: ...

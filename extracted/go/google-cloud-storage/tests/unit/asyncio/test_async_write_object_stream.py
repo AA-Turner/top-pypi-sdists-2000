@@ -15,6 +15,7 @@
 import pytest
 from unittest import mock
 
+from unittest.mock import AsyncMock
 from google.cloud.storage._experimental.asyncio.async_write_object_stream import (
     _AsyncWriteObjectStream,
 )
@@ -22,6 +23,8 @@ from google.cloud import _storage_v2
 
 BUCKET = "my-bucket"
 OBJECT = "my-object"
+GENERATION = 12345
+WRITE_HANDLE = b"test-handle"
 
 
 @pytest.fixture
@@ -39,6 +42,28 @@ def mock_client():
     client = mock.AsyncMock()
     client._client = mock_gapic_client
     return client
+
+
+async def instantiate_write_obj_stream(mock_client, mock_cls_async_bidi_rpc, open=True):
+    """Helper to create an instance of _AsyncWriteObjectStream and open it by default."""
+    socket_like_rpc = AsyncMock()
+    mock_cls_async_bidi_rpc.return_value = socket_like_rpc
+    socket_like_rpc.open = AsyncMock()
+    socket_like_rpc.send = AsyncMock()
+    socket_like_rpc.close = AsyncMock()
+
+    mock_response = mock.MagicMock(spec=_storage_v2.BidiWriteObjectResponse)
+    mock_response.resource = mock.MagicMock(spec=_storage_v2.Object)
+    mock_response.resource.generation = GENERATION
+    mock_response.write_handle = WRITE_HANDLE
+    socket_like_rpc.recv = AsyncMock(return_value=mock_response)
+
+    write_obj_stream = _AsyncWriteObjectStream(mock_client, BUCKET, OBJECT)
+
+    if open:
+        await write_obj_stream.open()
+
+    return write_obj_stream
 
 
 def test_async_write_object_stream_init(mock_client):
@@ -91,18 +116,275 @@ def test_async_write_object_stream_init_raises_value_error():
 
 
 @pytest.mark.asyncio
-async def test_unimplemented_methods_raise_error(mock_client):
-    """Test that unimplemented methods raise NotImplementedError."""
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_open_for_new_object(mock_async_bidi_rpc, mock_client):
+    """Test opening a stream for a new object."""
+    # Arrange
+    socket_like_rpc = mock.AsyncMock()
+    mock_async_bidi_rpc.return_value = socket_like_rpc
+    socket_like_rpc.open = mock.AsyncMock()
+
+    mock_response = mock.MagicMock(spec=_storage_v2.BidiWriteObjectResponse)
+    mock_response.resource = mock.MagicMock(spec=_storage_v2.Object)
+    mock_response.resource.generation = GENERATION
+    mock_response.write_handle = WRITE_HANDLE
+    socket_like_rpc.recv = mock.AsyncMock(return_value=mock_response)
+
     stream = _AsyncWriteObjectStream(mock_client, BUCKET, OBJECT)
 
-    with pytest.raises(NotImplementedError):
+    # Act
+    await stream.open()
+
+    # Assert
+    assert stream._is_stream_open
+    socket_like_rpc.open.assert_called_once()
+    socket_like_rpc.recv.assert_called_once()
+    assert stream.generation_number == GENERATION
+    assert stream.write_handle == WRITE_HANDLE
+
+
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_open_for_existing_object(mock_async_bidi_rpc, mock_client):
+    """Test opening a stream for an existing object."""
+    # Arrange
+    socket_like_rpc = mock.AsyncMock()
+    mock_async_bidi_rpc.return_value = socket_like_rpc
+    socket_like_rpc.open = mock.AsyncMock()
+
+    mock_response = mock.MagicMock(spec=_storage_v2.BidiWriteObjectResponse)
+    mock_response.resource = mock.MagicMock(spec=_storage_v2.Object)
+    mock_response.resource.generation = GENERATION
+    mock_response.write_handle = WRITE_HANDLE
+    socket_like_rpc.recv = mock.AsyncMock(return_value=mock_response)
+
+    stream = _AsyncWriteObjectStream(
+        mock_client, BUCKET, OBJECT, generation_number=GENERATION
+    )
+
+    # Act
+    await stream.open()
+
+    # Assert
+    assert stream._is_stream_open
+    socket_like_rpc.open.assert_called_once()
+    socket_like_rpc.recv.assert_called_once()
+    assert stream.generation_number == GENERATION
+    assert stream.write_handle == WRITE_HANDLE
+
+
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_open_when_already_open_raises_error(mock_async_bidi_rpc, mock_client):
+    """Test that opening an already open stream raises a ValueError."""
+    # Arrange
+    socket_like_rpc = mock.AsyncMock()
+    mock_async_bidi_rpc.return_value = socket_like_rpc
+    socket_like_rpc.open = mock.AsyncMock()
+
+    mock_response = mock.MagicMock(spec=_storage_v2.BidiWriteObjectResponse)
+    mock_response.resource = mock.MagicMock(spec=_storage_v2.Object)
+    mock_response.resource.generation = GENERATION
+    mock_response.write_handle = WRITE_HANDLE
+    socket_like_rpc.recv = mock.AsyncMock(return_value=mock_response)
+
+    stream = _AsyncWriteObjectStream(mock_client, BUCKET, OBJECT)
+    await stream.open()
+
+    # Act & Assert
+    with pytest.raises(ValueError, match="Stream is already open"):
         await stream.open()
 
-    with pytest.raises(NotImplementedError):
-        await stream.close()
 
-    with pytest.raises(NotImplementedError):
-        await stream.send(_storage_v2.BidiWriteObjectRequest())
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_open_raises_error_on_missing_object_resource(
+    mock_async_bidi_rpc, mock_client
+):
+    """Test that open raises ValueError if object_resource is not in the response."""
+    socket_like_rpc = mock.AsyncMock()
+    mock_async_bidi_rpc.return_value = socket_like_rpc
 
-    with pytest.raises(NotImplementedError):
-        await stream.recv()
+    mock_reponse = mock.AsyncMock()
+    type(mock_reponse).resource = mock.PropertyMock(return_value=None)
+    socket_like_rpc.recv.return_value = mock_reponse
+
+    # Note: Don't use below code as unittest library automatically assigns an
+    # `AsyncMock` object to an attribute, if not set.
+    # socket_like_rpc.recv.return_value = mock.AsyncMock(
+    #     return_value=_storage_v2.BidiWriteObjectResponse(resource=None)
+    # )
+
+    stream = _AsyncWriteObjectStream(mock_client, BUCKET, OBJECT)
+    with pytest.raises(
+        ValueError, match="Failed to obtain object resource after opening the stream"
+    ):
+        await stream.open()
+
+
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_open_raises_error_on_missing_generation(
+    mock_async_bidi_rpc, mock_client
+):
+    """Test that open raises ValueError if generation is not in the response."""
+    socket_like_rpc = mock.AsyncMock()
+    mock_async_bidi_rpc.return_value = socket_like_rpc
+
+    # Configure the mock response object
+    mock_response = mock.AsyncMock()
+    type(mock_response.resource).generation = mock.PropertyMock(return_value=None)
+    socket_like_rpc.recv.return_value = mock_response
+
+    stream = _AsyncWriteObjectStream(mock_client, BUCKET, OBJECT)
+    with pytest.raises(
+        ValueError, match="Failed to obtain object generation after opening the stream"
+    ):
+        await stream.open()
+
+
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_open_raises_error_on_missing_write_handle(
+    mock_async_bidi_rpc, mock_client
+):
+    """Test that open raises ValueError if write_handle is not in the response."""
+    socket_like_rpc = mock.AsyncMock()
+    mock_async_bidi_rpc.return_value = socket_like_rpc
+    socket_like_rpc.recv = mock.AsyncMock(
+        return_value=_storage_v2.BidiWriteObjectResponse(
+            resource=_storage_v2.Object(generation=GENERATION), write_handle=None
+        )
+    )
+    stream = _AsyncWriteObjectStream(mock_client, BUCKET, OBJECT)
+    with pytest.raises(ValueError, match="Failed to obtain write_handle"):
+        await stream.open()
+
+
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_close(mock_cls_async_bidi_rpc, mock_client):
+    """Test that close successfully closes the stream."""
+    # Arrange
+    write_obj_stream = await instantiate_write_obj_stream(
+        mock_client, mock_cls_async_bidi_rpc, open=True
+    )
+
+    # Act
+    await write_obj_stream.close()
+
+    # Assert
+    write_obj_stream.socket_like_rpc.close.assert_called_once()
+    assert not write_obj_stream.is_stream_open
+
+
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_close_without_open_should_raise_error(
+    mock_cls_async_bidi_rpc, mock_client
+):
+    """Test that closing a stream that is not open raises a ValueError."""
+    # Arrange
+    write_obj_stream = await instantiate_write_obj_stream(
+        mock_client, mock_cls_async_bidi_rpc, open=False
+    )
+
+    # Act & Assert
+    with pytest.raises(ValueError, match="Stream is not open"):
+        await write_obj_stream.close()
+
+
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_send(mock_cls_async_bidi_rpc, mock_client):
+    """Test that send calls the underlying rpc's send method."""
+    # Arrange
+    write_obj_stream = await instantiate_write_obj_stream(
+        mock_client, mock_cls_async_bidi_rpc, open=True
+    )
+
+    # Act
+    bidi_write_object_request = _storage_v2.BidiWriteObjectRequest()
+    await write_obj_stream.send(bidi_write_object_request)
+
+    # Assert
+    write_obj_stream.socket_like_rpc.send.assert_called_once_with(
+        bidi_write_object_request
+    )
+
+
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_send_without_open_should_raise_error(
+    mock_cls_async_bidi_rpc, mock_client
+):
+    """Test that sending on a stream that is not open raises a ValueError."""
+    # Arrange
+    write_obj_stream = await instantiate_write_obj_stream(
+        mock_client, mock_cls_async_bidi_rpc, open=False
+    )
+
+    # Act & Assert
+    with pytest.raises(ValueError, match="Stream is not open"):
+        await write_obj_stream.send(_storage_v2.BidiWriteObjectRequest())
+
+
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_recv(mock_cls_async_bidi_rpc, mock_client):
+    """Test that recv calls the underlying rpc's recv method."""
+    # Arrange
+    write_obj_stream = await instantiate_write_obj_stream(
+        mock_client, mock_cls_async_bidi_rpc, open=True
+    )
+    bidi_write_object_response = _storage_v2.BidiWriteObjectResponse()
+    write_obj_stream.socket_like_rpc.recv = AsyncMock(
+        return_value=bidi_write_object_response
+    )
+
+    # Act
+    response = await write_obj_stream.recv()
+
+    # Assert
+    write_obj_stream.socket_like_rpc.recv.assert_called_once()
+    assert response == bidi_write_object_response
+
+
+@pytest.mark.asyncio
+@mock.patch(
+    "google.cloud.storage._experimental.asyncio.async_write_object_stream.AsyncBidiRpc"
+)
+async def test_recv_without_open_should_raise_error(
+    mock_cls_async_bidi_rpc, mock_client
+):
+    """Test that receiving on a stream that is not open raises a ValueError."""
+    # Arrange
+    write_obj_stream = await instantiate_write_obj_stream(
+        mock_client, mock_cls_async_bidi_rpc, open=False
+    )
+
+    # Act & Assert
+    with pytest.raises(ValueError, match="Stream is not open"):
+        await write_obj_stream.recv()

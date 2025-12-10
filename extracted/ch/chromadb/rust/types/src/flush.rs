@@ -1,12 +1,10 @@
-use super::{AttachedFunctionUuid, CollectionUuid, ConversionError};
+use super::{AttachedFunctionUuid, CollectionUuid, ConversionError, Schema};
 use crate::{
-    chroma_proto::{
-        FilePaths, FlushCollectionCompactionAndAttachedFunctionResponse, FlushSegmentCompactionInfo,
-    },
+    chroma_proto::{self, FilePaths, FlushSegmentCompactionInfo},
     SegmentUuid,
 };
 use chroma_error::{ChromaError, ErrorCodes};
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::Arc};
 use thiserror::Error;
 use uuid::Uuid;
 
@@ -17,9 +15,20 @@ pub struct SegmentFlushInfo {
 }
 
 #[derive(Debug, Clone)]
+pub struct CollectionFlushInfo {
+    pub tenant_id: String,
+    pub collection_id: CollectionUuid,
+    pub log_position: i64,
+    pub collection_version: i32,
+    pub segment_flush_info: Arc<[SegmentFlushInfo]>,
+    pub total_records_post_compaction: u64,
+    pub size_bytes_post_compaction: u64,
+    pub schema: Option<Schema>,
+}
+
+#[derive(Debug, Clone)]
 pub struct AttachedFunctionUpdateInfo {
     pub attached_function_id: AttachedFunctionUuid,
-    pub attached_function_run_nonce: uuid::Uuid,
     pub completion_offset: u64,
 }
 
@@ -36,6 +45,28 @@ impl ChromaError for FinishAttachedFunctionError {
         match self {
             FinishAttachedFunctionError::FailedToFinishAttachedFunction(_) => ErrorCodes::Internal,
             FinishAttachedFunctionError::AttachedFunctionNotFound => ErrorCodes::NotFound,
+        }
+    }
+}
+
+#[derive(Error, Debug)]
+pub enum FinishCreateAttachedFunctionError {
+    #[error("Failed to finish creating attached function: {0}")]
+    FailedToFinishCreateAttachedFunction(#[from] tonic::Status),
+    #[error("Attached function not found")]
+    AttachedFunctionNotFound,
+    #[error("Output collection already exists")]
+    OutputCollectionExists,
+}
+
+impl ChromaError for FinishCreateAttachedFunctionError {
+    fn code(&self) -> ErrorCodes {
+        match self {
+            FinishCreateAttachedFunctionError::FailedToFinishCreateAttachedFunction(_) => {
+                ErrorCodes::Internal
+            }
+            FinishCreateAttachedFunctionError::AttachedFunctionNotFound => ErrorCodes::NotFound,
+            FinishCreateAttachedFunctionError::OutputCollectionExists => ErrorCodes::AlreadyExists,
         }
     }
 }
@@ -73,8 +104,6 @@ impl ChromaError for AdvanceAttachedFunctionError {
 
 #[derive(Debug, Clone)]
 pub struct AdvanceAttachedFunctionResponse {
-    pub next_nonce: uuid::Uuid,
-    pub next_run: std::time::SystemTime,
     pub completion_offset: u64,
 }
 
@@ -102,6 +131,45 @@ pub enum SegmentFlushInfoConversionError {
     DecodeError(#[from] ConversionError),
 }
 
+#[derive(Error, Debug)]
+pub enum CollectionFlushInfoConversionError {
+    #[error("Failed to convert segment flush info: {0}")]
+    SegmentConversionError(#[from] SegmentFlushInfoConversionError),
+    #[error("Failed to serialize schema")]
+    SchemaSerializationError,
+}
+
+impl TryFrom<CollectionFlushInfo> for chroma_proto::FlushCollectionCompactionRequest {
+    type Error = CollectionFlushInfoConversionError;
+
+    fn try_from(collection: CollectionFlushInfo) -> Result<Self, Self::Error> {
+        let segment_compaction_info = collection
+            .segment_flush_info
+            .iter()
+            .map(|segment_flush_info| segment_flush_info.try_into())
+            .collect::<Result<Vec<_>, _>>()?;
+
+        let schema_str = collection
+            .schema
+            .map(|s| {
+                serde_json::to_string(&s)
+                    .map_err(|_| CollectionFlushInfoConversionError::SchemaSerializationError)
+            })
+            .transpose()?;
+
+        Ok(crate::chroma_proto::FlushCollectionCompactionRequest {
+            tenant_id: collection.tenant_id,
+            collection_id: collection.collection_id.0.to_string(),
+            log_position: collection.log_position,
+            collection_version: collection.collection_version,
+            segment_compaction_info,
+            total_records_post_compaction: collection.total_records_post_compaction,
+            size_bytes_post_compaction: collection.size_bytes_post_compaction,
+            schema_str,
+        })
+    }
+}
+
 #[derive(Debug)]
 pub struct FlushCompactionResponse {
     pub collection_id: CollectionUuid,
@@ -111,13 +179,9 @@ pub struct FlushCompactionResponse {
 
 #[derive(Debug)]
 pub struct FlushCompactionAndAttachedFunctionResponse {
-    pub collection_id: CollectionUuid,
-    pub collection_version: i32,
-    pub last_compaction_time: i64,
+    pub collections: Vec<FlushCompactionResponse>,
     // Completion offset updated during register
     pub completion_offset: u64,
-    // NOTE: next_nonce and next_run are no longer returned
-    // They were already set by PrepareAttachedFunction via advance_attached_function()
 }
 
 impl FlushCompactionResponse {
@@ -134,42 +198,38 @@ impl FlushCompactionResponse {
     }
 }
 
-impl TryFrom<FlushCollectionCompactionAndAttachedFunctionResponse> for FlushCompactionResponse {
-    type Error = FlushCompactionResponseConversionError;
-
-    fn try_from(
-        value: FlushCollectionCompactionAndAttachedFunctionResponse,
-    ) -> Result<Self, Self::Error> {
-        let id = Uuid::parse_str(&value.collection_id)
-            .map_err(|_| FlushCompactionResponseConversionError::InvalidUuid)?;
-        Ok(FlushCompactionResponse {
-            collection_id: CollectionUuid(id),
-            collection_version: value.collection_version,
-            last_compaction_time: value.last_compaction_time,
-        })
-    }
-}
-
-impl TryFrom<FlushCollectionCompactionAndAttachedFunctionResponse>
+impl TryFrom<chroma_proto::FlushCollectionCompactionAndAttachedFunctionResponse>
     for FlushCompactionAndAttachedFunctionResponse
 {
     type Error = FlushCompactionResponseConversionError;
 
     fn try_from(
-        value: FlushCollectionCompactionAndAttachedFunctionResponse,
+        value: chroma_proto::FlushCollectionCompactionAndAttachedFunctionResponse,
     ) -> Result<Self, Self::Error> {
-        let id = Uuid::parse_str(&value.collection_id)
-            .map_err(|_| FlushCompactionResponseConversionError::InvalidUuid)?;
+        // Parse all collections from the repeated field
+        let mut collections = Vec::with_capacity(value.collections.len());
+        for collection in value.collections {
+            let id = Uuid::parse_str(&collection.collection_id)
+                .map_err(|_| FlushCompactionResponseConversionError::InvalidUuid)?;
+            collections.push(FlushCompactionResponse {
+                collection_id: CollectionUuid(id),
+                collection_version: collection.collection_version,
+                last_compaction_time: collection.last_compaction_time,
+            });
+        }
 
-        // Note: next_nonce and next_run are no longer populated by the server
+        // Extract completion_offset from attached_function_state
+        // Note: next_nonce and next_run are no longer used by the client
         // They were already set by PrepareAttachedFunction via advance_attached_function()
-        // We only use completion_offset from the response
+        let completion_offset = value
+            .attached_function_state
+            .as_ref()
+            .map(|state| state.completion_offset)
+            .unwrap_or(0);
 
         Ok(FlushCompactionAndAttachedFunctionResponse {
-            collection_id: CollectionUuid(id),
-            collection_version: value.collection_version,
-            last_compaction_time: value.last_compaction_time,
-            completion_offset: value.completion_offset,
+            collections,
+            completion_offset,
         })
     }
 }
@@ -182,10 +242,10 @@ pub enum FlushCompactionResponseConversionError {
     InvalidUuid,
     #[error("Invalid attached function nonce, valid UUID required")]
     InvalidAttachedFunctionNonce,
-    #[error("Missing next_run timestamp")]
-    MissingNextRun,
     #[error("Invalid timestamp format")]
     InvalidTimestamp,
+    #[error("Missing collections in response")]
+    MissingCollections,
 }
 
 impl ChromaError for FlushCompactionResponseConversionError {
@@ -195,8 +255,10 @@ impl ChromaError for FlushCompactionResponseConversionError {
             FlushCompactionResponseConversionError::InvalidAttachedFunctionNonce => {
                 ErrorCodes::InvalidArgument
             }
-            FlushCompactionResponseConversionError::MissingNextRun => ErrorCodes::InvalidArgument,
             FlushCompactionResponseConversionError::InvalidTimestamp => ErrorCodes::InvalidArgument,
+            FlushCompactionResponseConversionError::MissingCollections => {
+                ErrorCodes::InvalidArgument
+            }
             FlushCompactionResponseConversionError::DecodeError(e) => e.code(),
         }
     }

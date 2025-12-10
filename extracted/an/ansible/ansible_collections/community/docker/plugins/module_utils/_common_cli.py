@@ -126,13 +126,16 @@ class AnsibleDockerClientBase:
         self._info: dict[str, t.Any] | None = None
 
         if needs_api_version:
+            api_version_string = self._version["Server"].get(
+                "ApiVersion"
+            ) or self._version["Server"].get("APIVersion")
             if not isinstance(self._version.get("Server"), dict) or not isinstance(
-                self._version["Server"].get("ApiVersion"), str
+                api_version_string, str
             ):
                 self.fail(
                     "Cannot determine Docker Daemon information. Are you maybe using podman instead of docker?"
                 )
-            self.docker_api_version_str = to_text(self._version["Server"]["ApiVersion"])
+            self.docker_api_version_str = to_text(api_version_string)
             self.docker_api_version = LooseVersion(self.docker_api_version_str)
             min_docker_api_version = min_docker_api_version or "1.25"
             if self.docker_api_version < LooseVersion(min_docker_api_version):
@@ -194,7 +197,11 @@ class AnsibleDockerClientBase:
             data = json.loads(stdout)
         except Exception as exc:  # pylint: disable=broad-exception-caught
             self.fail(
-                f"Error while parsing JSON output of {self._compose_cmd_str(args)}: {exc}\nJSON output: {to_text(stdout)}"
+                f"Error while parsing JSON output of {self._compose_cmd_str(args)}: {exc}\nJSON output: {to_text(stdout)}\n\nError output:\n{to_text(stderr)}",
+                cmd=self._compose_cmd_str(args),
+                rc=rc,
+                stdout=stdout,
+                stderr=stderr,
             )
         return rc, data, stderr
 
@@ -220,7 +227,11 @@ class AnsibleDockerClientBase:
                     result.append(json.loads(line))
         except Exception as exc:  # pylint: disable=broad-exception-caught
             self.fail(
-                f"Error while parsing JSON output of {self._compose_cmd_str(args)}: {exc}\nJSON output: {to_text(stdout)}"
+                f"Error while parsing JSON output of {self._compose_cmd_str(args)}: {exc}\nJSON output: {to_text(stdout)}\n\nError output:\n{to_text(stderr)}",
+                cmd=self._compose_cmd_str(args),
+                rc=rc,
+                stdout=stdout,
+                stderr=stderr,
             )
         return rc, result, stderr
 

@@ -71,6 +71,8 @@ class StorageComponentConstants:
                               "managementUser", "managementPassword",
                               "managementProtocol",
                               "managementHost", "activateNow"]
+    CREATE_REQUIRED_FIELDS_ARRAY = ["arrayName", "arrayStorageTier", "label",
+                                    "storageFaultDomain", "activateNow"]
     CONVERSION_STATE_DECOMMISSION = "DECOMMISSION"
     CONVERSION_STATE_ACTIVE = "ACTIVE"
     CONVERSION_STATE_PAUSED = "PAUSED"
@@ -84,6 +86,7 @@ class StorageComponentConstants:
                         "bucket", "accessKey", "secretKey", "managementUser",
                         "managementPassword", "managementProtocol",
                         "managementHost"]
+    NON_EMPTY_FIELDS_ARRAY = ["storageFaultDomain"]
 
 
 class KmipConstants:

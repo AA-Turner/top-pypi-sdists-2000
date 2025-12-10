@@ -155,7 +155,7 @@ class EkmClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/keymanagement/create_ekms_private_endpoint.py.html>`__ to see an example of how to use create_ekms_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/keymanagement/create_ekms_private_endpoint.py.html>`__ to see an example of how to use create_ekms_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -253,7 +253,7 @@ class EkmClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/keymanagement/delete_ekms_private_endpoint.py.html>`__ to see an example of how to use delete_ekms_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/keymanagement/delete_ekms_private_endpoint.py.html>`__ to see an example of how to use delete_ekms_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ekmsPrivateEndpointId']
@@ -351,7 +351,7 @@ class EkmClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/keymanagement/get_ekms_private_endpoint.py.html>`__ to see an example of how to use get_ekms_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/keymanagement/get_ekms_private_endpoint.py.html>`__ to see an example of how to use get_ekms_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ekmsPrivateEndpointId']
@@ -468,7 +468,7 @@ class EkmClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/keymanagement/list_ekms_private_endpoints.py.html>`__ to see an example of how to use list_ekms_private_endpoints API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/keymanagement/list_ekms_private_endpoints.py.html>`__ to see an example of how to use list_ekms_private_endpoints API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -593,7 +593,7 @@ class EkmClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/keymanagement/update_ekms_private_endpoint.py.html>`__ to see an example of how to use update_ekms_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/keymanagement/update_ekms_private_endpoint.py.html>`__ to see an example of how to use update_ekms_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ekmsPrivateEndpointId']

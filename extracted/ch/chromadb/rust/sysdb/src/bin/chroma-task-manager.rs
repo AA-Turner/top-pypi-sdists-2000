@@ -52,35 +52,15 @@ enum Command {
     },
     #[command(about = "Detach a function")]
     DetachFunction {
-        #[arg(long, help = "ID of the attached function to delete")]
-        attached_function_id: String,
+        #[arg(long, help = "Name of the attached function to delete")]
+        name: String,
+        #[arg(long, help = "ID of the input collection")]
+        input_collection_id: String,
         #[arg(long, help = "Whether to delete the output collection")]
         delete_output: bool,
     },
-    #[command(about = "Mark an attached function run as ready to advance")]
-    AdvanceAttachedFunction {
-        #[arg(long, help = "ID of the collection")]
-        collection_id: String,
-        #[arg(long, help = "ID of the attached function")]
-        attached_function_id: String,
-        #[arg(long, help = "Nonce identifying the specific function run")]
-        run_nonce: String,
-        #[arg(long, help = "Completion offset")]
-        completion_offset: u64,
-        #[arg(long, help = "Next run delay in seconds")]
-        next_run_delay_secs: u64,
-    },
     #[command(about = "Get all available functions")]
     GetFunctions,
-    #[command(about = "Peek schedule by collection IDs")]
-    PeekSchedule {
-        #[arg(
-            long,
-            value_delimiter = ',',
-            help = "Comma-separated list of collection IDs"
-        )]
-        collection_ids: Vec<String>,
-    },
 }
 
 fn json_to_prost_value(json: serde_json::Value) -> prost_types::Value {
@@ -148,7 +128,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             };
 
             let response = client.attach_function(request).await?;
-            println!("Attached Function created: {}", response.into_inner().id);
+            let attached_function = response
+                .into_inner()
+                .attached_function
+                .ok_or("Server did not return attached function")?;
+            println!("Attached Function created: {}", attached_function.id);
         }
         Command::GetAttachedFunction {
             input_collection_id,
@@ -160,7 +144,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             };
 
             let response = client.get_attached_function_by_name(request).await?;
-            let attached_function = response.into_inner().attached_function.unwrap();
+            let attached_function = response
+                .into_inner()
+                .attached_function
+                .ok_or("Server did not return attached function")?;
 
             println!("Attached Function ID: {:?}", attached_function.id);
             println!("Name: {:?}", attached_function.name);
@@ -188,34 +175,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             );
         }
         Command::DetachFunction {
-            attached_function_id,
+            name,
+            input_collection_id,
             delete_output,
         } => {
             let request = chroma_proto::DetachFunctionRequest {
-                attached_function_id,
+                name,
+                input_collection_id,
                 delete_output,
             };
 
             let _response = client.detach_function(request).await?;
             println!("Attached Function deleted successfully");
-        }
-        Command::AdvanceAttachedFunction {
-            collection_id,
-            attached_function_id,
-            run_nonce,
-            completion_offset,
-            next_run_delay_secs,
-        } => {
-            let request = chroma_proto::AdvanceAttachedFunctionRequest {
-                collection_id: Some(collection_id),
-                id: Some(attached_function_id),
-                run_nonce: Some(run_nonce),
-                completion_offset: Some(completion_offset),
-                next_run_delay_secs: Some(next_run_delay_secs),
-            };
-
-            client.advance_attached_function(request).await?;
-            println!("Attached Function advanced successfully");
         }
         Command::GetFunctions => {
             let request = chroma_proto::GetFunctionsRequest {};
@@ -225,23 +196,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             for func in functions {
                 println!("  {} - {}", func.id, func.name);
-            }
-        }
-        Command::PeekSchedule { collection_ids } => {
-            let request = chroma_proto::PeekScheduleByCollectionIdRequest {
-                collection_id: collection_ids,
-            };
-
-            let response = client.peek_schedule_by_collection_id(request).await?;
-            let entries = response.into_inner().schedule;
-
-            println!("Schedule:");
-            for entry in entries {
-                println!("  Collection: {:?}", entry.collection_id);
-                println!("  Attached Function ID: {:?}", entry.attached_function_id);
-                println!("  Nonce: {:?}", entry.run_nonce);
-                println!("  When: {:?}", entry.when_to_run);
-                println!();
             }
         }
     }

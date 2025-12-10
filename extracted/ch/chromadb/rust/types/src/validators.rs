@@ -315,6 +315,12 @@ pub fn validate_schema(schema: &Schema) -> Result<(), ValidationError> {
             ));
         }
     }
+    if let Some(cmek) = &schema.cmek {
+        if !cmek.validate_pattern() {
+            return Err(ValidationError::new("schema")
+                .with_message(format!("CMEK does not match expected pattern: {cmek:?}").into()));
+        }
+    }
     Ok(())
 }
 
@@ -328,7 +334,7 @@ mod tests {
         // Valid metadata
         let mut metadata = Metadata::new();
         metadata.insert("valid_key".to_string(), MetadataValue::Int(42));
-        let sparse = SparseVector::new(vec![1, 2, 3], vec![0.1, 0.2, 0.3]);
+        let sparse = SparseVector::new(vec![1, 2, 3], vec![0.1, 0.2, 0.3]).unwrap();
         metadata.insert("embedding".to_string(), MetadataValue::SparseVector(sparse));
         assert!(validate_metadata(&metadata).is_ok());
 
@@ -354,7 +360,11 @@ mod tests {
 
         // Invalid sparse vector (length mismatch)
         let mut metadata = Metadata::new();
-        let invalid_sparse = SparseVector::new(vec![1, 2], vec![0.1, 0.2, 0.3]);
+        let invalid_sparse = SparseVector {
+            indices: vec![1, 2],
+            values: vec![0.1, 0.2, 0.3],
+            tokens: None,
+        };
         metadata.insert(
             "embedding".to_string(),
             MetadataValue::SparseVector(invalid_sparse),

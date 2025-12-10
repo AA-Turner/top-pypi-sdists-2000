@@ -680,13 +680,26 @@ def _telemetry_header():
     if telemetry_header is None:
         plugin_dir = os.path.dirname(__file__)
         collection_root = os.path.abspath(os.path.join(plugin_dir, '..', '..'))
-        if collection_root.find('ansible_collections') != -1:
-            version_file_path = os.path.join(collection_root, 'VERSION')
+        version_file_path = os.path.join(collection_root, 'VERSION')
+        if os.path.isfile(version_file_path):
+            with open(version_file_path, 'r', encoding='utf-8') as version_file:
+                version = version_file.read().strip()
         else:
             version_file_path = os.path.join(collection_root, 'collections', 'ansible_collections', 'cyberark', 'conjur', 'VERSION')
-
-        with open(version_file_path, 'r', encoding='utf-8') as version_file:
-            version = version_file.read().strip()
+            if os.path.isfile(version_file_path):
+                with open(version_file_path, 'r', encoding='utf-8') as version_file:
+                    version = version_file.read().strip()
+            else:
+                galaxy_file_path = os.path.join(collection_root, 'galaxy.yml')
+                if os.path.isfile(galaxy_file_path):
+                    try:
+                        with open(galaxy_file_path, 'r', encoding='utf-8') as galaxy_file:
+                            galaxy_data = yaml.safe_load(galaxy_file)
+                            version = galaxy_data['version']
+                    except (IOError, KeyError, yaml.YAMLError):
+                        version = "unknown"
+                else:
+                    version = "unknown"
 
         # Prepare the telemetry value
         telemetry_val = f'in=Ansible Collections&it=cybr-secretsmanager&iv={version}&vn=Ansible'

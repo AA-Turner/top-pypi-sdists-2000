@@ -189,7 +189,6 @@ ansible_facts:
 
 import re
 import platform
-from ansible.module_utils.common.text.converters import to_native
 from ansible.module_utils.basic import AnsibleModule
 
 
@@ -297,12 +296,12 @@ def ss_parse(raw):
                 protocol, state, recv_q, send_q, local_addr_port, peer_addr_port = cells
             else:
                 protocol, state, recv_q, send_q, local_addr_port, peer_addr_port, process = cells
-        except ValueError:
+        except ValueError as e:
             # unexpected stdout from ss
             raise EnvironmentError(
                 'Expected `ss` table layout "Netid, State, Recv-Q, Send-Q, Local Address:Port, Peer Address:Port" and'
                 f'optionally "Process", but got something else: {line}'
-            )
+            ) from e
 
         conns = regex_conns.search(local_addr_port)
         pids = regex_pid.findall(process)
@@ -418,7 +417,7 @@ def main():
                 elif connection["protocol"].startswith("udp"):
                     result["ansible_facts"]["udp_listen"].append(connection)
     except (KeyError, EnvironmentError) as e:
-        module.fail_json(msg=to_native(e))
+        module.fail_json(msg=f"{e}")
 
     module.exit_json(**result)
 

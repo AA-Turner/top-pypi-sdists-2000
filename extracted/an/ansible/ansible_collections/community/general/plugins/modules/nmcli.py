@@ -2489,7 +2489,7 @@ class Nmcli:
             if key and len(pair) > 1:
                 raw_value = pair[1].lstrip()
                 if raw_value == "--":
-                    if key_type == list:
+                    if key_type is list:
                         conn_info[key] = []
                     else:
                         conn_info[key] = None
@@ -2504,7 +2504,7 @@ class Nmcli:
                             conn_info[alias_key] = alias_value
                 elif key in ("ipv4.routes", "ipv6.routes"):
                     conn_info[key] = [s.strip() for s in raw_value.split(";")]
-                elif key_type == list:
+                elif key_type is list:
                     conn_info[key] = [s.strip() for s in raw_value.split(",")]
                 else:
                     m_enum = p_enum_value.match(raw_value)
@@ -2553,7 +2553,7 @@ class Nmcli:
         supported_properties = self.get_supported_properties(setting)
         unsupported_properties = []
 
-        for property, value in getattr(self, setting_key).items():
+        for property in getattr(self, setting_key):
             if property not in supported_properties:
                 unsupported_properties.append(property)
 
@@ -2562,7 +2562,8 @@ class Nmcli:
             for property in unsupported_properties:
                 msg_options.append(f"{setting_key}.{property}")
 
-            msg = 'Invalid or unsupported option(s): "%s"' % '", "'.join(msg_options)
+            str_msg_options = '", "'.join(msg_options)
+            msg = f'Invalid or unsupported option(s): "{str_msg_options}"'
             if self.ignore_unsupported_suboptions:
                 self.module.warn(msg)
             else:
@@ -2674,8 +2675,7 @@ class Nmcli:
         return self._compare_conn_params(self.show_connection(), options)
 
 
-def main():
-    # Parsing argument file
+def create_module() -> AnsibleModule:
     module = AnsibleModule(
         argument_spec=dict(
             ignore_unsupported_suboptions=dict(type="bool", default=False),
@@ -2869,6 +2869,12 @@ def main():
         supports_check_mode=True,
     )
     module.run_command_environ_update = dict(LANG="C", LC_ALL="C", LC_MESSAGES="C", LC_CTYPE="C")
+    return module
+
+
+def main():
+    # Parsing argument file
+    module = create_module()
 
     nmcli = Nmcli(module)
 

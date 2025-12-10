@@ -5,9 +5,12 @@
 from __future__ import annotations
 
 import json
+import typing as t
 
-from ansible.module_utils.common.text.converters import to_text
 from ansible.module_utils.urls import fetch_url
+
+if t.TYPE_CHECKING:
+    from ansible.module_utils.basic import AnsibleModule
 
 
 class GandiLiveDNSAPI:
@@ -22,7 +25,7 @@ class GandiLiveDNSAPI:
 
     attribute_map = {"record": "rrset_name", "type": "rrset_type", "ttl": "rrset_ttl", "values": "rrset_values"}
 
-    def __init__(self, module):
+    def __init__(self, module: AnsibleModule) -> None:
         self.module = module
         self.api_key = module.params["api_key"]
         self.personal_access_token = module.params["personal_access_token"]
@@ -70,7 +73,7 @@ class GandiLiveDNSAPI:
 
         if content:
             try:
-                result = json.loads(to_text(content, errors="surrogate_or_strict"))
+                result = json.loads(content)
             except getattr(json, "JSONDecodeError", ValueError) as e:
                 error_msg += f"; Failed to parse API response with error {e}: {content}"
 

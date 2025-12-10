@@ -7,10 +7,13 @@
 from __future__ import annotations
 
 import traceback
+import typing as t
 
 from functools import wraps
-from ansible.module_utils.common.text.converters import to_native
 from ansible.module_utils.basic import missing_required_lib
+
+if t.TYPE_CHECKING:
+    from ansible.module_utils.basic import AnsibleModule
 
 PYXCLI_INSTALLED = True
 PYXCLI_IMP_ERR = None
@@ -50,17 +53,17 @@ def xcli_wrapper(func):
     """Catch xcli errors and return a proper message"""
 
     @wraps(func)
-    def wrapper(module, *args, **kwargs):
+    def wrapper(module: AnsibleModule, *args, **kwargs):
         try:
             return func(module, *args, **kwargs)
         except errors.CommandExecutionError as e:
-            module.fail_json(msg=to_native(e))
+            module.fail_json(msg=f"{e}")
 
     return wrapper
 
 
 @xcli_wrapper
-def connect_ssl(module):
+def connect_ssl(module: AnsibleModule):
     endpoints = module.params["endpoints"]
     username = module.params["username"]
     password = module.params["password"]
@@ -73,7 +76,7 @@ def connect_ssl(module):
         module.fail_json(msg=f"Connection with Spectrum Accelerate system has failed: {e}.")
 
 
-def spectrum_accelerate_spec():
+def spectrum_accelerate_spec() -> dict[str, t.Any]:
     """Return arguments spec for AnsibleModule"""
     return dict(
         endpoints=dict(required=True),
@@ -83,7 +86,7 @@ def spectrum_accelerate_spec():
 
 
 @xcli_wrapper
-def execute_pyxcli_command(module, xcli_command, xcli_client):
+def execute_pyxcli_command(module: AnsibleModule, xcli_command, xcli_client):
     pyxcli_args = build_pyxcli_command(module.params)
     getattr(xcli_client.cmd, xcli_command)(**(pyxcli_args))
     return True
@@ -100,6 +103,6 @@ def build_pyxcli_command(fields):
     return pyxcli_args
 
 
-def is_pyxcli_installed(module):
+def is_pyxcli_installed(module: AnsibleModule) -> None:
     if not PYXCLI_INSTALLED:
         module.fail_json(msg=missing_required_lib("pyxcli"), exception=PYXCLI_IMP_ERR)

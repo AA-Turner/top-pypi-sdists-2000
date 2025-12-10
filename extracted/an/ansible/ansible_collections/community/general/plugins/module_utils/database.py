@@ -9,9 +9,15 @@
 # Simplified BSD License (see LICENSES/BSD-2-Clause.txt or https://opensource.org/licenses/BSD-2-Clause)
 # SPDX-License-Identifier: BSD-2-Clause
 
+# This module utils is deprecated and will be removed in community.general 13.0.0
+
 from __future__ import annotations
 
 import re
+import typing as t
+
+if t.TYPE_CHECKING:
+    from ansible.module_utils.basic import AnsibleModule
 
 
 # Input patterns for is_input_dangerous function:
@@ -56,8 +62,8 @@ def _find_end_quote(identifier, quote_char):
     while True:
         try:
             quote = identifier.index(quote_char)
-        except ValueError:
-            raise UnclosedQuoteError
+        except ValueError as e:
+            raise UnclosedQuoteError from e
         accumulate = accumulate + quote
         try:
             next_char = identifier[quote + 1]
@@ -67,8 +73,8 @@ def _find_end_quote(identifier, quote_char):
             try:
                 identifier = identifier[quote + 2 :]
                 accumulate = accumulate + 2
-            except IndexError:
-                raise UnclosedQuoteError
+            except IndexError as e:
+                raise UnclosedQuoteError from e
         else:
             return accumulate
 
@@ -157,14 +163,10 @@ def is_input_dangerous(string):
     if not string:
         return False
 
-    for pattern in (PATTERN_1, PATTERN_2, PATTERN_3):
-        if re.search(pattern, string):
-            return True
-
-    return False
+    return any(pattern.search(string) for pattern in (PATTERN_1, PATTERN_2, PATTERN_3))
 
 
-def check_input(module, *args):
+def check_input(module: AnsibleModule, *args) -> None:
     """Wrapper for is_input_dangerous function."""
     needs_to_check = args
 

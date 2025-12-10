@@ -56,16 +56,14 @@ from sqlalchemy.types import NullType
 class ReflectionFixtures:
     @testing.fixture(
         params=[
-            ("engine", True),
-            ("connection", True),
-            ("engine", False),
-            ("connection", False),
+            "engine",
+            "connection",
         ]
     )
     def inspect_fixture(self, request, metadata, testing_engine):
-        engine, future = request.param
+        engine = request.param
 
-        eng = testing_engine(future=future)
+        eng = testing_engine()
 
         conn = eng.connect()
 
@@ -84,7 +82,7 @@ class ForeignTableReflectionTest(
 
     __requires__ = ("postgresql_test_dblink",)
     __only_on__ = "postgresql >= 9.3"
-    __backend__ = True
+    __sparse_driver_backend__ = True
 
     @classmethod
     def define_tables(cls, metadata):
@@ -145,7 +143,7 @@ class PartitionedReflectionTest(fixtures.TablesTest, AssertsExecutionResults):
     # partitioned table reflection, issue #4237
 
     __only_on__ = "postgresql >= 10"
-    __backend__ = True
+    __sparse_driver_backend__ = True
 
     @classmethod
     def define_tables(cls, metadata):
@@ -226,7 +224,7 @@ class MaterializedViewReflectionTest(
     """Test reflection on materialized views"""
 
     __only_on__ = "postgresql >= 9.3"
-    __backend__ = True
+    __sparse_driver_backend__ = True
 
     @classmethod
     def define_tables(cls, metadata):
@@ -407,7 +405,7 @@ class DomainReflectionTest(fixtures.TestBase, AssertsExecutionResults):
     """Test PostgreSQL domains"""
 
     __only_on__ = "postgresql > 8.3"
-    __backend__ = True
+    __sparse_driver_backend__ = True
 
     # these fixtures are all currently using individual test scope,
     # on a connection that's in a transaction that's rolled back.
@@ -864,7 +862,7 @@ class DomainReflectionTest(fixtures.TestBase, AssertsExecutionResults):
 
 class ArrayReflectionTest(fixtures.TablesTest):
     __only_on__ = "postgresql >= 10"
-    __backend__ = True
+    __sparse_driver_backend__ = True
 
     @classmethod
     def define_tables(cls, metadata):
@@ -895,7 +893,7 @@ class ReflectionTest(
     ReflectionFixtures, AssertsCompiledSQL, ComparesIndexes, fixtures.TestBase
 ):
     __only_on__ = "postgresql"
-    __backend__ = True
+    __sparse_driver_backend__ = True
 
     def test_reflected_primary_key_order(self, metadata, connection):
         meta1 = metadata
@@ -2714,9 +2712,10 @@ class ReflectionTest(
 
 class CustomTypeReflectionTest(fixtures.TestBase):
     class CustomType:
-        def __init__(self, arg1=None, arg2=None):
+        def __init__(self, arg1=None, arg2=None, collation=None):
             self.arg1 = arg1
             self.arg2 = arg2
+            self.collation = collation
 
     ischema_names = None
 
@@ -2742,6 +2741,7 @@ class CustomTypeReflectionTest(fixtures.TestBase):
                 "format_type": sch,
                 "default": None,
                 "not_null": False,
+                "collation": "cc" if sch == "my_custom_type()" else None,
                 "comment": None,
                 "generated": "",
                 "identity_options": None,
@@ -2756,6 +2756,10 @@ class CustomTypeReflectionTest(fixtures.TestBase):
             assert isinstance(column_info["type"], self.CustomType)
             eq_(column_info["type"].arg1, args[0])
             eq_(column_info["type"].arg2, args[1])
+            if sch == "my_custom_type()":
+                eq_(column_info["type"].collation, "cc")
+            else:
+                eq_(column_info["type"].collation, None)
 
     def test_clslevel(self):
         postgresql.PGDialect.ischema_names["my_custom_type"] = self.CustomType
@@ -2784,6 +2788,7 @@ class CustomTypeReflectionTest(fixtures.TestBase):
                 "format_type": None,
                 "default": None,
                 "not_null": False,
+                "collation": None,
                 "comment": None,
                 "generated": "",
                 "identity_options": None,
@@ -2800,7 +2805,7 @@ class CustomTypeReflectionTest(fixtures.TestBase):
 
 class IntervalReflectionTest(fixtures.TestBase):
     __only_on__ = "postgresql"
-    __backend__ = True
+    __sparse_driver_backend__ = True
 
     @testing.combinations(
         ("YEAR",),
@@ -2855,7 +2860,7 @@ class IntervalReflectionTest(fixtures.TestBase):
 
 class IdentityReflectionTest(fixtures.TablesTest):
     __only_on__ = "postgresql"
-    __backend__ = True
+    __sparse_driver_backend__ = True
     __requires__ = ("identity_columns",)
 
     _names = ("t1", "T2", "MiXeDCaSe!")
@@ -2930,7 +2935,7 @@ class IdentityReflectionTest(fixtures.TablesTest):
 
 class TestReflectDifficultColTypes(fixtures.TablesTest):
     __only_on__ = "postgresql"
-    __backend__ = True
+    __sparse_driver_backend__ = True
 
     def define_tables(metadata):
         Table(

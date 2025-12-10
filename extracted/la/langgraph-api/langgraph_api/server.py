@@ -259,6 +259,10 @@ else:
 configure_loopback_transports(app)
 
 if config.MOUNT_PREFIX:
+    from starlette.routing import Route
+
+    from langgraph_api.api import ok
+
     prefix = config.MOUNT_PREFIX
     if not prefix.startswith("/") or prefix.endswith("/"):
         raise ValueError(
@@ -285,8 +289,13 @@ if config.MOUNT_PREFIX:
 
             return await self.app(scope, receive, send)
 
+    # Add health checks at root still to avoid having to override health checks.
     app = Starlette(
-        routes=[Mount(prefix, app=app)],
+        routes=[
+            Route("/", ok, methods=["GET"]),
+            Route("/ok", ok, methods=["GET"]),
+            Mount(prefix, app=app),
+        ],
         lifespan=app.router.lifespan_context,
         middleware=[Middleware(ASGIBypassMiddleware), *app.user_middleware],
         exception_handlers=app.exception_handlers,

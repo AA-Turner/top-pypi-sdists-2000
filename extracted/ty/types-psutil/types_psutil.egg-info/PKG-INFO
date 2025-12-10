@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: types-psutil
-Version: 7.1.3.20251202
+Version: 7.1.3.20251210
 Summary: Typing stubs for psutil
 License-Expression: Apache-2.0
 Project-URL: Homepage, https://github.com/python/typeshed
@@ -35,4 +35,4 @@ This package was tested with the following type checkers:
 * [pyright](https://github.com/microsoft/pyright) 1.1.407
 
 It was generated from typeshed commit
-[`cb592d4f3ea9216988006067454b8993f80ae248`](https://github.com/python/typeshed/commit/cb592d4f3ea9216988006067454b8993f80ae248).
+[`0153c409f1966e910ddba9543f35c86bbc21001d`](https://github.com/python/typeshed/commit/0153c409f1966e910ddba9543f35c86bbc21001d).

@@ -260,6 +260,7 @@ async def count_assistants(
         count = await CrudAssistants.count(
             conn,
             graph_id=payload.get("graph_id"),
+            name=payload.get("name"),
             metadata=payload.get("metadata"),
         )
     return ApiResponse(count)

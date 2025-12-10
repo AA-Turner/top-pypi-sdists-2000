@@ -200,25 +200,23 @@ def _token_request(module_params, payload):
 
     try:
         r = json.loads(
-            to_native(
-                open_url(
-                    auth_url,
-                    method="POST",
-                    validate_certs=validate_certs,
-                    http_agent=http_agent,
-                    timeout=connection_timeout,
-                    data=urlencode(payload),
-                ).read()
-            )
+            open_url(
+                auth_url,
+                method="POST",
+                validate_certs=validate_certs,
+                http_agent=http_agent,
+                timeout=connection_timeout,
+                data=urlencode(payload),
+            ).read()
         )
 
         return r["access_token"]
     except ValueError as e:
-        raise KeycloakError(f"API returned invalid JSON when trying to obtain access token from {auth_url}: {e}")
-    except KeyError:
-        raise KeycloakError(f"API did not include access_token field in response from {auth_url}")
+        raise KeycloakError(f"API returned invalid JSON when trying to obtain access token from {auth_url}: {e}") from e
+    except KeyError as e:
+        raise KeycloakError(f"API did not include access_token field in response from {auth_url}") from e
     except Exception as e:
-        raise KeycloakError(f"Could not obtain access token from {auth_url}: {e}", authError=e)
+        raise KeycloakError(f"Could not obtain access token from {auth_url}: {e}", authError=e) from e
 
 
 def _request_token_using_credentials(module_params):
@@ -467,7 +465,7 @@ class KeycloakAPI:
         :param data: (optional) data for request
         :return: raw API response
         """
-        return json.loads(to_native(self._request(url, method, data).read()))
+        return json.loads(self._request(url, method, data).read())
 
     def get_realm_info_by_id(self, realm="master"):
         """Obtain realm public info by id
@@ -2350,7 +2348,7 @@ class KeycloakAPI:
         """
         try:
             if diff > 0:
-                for i in range(diff):
+                for _i in range(diff):
                     self._request(
                         URL_AUTHENTICATION_EXECUTION_RAISE_PRIORITY.format(
                             url=self.baseurl, realm=realm, id=executionId
@@ -2358,7 +2356,7 @@ class KeycloakAPI:
                         method="POST",
                     )
             elif diff < 0:
-                for i in range(-diff):
+                for _i in range(-diff):
                     self._request(
                         URL_AUTHENTICATION_EXECUTION_LOWER_PRIORITY.format(
                             url=self.baseurl, realm=realm, id=executionId
@@ -3012,7 +3010,7 @@ class KeycloakAPI:
     def get_authz_permission_by_name(self, name, client_id, realm):
         """Get authorization permission by name"""
         url = URL_AUTHZ_POLICIES.format(url=self.baseurl, client_id=client_id, realm=realm)
-        search_url = "%s/search?name=%s" % (url, name.replace(" ", "%20"))
+        search_url = f"{url}/search?name={name.replace(' ', '%20')}"
 
         try:
             return self._request_and_deserialize(search_url, method="GET")
@@ -3058,7 +3056,7 @@ class KeycloakAPI:
     def get_authz_resource_by_name(self, name, client_id, realm):
         """Get authorization resource by name"""
         url = URL_AUTHZ_RESOURCES.format(url=self.baseurl, client_id=client_id, realm=realm)
-        search_url = "%s/search?name=%s" % (url, name.replace(" ", "%20"))
+        search_url = f"{url}/search?name={name.replace(' ', '%20')}"
 
         try:
             return self._request_and_deserialize(search_url, method="GET")
@@ -3068,7 +3066,7 @@ class KeycloakAPI:
     def get_authz_policy_by_name(self, name, client_id, realm):
         """Get authorization policy by name"""
         url = URL_AUTHZ_POLICIES.format(url=self.baseurl, client_id=client_id, realm=realm)
-        search_url = "%s/search?name=%s&permission=false" % (url, name.replace(" ", "%20"))
+        search_url = f"{url}/search?name={name.replace(' ', '%20')}"
 
         try:
             return self._request_and_deserialize(search_url, method="GET")

@@ -12,6 +12,10 @@ DOCUMENTATION = r"""
 module: layman
 author: "Jakub Jirutka (@jirutka)"
 short_description: Manage Gentoo overlays
+deprecated:
+  removed_in: 14.0.0
+  why: Gentoo deprecated C(layman) in mid-2023.
+  alternative: None.
 description:
   - Uses Layman to manage an additional repositories for the Portage package manager on Gentoo Linux. Please note that Layman
     must be installed on a managed node prior using this module.
@@ -132,7 +136,7 @@ def download_url(module, url, dest):
         with open(dest, "w") as f:
             shutil.copyfileobj(response, f)
     except IOError as e:
-        raise ModuleError(f"Failed to write: {e}")
+        raise ModuleError(f"Failed to write: {e}") from e
 
 
 def install_overlay(module, name, list_url=None):

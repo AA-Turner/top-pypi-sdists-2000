@@ -8,11 +8,15 @@ from __future__ import annotations
 import json
 import os
 import uuid
+import typing as t
 from urllib.error import URLError, HTTPError
 from urllib.parse import urlparse
 
 from ansible.module_utils.urls import open_url
 from ansible.module_utils.common.text.converters import to_native
+
+if t.TYPE_CHECKING:
+    from ansible.module_utils.basic import AnsibleModule
 
 
 GET_HEADERS = {"accept": "application/json"}
@@ -24,7 +28,7 @@ HEALTH_OK = 5
 
 
 class OcapiUtils:
-    def __init__(self, creds, base_uri, proxy_slot_number, timeout, module):
+    def __init__(self, creds, base_uri, proxy_slot_number, timeout, module: AnsibleModule) -> None:
         self.root_uri = base_uri
         self.proxy_slot_number = proxy_slot_number
         self.creds = creds
@@ -58,7 +62,7 @@ class OcapiUtils:
                 use_proxy=True,
                 timeout=self.timeout,
             )
-            data = json.loads(to_native(resp.read()))
+            data = json.loads(resp.read())
             headers = {k.lower(): v for (k, v) in resp.info().items()}
         except HTTPError as e:
             return {"ret": False, "msg": f"HTTP Error {e.code} on GET request to '{uri}'", "status": e.code}
@@ -88,7 +92,7 @@ class OcapiUtils:
                 timeout=self.timeout,
             )
             if resp.status != 204:
-                data = json.loads(to_native(resp.read()))
+                data = json.loads(resp.read())
             else:
                 data = ""
             headers = {k.lower(): v for (k, v) in resp.info().items()}

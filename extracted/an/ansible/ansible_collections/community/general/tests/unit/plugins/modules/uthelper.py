@@ -151,8 +151,8 @@ class ModuleTestCase:
         for mock_name, mock_spec in self.mock_specs.items():
             try:
                 mock_class = mocks_map[mock_name]
-            except KeyError:
-                raise Exception(f"Cannot find TestCaseMock class for: {mock_name}")
+            except KeyError as e:
+                raise Exception(f"Cannot find TestCaseMock class for: {mock_name}") from e
             self.mocks[mock_name] = mock_class.build_mock(mock_spec)
 
             self._fixtures.update(self.mocks[mock_name].fixtures())
@@ -231,8 +231,7 @@ class RunCommandMock(TestCaseMock):
 
     def setup(self, mocker):
         def _results():
-            for result in [(x["rc"], x["out"], x["err"]) for x in self.mock_specs]:
-                yield result
+            yield from [(x["rc"], x["out"], x["err"]) for x in self.mock_specs]
             raise Exception("testcase has not enough run_command calls")
 
         results = _results()

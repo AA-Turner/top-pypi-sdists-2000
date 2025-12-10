@@ -126,7 +126,7 @@ class PSAdapter(metaclass=abc.ABCMeta):
         try:
             regex = re.compile(pattern, flags)
         except re.error as e:
-            raise PSAdapterError(f"'{pattern}' is not a valid regular expression: {e}")
+            raise PSAdapterError(f"'{pattern}' is not a valid regular expression: {e}") from e
 
         return [p.pid for p in self._process_iter(*self.PATTERN_ATTRS) if self._matches_regex(p, regex)]
 
@@ -199,7 +199,7 @@ class Pids:
             try:
                 self._pids = self._ps.get_pids_by_pattern(self._pattern, self._ignore_case)
             except PSAdapterError as e:
-                self._module.fail_json(msg=to_native(e))
+                self._module.fail_json(msg=f"{e}")
 
         return self._module.exit_json(**self.result)
 

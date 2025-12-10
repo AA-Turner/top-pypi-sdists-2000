@@ -158,7 +158,6 @@ from ansible_collections.community.general.plugins.module_utils.redfish_utils im
     RedfishUtils,
     REDFISH_COMMON_ARGUMENT_SPEC,
 )
-from ansible.module_utils.common.text.converters import to_native
 
 
 class IdracRedfishUtils(RedfishUtils):
@@ -170,8 +169,7 @@ class IdracRedfishUtils(RedfishUtils):
             check_required_arguments(required_arg_spec, self.module.params)
 
         except TypeError as e:
-            msg = to_native(e)
-            self.module.fail_json(msg=msg)
+            self.module.fail_json(msg=f"{e}")
 
         key = "Attributes"
         command_manager_attributes_uri_map = {
@@ -291,17 +289,13 @@ def main():
 
     # Check that Category is valid
     if category not in CATEGORY_COMMANDS_ALL:
-        module.fail_json(
-            msg=to_native(f"Invalid Category '{category}'. Valid Categories = {list(CATEGORY_COMMANDS_ALL.keys())}")
-        )
+        module.fail_json(msg=f"Invalid Category '{category}'. Valid Categories = {list(CATEGORY_COMMANDS_ALL.keys())}")
 
     # Check that all commands are valid
     for cmd in command_list:
         # Fail if even one command given is invalid
         if cmd not in CATEGORY_COMMANDS_ALL[category]:
-            module.fail_json(
-                msg=to_native(f"Invalid Command '{cmd}'. Valid Commands = {CATEGORY_COMMANDS_ALL[category]}")
-            )
+            module.fail_json(msg=f"Invalid Command '{cmd}'. Valid Commands = {CATEGORY_COMMANDS_ALL[category]}")
 
     # check for mutually exclusive commands
     try:
@@ -311,7 +305,7 @@ def main():
         check_mutually_exclusive(CATEGORY_COMMANDS_MUTUALLY_EXCLUSIVE[category], dict.fromkeys(command_list, True))
 
     except TypeError as e:
-        module.fail_json(msg=to_native(e))
+        module.fail_json(msg=f"{e}")
 
     # Organize by Categories / Commands
 
@@ -319,7 +313,7 @@ def main():
         # execute only if we find a Manager resource
         result = rf_utils._find_managers_resource()
         if result["ret"] is False:
-            module.fail_json(msg=to_native(result["msg"]))
+            module.fail_json(msg=result["msg"])
 
         for command in command_list:
             if command in ["SetManagerAttributes", "SetLifecycleControllerAttributes", "SetSystemAttributes"]:
@@ -328,11 +322,11 @@ def main():
     # Return data back or fail with proper message
     if result["ret"] is True:
         if result.get("warning"):
-            module.warn(to_native(result["warning"]))
+            module.warn(result["warning"])
 
-        module.exit_json(changed=result["changed"], msg=to_native(result["msg"]))
+        module.exit_json(changed=result["changed"], msg=result["msg"])
     else:
-        module.fail_json(msg=to_native(result["msg"]))
+        module.fail_json(msg=result["msg"])
 
 
 if __name__ == "__main__":

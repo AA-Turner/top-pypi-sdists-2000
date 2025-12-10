@@ -250,7 +250,8 @@ def main():
             input_params, tokens
         )
         found_id = False
-        storage_component_list = storage_component_res.query_all()
+        storage_component_list = storage_component_res.query_all_no_params()
+        storage_component_list = storage_component_list.get("storage_components", [])
         logger.writeDebug(
             "storage_component_list={}".format(storage_component_list)
         )

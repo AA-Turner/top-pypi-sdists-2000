@@ -114,7 +114,6 @@ else:
     pyodbc_found = True
 
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
-from ansible.module_utils.common.text.converters import to_native
 
 
 class NotSupportedError(Exception):
@@ -198,12 +197,13 @@ def check(user_facts, user, profile, resource_pool, locked, password, expired, l
         and ldap != (user_facts[user_key]["expired"] == "True")
     ):
         return False
-    if roles and (
-        sorted(roles) != sorted(user_facts[user_key]["roles"])
-        or sorted(roles) != sorted(user_facts[user_key]["default_roles"])
-    ):
-        return False
-    return True
+    return not (
+        roles
+        and (
+            sorted(roles) != sorted(user_facts[user_key]["roles"])
+            or sorted(roles) != sorted(user_facts[user_key]["default_roles"])
+        )
+    )
 
 
 def present(user_facts, cursor, user, profile, resource_pool, locked, password, expired, ldap, roles):
@@ -283,8 +283,8 @@ def absent(user_facts, cursor, user, roles):
         update_roles(user_facts, cursor, user, user_facts[user_key]["roles"], user_facts[user_key]["default_roles"], [])
         try:
             cursor.execute(f"drop user {user_facts[user_key]['name']}")
-        except pyodbc.Error:
-            raise CannotDropError("Dropping user failed due to dependencies.")
+        except pyodbc.Error as e:
+            raise CannotDropError("Dropping user failed due to dependencies.") from e
         del user_facts[user_key]
         return True
     else:
@@ -365,23 +365,22 @@ def main():
             try:
                 changed = absent(user_facts, cursor, user, roles)
             except pyodbc.Error as e:
-                module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+                module.fail_json(msg=f"{e}", exception=traceback.format_exc())
         elif state in ["present", "locked"]:
             try:
                 changed = present(
                     user_facts, cursor, user, profile, resource_pool, locked, password, expired, ldap, roles
                 )
             except pyodbc.Error as e:
-                module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+                module.fail_json(msg=f"{e}", exception=traceback.format_exc())
     except NotSupportedError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={"vertica_users": user_facts})
+        module.fail_json(msg=f"{e}", ansible_facts={"vertica_users": user_facts})
     except CannotDropError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={"vertica_users": user_facts})
+        module.fail_json(msg=f"{e}", ansible_facts={"vertica_users": user_facts})
     except SystemExit:
-        # avoid catching this on python 2.4
         raise
     except Exception as e:
-        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+        module.fail_json(msg=f"{e}", exception=traceback.format_exc())
 
     module.exit_json(changed=changed, user=user, ansible_facts={"vertica_users": user_facts})
 

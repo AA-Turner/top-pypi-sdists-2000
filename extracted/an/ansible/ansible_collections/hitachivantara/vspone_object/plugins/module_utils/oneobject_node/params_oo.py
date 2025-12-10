@@ -73,6 +73,14 @@ class StorageComponentFactsParam:
                 if storage_component_facts_query != "CAPACITY":
                     raise ValueError(SCOMPMCA.ERR_INVALID_COMPONENT_QUERY_PARAM.value.format(
                         storage_component_facts_query))
+
+            page_size = self.json_spec.get("page_size", None)
+            if page_size is not None:
+                if page_size <= 0:
+                    raise ValueError(SCOMPMCA.ERR_INVALID_PAGE_SIZE.value.format(
+                        str(page_size)))
+                if isinstance(page_size, bool):
+                    raise ValueError(SCOMPMCA.ERR_INVALID_TYPE_PAGE_SIZE.value)
         return True
 
     def format_bytes(self, size_in_bytes):

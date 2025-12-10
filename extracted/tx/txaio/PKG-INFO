@@ -1,16 +1,17 @@
 Metadata-Version: 2.4
 Name: txaio
-Version: 25.12.1
+Version: 25.12.2
 Summary: Compatibility API between asyncio/Twisted/Trollius
-Author-email: typedef int GmbH <contact@typedefint.eu>
-Maintainer-email: typedef int GmbH <contact@typedefint.eu>
-License-Expression: MIT
 Project-URL: Homepage, https://txaio.readthedocs.io/
 Project-URL: Documentation, https://txaio.readthedocs.io/
 Project-URL: Repository, https://github.com/crossbario/txaio
 Project-URL: Source, https://github.com/crossbario/txaio
 Project-URL: Bug Tracker, https://github.com/crossbario/txaio/issues
-Keywords: asyncio,twisted,trollius,coroutine
+Author-email: typedef int GmbH <contact@typedefint.eu>
+Maintainer-email: typedef int GmbH <contact@typedefint.eu>
+License-Expression: MIT
+License-File: LICENSE
+Keywords: asyncio,coroutine,trollius,twisted
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: Console
 Classifier: Framework :: Twisted
@@ -27,48 +28,44 @@ Classifier: Programming Language :: Python :: Implementation :: PyPy
 Classifier: Topic :: Software Development :: Libraries
 Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
 Requires-Python: >=3.11
-Description-Content-Type: text/markdown
-License-File: LICENSE
-Provides-Extra: twisted
-Requires-Dist: zope.interface>=5.2.0; extra == "twisted"
-Requires-Dist: twisted>=22.10.0; extra == "twisted"
-Provides-Extra: asyncio
-Provides-Extra: docs
-Requires-Dist: sphinx>=7.2; extra == "docs"
-Requires-Dist: myst-parser>=2.0; extra == "docs"
-Requires-Dist: furo>=2024.7.0; extra == "docs"
-Requires-Dist: sphinx-autoapi>=2.1.0; extra == "docs"
-Requires-Dist: sphinx-copybutton>=0.5; extra == "docs"
-Requires-Dist: sphinx-design>=0.5; extra == "docs"
-Requires-Dist: sphinxcontrib-images>=0.9; extra == "docs"
-Requires-Dist: sphinxcontrib-spelling>=8.0; extra == "docs"
-Requires-Dist: pyenchant>=3.2; extra == "docs"
-Requires-Dist: scour>=0.38; extra == "docs"
-Requires-Dist: sphinxext-opengraph>=0.9; extra == "docs"
-Requires-Dist: linkify-it-py>=2.0.0; extra == "docs"
-Provides-Extra: dev
-Requires-Dist: build>=1.0.0; extra == "dev"
-Requires-Dist: wheel>=0.42.0; extra == "dev"
-Requires-Dist: twine>=5.0.0; extra == "dev"
-Requires-Dist: pytest>=8.0.0; extra == "dev"
-Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
-Requires-Dist: coverage>=7.0.0; extra == "dev"
-Requires-Dist: ruff>=0.4.0; extra == "dev"
 Provides-Extra: all
-Requires-Dist: zope.interface>=5.2.0; extra == "all"
-Requires-Dist: twisted>=22.10.0; extra == "all"
-Dynamic: license-file
+Requires-Dist: twisted>=22.10.0; extra == 'all'
+Requires-Dist: zope-interface>=5.2.0; extra == 'all'
+Provides-Extra: asyncio
+Provides-Extra: dev
+Requires-Dist: build>=1.0.0; extra == 'dev'
+Requires-Dist: coverage>=7.0.0; extra == 'dev'
+Requires-Dist: pytest-cov>=4.0.0; extra == 'dev'
+Requires-Dist: pytest>=8.0.0; extra == 'dev'
+Requires-Dist: ruff>=0.4.0; extra == 'dev'
+Requires-Dist: twine>=5.0.0; extra == 'dev'
+Requires-Dist: wheel>=0.42.0; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: furo>=2024.7.0; extra == 'docs'
+Requires-Dist: linkify-it-py>=2.0.0; extra == 'docs'
+Requires-Dist: myst-parser>=2.0; extra == 'docs'
+Requires-Dist: pyenchant>=3.2; extra == 'docs'
+Requires-Dist: scour>=0.38; extra == 'docs'
+Requires-Dist: sphinx-autoapi>=2.1.0; extra == 'docs'
+Requires-Dist: sphinx-copybutton>=0.5; extra == 'docs'
+Requires-Dist: sphinx-design>=0.5; extra == 'docs'
+Requires-Dist: sphinx>=8.2.3; extra == 'docs'
+Requires-Dist: sphinxcontrib-images>=0.9; extra == 'docs'
+Requires-Dist: sphinxcontrib-spelling>=8.0; extra == 'docs'
+Requires-Dist: sphinxext-opengraph>=0.9; extra == 'docs'
+Provides-Extra: twisted
+Requires-Dist: twisted>=22.10.0; extra == 'twisted'
+Requires-Dist: zope-interface>=5.2.0; extra == 'twisted'
+Description-Content-Type: text/markdown
 
 # txaio
 
-[![Version](https://img.shields.io/pypi/v/txaio.svg)](https://pypi.python.org/pypi/txaio)
-[![Test](https://github.com/crossbario/txaio/workflows/main/badge.svg)](https://github.com/crossbario/txaio/actions?query=workflow%3Amain)
-[![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](https://txaio.readthedocs.io/en/latest/)
-<!--
+[![PyPI](https://img.shields.io/pypi/v/txaio.svg)](https://pypi.python.org/pypi/txaio)
+[![Python](https://img.shields.io/pypi/pyversions/txaio.svg)](https://pypi.python.org/pypi/txaio)
+[![CI](https://github.com/crossbario/txaio/workflows/main/badge.svg)](https://github.com/crossbario/txaio/actions?query=workflow%3Amain)
 [![Docs](https://readthedocs.org/projects/txaio/badge/?version=latest)](https://txaio.readthedocs.io/en/latest/)
-[![Deploy Workflow](https://github.com/crossbario/txaio/workflows/deploy/badge.svg)](https://github.com/crossbario/txaio/actions?query=workflow%3Adeploy)
-[![Coverage](https://codecov.io/github/crossbario/txaio/coverage.svg?branch=master)](https://codecov.io/github/crossbario/txaio)
--->
+[![License](https://img.shields.io/pypi/l/txaio.svg)](https://github.com/crossbario/txaio/blob/master/LICENSE)
+[![Downloads](https://img.shields.io/pypi/dm/txaio.svg)](https://pypi.python.org/pypi/txaio)
 
 ------------------------------------------------------------------------
 

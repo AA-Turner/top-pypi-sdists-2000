@@ -358,10 +358,7 @@ class Rhsm:
 
         args = [SUBMAN_CMD, "identity"]
         rc, stdout, stderr = self.module.run_command(args, check_rc=False)
-        if rc == 0:
-            return True
-        else:
-            return False
+        return rc == 0
 
     def _has_dbus_interface(self):
         """
@@ -607,7 +604,7 @@ class Rhsm:
                 if distro_id == "fedora" and distro_version[0] >= 41:
                     return True
                 # Assume EL distros here.
-                if distro_version[0] >= 10:
+                if distro_version[0] >= 10:  # noqa: SIM103
                     return True
                 return False
 
@@ -628,7 +625,7 @@ class Rhsm:
                 # if the 2nd part of the version is empty, it means it is
                 # CentOS Stream, and thus we can assume it has the latest
                 # version of subscription-manager.
-                if distro_id == "centos" and (
+                if distro_id == "centos" and (  # noqa: SIM103
                     (distro_version[0] == 8 and (distro_version[1] >= 6 or distro_version_parts[1] == ""))
                     or distro_version[0] >= 9
                 ):
@@ -662,7 +659,7 @@ class Rhsm:
                 # CentOS: since the change was only done in EL 9, then there is
                 # only CentOS Stream for 9, and thus we can assume it has the
                 # latest version of subscription-manager.
-                if distro_id == "centos" and distro_version[0] >= 9:
+                if distro_id == "centos" and distro_version[0] >= 9:  # noqa: SIM103
                     return True
                 # Unknown or old distro: assume it does not support
                 # the new option.
@@ -695,7 +692,7 @@ class Rhsm:
                 # if the 2nd part of the version is empty, it means it is
                 # CentOS Stream, and thus we can assume it has the latest
                 # version of subscription-manager.
-                if distro_id == "centos" and (
+                if distro_id == "centos" and (  # noqa: SIM103
                     (distro_version[0] == 8 and (distro_version[1] >= 6 or distro_version_parts[1] == ""))
                     or distro_version[0] >= 9
                 ):
@@ -909,10 +906,7 @@ class RhsmPool:
     def subscribe(self):
         args = f"subscription-manager attach --pool {self.get_pool_id()}"
         rc, stdout, stderr = self.module.run_command(args, check_rc=True)
-        if rc == 0:
-            return True
-        else:
-            return False
+        return rc == 0
 
 
 class RhsmPools:
@@ -1157,7 +1151,7 @@ def main():
         try:
             syspurpose_changed = SysPurpose().update_syspurpose(syspurpose)
         except Exception as err:
-            module.fail_json(msg=f"Failed to update syspurpose attributes: {to_native(err)}")
+            module.fail_json(msg=f"Failed to update syspurpose attributes: {err}")
 
     # Ensure system is registered
     if state == "present":
@@ -1170,12 +1164,12 @@ def main():
                 try:
                     rhsm.sync_syspurpose()
                 except Exception as e:
-                    module.fail_json(msg=f"Failed to synchronize syspurpose attributes: {to_native(e)}")
+                    module.fail_json(msg=f"Failed to synchronize syspurpose attributes: {e}")
             if pool_ids:
                 try:
                     result = rhsm.update_subscriptions_by_pool_ids(pool_ids)
                 except Exception as e:
-                    module.fail_json(msg=f"Failed to update subscriptions for '{server_hostname}': {to_native(e)}")
+                    module.fail_json(msg=f"Failed to update subscriptions for '{server_hostname}': {e}")
                 else:
                     module.exit_json(**result)
             else:
@@ -1213,7 +1207,7 @@ def main():
                 else:
                     subscribed_pool_ids = []
             except Exception as e:
-                module.fail_json(msg=f"Failed to register with '{server_hostname}': {to_native(e)}")
+                module.fail_json(msg=f"Failed to register with '{server_hostname}': {e}")
             else:
                 module.exit_json(
                     changed=True,

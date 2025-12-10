@@ -1,5 +1,8 @@
-from typing import Literal
+import os
+import re
+from typing import Annotated, Literal
 
+from pydantic.functional_validators import AfterValidator
 from typing_extensions import TypedDict
 
 __all__ = [
@@ -20,19 +23,37 @@ __all__ = [
 
 class CorsConfig(TypedDict, total=False):
     allow_origins: list[str]
+    """List of origins allowed to access the API (e.g., ["https://app.com"]).
+
+    Use ["*"] to allow any origin. Combined with `allow_origin_regex` when both are set.
+    """
     allow_methods: list[str]
+    """HTTP methods permitted for cross-origin requests (e.g., ["GET", "POST"])."""
     allow_headers: list[str]
+    """Request headers clients may send in cross-origin requests (e.g., ["authorization"])."""
     allow_credentials: bool
+    """Whether browsers may include credentials (cookies, Authorization) in cross-origin requests."""
     allow_origin_regex: str
+    """Regular expression that matches allowed origins; evaluated against the request Origin header."""
     expose_headers: list[str]
+    """Response headers that browsers are allowed to read from CORS responses."""
     max_age: int
+    """Number of seconds browsers may cache the CORS preflight (OPTIONS) response."""
 
 
 class ConfigurableHeaders(TypedDict, total=False):
     includes: list[str] | None
+    """Header name patterns to include.
+
+    Patterns support literal names and the "*" wildcard (e.g., "x-*", "user-agent").
+    Matching is performed against lower-cased header names.
+    """
     excludes: list[str] | None
+    """Header name patterns to exclude after inclusion rules are applied."""
     include: list[str] | None
+    """Alias of `includes` for convenience/backwards compatibility."""
     exclude: list[str] | None
+    """Alias of `excludes` for convenience/backwards compatibility."""
 
 
 MiddlewareOrders = Literal["auth_first", "middleware_first"]
@@ -54,7 +75,7 @@ class HttpConfig(TypedDict, total=False):
     disable_webhooks: bool
     """Disable webhooks calls on run completion in all routes"""
     cors: CorsConfig | None
-    """CORS configuration"""
+    """CORS configuration for all mounted routes; see CorsConfig for details."""
     disable_ui: bool
     """Disable /ui routes"""
     disable_mcp: bool
@@ -62,15 +83,35 @@ class HttpConfig(TypedDict, total=False):
     mount_prefix: str
     """Prefix for mounted routes. E.g., "/my-deployment/api"."""
     configurable_headers: ConfigurableHeaders | None
+    """Controls which inbound request headers are surfaced to runs as `config.configurable`.
+
+    Only headers that match `includes` and do not match `excludes` are exposed, except
+    for tracing headers like `langsmith-trace` and select `baggage` keys which are
+    always forwarded. Patterns are matched case-insensitively against lower-cased names.
+    """
     logging_headers: ConfigurableHeaders | None
+    """Controls which inbound request headers may appear in access/application logs.
+
+    Use restrictive patterns (e.g., include "user-agent", exclude "authorization") to
+    avoid logging sensitive information.
+    """
     enable_custom_route_auth: bool
+    """If true, apply the configured authentication middleware to user-supplied routes."""
     middleware_order: MiddlewareOrders | None
+    """Ordering for authentication vs custom middleware on user routes.
+
+    - "auth_first": run auth middleware before user middleware
+    - "middleware_first": run user middleware before auth (default behavior)
+    """
 
 
 class ThreadTTLConfig(TypedDict, total=False):
     strategy: Literal["delete"]
+    """Action taken when a thread exceeds its TTL. Currently only "delete" is supported."""
     default_ttl: float | None
+    """Default thread TTL in minutes; threads past this age are subject to the `strategy`."""
     sweep_interval_minutes: int | None
+    """How often to scan for expired threads, in minutes."""
 
 
 class IndexConfig(TypedDict, total=False):
@@ -130,8 +171,18 @@ class TTLConfig(TypedDict, total=False):
 
 class StoreConfig(TypedDict, total=False):
     path: str
+    """Import path to a custom `BaseStore` or a callable returning one.
+
+    Examples:
+    - "./my_store.py:create_store"
+    - "my_package.store:Store"
+
+    When provided, this replaces the default Postgres-backed store.
+    """
     index: IndexConfig
+    """Vector index settings for the built-in store (ignored by custom stores)."""
     ttl: TTLConfig
+    """TTL behavior for stored items in the built-in store (custom stores may not support TTL)."""
 
 
 class SerdeConfig(TypedDict, total=False):
@@ -191,15 +242,24 @@ class CheckpointerConfig(TypedDict, total=False):
 
 class SecurityConfig(TypedDict, total=False):
     securitySchemes: dict
+    """OpenAPI `components.securitySchemes` definition to merge into the spec."""
     security: list
+    """Default security requirements applied to all operations (OpenAPI `security`)."""
     # path => {method => security}
     paths: dict[str, dict[str, list]]
+    """Per-route overrides of security requirements.
+
+    Mapping of path -> method -> OpenAPI `security` array.
+    """
 
 
 class CacheConfig(TypedDict, total=False):
     cache_keys: list[str]
+    """Header names used to build the cache key for auth decisions."""
     ttl_seconds: int
+    """How long to cache successful auth decisions, in seconds."""
     max_size: int
+    """Maximum number of distinct auth cache entries to retain."""
 
 
 class AuthConfig(TypedDict, total=False):
@@ -232,6 +292,123 @@ class AuthConfig(TypedDict, total=False):
         }
     """
     cache: CacheConfig | None
+    """Optional cache settings for the custom auth backend to reduce repeated lookups."""
+
+
+class WebhookUrlPolicy(TypedDict, total=False):
+    require_https: bool
+    """Enforce HTTPS scheme for absolute URLs; reject `http://` when true."""
+    allowed_domains: list[str]
+    """Hostname allowlist. Supports exact hosts and wildcard subdomains.
+
+    Use entries like "hooks.example.com" or "*.mycorp.com". The wildcard only
+    matches subdomains ("foo.mycorp.com"), not the apex ("mycorp.com"). When
+    empty or omitted, any public host is allowed (subject to SSRF IP checks).
+    """
+    allowed_ports: list[int]
+    """Explicit port allowlist for absolute URLs.
+
+    If set, requests must use one of these ports. Defaults are respected when
+    a port is not present in the URL (443 for https, 80 for http).
+    """
+    max_url_length: int
+    """Maximum permitted URL length in characters; longer inputs are rejected early."""
+    disable_loopback: bool
+    """Disallow relative URLs (internal loopback calls) when true."""
+
+
+# Matches things like "${{ env.LG_WEBHOOK_FOO_BAR }}"
+_WEBHOOK_TEMPLATE_RE = re.compile(r"\$\{\{\s*([^}]+?)\s*\}\}")
+
+
+def _validate_url_policy(
+    policy: "WebhookUrlPolicy | None",
+) -> "WebhookUrlPolicy | None":
+    if not policy:
+        return policy
+    if "allowed_domains" in policy:
+        doms = policy["allowed_domains"]
+        if not isinstance(doms, list) or not all(
+            isinstance(d, str) and d for d in doms
+        ):
+            raise ValueError(
+                f"webhooks.url.allowed_domains must be a list of non-empty strings. Got: {doms}"
+            )
+        for d in doms:
+            if "*" in d and not d.startswith("*."):
+                raise ValueError(
+                    f"webhooks.url.allowed_domains wildcard can only be used as a prefix, in the form '*.domain'. Got: {doms}"
+                )
+    if "require_https" not in policy:
+        policy["require_https"] = True
+    if "allowed_domains" not in policy:
+        policy["allowed_domains"] = []
+    if "allowed_ports" not in policy:
+        policy["allowed_ports"] = []
+    if "max_url_length" not in policy:
+        policy["max_url_length"] = 2048
+    if "disable_loopback" not in policy:
+        policy["disable_loopback"] = False
+    return policy
+
+
+class WebhooksConfig(TypedDict, total=False):
+    env_prefix: str
+    """Required prefix for environment variables referenced in header templates.
+
+    Acts as an allowlist boundary to prevent leaking arbitrary environment
+    variables. Defaults to "LG_WEBHOOK_" when omitted.
+    """
+    url: Annotated[WebhookUrlPolicy, AfterValidator(_validate_url_policy)]
+    """URL validation policy for user-supplied webhook endpoints."""
+    headers: dict[str, str]
+    """Static headers to include with webhook requests.
+
+    Values may contain templates of the form "${{ env.VAR }}". On startup, these
+    are resolved via the process environment after verifying `VAR` starts with
+    `env_prefix`. Mixed literals and multiple templates are allowed.
+    """
+
+
+def webhooks_validator(cfg: "WebhooksConfig") -> "WebhooksConfig":
+    # Enforce env prefix & actual env presence at the aggregate level
+    headers = cfg.get("headers") or {}
+    if headers:
+        env_prefix = cfg.get("env_prefix", "LG_WEBHOOK_")
+        if env_prefix is None:
+            raise ValueError("webhook headers: Invalid null env_prefix")
+
+        def _replace(m: re.Match[str]) -> str:
+            expr = m.group(1).strip()
+            # Only variables we support are of the form "env.FOO_BAR" right now.
+            if not expr.startswith("env."):
+                raise ValueError(
+                    f"webhook headers: only env.VAR references are allowed (e.g. {{{{ env.{env_prefix}FOO_BAR }}}})"
+                )
+            var = expr[len("env.") :]
+            if not var or "." in var:
+                raise ValueError(
+                    f"webhook headers: invalid env reference '{var}'. Use env.VAR with no dots (e.g. {{{{ env.{env_prefix}FOO_BAR }}}})"
+                )
+            if env_prefix and not var.startswith(env_prefix):
+                raise ValueError(
+                    f"webhook headers: environment variable name '{var}' must start with the configured env_prefix '{env_prefix}'"
+                )
+            val = os.getenv(var)
+            if val is None:
+                raise ValueError(
+                    f"webhook headers: missing required environment variable '{var}'"
+                )
+            return val
+
+        rendered_headers = {}
+        for k, v in headers.items():
+            if not isinstance(v, str):
+                raise ValueError(f"Webhook header values must be strings. Got: {v}")
+            rendered = _WEBHOOK_TEMPLATE_RE.sub(_replace, v)
+            rendered_headers[k] = rendered
+        cfg["headers"] = rendered_headers
+    return cfg
 
 
 class EncryptionConfig(TypedDict, total=False):

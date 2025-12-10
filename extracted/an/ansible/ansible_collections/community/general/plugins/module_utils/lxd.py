@@ -6,14 +6,14 @@ from __future__ import annotations
 
 
 import http.client as http_client
+import json
 import os
 import socket
 import ssl
-import json
+import typing as t
 from urllib.parse import urlparse
 
 from ansible.module_utils.urls import generic_urlparse
-from ansible.module_utils.common.text.converters import to_text
 
 # httplib/http.client connection using unix domain socket
 HTTPConnection = http_client.HTTPConnection
@@ -21,7 +21,7 @@ HTTPSConnection = http_client.HTTPSConnection
 
 
 class UnixHTTPConnection(HTTPConnection):
-    def __init__(self, path):
+    def __init__(self, path: str) -> None:
         HTTPConnection.__init__(self, "localhost")
         self.path = path
 
@@ -32,33 +32,34 @@ class UnixHTTPConnection(HTTPConnection):
 
 
 class LXDClientException(Exception):
-    def __init__(self, msg, **kwargs):
+    def __init__(self, msg: str, **kwargs) -> None:
         self.msg = msg
         self.kwargs = kwargs
 
 
 class LXDClient:
     def __init__(
-        self, url, key_file=None, cert_file=None, debug=False, server_cert_file=None, server_check_hostname=True
-    ):
+        self,
+        url: str,
+        key_file: str | None = None,
+        cert_file: str | None = None,
+        debug: bool = False,
+        server_cert_file: str | None = None,
+        server_check_hostname: bool = True,
+    ) -> None:
         """LXD Client.
 
         :param url: The URL of the LXD server. (e.g. unix:/var/lib/lxd/unix.socket or https://127.0.0.1)
-        :type url: ``str``
         :param key_file: The path of the client certificate key file.
-        :type key_file: ``str``
         :param cert_file: The path of the client certificate file.
-        :type cert_file: ``str``
         :param debug: The debug flag. The request and response are stored in logs when debug is true.
-        :type debug: ``bool``
         :param server_cert_file: The path of the server certificate file.
-        :type server_cert_file: ``str``
         :param server_check_hostname: Whether to check the server's hostname as part of TLS verification.
-        :type debug: ``bool``
         """
         self.url = url
         self.debug = debug
-        self.logs = []
+        self.logs: list[dict[str, t.Any]] = []
+        self.connection: UnixHTTPConnection | HTTPSConnection
         if url.startswith("https:"):
             self.cert_file = cert_file
             self.key_file = key_file
@@ -68,7 +69,7 @@ class LXDClient:
                 # Check that the received cert is signed by the provided server_cert_file
                 ctx.load_verify_locations(cafile=server_cert_file)
             ctx.check_hostname = server_check_hostname
-            ctx.load_cert_chain(cert_file, keyfile=key_file)
+            ctx.load_cert_chain(cert_file, keyfile=key_file)  # type: ignore # TODO!
             self.connection = HTTPSConnection(parts.get("netloc"), context=ctx)
         elif url.startswith("unix:"):
             unix_socket_path = url[len("unix:") :]
@@ -76,7 +77,7 @@ class LXDClient:
         else:
             raise LXDClientException("URL scheme must be unix: or https:")
 
-    def do(self, method, url, body_json=None, ok_error_codes=None, timeout=None, wait_for_container=None):
+    def do(self, method: str, url: str, body_json=None, ok_error_codes=None, timeout=None, wait_for_container=None):
         resp_json = self._send_request(method, url, body_json=body_json, ok_error_codes=ok_error_codes, timeout=timeout)
         if resp_json["type"] == "async":
             url = f"{resp_json['operation']}/wait"
@@ -92,13 +93,12 @@ class LXDClient:
         body_json = {"type": "client", "password": trust_password}
         return self._send_request("POST", "/1.0/certificates", body_json=body_json)
 
-    def _send_request(self, method, url, body_json=None, ok_error_codes=None, timeout=None):
+    def _send_request(self, method: str, url: str, body_json=None, ok_error_codes=None, timeout=None):
         try:
             body = json.dumps(body_json)
             self.connection.request(method, url, body=body)
             resp = self.connection.getresponse()
             resp_data = resp.read()
-            resp_data = to_text(resp_data, errors="surrogate_or_strict")
             resp_json = json.loads(resp_data)
             self.logs.append(
                 {
@@ -116,7 +116,7 @@ class LXDClient:
                 self._raise_err_from_json(resp_json)
             return resp_json
         except socket.error as e:
-            raise LXDClientException("cannot connect to the LXD server", err=e)
+            raise LXDClientException("cannot connect to the LXD server", err=e) from e
 
     def _raise_err_from_json(self, resp_json):
         err_params = {}
@@ -135,9 +135,9 @@ class LXDClient:
         return err
 
 
-def default_key_file():
+def default_key_file() -> str:
     return os.path.expanduser("~/.config/lxc/client.key")
 
 
-def default_cert_file():
+def default_cert_file() -> str:
     return os.path.expanduser("~/.config/lxc/client.crt")

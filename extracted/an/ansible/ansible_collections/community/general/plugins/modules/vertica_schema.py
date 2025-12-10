@@ -106,7 +106,6 @@ else:
     pyodbc_found = True
 
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
-from ansible.module_utils.common.text.converters import to_native
 
 
 class NotSupportedError(Exception):
@@ -190,9 +189,7 @@ def check(schema_facts, schema, usage_roles, create_roles, owner):
         return False
     if sorted(usage_roles) != sorted(schema_facts[schema_key]["usage_roles"]):
         return False
-    if sorted(create_roles) != sorted(schema_facts[schema_key]["create_roles"]):
-        return False
-    return True
+    return sorted(create_roles) == sorted(schema_facts[schema_key]["create_roles"])
 
 
 def present(schema_facts, cursor, schema, usage_roles, create_roles, owner):
@@ -243,8 +240,8 @@ def absent(schema_facts, cursor, schema, usage_roles, create_roles):
         )
         try:
             cursor.execute(f"drop schema {schema_facts[schema_key]['name']} restrict")
-        except pyodbc.Error:
-            raise CannotDropError("Dropping schema failed due to dependencies.")
+        except pyodbc.Error as e:
+            raise CannotDropError("Dropping schema failed due to dependencies.") from e
         del schema_facts[schema_key]
         return True
     else:
@@ -314,21 +311,21 @@ def main():
             try:
                 changed = absent(schema_facts, cursor, schema, usage_roles, create_roles)
             except pyodbc.Error as e:
-                module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+                module.fail_json(msg=f"{e}", exception=traceback.format_exc())
         elif state == "present":
             try:
                 changed = present(schema_facts, cursor, schema, usage_roles, create_roles, owner)
             except pyodbc.Error as e:
-                module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+                module.fail_json(msg=f"{e}", exception=traceback.format_exc())
     except NotSupportedError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={"vertica_schemas": schema_facts})
+        module.fail_json(msg=f"{e}", ansible_facts={"vertica_schemas": schema_facts})
     except CannotDropError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={"vertica_schemas": schema_facts})
+        module.fail_json(msg=f"{e}", ansible_facts={"vertica_schemas": schema_facts})
     except SystemExit:
         # avoid catching this on python 2.4
         raise
     except Exception as e:
-        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+        module.fail_json(msg=f"{e}", exception=traceback.format_exc())
 
     module.exit_json(changed=changed, schema=schema, ansible_facts={"vertica_schemas": schema_facts})
 

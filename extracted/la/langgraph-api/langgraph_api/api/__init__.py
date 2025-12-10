@@ -62,6 +62,7 @@ async def docs(request: Request):
 
 
 shadowable_meta_routes: list[BaseRoute] = [
+    Route("/", ok, methods=["GET"]),  # Root health check for load balancers
     Route("/info", meta_info, methods=["GET"]),
 ]
 unshadowable_meta_routes: list[BaseRoute] = [

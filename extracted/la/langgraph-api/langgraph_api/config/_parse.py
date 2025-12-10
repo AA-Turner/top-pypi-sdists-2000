@@ -1,8 +1,9 @@
 from collections.abc import Callable
-from typing import TypeVar, cast
+from typing import Annotated, TypeVar, cast, get_args, get_origin
 
 import orjson
 from pydantic import TypeAdapter
+from typing_extensions import TypeForm
 
 from langgraph_api.config.schemas import (
     ThreadTTLConfig,
@@ -18,11 +19,18 @@ def parse_json(json: str | None, schema: TypeAdapter | None = None) -> dict | No
     return parsed or None
 
 
-def parse_schema(schema: type[TD]) -> Callable[[str | None], TD | None]:
+def parse_schema(
+    schema: TypeForm[TD],
+) -> Callable[[str | None], TD | None]:
     def composed(json: str | None) -> TD | None:
         return cast("TD | None", parse_json(json, schema=TypeAdapter(schema)))
 
-    composed.__name__ = schema.__name__  # This just gives a nicer error message if the user provides an incompatible value
+    # This just gives a nicer error message if the user provides an incompatible value
+    if get_origin(schema) is Annotated:
+        schema_type = get_args(schema)[0]
+        composed.__name__ = schema_type.__name__
+    else:
+        composed.__name__ = schema.__name__  # type: ignore
     return composed
 
 

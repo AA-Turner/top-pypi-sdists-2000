@@ -117,7 +117,6 @@ CATEGORY_COMMANDS_ALL = {"Manager": ["SetTimeZone", "SetDNSserver", "SetDomainNa
 from ansible_collections.community.general.plugins.module_utils.ilo_redfish_utils import iLORedfishUtils
 from ansible_collections.community.general.plugins.module_utils.redfish_utils import REDFISH_COMMON_ARGUMENT_SPEC
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.text.converters import to_native
 
 
 def main():
@@ -166,14 +165,12 @@ def main():
     offending = [cmd for cmd in command_list if cmd not in CATEGORY_COMMANDS_ALL[category]]
 
     if offending:
-        module.fail_json(
-            msg=to_native(f"Invalid Command(s): '{offending}'. Allowed Commands = {CATEGORY_COMMANDS_ALL[category]}")
-        )
+        module.fail_json(msg=f"Invalid Command(s): '{offending}'. Allowed Commands = {CATEGORY_COMMANDS_ALL[category]}")
 
     if category == "Manager":
         resource = rf_utils._find_managers_resource()
         if not resource["ret"]:
-            module.fail_json(msg=to_native(resource["msg"]))
+            module.fail_json(msg=resource["msg"])
 
         dispatch = dict(
             SetTimeZone=rf_utils.set_time_zone,

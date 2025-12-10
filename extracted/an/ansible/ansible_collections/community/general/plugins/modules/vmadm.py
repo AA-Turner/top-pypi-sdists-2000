@@ -346,7 +346,6 @@ import traceback
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.text.converters import to_native
 
 # While vmadm(1M) supports a -E option to return any errors in JSON, the
 # generated JSON does not play well with the JSON parsers of Python.
@@ -362,14 +361,14 @@ def get_vm_prop(module, uuid, prop):
     (rc, stdout, stderr) = module.run_command(cmd)
 
     if rc != 0:
-        module.fail_json(msg=f"Could not perform lookup of {prop} on {uuid}", exception=stderr)
+        module.fail_json(msg=f"Could not perform lookup of {prop} on {uuid}", rc=rc, stdout=stdout, stderr=stderr)
 
     try:
         stdout_json = json.loads(stdout)
     except Exception as e:
         module.fail_json(
             msg=f"Invalid JSON returned by vmadm for uuid lookup of {prop}",
-            details=to_native(e),
+            details=f"{e}",
             exception=traceback.format_exc(),
         )
 
@@ -385,7 +384,7 @@ def get_vm_uuid(module, alias):
     (rc, stdout, stderr) = module.run_command(cmd)
 
     if rc != 0:
-        module.fail_json(msg=f"Could not retrieve UUID of {alias}", exception=stderr)
+        module.fail_json(msg=f"Could not retrieve UUID of {alias}", rc=rc, stdout=stdout, stderr=stderr)
 
     # If no VM was found matching the given alias, we get back an empty array.
     # That is not an error condition as we might be explicitly checking for its
@@ -395,7 +394,7 @@ def get_vm_uuid(module, alias):
     except Exception as e:
         module.fail_json(
             msg=f"Invalid JSON returned by vmadm for uuid lookup of {alias}",
-            details=to_native(e),
+            details=f"{e}",
             exception=traceback.format_exc(),
         )
 
@@ -410,23 +409,23 @@ def get_all_vm_uuids(module):
     (rc, stdout, stderr) = module.run_command(cmd)
 
     if rc != 0:
-        module.fail_json(msg="Failed to get VMs list", exception=stderr)
+        module.fail_json(msg="Failed to get VMs list", rc=rc, stdout=stdout, stderr=stderr)
 
     try:
         stdout_json = json.loads(stdout)
         return [v["uuid"] for v in stdout_json]
     except Exception as e:
-        module.fail_json(msg="Could not retrieve VM UUIDs", details=to_native(e), exception=traceback.format_exc())
+        module.fail_json(msg="Could not retrieve VM UUIDs", details=f"{e}", exception=traceback.format_exc())
 
 
 def new_vm(module, uuid, vm_state):
     payload_file = create_payload(module, uuid)
 
-    (rc, dummy, stderr) = vmadm_create_vm(module, payload_file)
+    (rc, stdout, stderr) = vmadm_create_vm(module, payload_file)
 
     if rc != 0:
         changed = False
-        module.fail_json(msg="Could not create VM", exception=stderr)
+        module.fail_json(msg="Could not create VM", rc=rc, stdout=stdout, stderr=stderr)
     else:
         changed = True
         # 'vmadm create' returns all output to stderr...

@@ -1,7 +1,8 @@
 import os
 from os import environ, getenv
-from typing import Literal, TypeVar
+from typing import TYPE_CHECKING, Annotated, Literal, TypeVar, cast
 
+from pydantic.functional_validators import AfterValidator
 from starlette.config import Config, undefined
 from starlette.datastructures import CommaSeparatedStrings
 
@@ -17,7 +18,12 @@ from langgraph_api.config.schemas import (
     StoreConfig,
     ThreadTTLConfig,
     TTLConfig,
+    WebhooksConfig,
+    webhooks_validator,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 # env
 
@@ -227,6 +233,20 @@ else:
         ),
     )
 
+# Webhooks
+
+
+WEBHOOKS_CONFIG = env(
+    "LANGGRAPH_WEBHOOKS",
+    cast=cast(
+        "Callable[[str | None], WebhooksConfig | None]",
+        _parse.parse_schema(
+            Annotated[WebhooksConfig, AfterValidator(webhooks_validator)]
+        ),
+    ),
+    default=None,
+)
+
 # license
 
 LANGGRAPH_CLOUD_LICENSE_KEY = env("LANGGRAPH_CLOUD_LICENSE_KEY", cast=str, default="")
@@ -408,4 +428,5 @@ __all__ = [
     "StoreConfig",
     "TTLConfig",
     "ThreadTTLConfig",
+    "WebhooksConfig",
 ]

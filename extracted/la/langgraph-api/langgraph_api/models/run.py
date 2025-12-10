@@ -27,6 +27,7 @@ from langgraph_api.schema import (
 from langgraph_api.utils import AsyncConnectionProto, get_auth_ctx, get_user_id
 from langgraph_api.utils.headers import get_configurable_headers
 from langgraph_api.utils.uuids import uuid7
+from langgraph_api.webhook import validate_webhook_url_or_raise
 from langgraph_runtime.ops import Runs
 
 if TYPE_CHECKING:
@@ -258,6 +259,9 @@ async def create_valid_run(
     if durability is None:
         checkpoint_during = payload.get("checkpoint_during")
         durability = "async" if checkpoint_during in (None, True) else "exit"
+
+    if webhook := payload.get("webhook"):
+        await validate_webhook_url_or_raise(str(webhook))
 
     run_coro = Runs.put(
         conn,

@@ -389,6 +389,7 @@ where
         let mut device_options = DirectFsDeviceOptions::new(dir)
             .with_capacity(config.disk * MIB)
             .with_file_size(config.file_size * MIB);
+
         if config.admission_rate_limit > 0 {
             device_options = device_options.with_throttle(
                 Throttle::new().with_write_throughput(config.admission_rate_limit * MIB),

@@ -239,9 +239,9 @@ copyright = "2007-2025, the SQLAlchemy authors and contributors"  # noqa
 # The short X.Y version.
 version = "2.0"
 # The full version, including alpha/beta/rc tags.
-release = "2.0.44"
+release = "2.0.45"
 
-release_date = "October 10, 2025"
+release_date = "December 9, 2025"
 
 site_base = os.environ.get("RTD_SITE_BASE", "https://www.sqlalchemy.org")
 site_adapter_template = "docs_adapter.mako"
@@ -479,3 +479,17 @@ epub_copyright = "2007-2015, SQLAlchemy authors"
 
 # Allow duplicate toc entries.
 # epub_tocdup = True
+
+
+def setup(app):  # noqa: U100
+    """Sphinx setup hook to configure documentation build."""
+
+    # delete class attributes with a value, where the value has ``__doc__``
+    # defined, but we want to see only the docstring under the attribute
+    # itself.
+    try:
+        from sqlalchemy.ext.asyncio import AsyncSession
+    except ImportError:
+        pass
+    else:
+        del AsyncSession.sync_session_class

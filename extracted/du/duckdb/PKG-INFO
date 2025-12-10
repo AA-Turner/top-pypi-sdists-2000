@@ -1,11 +1,11 @@
 Metadata-Version: 2.1
 Name: duckdb
-Version: 1.4.2
+Version: 1.4.3
 Summary: DuckDB in-process database
 Keywords: DuckDB,Database,SQL,OLAP
 Author: DuckDB Foundation
 Maintainer: DuckDB Foundation
-Classifier: Development Status :: 3 - Alpha
+Classifier: Development Status :: 5 - Production/Stable
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Classifier: Topic :: Database
@@ -28,7 +28,7 @@ Classifier: Programming Language :: C++
 Project-URL: Documentation, https://duckdb.org/docs/stable/clients/python/overview
 Project-URL: Source, https://github.com/duckdb/duckdb-python
 Project-URL: Issues, https://github.com/duckdb/duckdb-python/issues
-Project-URL: Changelog, https://github.com/duckdb/duckdb/releases
+Project-URL: Changelog, https://github.com/duckdb/duckdb-python/releases
 Requires-Python: >=3.9.0
 Provides-Extra: all
 Requires-Dist: ipython; extra == "all"

@@ -33,6 +33,7 @@ from langgraph_api.validation import (
     RunsCancel,
     ThreadCronCreate,
 )
+from langgraph_api.webhook import validate_webhook_url_or_raise
 from langgraph_license.validation import plus_features_enabled
 from langgraph_runtime.database import connect
 from langgraph_runtime.ops import Crons, Runs, StreamHandler, Threads
@@ -637,6 +638,8 @@ async def delete_run(request: ApiRequest):
 async def create_cron(request: ApiRequest):
     """Create a cron with new thread."""
     payload = await request.json(CronCreate)
+    if webhook := payload.get("webhook"):
+        await validate_webhook_url_or_raise(str(webhook))
 
     original_metadata = payload.get("metadata") or {}
     original_context = payload.get("context") or {}
@@ -690,6 +693,8 @@ async def create_thread_cron(request: ApiRequest):
     thread_id = request.path_params["thread_id"]
     validate_uuid(thread_id, "Invalid thread ID: must be a UUID")
     payload = await request.json(ThreadCronCreate)
+    if webhook := payload.get("webhook"):
+        await validate_webhook_url_or_raise(str(webhook))
 
     original_metadata = payload.get("metadata") or {}
     original_context = payload.get("context") or {}

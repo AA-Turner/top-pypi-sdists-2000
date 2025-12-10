@@ -78,7 +78,6 @@ msg:
 import traceback
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.text.converters import to_native
 
 
 def do_upgrade(module, image):
@@ -108,14 +107,14 @@ def core(module):
 
     if backend:
         if state == "present" or state == "latest":
-            args = [atomic_bin, "pull", "--storage=%s" % backend, image]
+            args = [atomic_bin, "pull", f"--storage={backend}", image]
             rc, out, err = module.run_command(args, check_rc=False)
             if rc < 0:
                 module.fail_json(rc=rc, msg=err)
             else:
                 out_run = ""
                 if started:
-                    args = [atomic_bin, "run", "--storage=%s" % backend, image]
+                    args = [atomic_bin, "run", f"--storage={backend}", image]
                     rc, out_run, err = module.run_command(args, check_rc=False)
                     if rc < 0:
                         module.fail_json(rc=rc, msg=err)
@@ -123,7 +122,7 @@ def core(module):
                 changed = "Extracting" in out or "Copying blob" in out
                 module.exit_json(msg=(out + out_run), changed=changed)
         elif state == "absent":
-            args = [atomic_bin, "images", "delete", "--storage=%s" % backend, image]
+            args = [atomic_bin, "images", "delete", f"--storage={backend}", image]
             rc, out, err = module.run_command(args, check_rc=False)
             if rc < 0:
                 module.fail_json(rc=rc, msg=err)
@@ -171,7 +170,7 @@ def main():
     try:
         core(module)
     except Exception as e:
-        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+        module.fail_json(msg=f"{e}", exception=traceback.format_exc())
 
 
 if __name__ == "__main__":

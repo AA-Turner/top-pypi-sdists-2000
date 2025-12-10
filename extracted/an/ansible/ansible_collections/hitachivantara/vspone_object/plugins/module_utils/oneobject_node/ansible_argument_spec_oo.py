@@ -303,7 +303,7 @@ class OOArgumentSpec:
                 },
                 "storage_type": {
                     "type": "str",
-                    "choices": ['HCPS_S3'],
+                    "choices": ['HCPS_S3', 'ARRAY'],
                     "required": False
                 },
                 "storage_custom_metadata": {
@@ -353,7 +353,9 @@ class OOArgumentSpec:
                         "namespace": {"type": "str", "required": False},
                         "data_persistent_volume_name": {"type": "str", "required": False},
                         "data_claim_capacity": {"type": "str", "required": False},
-                        "node": {"type": "str", "required": False}
+                        "node": {"type": "str", "required": False},
+                        "array_name": {"type": "str", "required": False},
+                        "array_storage_tier": {"type": "str", "required": False},
                     }
                 }
             }
@@ -422,7 +424,11 @@ class OOArgumentSpec:
                 "query": {
                     "type": "str",
                     "required": False
-                }
+                },
+                "page_size": {
+                    "type": "int",
+                    "required": False
+                },
             }
         }
 

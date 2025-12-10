@@ -114,6 +114,12 @@ options:
         description: Type of query to perform on storage components.
         type: str
         required: false
+      page_size:
+        description:
+          - Number of storage components to retrieve per page when querying.
+          - This parameter is ignored if the parameter `query` is provided.
+        type: int
+        required: false
 """
 
 EXAMPLES = """
@@ -128,6 +134,20 @@ EXAMPLES = """
       oneobject_node_username: "your_username"
       oneobject_node_userpass: "your_password"
       oneobject_node_client_id: "vsp-object-external-client"
+
+- name: Get n number of storage components
+  hitachivantara.vspone_object.oneobject_node.hv_storage_components_facts:
+    connection_info:
+      http_request_timeout: 300
+      http_request_retry_times: 3
+      http_request_retry_interval_seconds: 5
+      cluster_name: "your_cluster_name"
+      region: "your_region"
+      oneobject_node_username: "your_username"
+      oneobject_node_userpass: "your_password"
+      oneobject_node_client_id: "vsp-object-external-client"
+    spec:
+      page_size: 2
 
 - name: Get storage components capacity
   hitachivantara.vspone_object.oneobject_node.hv_storage_components_facts:
@@ -262,6 +282,22 @@ ansible_facts:
               description: Whether to use a proxy for the storage component.
               type: bool
               sample: false
+            array_lun:
+              description: The LUN on the storage array.
+              type: str
+              sample: "lun1"
+            array_name:
+              description: The name of the storage array.
+              type: str
+              sample: "vsp_array_01"
+            array_namespace:
+              description: The namespace on the storage array.
+              type: str
+              sample: "namespace1"
+            array_storage_tier:
+              description: The storage tier on the storage array.
+              type: str
+              sample: "nvme-tlc"
         storage_custom_metadata:
           description: Custom metadata for the storage component.
           type: dict
@@ -379,6 +415,7 @@ def main():
     )
     raw_message = ""
     capacity_query = False
+    page_token = ""
     try:
         storage_components = StorageComponentResource(
             storage_component_param, tokens
@@ -395,8 +432,15 @@ def main():
                     value["warn_threshold_capacity"] = storage_component_param.format_bytes(value["warn_threshold"])
                     raw_message["storage_capacities"][key] = value
 
+        elif json_spec and json_spec.get("page_size", None) > 0:
+            raw_message = storage_components.query_n()
+            page_token = raw_message.get("page_token", None)
+            logger.writeDebug("Initial page_token={}".format(page_token))
+            raw_message = raw_message.get("storage_components", [])
+
         else:
             raw_message = storage_components.query_all()
+            raw_message = raw_message.get("storage_components", [])
     except Exception as err:
         module.fail_json(msg=CMCA.ERR_CMN_REASON.value.format(err))
 
@@ -405,6 +449,8 @@ def main():
     response = {
         "storage_components": raw_message,
     }
+    if page_token != "":
+        response["page_token"] = page_token
 
     if registration_message:
         response["user_consent_required"] = registration_message

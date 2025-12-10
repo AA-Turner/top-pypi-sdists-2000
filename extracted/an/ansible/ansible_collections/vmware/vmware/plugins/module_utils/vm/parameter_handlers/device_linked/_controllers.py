@@ -1,8 +1,8 @@
 """
-Controller parameter handlers for VM storage controller configuration.
+Controller parameter handlers for VM controller configuration.
 
-This module provides parameter handlers for different types of VM storage
-controllers including SCSI, SATA, NVMe, and IDE controllers. Each controller
+This module provides parameter handlers for different types of VM
+controllers such as SCSI, SATA, etc. Each controller
 type has specific capabilities and configuration options that are managed
 by their respective handlers.
 
@@ -17,10 +17,9 @@ from ansible_collections.vmware.vmware.plugins.module_utils.vm.parameter_handler
     DeviceLinkError,
 )
 from ansible_collections.vmware.vmware.plugins.module_utils.vm.objects._controllers import (
-    ScsiController,
-    SataController,
-    NvmeController,
-    IdeController,
+    ScsiDeviceController,
+    BasicDeviceController,
+    ShareableDeviceController,
 )
 
 try:
@@ -29,29 +28,12 @@ except ImportError:
     pass
 
 
-class DiskControllerParameterHandlerBase(AbstractDeviceLinkedParameterHandler):
-    """
-    Abstract base class for disk controller parameter handlers.
+class UsbControllerParameterHandler(AbstractDeviceLinkedParameterHandler):
 
-    This class provides common functionality for managing VM disk controllers
-    including parameter validation, device linking, and change detection.
-    All disk controller types (SCSI, SATA, NVMe, IDE) extend this base class.
-
-    Controllers are identified by their category (scsi, sata, nvme, ide) and
-    bus number. Each controller type has a maximum number of controllers that
-    can be added to a VM, and this base class enforces those limits.
-
-    The base class handles common controller operations while allowing subclasses
-    to implement type-specific parameter parsing and configuration.
-
-    Attributes:
-        controllers (dict): Registry of controllers by bus number {bus_number: controller}
-        max_count (int): Maximum number of controllers allowed for this type
-        category (str): Controller category identifier (scsi, sata, nvme, ide)
-    """
+    HANDLER_NAME = "usb_controller"
 
     def __init__(
-        self, error_handler, params, change_set, vm, device_tracker, category, max_count=4
+        self, error_handler, params, change_set, vm, device_tracker
     ):
         """
         Initialize the controller parameter handler.
@@ -62,54 +44,57 @@ class DiskControllerParameterHandlerBase(AbstractDeviceLinkedParameterHandler):
             change_set: Service for tracking configuration changes and requirements
             vm: VM object being configured (None for new VM creation)
             device_tracker: Service for device identification and error reporting
-            category (str): Controller category identifier (scsi, sata, nvme, ide)
-            max_count (int): Maximum number of controllers allowed (default 4)
         """
         super().__init__(error_handler, params, change_set, vm, device_tracker)
-        self.controllers = {}  # {bus_number: controller}
-        self.max_count = max_count
-        self.category = category
+        self._check_if_params_are_defined_by_user("usb_controllers", required_for_vm_creation=False)
+        self.controllers = {}  # {controller_type: controller}
+        self.max_count = 2
 
     def verify_parameter_constraints(self):
         """
-        Validate controller parameter constraints and limits.
+        Parse USB controller parameters from module input.
 
-        Parses controller parameters and validates that the number of
-        controllers doesn't exceed the maximum allowed for this controller
-        type. Different controller types have different limits.
-
-        Raises:
-            Calls error_handler.fail_with_parameter_error() if too many
-            controllers are specified for this controller type.
-        """
-        self._parse_device_controller_params()
-        if len(self.controllers) > self.max_count:
-            self.error_handler.fail_with_parameter_error(
-                parameter_name="%s_controllers" % self.category,
-                message="Only a maximum of %s %s controllers are allowed, but trying to manage %s controllers."
-                % (self.max_count, self.category.upper(), len(self.controllers)),
-                details={
-                    "max_count": self.max_count,
-                    "category": self.category,
-                    "current_count": len(self.controllers),
-                },
-            )
-
-    @abstractmethod
-    def _parse_device_controller_params(self):
-        """
-        Parse controller-specific parameters from module input.
-
-        This method must be implemented by subclasses to handle the specific
-        parameter format and options for each controller type. For example,
-        SCSI controllers have type and bus sharing options, while SATA
-        controllers only need a count.
+        Processes the usb_controllers parameter list and creates device
+        objects representing the desired USB controller configuration. Controllers are
+        indexed by their position in the list.
 
         Side Effects:
-            Populates self.controllers with controller objects representing
-            the desired configuration.
+            Populates self.controllers with device objects representing
+            the desired USB controller configuration.
         """
-        raise NotImplementedError
+        for controller_param_def in self.params.get("usb_controllers"):
+            controller_type = controller_param_def.get("controller_type")
+            if controller_type in self.controllers:
+                self.error_handler.fail_with_parameter_error(
+                    parameter_name="usb_controllers",
+                    message=(
+                        "USB controller type %s is already defined. Only one controller of each type is allowed."
+                        % (controller_type)
+                    ),
+                    details={"violating_param": controller_param_def},
+                )
+            self.controllers[controller_type] = BasicDeviceController(
+                bus_number=0,  # bus number is always 0 for USB controllers, since only one of each type is allowed
+                device_type=controller_type,
+                vim_device_class=self.device_type_to_sub_class_map[controller_type],
+            )
+
+    @property
+    def vim_device_class(self):
+        """
+        Get the VMware device class for this controller type.
+        """
+        return tuple(self.device_type_to_sub_class_map.values())
+
+    @property
+    def device_type_to_sub_class_map(self):
+        """
+        Get a map of device types to their corresponding sub-classes.
+        """
+        return {
+            "usb2": vim.vm.device.VirtualUSBController,
+            "usb3": vim.vm.device.VirtualUSBXHCIController,
+        }
 
     def populate_config_spec_with_parameters(self, configspec):
         """
@@ -128,13 +113,11 @@ class DiskControllerParameterHandlerBase(AbstractDeviceLinkedParameterHandler):
         """
         for controller in self.change_set.objects_to_add:
             self.device_tracker.track_device_id_from_spec(controller)
-            configspec.deviceChange.append(
-                controller.create_controller_spec(edit=False)
-            )
+            configspec.deviceChange.append(controller.to_new_spec())
 
         for controller in self.change_set.objects_to_update:
             self.device_tracker.track_device_id_from_spec(controller)
-            configspec.deviceChange.append(controller.create_controller_spec(edit=True))
+            configspec.deviceChange.append(controller.to_update_spec())
 
     def compare_live_config_with_desired_config(self):
         """
@@ -151,16 +134,146 @@ class DiskControllerParameterHandlerBase(AbstractDeviceLinkedParameterHandler):
             Updates change_set with controller objects categorized by required actions.
         """
         for controller in self.controllers.values():
-            if controller._device is None:
+            if not controller.has_a_linked_live_vm_device():
                 self.change_set.objects_to_add.append(controller)
-            elif controller.linked_device_differs_from_config():
+            elif controller.differs_from_live_object():
                 self.change_set.objects_to_update.append(controller)
-            else:
-                self.change_set.objects_in_sync.append(controller)
 
         return self.change_set
 
     def link_vm_device(self, device):
+        """
+        Link a VMware controller device to the appropriate controller object.
+
+        Matches a VMware controller device to the corresponding controller object
+        based on the device class. Since USB devices are either version 2 or 3, and
+        there can only be one of each, the bus number is always 0 for both types.
+
+        Args:
+            device: VMware controller device to link
+
+        Returns:
+            BasicDeviceController or None: None if device was linked, else a controller
+                                           object representing the VM device
+        """
+        for key, value in self.device_type_to_sub_class_map.items():
+            if isinstance(device, value):
+                device_type = key
+                break
+        else:
+            raise DeviceLinkError(
+                "USB controller type %s not supported." % str(type(device)),
+                device,
+                self,
+            )
+
+        try:
+            controller = self.controllers[device_type]
+            controller.link_corresponding_live_object(
+                BasicDeviceController.from_live_device_spec(device, device_type)
+            )
+            return
+        except KeyError:
+            pass
+
+        if self.params.get("usb_controllers_remove_unmanaged"):
+            return BasicDeviceController.from_live_device_spec(device, device_type)
+        else:
+            return None
+
+
+class DiskControllerParameterHandlerBase(AbstractDeviceLinkedParameterHandler):
+    """
+    Abstract base class for disk controller parameter handlers.
+
+    This class provides common functionality for managing VM disk controllers
+    including parameter validation, device linking, and change detection.
+    All disk controller types (SCSI, SATA, NVMe, IDE) extend this base class.
+
+    Controllers are identified by their category (scsi, sata, nvme, ide) and
+    bus number. Each controller type has a maximum number of controllers that
+    can be added to a VM, and this base class enforces those limits.
+
+    The base class handles common controller operations while allowing subclasses
+    to implement type-specific parameter parsing and configuration.
+
+    Attributes:
+        max_count (int): Maximum number of controllers allowed for this type
+        category (str): Controller category identifier (scsi, sata, nvme, ide)
+    """
+
+    def __init__(
+        self,
+        error_handler,
+        params,
+        change_set,
+        vm,
+        device_tracker,
+        category,
+        max_count=4,
+    ):
+        """
+        Initialize the controller parameter handler.
+
+        Args:
+            error_handler: Service for parameter validation error handling
+            params (dict): Module parameters containing controller configuration
+            change_set: Service for tracking configuration changes and requirements
+            vm: VM object being configured (None for new VM creation)
+            device_tracker: Service for device identification and error reporting
+            category (str): Controller category identifier (scsi, sata, nvme, ide)
+            max_count (int): Maximum number of controllers allowed (default 4)
+        """
+        super().__init__(error_handler, params, change_set, vm, device_tracker)
+        self.max_count = max_count
+        self.category = category
+
+    def verify_parameter_constraints(self):
+        """
+        Validate controller parameter constraints and limits.
+
+        Parses controller parameters and validates that the number of
+        controllers doesn't exceed the maximum allowed for this controller
+        type. Different controller types have different limits.
+
+        Raises:
+            Calls error_handler.fail_with_parameter_error() if too many
+            controllers are specified for this controller type.
+        """
+        self._parse_device_controller_params()
+        if len(self.managed_parameter_objects) > self.max_count:
+            self.error_handler.fail_with_parameter_error(
+                parameter_name="%s_controllers" % self.category,
+                message="Only a maximum of %s %s controllers are allowed, but trying to manage %s controllers."
+                % (
+                    self.max_count,
+                    self.category.upper(),
+                    len(self.managed_parameter_objects),
+                ),
+                details={
+                    "max_count": self.max_count,
+                    "category": self.category,
+                    "current_count": len(self.managed_parameter_objects),
+                },
+            )
+
+    @abstractmethod
+    def _parse_device_controller_params(self):
+        """
+        Parse controller-specific parameters from module input.
+
+        This method must be implemented by subclasses to handle the specific
+        parameter format and options for each controller type. For example,
+        SCSI controllers have type and bus sharing options, while SATA
+        controllers only need a count.
+
+        Side Effects:
+            Populates self.managed_parameter_objects with controller objects representing
+            the desired configuration.
+        """
+        raise NotImplementedError
+
+    def link_vm_device(self, device, remove_unmanaged=False):
         """
         Link a VMware controller device to the appropriate controller object.
 
@@ -177,16 +290,17 @@ class DiskControllerParameterHandlerBase(AbstractDeviceLinkedParameterHandler):
         Side Effects:
             Sets the _device attribute on the matching controller object.
         """
-        for controller in self.controllers.values():
+        for controller in self.managed_parameter_objects.values():
             if device.busNumber == controller.bus_number:
-                controller._device = device
+                controller.link_corresponding_live_object(
+                    controller.from_live_device_spec(device, device_type=self.category)
+                )
                 return
 
-        raise DeviceLinkError(
-            "Controller %s not found for device %s" % (self.controllers[0].device_class.__name__, device.busNumber),
-            device,
-            self,
-        )
+        if remove_unmanaged:
+            return BasicDeviceController.from_live_device_spec(device, self.category)
+        else:
+            return None
 
 
 class ScsiControllerParameterHandler(DiskControllerParameterHandlerBase):
@@ -228,14 +342,16 @@ class ScsiControllerParameterHandler(DiskControllerParameterHandlerBase):
             device_tracker: Service for device identification and error reporting
         """
         super().__init__(error_handler, params, change_set, vm, device_tracker, "scsi")
-        self._check_if_params_are_defined_by_user("scsi_controllers", required_for_vm_creation=False)
+        self._check_if_params_are_defined_by_user(
+            "scsi_controllers", required_for_vm_creation=False
+        )
 
     @property
     def vim_device_class(self):
         """
         Get the VMware device class for this controller type.
         """
-        return vim.vm.device.VirtualSCSIController
+        return tuple(self.device_type_to_sub_class_map.values())
 
     @property
     def device_type_to_sub_class_map(self):
@@ -256,20 +372,65 @@ class ScsiControllerParameterHandler(DiskControllerParameterHandlerBase):
         Processes the scsi_controllers parameter list and creates ScsiController
         objects with the specified controller type and bus sharing configuration.
         Controllers are indexed by their position in the list.
-
-        Side Effects:
-            Populates self.controllers with ScsiController objects representing
-            the desired SCSI controller configuration.
         """
-        for index, controller_param_def in enumerate(self.params.get("scsi_controllers")):
-            self.controllers[index] = ScsiController(
-                bus_number=index,
+        for controller_param_def in self.params.get("scsi_controllers"):
+            bus_number = controller_param_def.get("bus_number")
+            if bus_number >= self.max_count:
+                self.error_handler.fail_with_parameter_error(
+                    parameter_name="scsi_controllers",
+                    message="Bus number %s is out of range for SCSI controllers. Valid bus numbers are 0 to %s, inclusive."
+                    % (bus_number, self.max_count - 1),
+                    details={"violating_param": controller_param_def},
+                )
+            self.managed_parameter_objects[bus_number] = ScsiDeviceController(
+                bus_number=bus_number,
                 device_type=controller_param_def.get("controller_type"),
-                device_class=self.device_type_to_sub_class_map[
+                vim_device_class=self.device_type_to_sub_class_map[
                     controller_param_def.get("controller_type")
                 ],
                 bus_sharing=controller_param_def.get("bus_sharing"),
             )
+
+    def link_vm_device(self, device):
+        """
+        Overloaded version of the base class method to handle SCSI controller specific logic.
+
+        Args:
+            device: VMware controller device to link
+
+        Raises:
+            Exception: If no matching controller object is found for the device
+
+        Side Effects:
+            Sets the _device attribute on the matching controller object.
+        """
+        for key, value in self.device_type_to_sub_class_map.items():
+            if isinstance(device, value):
+                device_type = key
+                break
+        else:
+            raise DeviceLinkError(
+                "SCSI controller type %s not supported device %s"
+                % (str(type(device)), device.busNumber),
+                device,
+                self,
+            )
+
+        for controller in self.managed_parameter_objects.values():
+            if (
+                device.busNumber == controller.bus_number
+                and device_type == controller.device_type
+            ):
+                controller.link_corresponding_live_object(
+                    ScsiDeviceController.from_live_device_spec(device, device_type)
+                )
+                return
+
+        # device is unlinked and should be removed
+        if self.params.get("scsi_controllers_remove_unmanaged"):
+            return ScsiDeviceController.from_live_device_spec(device, device_type)
+        else:
+            return None
 
 
 class SataControllerParameterHandler(DiskControllerParameterHandlerBase):
@@ -301,7 +462,9 @@ class SataControllerParameterHandler(DiskControllerParameterHandlerBase):
             device_tracker: Service for device identification and error reporting
         """
         super().__init__(error_handler, params, change_set, vm, device_tracker, "sata")
-        self._check_if_params_are_defined_by_user("sata_controller_count", required_for_vm_creation=False)
+        self._check_if_params_are_defined_by_user(
+            "sata_controllers", required_for_vm_creation=False
+        )
 
     @property
     def vim_device_class(self):
@@ -317,13 +480,30 @@ class SataControllerParameterHandler(DiskControllerParameterHandlerBase):
         Creates the specified number of SATA controllers based on the
         sata_controller_count parameter. Controllers are numbered sequentially
         starting from 0.
-
-        Side Effects:
-            Populates self.controllers with SataController objects representing
-            the desired SATA controller configuration.
         """
-        for index in range(self.params.get("sata_controller_count", 0)):
-            self.controllers[index] = SataController(bus_number=index)
+        for sata_controller_param in self.params.get("sata_controllers"):
+            bus_number = sata_controller_param.get("bus_number")
+            if bus_number >= self.max_count:
+                self.error_handler.fail_with_parameter_error(
+                    parameter_name="sata_controllers",
+                    message="Bus number %s is out of range for SATA controllers. Valid bus numbers are 0 to %s, inclusive."
+                    % (bus_number, self.max_count - 1),
+                    details={"violating_param": sata_controller_param},
+                )
+            self.managed_parameter_objects[bus_number] = BasicDeviceController(
+                bus_number=bus_number,
+                device_type=self.category,
+                vim_device_class=self.vim_device_class,
+            )
+
+    def link_vm_device(self, device):
+        """
+        Overloaded version of the base class method to handle SATA controller specific logic.
+
+        Args:
+            device: VMware controller device to link
+        """
+        return super().link_vm_device(device, remove_unmanaged=self.params.get("sata_controllers_remove_unmanaged"))
 
 
 class NvmeControllerParameterHandler(DiskControllerParameterHandlerBase):
@@ -358,7 +538,9 @@ class NvmeControllerParameterHandler(DiskControllerParameterHandlerBase):
             device_tracker: Service for device identification and error reporting
         """
         super().__init__(error_handler, params, change_set, vm, device_tracker, "nvme")
-        self._check_if_params_are_defined_by_user("nvme_controllers", required_for_vm_creation=False)
+        self._check_if_params_are_defined_by_user(
+            "nvme_controllers", required_for_vm_creation=False
+        )
 
     @property
     def vim_device_class(self):
@@ -374,15 +556,31 @@ class NvmeControllerParameterHandler(DiskControllerParameterHandlerBase):
         Processes the nvme_controllers parameter list and creates NvmeController
         objects with the specified bus sharing configuration. Controllers are
         indexed by their position in the list.
-
-        Side Effects:
-            Populates self.controllers with NvmeController objects representing
-            the desired NVMe controller configuration.
         """
-        for index, controller_param_def in enumerate(self.params.get("nvme_controllers")):
-            self.controllers[index] = NvmeController(
-                bus_number=index, bus_sharing=controller_param_def.get("bus_sharing")
+        for controller_param_def in self.params.get("nvme_controllers"):
+            bus_number = controller_param_def.get("bus_number")
+            if bus_number >= self.max_count:
+                self.error_handler.fail_with_parameter_error(
+                    parameter_name="nvme_controllers",
+                    message="Bus number %s is out of range for NVMe controllers. Valid bus numbers are 0 to %s, inclusive."
+                    % (bus_number, self.max_count - 1),
+                    details={"violating_param": controller_param_def},
+                )
+            self.managed_parameter_objects[bus_number] = ShareableDeviceController(
+                device_type=self.category,
+                bus_number=bus_number,
+                vim_device_class=self.vim_device_class,
+                bus_sharing=controller_param_def.get("bus_sharing"),
             )
+
+    def link_vm_device(self, device):
+        """
+        Overloaded version of the base class method to handle NVMe controller specific logic.
+
+        Args:
+            device: VMware controller device to link
+        """
+        return super().link_vm_device(device, remove_unmanaged=self.params.get("nvme_controllers_remove_unmanaged"))
 
 
 class IdeControllerParameterHandler(DiskControllerParameterHandlerBase):
@@ -432,10 +630,10 @@ class IdeControllerParameterHandler(DiskControllerParameterHandlerBase):
         Creates representations of the 2 IDE controllers that are present
         on all VMs by default. These controllers cannot be modified but
         can be referenced by other VM components.
-
-        Side Effects:
-            Populates self.controllers with IdeController objects representing
-            the default IDE controllers (bus numbers 0 and 1).
         """
         for index in range(self.max_count):
-            self.controllers[index] = IdeController(bus_number=index)
+            self.managed_parameter_objects[index] = BasicDeviceController(
+                bus_number=index,
+                device_type=self.category,
+                vim_device_class=self.vim_device_class,
+            )

@@ -353,7 +353,13 @@ impl ManifestManager {
         match rx.await {
             Ok(None) => Ok(()),
             Ok(Some(err)) => Err(err),
-            Err(_) => Err(Error::Internal),
+            // NOTE(rescrv):  This is an error on a channel.  We made the oneshot above.  The
+            // background push work call does not fail.  Do work does not fail.  The only way this
+            // can fail is if some other thread picks up our work and encounters a failure that
+            // causes it to enter a backoff-retry condition.
+            //
+            // See [LogWriter::handle_errors_and_contention] for more information.
+            Err(_) => Err(Error::LogContentionFailure),
         }
     }
 

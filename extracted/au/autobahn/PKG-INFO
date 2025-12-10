@@ -1,12 +1,13 @@
 Metadata-Version: 2.4
 Name: autobahn
-Version: 25.11.1
+Version: 25.12.1
 Summary: WebSocket client & server library, WAMP real-time framework
-Author-email: typedef int GmbH <contact@typedefint.eu>
-License-Expression: MIT
 Project-URL: Homepage, https://autobahn.readthedocs.io/
 Project-URL: Source, https://github.com/crossbario/autobahn-python
-Keywords: autobahn,crossbar,websocket,realtime,rfc6455,wamp,rpc,pubsub,twisted,asyncio
+Author-email: typedef int GmbH <contact@typedefint.eu>
+License-Expression: MIT
+License-File: LICENSE
+Keywords: asyncio,autobahn,crossbar,pubsub,realtime,rfc6455,rpc,twisted,wamp,websocket
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: No Input/Output (Daemon)
 Classifier: Framework :: Twisted
@@ -20,108 +21,131 @@ Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Topic :: Communications
 Classifier: Topic :: Internet
 Classifier: Topic :: Internet :: WWW/HTTP
-Classifier: Topic :: Communications
-Classifier: Topic :: System :: Distributed Computing
 Classifier: Topic :: Software Development :: Libraries
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Software Development :: Object Brokering
+Classifier: Topic :: System :: Distributed Computing
 Requires-Python: >=3.11
-Description-Content-Type: text/markdown
-License-File: LICENSE
-Requires-Dist: txaio>=25.9.2
+Requires-Dist: cbor2>=5.2.0
+Requires-Dist: cffi>=2.0.0
 Requires-Dist: cryptography>=3.4.6
 Requires-Dist: hyperlink>=21.0.0
-Requires-Dist: importlib-resources>=5.0.0; python_version < "3.10"
-Requires-Dist: msgpack>=1.0.2; platform_python_implementation == "CPython"
-Requires-Dist: u-msgpack-python>=2.1; platform_python_implementation != "CPython"
-Requires-Dist: ujson>=4.0.2
-Requires-Dist: cbor2>=5.2.0
+Requires-Dist: importlib-resources>=5.0.0; python_version < '3.10'
+Requires-Dist: msgpack>=1.0.2; platform_python_implementation == 'CPython'
 Requires-Dist: py-ubjson>=0.16.1
-Provides-Extra: twisted
-Requires-Dist: zope.interface>=5.2.0; extra == "twisted"
-Requires-Dist: twisted>=22.10.0; extra == "twisted"
-Requires-Dist: attrs>=20.3.0; extra == "twisted"
+Requires-Dist: txaio>=25.12.2
+Requires-Dist: u-msgpack-python>=2.1; platform_python_implementation != 'CPython'
+Requires-Dist: ujson>=4.0.2
 Provides-Extra: accelerate
-Provides-Extra: compress
-Requires-Dist: brotli>=1.0.0; platform_python_implementation == "CPython" and extra == "compress"
-Requires-Dist: brotlicffi>=1.0.0; platform_python_implementation != "CPython" and extra == "compress"
-Provides-Extra: serialization
-Provides-Extra: encryption
-Requires-Dist: pyopenssl>=20.0.1; extra == "encryption"
-Requires-Dist: service-identity>=18.1.0; extra == "encryption"
-Requires-Dist: pynacl>=1.4.0; extra == "encryption"
-Requires-Dist: pytrie>=0.4.0; extra == "encryption"
-Requires-Dist: qrcode>=7.3.1; extra == "encryption"
-Requires-Dist: base58>=2.1.1; extra == "encryption"
-Requires-Dist: ecdsa>=0.19.1; extra == "encryption"
-Provides-Extra: scram
-Requires-Dist: cffi>=1.14.5; extra == "scram"
-Requires-Dist: argon2-cffi>=20.1.0; extra == "scram"
-Requires-Dist: passlib>=1.7.4; extra == "scram"
-Provides-Extra: nvx
-Requires-Dist: cffi>=1.14.5; extra == "nvx"
-Provides-Extra: benchmark
-Requires-Dist: vmprof>=0.4.15; python_version >= "3.11" and extra == "benchmark"
-Requires-Dist: vmprof-flamegraph>=0.0.1; python_version >= "3.11" and extra == "benchmark"
-Requires-Dist: jinja2>=3.0.0; extra == "benchmark"
-Requires-Dist: humanize>=4.0.0; extra == "benchmark"
-Provides-Extra: build-tools
-Requires-Dist: build>=1.0.0; extra == "build-tools"
-Requires-Dist: wheel>=0.36.2; extra == "build-tools"
-Requires-Dist: auditwheel>=5.0.0; sys_platform == "linux" and extra == "build-tools"
-Provides-Extra: dev
-Requires-Dist: auditwheel>=5.0.0; sys_platform == "linux" and extra == "dev"
-Requires-Dist: backports.tempfile>=1.0; extra == "dev"
-Requires-Dist: build>=1.0.0; extra == "dev"
-Requires-Dist: bumpversion>=0.5.3; extra == "dev"
-Requires-Dist: codecov>=2.0.15; extra == "dev"
-Requires-Dist: humanize>=4.0.0; extra == "dev"
-Requires-Dist: mypy>=0.610; (python_version >= "3.4" and platform_python_implementation != "PyPy") and extra == "dev"
-Requires-Dist: myst-parser>=4.0.1; extra == "dev"
-Requires-Dist: passlib; extra == "dev"
-Requires-Dist: pep8-naming>=0.3.3; extra == "dev"
-Requires-Dist: pyenchant>=1.6.6; extra == "dev"
-Requires-Dist: pyflakes>=1.0.0; extra == "dev"
-Requires-Dist: pyinstaller>=4.2; extra == "dev"
-Requires-Dist: pylint>=1.9.2; extra == "dev"
-Requires-Dist: pytest-aiohttp; extra == "dev"
-Requires-Dist: pytest-asyncio>=0.14.0; extra == "dev"
-Requires-Dist: pytest-runner>=2.11.1; extra == "dev"
-Requires-Dist: pytest>=3.4.2; extra == "dev"
-Requires-Dist: pyyaml>=4.2b4; extra == "dev"
-Requires-Dist: qualname>=0.1.0; extra == "dev"
-Requires-Dist: ruff>=0.12.1; extra == "dev"
-Requires-Dist: sphinx-autoapi>=1.7.0; extra == "dev"
-Requires-Dist: sphinx<8,>=1.7.1; extra == "dev"
-Requires-Dist: sphinx-rtd-theme>=0.1.9; extra == "dev"
-Requires-Dist: sphinxcontrib-images>=0.9.1; extra == "dev"
-Requires-Dist: twine>=3.3.0; extra == "dev"
-Requires-Dist: twisted>=22.10.0; extra == "dev"
-Requires-Dist: txaio>=25.9.2; extra == "dev"
-Requires-Dist: watchdog>=0.8.3; extra == "dev"
-Requires-Dist: wheel>=0.36.2; extra == "dev"
-Requires-Dist: yapf==0.29.0; extra == "dev"
 Provides-Extra: all
-Requires-Dist: autobahn[accelerate,compress,encryption,nvx,scram,serialization,twisted]; extra == "all"
+Requires-Dist: argon2-cffi>=20.1.0; extra == 'all'
+Requires-Dist: attrs>=20.3.0; extra == 'all'
+Requires-Dist: base58>=2.1.1; extra == 'all'
+Requires-Dist: brotli>=1.0.0; (platform_python_implementation == 'CPython') and extra == 'all'
+Requires-Dist: brotlicffi>=1.0.0; (platform_python_implementation != 'CPython') and extra == 'all'
+Requires-Dist: ecdsa>=0.19.1; extra == 'all'
+Requires-Dist: passlib>=1.7.4; extra == 'all'
+Requires-Dist: pynacl>=1.4.0; extra == 'all'
+Requires-Dist: pyopenssl>=20.0.1; extra == 'all'
+Requires-Dist: pytrie>=0.4.0; extra == 'all'
+Requires-Dist: qrcode>=7.3.1; extra == 'all'
+Requires-Dist: service-identity>=18.1.0; extra == 'all'
+Requires-Dist: twisted>=22.10.0; extra == 'all'
+Requires-Dist: zope-interface>=5.2.0; extra == 'all'
 Provides-Extra: asyncio
-Dynamic: license-file
+Provides-Extra: benchmark
+Requires-Dist: humanize>=4.0.0; extra == 'benchmark'
+Requires-Dist: jinja2>=3.0.0; extra == 'benchmark'
+Requires-Dist: vmprof-flamegraph>=0.0.1; (python_version >= '3.11') and extra == 'benchmark'
+Requires-Dist: vmprof>=0.4.15; (python_version >= '3.11') and extra == 'benchmark'
+Provides-Extra: build-tools
+Requires-Dist: auditwheel>=5.0.0; (sys_platform == 'linux') and extra == 'build-tools'
+Requires-Dist: build>=1.0.0; extra == 'build-tools'
+Requires-Dist: wheel>=0.36.2; extra == 'build-tools'
+Provides-Extra: compress
+Requires-Dist: brotli>=1.0.0; (platform_python_implementation == 'CPython') and extra == 'compress'
+Requires-Dist: brotlicffi>=1.0.0; (platform_python_implementation != 'CPython') and extra == 'compress'
+Provides-Extra: dev
+Requires-Dist: auditwheel>=5.0.0; (sys_platform == 'linux') and extra == 'dev'
+Requires-Dist: backports-tempfile>=1.0; extra == 'dev'
+Requires-Dist: build>=1.0.0; extra == 'dev'
+Requires-Dist: bumpversion>=0.5.3; extra == 'dev'
+Requires-Dist: codecov>=2.0.15; extra == 'dev'
+Requires-Dist: humanize>=4.0.0; extra == 'dev'
+Requires-Dist: myst-parser>=4.0.1; extra == 'dev'
+Requires-Dist: passlib; extra == 'dev'
+Requires-Dist: pep8-naming>=0.3.3; extra == 'dev'
+Requires-Dist: pyenchant>=1.6.6; extra == 'dev'
+Requires-Dist: pyflakes>=1.0.0; extra == 'dev'
+Requires-Dist: pyinstaller>=4.2; extra == 'dev'
+Requires-Dist: pylint>=1.9.2; extra == 'dev'
+Requires-Dist: pytest-aiohttp; extra == 'dev'
+Requires-Dist: pytest-asyncio>=0.14.0; extra == 'dev'
+Requires-Dist: pytest-runner>=2.11.1; extra == 'dev'
+Requires-Dist: pytest>=3.4.2; extra == 'dev'
+Requires-Dist: pyyaml>=4.2b4; extra == 'dev'
+Requires-Dist: qualname>=0.1.0; extra == 'dev'
+Requires-Dist: ruff>=0.12.1; extra == 'dev'
+Requires-Dist: scour>=0.38; extra == 'dev'
+Requires-Dist: sphinx-autoapi>=1.7.0; extra == 'dev'
+Requires-Dist: sphinx-rtd-theme>=0.1.9; extra == 'dev'
+Requires-Dist: sphinx<8,>=1.7.1; extra == 'dev'
+Requires-Dist: sphinxcontrib-images>=0.9.1; extra == 'dev'
+Requires-Dist: twine>=3.3.0; extra == 'dev'
+Requires-Dist: twisted>=22.10.0; extra == 'dev'
+Requires-Dist: txaio>=25.12.2; extra == 'dev'
+Requires-Dist: watchdog>=0.8.3; extra == 'dev'
+Requires-Dist: wheel>=0.36.2; extra == 'dev'
+Requires-Dist: yapf==0.29.0; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: furo>=2024.7.0; extra == 'docs'
+Requires-Dist: linkify-it-py>=2.0.0; extra == 'docs'
+Requires-Dist: myst-parser>=2.0; extra == 'docs'
+Requires-Dist: pyenchant>=3.2; extra == 'docs'
+Requires-Dist: scour>=0.38; extra == 'docs'
+Requires-Dist: sphinx-autoapi>=2.1.0; extra == 'docs'
+Requires-Dist: sphinx-copybutton>=0.5; extra == 'docs'
+Requires-Dist: sphinx-design>=0.5; extra == 'docs'
+Requires-Dist: sphinx>=8.2.3; extra == 'docs'
+Requires-Dist: sphinxcontrib-images>=0.9; extra == 'docs'
+Requires-Dist: sphinxcontrib-spelling>=8.0; extra == 'docs'
+Requires-Dist: sphinxext-opengraph>=0.9; extra == 'docs'
+Provides-Extra: encryption
+Requires-Dist: base58>=2.1.1; extra == 'encryption'
+Requires-Dist: ecdsa>=0.19.1; extra == 'encryption'
+Requires-Dist: pynacl>=1.4.0; extra == 'encryption'
+Requires-Dist: pyopenssl>=20.0.1; extra == 'encryption'
+Requires-Dist: pytrie>=0.4.0; extra == 'encryption'
+Requires-Dist: qrcode>=7.3.1; extra == 'encryption'
+Requires-Dist: service-identity>=18.1.0; extra == 'encryption'
+Provides-Extra: nvx
+Provides-Extra: scram
+Requires-Dist: argon2-cffi>=20.1.0; extra == 'scram'
+Requires-Dist: passlib>=1.7.4; extra == 'scram'
+Provides-Extra: serialization
+Provides-Extra: twisted
+Requires-Dist: attrs>=20.3.0; extra == 'twisted'
+Requires-Dist: twisted>=22.10.0; extra == 'twisted'
+Requires-Dist: zope-interface>=5.2.0; extra == 'twisted'
+Description-Content-Type: text/markdown
 
 # Autobahn|Python
 
 WebSocket & WAMP for Python on Twisted and asyncio.
 
-[![Version](https://img.shields.io/pypi/v/autobahn.svg)](https://pypi.python.org/pypi/autobahn)
-[![Test](https://github.com/crossbario/autobahn-python/workflows/main/badge.svg)](https://github.com/crossbario/autobahn-python/actions?query=workflow%3Amain)
-[![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](https://autobahn.readthedocs.io/en/latest/)
-<!--
-[![CI Deploy Status](https://github.com/crossbario/autobahn-python/workflows/deploy/badge.svg)](https://github.com/crossbario/autobahn-python/actions?query=workflow%3Adeploy)
-[![CI Docker Status](https://github.com/crossbario/autobahn-python/workflows/docker/badge.svg)](https://github.com/crossbario/autobahn-python/actions?query=workflow%3Adocker)
-[![CI EXE Status](https://github.com/crossbario/autobahn-python/workflows/pyinstaller/badge.svg)](https://github.com/crossbario/autobahn-python/actions?query=workflow%3Apyinstaller)
-[![Docker
-Images](https://img.shields.io/badge/download-docker-blue.svg?style=flat)](https://hub.docker.com/r/crossbario/autobahn-python/)
--->
+[![PyPI](https://img.shields.io/pypi/v/autobahn.svg)](https://pypi.python.org/pypi/autobahn)
+[![Python](https://img.shields.io/pypi/pyversions/autobahn.svg)](https://pypi.python.org/pypi/autobahn)
+[![CI](https://github.com/crossbario/autobahn-python/workflows/main/badge.svg)](https://github.com/crossbario/autobahn-python/actions?query=workflow%3Amain)
+[![CI (wstest)](https://github.com/crossbario/autobahn-python/workflows/wstest/badge.svg)](https://github.com/crossbario/autobahn-python/actions?query=workflow%3Awstest)
+[![CD (wheels)](https://github.com/crossbario/autobahn-python/workflows/wheels/badge.svg)](https://github.com/crossbario/autobahn-python/actions?query=workflow%3Awheels)
+[![CD (wheels-arm64)](https://github.com/crossbario/autobahn-python/workflows/wheels-arm64/badge.svg)](https://github.com/crossbario/autobahn-python/actions?query=workflow%3Awheels-arm64)
+[![CD (wheels-docker)](https://github.com/crossbario/autobahn-python/workflows/wheels-docker/badge.svg)](https://github.com/crossbario/autobahn-python/actions?query=workflow%3Awheels-docker)
+[![Docs](https://readthedocs.org/projects/autobahn/badge/?version=latest)](https://autobahn.readthedocs.io/en/latest/)
+[![License](https://img.shields.io/pypi/l/autobahn.svg)](https://github.com/crossbario/autobahn-python/blob/master/LICENSE)
+[![Downloads](https://img.shields.io/pypi/dm/autobahn.svg)](https://pypi.python.org/pypi/autobahn)
 
 ---
 

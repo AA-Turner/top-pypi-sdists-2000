@@ -98,6 +98,7 @@ def run_server(
     auth: typing.Optional["AuthConfig"] = None,
     http: typing.Optional["HttpConfig"] = None,
     ui: dict | None = None,
+    webhooks: dict | None = None,
     ui_config: dict | None = None,
     studio_url: str | None = None,
     disable_persistence: bool = False,
@@ -202,6 +203,7 @@ def run_server(
         LANGGRAPH_AUTH=json.dumps(auth) if auth else None,
         LANGGRAPH_HTTP=json.dumps(http) if http else None,
         LANGGRAPH_UI=json.dumps(ui) if ui else None,
+        LANGGRAPH_WEBHOOKS=json.dumps(webhooks) if webhooks else None,
         LANGGRAPH_UI_CONFIG=json.dumps(ui_config) if ui_config else None,
         LANGGRAPH_UI_BUNDLER="true",
         LANGGRAPH_API_URL=local_url,
@@ -409,6 +411,7 @@ def main():
     graphs = config_data.get("graphs", {})
     auth = config_data.get("auth")
     ui = config_data.get("ui")
+    webhooks = config_data.get("webhooks")
     ui_config = config_data.get("ui_config")
     kwargs = {}
     if args.runtime_edition == "postgres":
@@ -430,6 +433,7 @@ def main():
         env=config_data.get("env", None),
         auth=auth,
         ui=ui,
+        webhooks=webhooks,
         ui_config=ui_config,
         runtime_edition=args.runtime_edition,
         **kwargs,

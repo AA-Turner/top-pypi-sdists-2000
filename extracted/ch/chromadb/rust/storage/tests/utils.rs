@@ -1,19 +1,38 @@
-//! Test utilities for ObjectStorage implementations
+//! Test utilities for Storage implementations
 //!
 //! This module provides reusable test functions that can be used to test
-//! any ObjectStorage backend (GCS, S3, Azure, etc.) by simply passing in
-//! a configured storage instance.
+//! any Storage backend (GCS, S3, Azure, Local, AdmissionControlled, etc.)
+//! via the unified Storage enum interface.
 
-use chroma_storage::object_storage::ObjectStorage;
-use chroma_storage::{GetOptions, PutOptions};
+use chroma_storage::{DeleteOptions, ETag, GetOptions, PutMode, PutOptions, Storage};
+use chroma_types::Cmek;
+
+/// Helper to create PutOptions with optional CMEK
+fn make_put_options(cmek: Option<Cmek>) -> PutOptions {
+    let mut options = PutOptions::default();
+    if let Some(cmek) = cmek {
+        options = options.with_cmek(cmek);
+    }
+    options
+}
+
+/// Helper to create PutOptions with if_not_exists and optional CMEK
+fn make_put_options_if_not_exists(cmek: Option<Cmek>) -> PutOptions {
+    make_put_options(cmek).with_mode(PutMode::IfNotExist)
+}
+
+/// Helper to create PutOptions with if_match and optional CMEK
+fn make_put_options_if_match(cmek: Option<Cmek>, etag: &ETag) -> PutOptions {
+    make_put_options(cmek).with_mode(PutMode::IfMatch(etag.clone()))
+}
 
 /// Test Group 1: Basic operations (non-concurrency aware APIs)
 ///
-/// Tests: list_prefix, put, get, copy, rename, delete, delete_many
-pub async fn test_basic_operations(storage: &ObjectStorage, test_prefix: &str) {
+/// Tests: list_prefix, put, get, copy, delete, delete_many
+pub async fn test_basic_operations(storage: &Storage, test_prefix: &str, cmek: Option<Cmek>) {
     // Cleanup any leftover objects from previous test runs
     let existing = storage
-        .list_prefix(test_prefix)
+        .list_prefix(test_prefix, GetOptions::default())
         .await
         .expect("Failed to list for cleanup");
     if !existing.is_empty() {
@@ -25,7 +44,7 @@ pub async fn test_basic_operations(storage: &ObjectStorage, test_prefix: &str) {
 
     // Test 1: list_prefix on empty prefix
     let objects = storage
-        .list_prefix(test_prefix)
+        .list_prefix(test_prefix, GetOptions::default())
         .await
         .expect("Failed to list empty prefix");
     assert_eq!(
@@ -43,21 +62,25 @@ pub async fn test_basic_operations(storage: &ObjectStorage, test_prefix: &str) {
 
     for key in &test_keys {
         storage
-            .put(key, key.as_bytes().to_vec().into(), PutOptions::default())
+            .put_bytes(key, key.as_bytes().to_vec(), make_put_options(cmek.clone()))
             .await
             .unwrap_or_else(|e| panic!("Failed to put {}: {}", key, e));
 
-        let (data, _etag) = storage
-            .get(key, GetOptions::new(Default::default()))
+        let data = storage
+            .get(key, GetOptions::default())
             .await
             .unwrap_or_else(|e| panic!("Failed to get {}: {}", key, e));
-        assert!(data.is_unique());
-        assert_eq!(data, key.as_bytes(), "Content mismatch for {}", key);
+        assert_eq!(
+            data.as_ref(),
+            key.as_bytes(),
+            "Content mismatch for {}",
+            key
+        );
     }
 
     // Test 3: list_prefix with results
     let objects = storage
-        .list_prefix(test_prefix)
+        .list_prefix(test_prefix, GetOptions::default())
         .await
         .expect("Failed to list prefix");
     assert_eq!(
@@ -75,43 +98,33 @@ pub async fn test_basic_operations(storage: &ObjectStorage, test_prefix: &str) {
     let dst = format!("{}-copy", src);
     storage.copy(src, &dst).await.expect("Failed to copy");
 
-    let (data, _) = storage
-        .get(&dst, GetOptions::new(Default::default()))
+    let data = storage
+        .get(&dst, GetOptions::default())
         .await
         .expect("Failed to get copied file");
-    assert!(data.is_unique());
-    assert_eq!(data, src.as_bytes(), "Copied file content mismatch");
+    assert_eq!(
+        data.as_ref(),
+        src.as_bytes(),
+        "Copied file content mismatch"
+    );
 
     // Verify original still exists
     storage
-        .get(src, GetOptions::new(Default::default()))
+        .get(src, GetOptions::default())
         .await
         .expect("Original should still exist after copy");
 
-    // Test 5: rename
-    let src = &test_keys[1];
-    let dst = format!("{}-renamed", src);
-    storage.rename(src, &dst).await.expect("Failed to rename");
-
-    let (data, _) = storage
-        .get(&dst, GetOptions::new(Default::default()))
+    // Test 5: delete single
+    storage
+        .delete(&dst, DeleteOptions::default())
         .await
-        .expect("Failed to get renamed file");
-    assert!(data.is_unique());
-    assert_eq!(data, src.as_bytes(), "Renamed file content mismatch");
-
-    // Verify original no longer exists
-    let result = storage.get(src, GetOptions::new(Default::default())).await;
-    assert!(result.is_err(), "Original should not exist after rename");
-
-    // Test 6: delete single
-    storage.delete(&dst).await.expect("Failed to delete");
-    let result = storage.get(&dst, GetOptions::new(Default::default())).await;
+        .expect("Failed to delete");
+    let result = storage.get(&dst, GetOptions::default()).await;
     assert!(result.is_err(), "Deleted object should not exist");
 
-    // Test 7: delete_many
+    // Test 6: delete_many
     let remaining = storage
-        .list_prefix(test_prefix)
+        .list_prefix(test_prefix, GetOptions::default())
         .await
         .expect("Failed to list");
     let result = storage
@@ -125,7 +138,7 @@ pub async fn test_basic_operations(storage: &ObjectStorage, test_prefix: &str) {
     );
 
     let objects = storage
-        .list_prefix(test_prefix)
+        .list_prefix(test_prefix, GetOptions::default())
         .await
         .expect("Failed to list after cleanup");
     assert_eq!(objects.len(), 0, "All objects should be deleted");
@@ -134,9 +147,12 @@ pub async fn test_basic_operations(storage: &ObjectStorage, test_prefix: &str) {
 /// Test Group 2: Multipart upload/download
 ///
 /// Tests: large file uploads, multipart downloads with parallelism
-pub async fn test_multipart_operations(storage: &ObjectStorage, test_prefix: &str) {
+pub async fn test_multipart_operations(storage: &Storage, test_prefix: &str, cmek: Option<Cmek>) {
     // Cleanup
-    let existing = storage.list_prefix(test_prefix).await.unwrap_or_default();
+    let existing = storage
+        .list_prefix(test_prefix, GetOptions::default())
+        .await
+        .unwrap_or_default();
     if !existing.is_empty() {
         storage.delete_many(existing).await.ok();
     }
@@ -146,21 +162,20 @@ pub async fn test_multipart_operations(storage: &ObjectStorage, test_prefix: &st
     let small_content = small_key.repeat(1000); // ~25 KB
 
     storage
-        .put(
+        .put_bytes(
             &small_key,
-            small_content.as_bytes().to_vec().into(),
-            PutOptions::default(),
+            small_content.as_bytes().to_vec(),
+            make_put_options(cmek.clone()),
         )
         .await
         .expect("Failed to put small file");
 
-    let (data, _) = storage
-        .get(&small_key, GetOptions::new(Default::default()))
+    let data = storage
+        .get(&small_key, GetOptions::default())
         .await
         .expect("Failed to get small file");
-    assert!(data.is_unique());
     assert_eq!(
-        data,
+        data.as_ref(),
         small_content.as_bytes(),
         "Small file content mismatch"
     );
@@ -170,44 +185,39 @@ pub async fn test_multipart_operations(storage: &ObjectStorage, test_prefix: &st
     let large_content = large_key.repeat(400_000); // ~10 MB - well over 5MB threshold
 
     storage
-        .put(
+        .put_bytes(
             &large_key,
-            large_content.as_bytes().to_vec().into(),
-            PutOptions::default(),
+            large_content.as_bytes().to_vec(),
+            make_put_options(cmek.clone()),
         )
         .await
         .expect("Failed to put large file");
 
     // Test 3: Download with oneshot
-    let (data, _) = storage
-        .get(&large_key, GetOptions::new(Default::default()))
+    let data = storage
+        .get(&large_key, GetOptions::default())
         .await
         .expect("Failed to get large file with oneshot");
-    assert!(data.is_unique());
     assert_eq!(
-        data,
+        data.as_ref(),
         large_content.as_bytes(),
         "Large file content mismatch (oneshot)"
     );
 
     // Test 4: Download with parallelism
-    let (data, _) = storage
-        .get(
-            &large_key,
-            GetOptions::new(Default::default()).with_parallelism(),
-        )
+    let data = storage
+        .get(&large_key, GetOptions::default().with_parallelism())
         .await
         .expect("Failed to get large file with parallelism");
-    assert!(data.is_unique());
     assert_eq!(
-        data,
+        data.as_ref(),
         large_content.as_bytes(),
         "Large file content mismatch (multipart)"
     );
 
     // Cleanup
     storage
-        .delete_many(vec![small_key, large_key])
+        .delete_many([small_key, large_key])
         .await
         .expect("Failed to cleanup");
 }
@@ -219,9 +229,12 @@ pub async fn test_multipart_operations(storage: &ObjectStorage, test_prefix: &st
 /// Note: Conditional operations always use oneshot uploads (not multipart),
 /// even for large files, because multipart uploads don't support ETags.
 /// The race condition test uses ~800KB content to verify this behavior.
-pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &str) {
+pub async fn test_conditional_operations(storage: &Storage, test_prefix: &str, cmek: Option<Cmek>) {
     // Cleanup
-    let existing = storage.list_prefix(test_prefix).await.unwrap_or_default();
+    let existing = storage
+        .list_prefix(test_prefix, GetOptions::default())
+        .await
+        .unwrap_or_default();
     if !existing.is_empty() {
         storage.delete_many(existing).await.ok();
     }
@@ -231,27 +244,27 @@ pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &
     let content1 = format!("{}-v1", key1);
 
     let _etag1 = storage
-        .put(
+        .put_bytes(
             &key1,
-            content1.as_bytes().to_vec().into(),
-            PutOptions::if_not_exists(Default::default()),
+            content1.as_bytes().to_vec(),
+            make_put_options_if_not_exists(cmek.clone()),
         )
         .await
         .expect("First if_not_exists should succeed");
 
-    let (data, _) = storage
-        .get(&key1, GetOptions::new(Default::default()))
+    let data = storage
+        .get(&key1, GetOptions::default())
         .await
         .expect("Failed to get");
-    assert!(data.is_unique());
-    assert_eq!(data, content1.as_bytes());
+    // Data is Arc<Vec<u8>>
+    assert_eq!(data.as_ref(), content1.as_bytes());
 
     // Second create should fail
     let result = storage
-        .put(
+        .put_bytes(
             &key1,
-            "different".as_bytes().to_vec().into(),
-            PutOptions::if_not_exists(Default::default()),
+            "different".as_bytes().to_vec(),
+            make_put_options_if_not_exists(cmek.clone()),
         )
         .await;
     assert!(result.is_err(), "Second if_not_exists should fail");
@@ -262,37 +275,38 @@ pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &
     let content_v2 = format!("{}-v2", key2);
 
     let etag_v1 = storage
-        .put(
+        .put_bytes(
             &key2,
-            content_v1.as_bytes().to_vec().into(),
-            PutOptions::default(),
+            content_v1.as_bytes().to_vec(),
+            make_put_options(cmek.clone()),
         )
         .await
-        .expect("Initial put failed");
+        .expect("Initial put failed")
+        .expect("ETag required");
 
     // Update with correct ETag should succeed
     let _etag_v2 = storage
-        .put(
+        .put_bytes(
             &key2,
-            content_v2.as_bytes().to_vec().into(),
-            PutOptions::if_matches(&etag_v1, Default::default()),
+            content_v2.as_bytes().to_vec(),
+            make_put_options_if_match(cmek.clone(), &etag_v1),
         )
         .await
         .expect("Update with correct ETag should succeed");
 
-    let (data, _) = storage
-        .get(&key2, GetOptions::new(Default::default()))
+    let data = storage
+        .get(&key2, GetOptions::default())
         .await
         .expect("Failed to get");
-    assert!(data.is_unique());
-    assert_eq!(data, content_v2.as_bytes());
+    // Data is Arc<Vec<u8>>
+    assert_eq!(data.as_ref(), content_v2.as_bytes());
 
     // Update with stale ETag should fail
     let result = storage
-        .put(
+        .put_bytes(
             &key2,
-            "v3".as_bytes().to_vec().into(),
-            PutOptions::if_matches(&etag_v1, Default::default()),
+            "v3".as_bytes().to_vec(),
+            make_put_options_if_match(cmek.clone(), &etag_v1),
         )
         .await;
     assert!(result.is_err(), "Update with stale ETag should fail");
@@ -303,13 +317,14 @@ pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &
     let content3_v2 = format!("{}-v2", key3);
 
     let etag3_v1 = storage
-        .put(
+        .put_bytes(
             &key3,
-            content3_v1.as_bytes().to_vec().into(),
-            PutOptions::default(),
+            content3_v1.as_bytes().to_vec(),
+            make_put_options(cmek.clone()),
         )
         .await
-        .expect("Put failed");
+        .expect("Put failed")
+        .expect("ETag required");
 
     let same = storage
         .confirm_same(&key3, &etag3_v1)
@@ -319,10 +334,10 @@ pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &
 
     // Update object
     let _etag3_v2 = storage
-        .put(
+        .put_bytes(
             &key3,
-            content3_v2.as_bytes().to_vec().into(),
-            PutOptions::default(),
+            content3_v2.as_bytes().to_vec(),
+            make_put_options(cmek.clone()),
         )
         .await
         .expect("Update failed");
@@ -344,24 +359,24 @@ pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &
         .put_file(
             &key4,
             temp_file.path().to_str().unwrap(),
-            PutOptions::if_not_exists(Default::default()),
+            make_put_options_if_not_exists(cmek.clone()),
         )
         .await
         .expect("put_file should succeed");
 
-    let (data, _) = storage
-        .get(&key4, GetOptions::new(Default::default()))
+    let data = storage
+        .get(&key4, GetOptions::default())
         .await
         .expect("Failed to get");
-    assert!(data.is_unique());
-    assert_eq!(data, content4.as_bytes());
+    // Data is Arc<Vec<u8>>
+    assert_eq!(data.as_ref(), content4.as_bytes());
 
     // Second put_file should fail
     let result = storage
         .put_file(
             &key4,
             temp_file.path().to_str().unwrap(),
-            PutOptions::if_not_exists(Default::default()),
+            make_put_options_if_not_exists(cmek.clone()),
         )
         .await;
     assert!(result.is_err(), "Second put_file should fail");
@@ -375,13 +390,14 @@ pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &
     let initial = "initial-data-".repeat(500_000); // ~6.5 MB - over 5MB threshold
 
     let race_etag = storage
-        .put(
+        .put_bytes(
             &key5,
-            initial.as_bytes().to_vec().into(),
-            PutOptions::default(),
+            initial.as_bytes().to_vec(),
+            make_put_options(cmek.clone()),
         )
         .await
-        .expect("Initial put failed");
+        .expect("Initial put failed")
+        .expect("ETag required");
 
     // Spawn concurrent updates with same stale ETag - use large payloads > 5MB
     let storage_a = storage.clone();
@@ -390,6 +406,8 @@ pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &
     let key5_b = key5.clone();
     let etag_a = race_etag.clone();
     let etag_b = race_etag.clone();
+    let cmek_a = cmek.clone();
+    let cmek_b = cmek.clone();
     let writer_a_content = "writer-a-data-".repeat(500_000); // ~7 MB - over 5MB threshold
     let writer_b_content = "writer-b-data-".repeat(500_000); // ~7 MB - over 5MB threshold
 
@@ -399,20 +417,20 @@ pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &
 
     let task_a = tokio::spawn(async move {
         storage_a
-            .put(
+            .put_bytes(
                 &key5_a,
-                writer_a_content.as_bytes().to_vec().into(),
-                PutOptions::if_matches(&etag_a, Default::default()),
+                writer_a_content.as_bytes().to_vec(),
+                make_put_options_if_match(cmek_a, &etag_a),
             )
             .await
     });
 
     let task_b = tokio::spawn(async move {
         storage_b
-            .put(
+            .put_bytes(
                 &key5_b,
-                writer_b_content.as_bytes().to_vec().into(),
-                PutOptions::if_matches(&etag_b, Default::default()),
+                writer_b_content.as_bytes().to_vec(),
+                make_put_options_if_match(cmek_b, &etag_b),
             )
             .await
     });
@@ -426,15 +444,14 @@ pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &
     assert_eq!(success_count, 1, "Exactly one writer should succeed");
 
     // Verify the winner's content was actually written - COMPLETE byte-by-byte verification
-    let (final_data, _) = storage
-        .get(&key5, GetOptions::new(Default::default()))
+    let final_data = storage
+        .get(&key5, GetOptions::default())
         .await
         .expect("Failed to get final content");
-    assert!(final_data.is_unique());
 
     // Compare against both possible winning contents
-    let is_writer_a = final_data == writer_a_content_copy.as_bytes();
-    let is_writer_b = final_data == writer_b_content_copy.as_bytes();
+    let is_writer_a = final_data.as_ref() == writer_a_content_copy.as_bytes();
+    let is_writer_b = final_data.as_ref() == writer_b_content_copy.as_bytes();
 
     assert!(
         is_writer_a || is_writer_b,
@@ -443,7 +460,49 @@ pub async fn test_conditional_operations(storage: &ObjectStorage, test_prefix: &
 
     // Cleanup
     storage
-        .delete_many(vec![key1, key2, key3, key4, key5])
+        .delete_many([key1, key2, key3, key4, key5])
         .await
         .expect("Failed to cleanup");
+}
+
+/// Test Group 4: Negative test - invalid CMEK should fail
+///
+/// Tests: Verifies that CMEK header is actually being sent by using an invalid key
+pub async fn test_invalid_cmek_fails(storage: &Storage, test_prefix: &str, invalid_cmek: Cmek) {
+    // Cleanup
+    let existing = storage
+        .list_prefix(test_prefix, GetOptions::default())
+        .await
+        .unwrap_or_default();
+    if !existing.is_empty() {
+        storage.delete_many(existing).await.ok();
+    }
+
+    let key = format!("{}invalid-cmek-test.txt", test_prefix);
+    let content = b"test content".to_vec();
+
+    let put_opts = PutOptions::default().with_cmek(invalid_cmek);
+
+    // This should fail because the CMEK key is invalid/inaccessible
+    let result = storage.put_bytes(&key, content, put_opts).await;
+
+    assert!(
+        result.is_err(),
+        "Upload with invalid CMEK should fail, proving CMEK header is being sent"
+    );
+
+    // Verify error is related to encryption/permissions
+    if let Err(e) = result {
+        let error_msg = format!("{}", e).to_lowercase();
+        // GCS typically returns 400 Bad Request or 403 Forbidden for invalid CMEK
+        assert!(
+            error_msg.contains("400")
+                || error_msg.contains("403")
+                || error_msg.contains("permission")
+                || error_msg.contains("kms")
+                || error_msg.contains("key"),
+            "Expected CMEK-related error, got: {}",
+            error_msg
+        );
+    }
 }

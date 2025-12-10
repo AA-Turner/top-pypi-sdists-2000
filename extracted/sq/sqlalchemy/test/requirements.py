@@ -73,6 +73,10 @@ class DefaultRequirements(SuiteRequirements):
         return skip_if(no_support("sqlite", "not supported by database"))
 
     @property
+    def foreign_key_cycles_w_cascade(self):
+        return skip_if(no_support("mssql", "not supported"))
+
+    @property
     def foreign_keys_reflect_as_index(self):
         return only_on(["mysql", "mariadb"])
 
@@ -173,6 +177,10 @@ class DefaultRequirements(SuiteRequirements):
 
     @property
     def constraint_comment_reflection(self):
+        return only_on(["postgresql"])
+
+    @property
+    def column_collation_reflection(self):
         return only_on(["postgresql"])
 
     @property
@@ -425,7 +433,9 @@ class DefaultRequirements(SuiteRequirements):
         return skip_if(
             [
                 no_support("oracle", "Oracle XE usually can't handle these"),
-                no_support("mssql+pyodbc", "MS ODBC drivers struggle"),
+                no_support(
+                    "mssql", "MS drivers struggle plus the DB does too"
+                ),
                 no_support("+aiosqlite", "very unreliable driver"),
                 self._running_on_windows(),
             ]
@@ -935,6 +945,7 @@ class DefaultRequirements(SuiteRequirements):
                 no_support(
                     "sqlite", "two-phase xact not supported by database"
                 ),
+                no_support("oracle+cx_oracle", "prefer oracledb"),
                 # in Ia3cbbf56d4882fcc7980f90519412f1711fae74d
                 # we are evaluating which modern MySQL / MariaDB versions
                 # can handle two-phase testing without too many problems
@@ -1640,6 +1651,16 @@ class DefaultRequirements(SuiteRequirements):
         return self._has_oracle_test_dblink("oracle_db_link2")
 
     @property
+    def oracle_vector(self):
+        """oracle vector support"""
+        return only_on("oracle>=23.4") + only_on("oracle+oracledb")
+
+    @property
+    def oracle_sparse_vector(self):
+        """oracle vector support"""
+        return only_on("oracle>=23.7") + only_on("oracle+oracledb")
+
+    @property
     def postgresql_test_dblink(self):
         return skip_if(
             lambda config: not config.file_config.has_option(
@@ -1734,10 +1755,6 @@ class DefaultRequirements(SuiteRequirements):
         return only_on(["mssql+pymssql"])
 
     @property
-    def ad_hoc_engines(self):
-        return skip_if(self._sqlite_file_db)
-
-    @property
     def no_asyncio(self):
         def go(config):
             return config.db.dialect.is_async
@@ -1778,6 +1795,10 @@ class DefaultRequirements(SuiteRequirements):
             "mysql+mysqlconnector",
             "lock-sensitive operations crash on mysqlconnector",
         )
+
+    @property
+    def mysql_for_update_read(self):
+        return self.mysql_for_update + only_on(["mysql >= 8.0.0", "mariadb"])
 
     @property
     def mysql_fsp(self):

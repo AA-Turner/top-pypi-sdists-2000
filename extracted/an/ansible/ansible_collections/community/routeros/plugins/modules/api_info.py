@@ -63,6 +63,8 @@ options:
       - interface bridge settings
       - interface bridge vlan
       - interface detect-internet
+      - interface dot1x client
+      - interface dot1x server
       - interface eoip
       - interface ethernet
       - interface ethernet poe
@@ -147,7 +149,13 @@ options:
       - ip firewall nat
       - ip firewall raw
       - ip firewall service-port
+      - ip hotspot
+      - ip hotspot profile
       - ip hotspot service-port
+      - ip hotspot user
+      - ip hotspot user profile
+      - ip hotspot walled-garden
+      - ip hotspot walled-garden ip
       - ip ipsec identity
       - ip ipsec mode-config
       - ip ipsec peer

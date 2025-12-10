@@ -259,7 +259,7 @@ def main():
     module = AnsibleModule(argument_spec=fields, supports_check_mode=True)
     connection_info = module.params['connection_info']
 
-    logger.writeDebug("connection_info: {}".format(connection_info))
+    # logger.writeDebug("connection_info: {}".format(connection_info))
 
     gw = OOGateway()
 

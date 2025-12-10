@@ -397,6 +397,7 @@ class Assistants(Authenticated):
         conn,  # Not used in gRPC implementation
         *,
         graph_id: str | None = None,
+        name: str | None = None,
         metadata: MetadataInput = None,
         ctx: Any = None,
     ) -> int:  # type: ignore[return-value]
@@ -410,6 +411,7 @@ class Assistants(Authenticated):
         request = pb.CountAssistantsRequest(
             filters=auth_filters or {},
             graph_id=graph_id,
+            name=name,
             metadata_json=json_dumpb_optional(metadata),
         )
 

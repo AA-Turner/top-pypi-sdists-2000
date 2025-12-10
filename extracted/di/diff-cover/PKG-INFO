@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: diff_cover
-Version: 9.7.2
+Version: 10.0.0
 Summary: Run coverage and linting reports on diffs
 License: Apache-2.0
 Author: See Contributors
@@ -17,6 +17,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Topic :: Software Development :: Quality Assurance
 Classifier: Topic :: Software Development :: Testing

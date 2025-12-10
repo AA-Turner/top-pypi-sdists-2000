@@ -44,16 +44,17 @@ class TestParameterChangeSet:
         change_set._check_if_change_violates_power_state = Mock(return_value=None)
 
         change_set.check_if_change_is_required("cpu.cores", "config.hardware.numCPU")
-        change_set._check_if_param_differs_from_vm.assert_not_called()
+        change_set._check_if_param_differs_from_vm.assert_called_once()
         change_set._check_if_change_violates_power_state.assert_not_called()
 
         change_set.vm = Mock()
         change_set.check_if_change_is_required("cpu.cores", "config.hardware.numCPU")
-        change_set._check_if_param_differs_from_vm.assert_called_once_with(
+        change_set._check_if_param_differs_from_vm.assert_called_with(
             "cpu.cores", "config.hardware.numCPU"
         )
         change_set._check_if_change_violates_power_state.assert_not_called()
 
+        change_set._changed_parameters = {"cpu.cores": {"old_value": 4, "new_value": 8}}
         change_set.check_if_change_is_required(
             "cpu.cores",
             "config.hardware.numCPU",
@@ -72,6 +73,7 @@ class TestParameterChangeSet:
         error_handler = Mock()
 
         change_set = ParameterChangeSet(params, vm, error_handler)
+        change_set._changed_parameters = {"cpu.cores": {"old_value": 4, "new_value": 8}}
         change_set.check_if_change_is_required("cpu.cores", "config.hardware.numCPU")
 
         assert change_set.are_changes_required() is True
@@ -225,16 +227,22 @@ class TestParameterChangeSet:
         change_set2 = ParameterChangeSet(params2, vm, error_handler)
 
         # Set up change sets with different states
-        change_set1._changed_parameters = {'1': {'old': 1, 'new': 2}, '2': {'old': 2, 'new': 3}}
+        change_set1._changed_parameters = {
+            "1": {"old": 1, "new": 2},
+            "2": {"old": 2, "new": 3},
+        }
         change_set1.power_cycle_required = False
-        change_set2._changed_parameters = {'1': {'old': 1, 'new': 3}}
+        change_set2._changed_parameters = {"1": {"old": 1, "new": 3}}
         change_set2.power_cycle_required = True
 
         change_set1.propagate_required_changes_from(change_set2)
 
         assert change_set1.are_changes_required() is True
-        assert change_set1._changed_parameters == {'1': {'old': 1, 'new': 3}, '2': {'old': 2, 'new': 3}}
-        assert change_set2._changed_parameters == {'1': {'old': 1, 'new': 3}}
+        assert change_set1._changed_parameters == {
+            "1": {"old": 1, "new": 3},
+            "2": {"old": 2, "new": 3},
+        }
+        assert change_set2._changed_parameters == {"1": {"old": 1, "new": 3}}
         assert change_set1.power_cycle_required is True
 
     def test_propagate_required_changes_from_invalid_type(self):

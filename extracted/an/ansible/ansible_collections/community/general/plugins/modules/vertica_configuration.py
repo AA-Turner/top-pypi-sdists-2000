@@ -79,7 +79,6 @@ else:
     pyodbc_found = True
 
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
-from ansible.module_utils.common.text.converters import to_native
 
 
 class NotSupportedError(Exception):
@@ -120,9 +119,7 @@ def get_configuration_facts(cursor, parameter_name=""):
 
 def check(configuration_facts, parameter_name, current_value):
     parameter_key = parameter_name.lower()
-    if current_value and current_value.lower() != configuration_facts[parameter_key]["current_value"].lower():
-        return False
-    return True
+    return not (current_value and current_value.lower() != configuration_facts[parameter_key]["current_value"].lower())
 
 
 def present(configuration_facts, cursor, parameter_name, current_value):
@@ -187,16 +184,16 @@ def main():
             try:
                 changed = present(configuration_facts, cursor, parameter_name, current_value)
             except pyodbc.Error as e:
-                module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+                module.fail_json(msg=f"{e}", exception=traceback.format_exc())
     except NotSupportedError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={"vertica_configuration": configuration_facts})
+        module.fail_json(msg=f"{e}", ansible_facts={"vertica_configuration": configuration_facts})
     except CannotDropError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={"vertica_configuration": configuration_facts})
+        module.fail_json(msg=f"{e}", ansible_facts={"vertica_configuration": configuration_facts})
     except SystemExit:
         # avoid catching this on python 2.4
         raise
     except Exception as e:
-        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+        module.fail_json(msg=f"{e}", exception=traceback.format_exc())
 
     module.exit_json(
         changed=changed, parameter=parameter_name, ansible_facts={"vertica_configuration": configuration_facts}

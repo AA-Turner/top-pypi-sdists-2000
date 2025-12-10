@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+import ipaddress
 import json
 import re
 import typing as t
@@ -505,3 +506,47 @@ def omit_none_from_dict(d: dict[str, t.Any]) -> dict[str, t.Any]:
     Return a copy of the dictionary with all keys with value None omitted.
     """
     return {k: v for (k, v) in d.items() if v is not None}
+
+
+@t.overload
+def normalize_ip_address(ip_address: str) -> str: ...
+
+
+@t.overload
+def normalize_ip_address(ip_address: str | None) -> str | None: ...
+
+
+def normalize_ip_address(ip_address: str | None) -> str | None:
+    """
+    Given an IP address as a string, normalize it so that it can be
+    used to compare IP addresses as strings.
+    """
+    if ip_address is None:
+        return None
+    try:
+        return ipaddress.ip_address(ip_address).compressed
+    except ValueError:
+        # Fallback for invalid addresses: simply return the input
+        return ip_address
+
+
+@t.overload
+def normalize_ip_network(network: str) -> str: ...
+
+
+@t.overload
+def normalize_ip_network(network: str | None) -> str | None: ...
+
+
+def normalize_ip_network(network: str | None) -> str | None:
+    """
+    Given a network in CIDR notation as a string, normalize it so that it can be
+    used to compare networks as strings.
+    """
+    if network is None:
+        return None
+    try:
+        return ipaddress.ip_network(network).compressed
+    except ValueError:
+        # Fallback for invalid networks: simply return the input
+        return network

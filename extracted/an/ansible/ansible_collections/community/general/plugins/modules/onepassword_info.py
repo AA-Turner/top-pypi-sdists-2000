@@ -159,8 +159,6 @@ import json
 import os
 import re
 
-from subprocess import Popen, PIPE
-
 from ansible.module_utils.common.text.converters import to_bytes, to_native
 from ansible.module_utils.basic import AnsibleModule
 
@@ -193,9 +191,7 @@ class OnePasswordInfo:
             args += [to_bytes("--session=") + self.token]
 
         command = [self.cli_path] + args
-        p = Popen(command, stdout=PIPE, stderr=PIPE, stdin=PIPE)
-        out, err = p.communicate(input=command_input)
-        rc = p.wait()
+        rc, out, err = module.run_command(command, data=command_input, check_rc=False, binary_data=True, encoding=None)
         if not ignore_errors and rc != expected_rc:
             raise AnsibleModuleError(to_native(err))
         return rc, out, err
@@ -266,7 +262,7 @@ class OnePasswordInfo:
             return output
 
         except Exception as e:
-            if re.search(".*not found.*", to_native(e)):
+            if re.search(".*not found.*", f"{e}"):
                 module.fail_json(msg=f"Unable to find an item in 1Password named '{item_id}'.")
             else:
                 module.fail_json(msg=f"Unexpected error attempting to find an item in 1Password named '{item_id}': {e}")
@@ -300,7 +296,7 @@ class OnePasswordInfo:
                 rc, out, err = self._run(args, command_input=to_bytes(self.auto_login["master_password"]))
                 self.token = out.strip()
             except AnsibleModuleError as e:
-                module.fail_json(msg=f"Failed to perform initial sign in to 1Password: {to_native(e)}")
+                module.fail_json(msg=f"Failed to perform initial sign in to 1Password: {e}")
         else:
             module.fail_json(
                 msg=f"Unable to perform an initial sign in to 1Password. Please run '{self.cli_path} signin' "

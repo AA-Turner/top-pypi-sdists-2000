@@ -55,7 +55,7 @@ options:
     choices: [absent, present]
 notes:
   - Check mode is supported.
-  - For secured values return parameter C(changed) is always V(true).
+  - For secured values return parameter RV(ignore:changed) is always V(true).
 """
 
 EXAMPLES = r"""
@@ -89,10 +89,10 @@ error_messages = {
 }
 
 BITBUCKET_API_ENDPOINTS = {
-    "pipeline-variable-list": "%s/2.0/repositories/{workspace}/{repo_slug}/pipelines_config/variables/"
-    % BitbucketHelper.BITBUCKET_API_URL,
-    "pipeline-variable-detail": "%s/2.0/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
-    % BitbucketHelper.BITBUCKET_API_URL,
+    "pipeline-variable-list": f"{BitbucketHelper.BITBUCKET_API_URL}/2.0/repositories/{{workspace}}/{{repo_slug}}/pipelines_config/variables/",
+    "pipeline-variable-detail": (
+        f"{BitbucketHelper.BITBUCKET_API_URL}/2.0/repositories/{{workspace}}/{{repo_slug}}/pipelines_config/variables/{{variable_uuid}}"
+    ),
 }
 
 

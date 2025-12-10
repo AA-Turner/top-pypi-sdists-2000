@@ -155,7 +155,7 @@ def run():
                 try:
                     job_json = json.loads(job_json)
                 except ValueError as e:
-                    module.fail_json(msg=to_native(e))
+                    module.fail_json(msg=f"{e}")
                 job = dict()
                 job["job"] = job_json
                 try:
@@ -172,7 +172,7 @@ def run():
                     else:
                         result = plan
                 except Exception as e:
-                    module.fail_json(msg=to_native(e))
+                    module.fail_json(msg=f"{e}")
 
             if module.params.get("content_format") == "hcl":
                 try:
@@ -181,8 +181,7 @@ def run():
                     job = dict()
                     job["job"] = job_json
                 except nomad.api.exceptions.BadRequestNomadException as err:
-                    msg = f"{err.nomad_resp.reason} {err.nomad_resp.text}"
-                    module.fail_json(msg=to_native(msg))
+                    module.fail_json(msg=f"{err.nomad_resp.reason} {err.nomad_resp.text}")
                 try:
                     job_id = job_json.get("ID")
                     plan = nomad_client.job.plan_job(job_id, job, diff=True)
@@ -195,7 +194,7 @@ def run():
                     else:
                         result = plan
                 except Exception as e:
-                    module.fail_json(msg=to_native(e))
+                    module.fail_json(msg=f"{e}")
 
         if module.params.get("force_start"):
             try:
@@ -220,7 +219,7 @@ def run():
                         result = json.loads(result.text)
                     changed = True
             except Exception as e:
-                module.fail_json(msg=to_native(e))
+                module.fail_json(msg=f"{e}")
 
     if module.params.get("state") == "absent":
         try:
@@ -244,7 +243,7 @@ def run():
                     result = job
                 changed = True
         except Exception as e:
-            module.fail_json(msg=to_native(e))
+            module.fail_json(msg=f"{e}")
 
     module.exit_json(changed=changed, result=result)
 

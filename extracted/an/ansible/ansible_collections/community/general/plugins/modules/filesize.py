@@ -66,7 +66,7 @@ options:
   force:
     description:
       - Whether or not to overwrite the file if it exists, in other words, to truncate it from 0. When V(true), the module
-        is not idempotent, that means it always reports C(changed=true).
+        is not idempotent, that means it always reports RV(ignore:changed=true).
       - O(force=true) and O(sparse=true) are mutually exclusive.
     type: bool
     default: false
@@ -219,7 +219,6 @@ import os
 import math
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.text.converters import to_native
 
 
 # These are the multiplicative suffixes understood (or returned) by dd and
@@ -453,7 +452,7 @@ def main():
         initial_filesize = current_size(args)
         size_descriptors = size_spec(args)
     except AssertionError as err:
-        module.fail_json(msg=to_native(err))
+        module.fail_json(msg=f"{err}")
 
     expected_filesize = size_descriptors["bytes"]
     if initial_filesize:

@@ -418,7 +418,7 @@ class XCCRedfishUtils(RedfishUtils):
 
         # eject all inserted media one by one
         ejected_media_list = []
-        for uri, data in resources.items():
+        for data in resources.values():
             if data.get("Image") and data.get("Inserted", True):
                 returndict = self.virtual_media_eject_one(data.get("Image"))
                 if not returndict["ret"]:
@@ -556,7 +556,7 @@ class XCCRedfishUtils(RedfishUtils):
         data = response["data"]
         for key in request_body.keys():
             if key not in data:
-                return {"ret": False, "msg": f"Key {key} not found. Supported key list: {data.keys()}"}
+                return {"ret": False, "msg": f"Key {key} not found. Supported key list: {list(data)}"}
 
         # perform patch
         response = self.patch_request(self.root_uri + resource_uri, request_body)
@@ -735,28 +735,24 @@ def main():
 
     # Check that Category is valid
     if category not in CATEGORY_COMMANDS_ALL:
-        module.fail_json(
-            msg=to_native(f"Invalid Category '{category}'. Valid Categories = {CATEGORY_COMMANDS_ALL.keys()}")
-        )
+        module.fail_json(msg=f"Invalid Category '{category}'. Valid Categories = {list(CATEGORY_COMMANDS_ALL.keys())}")
 
     # Check that all commands are valid
     for cmd in command_list:
         # Fail if even one command given is invalid
         if cmd not in CATEGORY_COMMANDS_ALL[category]:
-            module.fail_json(
-                msg=to_native(f"Invalid Command '{cmd}'. Valid Commands = {CATEGORY_COMMANDS_ALL[category]}")
-            )
+            module.fail_json(msg=f"Invalid Command '{cmd}'. Valid Commands = {CATEGORY_COMMANDS_ALL[category]}")
 
     # Organize by Categories / Commands
     if category == "Manager":
         # For virtual media resource locates on Systems service
         result = rf_utils._find_systems_resource()
         if result["ret"] is False:
-            module.fail_json(msg=to_native(result["msg"]))
+            module.fail_json(msg=result["msg"])
         # For virtual media resource locates on Managers service
         result = rf_utils._find_managers_resource()
         if result["ret"] is False:
-            module.fail_json(msg=to_native(result["msg"]))
+            module.fail_json(msg=result["msg"])
 
         for command in command_list:
             if command == "VirtualMediaInsert":

@@ -22,14 +22,15 @@ use chroma_types::{
     CreateDatabaseResponse, CreateTenantRequest, CreateTenantResponse,
     DeleteCollectionRecordsPayload, DeleteCollectionRecordsResponse, DeleteDatabaseRequest,
     DeleteDatabaseResponse, DetachFunctionRequest, DetachFunctionResponse,
-    GetCollectionByCrnRequest, GetCollectionRequest, GetDatabaseRequest, GetDatabaseResponse,
-    GetRequest, GetRequestPayload, GetResponse, GetTenantRequest, GetTenantResponse,
-    InternalCollectionConfiguration, InternalUpdateCollectionConfiguration, ListCollectionsRequest,
-    ListCollectionsResponse, ListDatabasesRequest, ListDatabasesResponse, QueryRequest,
-    QueryRequestPayload, QueryResponse, SearchRequest, SearchRequestPayload, SearchResponse,
-    UpdateCollectionPayload, UpdateCollectionRecordsPayload, UpdateCollectionRecordsResponse,
-    UpdateCollectionResponse, UpdateTenantRequest, UpdateTenantResponse,
-    UpsertCollectionRecordsPayload, UpsertCollectionRecordsResponse,
+    GetAttachedFunctionResponse, GetCollectionByCrnRequest, GetCollectionRequest,
+    GetDatabaseRequest, GetDatabaseResponse, GetRequest, GetRequestPayload, GetResponse,
+    GetTenantRequest, GetTenantResponse, InternalCollectionConfiguration,
+    InternalUpdateCollectionConfiguration, ListCollectionsRequest, ListCollectionsResponse,
+    ListDatabasesRequest, ListDatabasesResponse, QueryRequest, QueryRequestPayload, QueryResponse,
+    SearchRequest, SearchRequestPayload, SearchResponse, UpdateCollectionPayload,
+    UpdateCollectionRecordsPayload, UpdateCollectionRecordsResponse, UpdateCollectionResponse,
+    UpdateTenantRequest, UpdateTenantResponse, UpsertCollectionRecordsPayload,
+    UpsertCollectionRecordsResponse,
 };
 use mdac::{Rule, Scorecard, ScorecardGuard};
 use opentelemetry::global;
@@ -137,6 +138,7 @@ pub struct Metrics {
     collection_query: Counter<u64>,
     collection_search: Counter<u64>,
     attach_function: Counter<u64>,
+    get_attached_function: Counter<u64>,
     detach_function: Counter<u64>,
 }
 
@@ -173,6 +175,7 @@ impl Metrics {
             collection_query: meter.u64_counter("collection_query").build(),
             collection_search: meter.u64_counter("collection_search").build(),
             attach_function: meter.u64_counter("attach_function").build(),
+            get_attached_function: meter.u64_counter("get_attached_function").build(),
             detach_function: meter.u64_counter("detach_function").build(),
         }
     }
@@ -320,7 +323,11 @@ impl FrontendServer {
                 post(attach_function),
             )
             .route(
-                "/api/v2/tenants/{tenant}/databases/{database}/attached_functions/{attached_function_id}/detach",
+                "/api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/functions/{function_name}",
+                get(get_attached_function),
+            )
+            .route(
+                "/api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/attached_functions/{name}/detach",
                 post(detach_function),
             )
             .merge(docs_router)
@@ -1683,11 +1690,13 @@ async fn collection_delete(
         r#where,
     )?;
 
-    server
-        .frontend
-        .delete(request)
-        .meter(metering_context_container)
-        .await?;
+    Box::pin(
+        server
+            .frontend
+            .delete(request)
+            .meter(metering_context_container),
+    )
+    .await?;
 
     Ok(Json(DeleteCollectionRecordsResponse {}))
 }
@@ -2155,7 +2164,7 @@ async fn attach_function(
             AuthzResource {
                 tenant: Some(tenant.clone()),
                 database: Some(database.clone()),
-                collection: None,
+                collection: Some(collection_id.clone()),
             },
         )
         .await?;
@@ -2173,10 +2182,62 @@ async fn attach_function(
     Ok(Json(res))
 }
 
+/// Get an attached function by name
+#[utoipa::path(
+    get,
+    path = "/api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/functions/{function_name}",
+    responses(
+        (status = 200, description = "Attached function retrieved successfully", body = GetAttachedFunctionResponse),
+        (status = 401, description = "Unauthorized", body = ErrorResponse),
+        (status = 404, description = "Attached function not found", body = ErrorResponse),
+        (status = 500, description = "Server error", body = ErrorResponse)
+    ),
+    params(
+        ("tenant" = String, Path, description = "Tenant ID"),
+        ("database" = String, Path, description = "Database name"),
+        ("collection_id" = String, Path, description = "Collection ID"),
+        ("function_name" = String, Path, description = "Attached function name")
+    )
+)]
+async fn get_attached_function(
+    headers: HeaderMap,
+    Path((tenant, database, collection_id, function_name)): Path<(String, String, String, String)>,
+    State(mut server): State<FrontendServer>,
+) -> Result<Json<GetAttachedFunctionResponse>, ServerError> {
+    server.metrics.get_attached_function.add(1, &[]);
+    server
+        .authenticate_and_authorize(
+            &headers,
+            AuthzAction::GetCollection, // Using GetCollection as the auth action for getting attached functions
+            AuthzResource {
+                tenant: Some(tenant.clone()),
+                database: Some(database.clone()),
+                collection: Some(collection_id.clone()),
+            },
+        )
+        .await?;
+
+    let _guard = server.scorecard_request(&[
+        "op:get_attached_function",
+        format!("tenant:{}", tenant).as_str(),
+        format!("database:{}", database).as_str(),
+    ])?;
+
+    let attached_function = server
+        .frontend
+        .get_attached_function(tenant, database, collection_id, function_name)
+        .await?;
+    let attached_function_api =
+        chroma_types::AttachedFunctionApiResponse::from_attached_function(attached_function)?;
+    Ok(Json(GetAttachedFunctionResponse {
+        attached_function: attached_function_api,
+    }))
+}
+
 /// Detach a function
 #[utoipa::path(
     post,
-    path = "/api/v2/tenants/{tenant}/databases/{database}/attached_functions/{attached_function_id}/detach",
+    path = "/api/v2/tenants/{tenant}/databases/{database}/collections/{collection_id}/attached_functions/{name}/detach",
     request_body = DetachFunctionRequest,
     responses(
         (status = 200, description = "Function detached successfully", body = DetachFunctionResponse),
@@ -2186,12 +2247,13 @@ async fn attach_function(
     params(
         ("tenant" = String, Path, description = "Tenant ID"),
         ("database" = String, Path, description = "Database name"),
-        ("attached_function_id" = String, Path, description = "Attached Function ID")
+        ("collection_id" = String, Path, description = "Input collection ID"),
+        ("name" = String, Path, description = "Attached function name")
     )
 )]
 async fn detach_function(
     headers: HeaderMap,
-    Path((tenant, database_name, attached_function_id)): Path<(String, String, String)>,
+    Path((tenant, database_name, collection_id, name)): Path<(String, String, String, String)>,
     State(mut server): State<FrontendServer>,
     TracedJson(request): TracedJson<DetachFunctionRequest>,
 ) -> Result<Json<DetachFunctionResponse>, ServerError> {
@@ -2203,7 +2265,7 @@ async fn detach_function(
             AuthzResource {
                 tenant: Some(tenant.clone()),
                 database: Some(database_name.clone()),
-                collection: None,
+                collection: Some(collection_id.clone()),
             },
         )
         .await?;
@@ -2216,7 +2278,7 @@ async fn detach_function(
 
     let res = server
         .frontend
-        .detach_function(tenant, database_name, attached_function_id, request)
+        .detach_function(tenant, database_name, collection_id, name, request)
         .await?;
     Ok(Json(res))
 }
@@ -2280,6 +2342,7 @@ impl Modify for ChromaTokenSecurityAddon {
         collection_query,
         collection_search,
         attach_function,
+        get_attached_function,
         detach_function,
     ),
     // Apply our new security scheme here

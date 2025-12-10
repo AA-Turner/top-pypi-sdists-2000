@@ -129,7 +129,7 @@ def _verify_and_get_type(variable):
     elif isinstance(variable, dict):
         return "dict"
     else:
-        raise AnsibleError("Not supported type detected, variable must be a list or a dict")
+        raise AnsibleError(f"Not supported type detected, variable must be a list or a dict: '{variable}'")
 
 
 class LookupModule(LookupBase):
@@ -163,10 +163,7 @@ class LookupModule(LookupBase):
             return True
 
         group_intersection = [host_group_name for host_group_name in host_groups if host_group_name in self._groups]
-        if group_intersection:
-            return True
-
-        return False
+        return bool(group_intersection)
 
     def _var_matches(self, key, search_pattern):
         if self._pattern_type == "prefix":

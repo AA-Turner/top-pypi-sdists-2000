@@ -31,3 +31,5 @@ class StorageComponentMsgCatalog(Enum):
     ERR_INVALID_STATE_CONVERSION = "Invalid State Conversion. Cannot convert from {} to {}."
     ERR_INVALID_COMPONENT_QUERY_PARAM = "Invalid storage component facts query param : {}."
     ERR_OPERATION_UNSUPPORTED = "Operation not supported. Provide \'query\' param"
+    ERR_INVALID_PAGE_SIZE = "Invalid page_size value : {}. It must be a positive integer."
+    ERR_INVALID_TYPE_PAGE_SIZE = "Invalid type for page_size. It must be an integer."

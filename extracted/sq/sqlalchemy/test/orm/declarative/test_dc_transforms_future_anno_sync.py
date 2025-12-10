@@ -906,6 +906,36 @@ class DCTransformsTest(AssertsCompiledSQL, fixtures.TestBase):
         eq_(fields["id"].metadata, {})
         eq_(fields["value"].metadata, {"meta_key": "meta_value"})
 
+    @testing.requires.python314
+    def test_apply_dc_deferred_annotations(self, dc_decl_base):
+        """test for #12952"""
+
+        class Message(dc_decl_base):
+            __tablename__ = "message"
+
+            id: Mapped[int] = mapped_column(primary_key=True)
+            content: Mapped[str]
+            user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+
+            # annotation is unquoted and refers to nonexistent class (and if
+            # this is test_dc_transforms.py, __future__ annotations is not
+            # turned on), so would be rejected by any python interpreter < 3.14
+            # up front.  with python 3.14, the dataclass scan takes place
+            # and has to fetch the annotations using get_annotations()
+            # so that refs are turned into FwdRef without being resolved
+            user: Mapped[UnavailableUser] = relationship(  # type: ignore  # noqa
+                back_populates="messages"
+            )
+
+        # The key assertion: Message should be a dataclass
+        is_true(dataclasses.is_dataclass(Message))
+
+        # Verify the dataclass has proper __init__ signature
+        sig = pyinspect.signature(Message.__init__)
+        is_true("id" in sig.parameters)
+        is_true("content" in sig.parameters)
+        is_true("user_id" in sig.parameters)
+
 
 class RelationshipDefaultFactoryTest(fixtures.TestBase):
     def test_list(self, dc_decl_base: Type[MappedAsDataclass]):
@@ -1484,6 +1514,55 @@ class DataclassesForNonMappedClassesTest(fixtures.TestBase):
 
         n1 = Novel("the description")
         eq_(n1.description, "the description")
+
+    @testing.requires.python310
+    def test_cpython_142214(self, dc_decl_base):
+        """test for the cpython issue shown in issue #13021"""
+
+        class User(dc_decl_base):
+            __tablename__ = "user_account"
+
+            id: Mapped[int] = mapped_column(init=False, primary_key=True)
+            name: Mapped[str]
+
+        class CreatedByMixin(MappedAsDataclass, kw_only=True):
+            created_by_fk: Mapped[int] = mapped_column(
+                ForeignKey("user_account.id"), init=False
+            )
+
+            @declared_attr
+            @classmethod
+            def created_by(cls) -> Mapped[User]:
+                return relationship(foreign_keys=[cls.created_by_fk])
+
+        class Item(CreatedByMixin, dc_decl_base, kw_only=True):
+            __tablename__ = "item"
+
+            id: Mapped[int] = mapped_column(init=False, primary_key=True)
+            description: Mapped[str]
+
+        class SpecialItem(Item, kw_only=True):
+            __tablename__ = "special_item"
+
+            id: Mapped[int] = mapped_column(
+                ForeignKey("item.id"), init=False, primary_key=True
+            )
+            special_description: Mapped[str]
+
+        special_item = SpecialItem(
+            special_description="sd1",
+            description="d1",
+            created_by=User(name="u1"),
+        )
+
+        eq_(
+            special_item,
+            SpecialItem(
+                special_description="sd1",
+                description="d1",
+                created_by=User(name="u1"),
+            ),
+        )
 
 
 class DataclassArgsTest(fixtures.TestBase):

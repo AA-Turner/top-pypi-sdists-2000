@@ -22,7 +22,7 @@ use chroma_types::{
     operator::{Filter, KnnBatch, KnnProjection, Limit, Projection, Scan},
     plan::{Count, Get, Knn, Search},
     AddCollectionRecordsError, AddCollectionRecordsRequest, AddCollectionRecordsResponse,
-    AttachFunctionRequest, AttachFunctionResponse, Collection, CollectionUuid,
+    AttachFunctionRequest, AttachFunctionResponse, Cmek, Collection, CollectionUuid,
     CountCollectionsError, CountCollectionsRequest, CountCollectionsResponse, CountRequest,
     CountResponse, CreateCollectionError, CreateCollectionRequest, CreateCollectionResponse,
     CreateDatabaseError, CreateDatabaseRequest, CreateDatabaseResponse, CreateTenantError,
@@ -182,20 +182,6 @@ impl ServiceBasedFrontend {
             .collection)
     }
 
-    async fn get_collection_dimension(
-        &mut self,
-        collection_id: CollectionUuid,
-    ) -> Result<Option<u32>, GetCollectionError> {
-        Ok(self
-            .collections_with_segments_provider
-            .get_collection_with_segments(collection_id)
-            .await
-            .map_err(|err| Box::new(err) as Box<dyn ChromaError>)?
-            .collection
-            .dimension
-            .map(|dim| dim as u32))
-    }
-
     async fn set_collection_dimension(
         &mut self,
         collection_id: CollectionUuid,
@@ -219,10 +205,11 @@ impl ServiceBasedFrontend {
         option_embeddings: Option<&Vec<Embedding>>,
         update_if_not_present: bool,
         read_length: F,
-    ) -> Result<(), ValidationError>
+    ) -> Result<Collection, ValidationError>
     where
         F: Fn(&Embedding) -> Option<usize>,
     {
+        let collection = self.get_cached_collection(collection_id).await?;
         if let Some(embeddings) = option_embeddings {
             let emb_dims = embeddings
                 .iter()
@@ -237,28 +224,23 @@ impl ServiceBasedFrontend {
                 low as u32
             } else {
                 // No embedding to check, return
-                return Ok(());
+                return Ok(collection);
             };
-            match self.get_collection_dimension(collection_id).await {
-                Ok(Some(expected_dim)) => {
+            match collection.dimension.map(|dim| dim as u32) {
+                Some(expected_dim) => {
                     if expected_dim != emb_dim {
                         return Err(ValidationError::DimensionMismatch(expected_dim, emb_dim));
                     }
-
-                    Ok(())
                 }
-                Ok(None) => {
+                None => {
                     if update_if_not_present {
                         self.set_collection_dimension(collection_id, emb_dim)
                             .await?;
                     }
-                    Ok(())
                 }
-                Err(err) => Err(err.into()),
-            }
-        } else {
-            Ok(())
+            };
         }
+        Ok(collection)
     }
 
     pub async fn reset(&mut self) -> Result<ResetResponse, ResetError> {
@@ -576,7 +558,7 @@ impl ServiceBasedFrontend {
                     if let Some(schema) = reconciled_schema.as_ref() {
                         if schema.is_sparse_index_enabled() {
                             return Err(CreateCollectionError::InvalidSchema(
-                                SchemaError::InvalidSchema {
+                                SchemaError::InvalidUserInput {
                                     reason: "Sparse vector indexing is not enabled in local"
                                         .to_string(),
                                 },
@@ -810,9 +792,10 @@ impl ServiceBasedFrontend {
         tenant_id: &str,
         collection_id: CollectionUuid,
         records: Vec<OperationRecord>,
+        cmek: Option<Cmek>,
     ) -> Result<(), Box<dyn ChromaError>> {
         self.log_client
-            .push_logs(tenant_id, collection_id, records)
+            .push_logs(tenant_id, collection_id, records, cmek)
             .await
     }
 
@@ -829,14 +812,15 @@ impl ServiceBasedFrontend {
             ..
         }: AddCollectionRecordsRequest,
     ) -> Result<AddCollectionRecordsResponse, AddCollectionRecordsError> {
-        self.validate_embedding(
-            collection_id,
-            Some(&embeddings),
-            true,
-            |embedding: &Vec<f32>| Some(embedding.len()),
-        )
-        .await
-        .map_err(|err| err.boxed())?;
+        let collection = self
+            .validate_embedding(
+                collection_id,
+                Some(&embeddings),
+                true,
+                |embedding: &Vec<f32>| Some(embedding.len()),
+            )
+            .await
+            .map_err(|err| err.boxed())?;
 
         let embeddings = Some(embeddings.into_iter().map(Some).collect());
 
@@ -849,9 +833,13 @@ impl ServiceBasedFrontend {
             let mut self_clone = self.clone();
             let records_clone = records.clone();
             let tenant_id_clone = tenant_id.clone();
+            let cmek_clone = collection
+                .schema
+                .as_ref()
+                .and_then(|schema| schema.cmek.clone());
             async move {
                 self_clone
-                    .retryable_push_logs(&tenant_id_clone, collection_id, records_clone)
+                    .retryable_push_logs(&tenant_id_clone, collection_id, records_clone, cmek_clone)
                     .await
             }
         };
@@ -916,11 +904,12 @@ impl ServiceBasedFrontend {
             ..
         }: UpdateCollectionRecordsRequest,
     ) -> Result<UpdateCollectionRecordsResponse, UpdateCollectionRecordsError> {
-        self.validate_embedding(collection_id, embeddings.as_ref(), true, |embedding| {
-            embedding.as_ref().map(|emb| emb.len())
-        })
-        .await
-        .map_err(|err| err.boxed())?;
+        let collection = self
+            .validate_embedding(collection_id, embeddings.as_ref(), true, |embedding| {
+                embedding.as_ref().map(|emb| emb.len())
+            })
+            .await
+            .map_err(|err| err.boxed())?;
 
         let (records, log_size_bytes) = to_records(
             ids,
@@ -937,9 +926,13 @@ impl ServiceBasedFrontend {
             let mut self_clone = self.clone();
             let records_clone = records.clone();
             let tenant_id_clone = tenant_id.clone();
+            let cmek_clone = collection
+                .schema
+                .as_ref()
+                .and_then(|schema| schema.cmek.clone());
             async move {
                 self_clone
-                    .retryable_push_logs(&tenant_id_clone, collection_id, records_clone)
+                    .retryable_push_logs(&tenant_id_clone, collection_id, records_clone, cmek_clone)
                     .await
             }
         };
@@ -1004,14 +997,15 @@ impl ServiceBasedFrontend {
             ..
         }: UpsertCollectionRecordsRequest,
     ) -> Result<UpsertCollectionRecordsResponse, UpsertCollectionRecordsError> {
-        self.validate_embedding(
-            collection_id,
-            Some(&embeddings),
-            true,
-            |embedding: &Vec<f32>| Some(embedding.len()),
-        )
-        .await
-        .map_err(|err| err.boxed())?;
+        let collection = self
+            .validate_embedding(
+                collection_id,
+                Some(&embeddings),
+                true,
+                |embedding: &Vec<f32>| Some(embedding.len()),
+            )
+            .await
+            .map_err(|err| err.boxed())?;
 
         let embeddings = Some(embeddings.into_iter().map(Some).collect());
 
@@ -1030,9 +1024,13 @@ impl ServiceBasedFrontend {
             let mut self_clone = self.clone();
             let records_clone = records.clone();
             let tenant_id_clone = tenant_id.clone();
+            let cmek_clone = collection
+                .schema
+                .as_ref()
+                .and_then(|schema| schema.cmek.clone());
             async move {
                 self_clone
-                    .retryable_push_logs(&tenant_id_clone, collection_id, records_clone)
+                    .retryable_push_logs(&tenant_id_clone, collection_id, records_clone, cmek_clone)
                     .await
             }
         };
@@ -1213,8 +1211,13 @@ impl ServiceBasedFrontend {
 
             let log_size_bytes = records.iter().map(OperationRecord::size_bytes).sum();
 
-            self.log_client
-                .push_logs(&tenant_id, collection_id, records)
+            let cmek = self
+                .get_cached_collection(collection_id)
+                .await
+                .map_err(|err| DeleteCollectionRecordsError::Internal(err.boxed()))?
+                .schema
+                .and_then(|schema| schema.cmek.clone());
+            self.retryable_push_logs(&tenant_id, collection_id, records, cmek)
                 .await
                 .map_err(|err| {
                     if err.code() == ErrorCodes::Unavailable {
@@ -1906,6 +1909,7 @@ impl ServiceBasedFrontend {
                 )))
             })?);
 
+        // Step 1: Create attached function with is_ready = false
         let attached_function_id = self
             .sysdb_client
             .create_attached_function(
@@ -1914,63 +1918,120 @@ impl ServiceBasedFrontend {
                 input_collection_id,
                 output_collection.clone(),
                 params,
-                tenant_name,
+                tenant_name.clone(),
                 database_name,
                 self.min_records_for_invocation,
             )
+            .await?;
+
+        // Step 2: Start backfill
+        self.start_backfill(tenant_name, input_collection_id, attached_function_id)
+            .await?;
+
+        // Step 3: Create output collection and set is_ready = true
+        self.sysdb_client
+            .finish_create_attached_function(attached_function_id)
             .await
             .map_err(|e| match e {
-                chroma_sysdb::AttachFunctionError::AlreadyExists => {
-                    chroma_types::AttachFunctionError::AlreadyExists(name.clone())
+                chroma_types::FinishCreateAttachedFunctionError::OutputCollectionExists => {
+                    chroma_types::AttachFunctionError::OutputCollectionExists(
+                        output_collection.clone(),
+                    )
                 }
-                chroma_sysdb::AttachFunctionError::FailedToCreateAttachedFunction(s) => {
-                    chroma_types::AttachFunctionError::Internal(Box::new(chroma_error::TonicError(
-                        s,
-                    )))
-                }
-                chroma_sysdb::AttachFunctionError::ServerReturnedInvalidData => {
-                    chroma_types::AttachFunctionError::Internal(Box::new(
-                        chroma_sysdb::AttachFunctionError::ServerReturnedInvalidData,
-                    ))
-                }
+                other => chroma_types::AttachFunctionError::from(other),
             })?;
 
         Ok(AttachFunctionResponse {
             attached_function: chroma_types::AttachedFunctionInfo {
                 id: attached_function_id.to_string(),
                 name,
-                function_id,
+                function_name: function_id,
             },
         })
+    }
+
+    // Stub method for backfill - will be implemented later
+    async fn start_backfill(
+        &mut self,
+        tenant: String,
+        collection_id: CollectionUuid,
+        _attached_function_id: chroma_types::AttachedFunctionUuid,
+    ) -> Result<(), chroma_types::AttachFunctionError> {
+        let collection = self.get_cached_collection(collection_id).await?;
+        let embedding_dim = collection.dimension.unwrap_or(1);
+        let fake_embedding = vec![0.0; embedding_dim as usize];
+        // TODO(tanujnay112): Make this either a configurable or better yet a separate
+        // RPC to the logs service.
+        let num_fake_logs = 250;
+        let logs = vec![
+            OperationRecord {
+                id: "backfill_id".to_string(),
+                embedding: Some(fake_embedding),
+                encoding: None,
+                metadata: None,
+                document: None,
+                operation: Operation::BackfillFn,
+            };
+            num_fake_logs
+        ];
+
+        let cmek = collection.schema.and_then(|schema| schema.cmek.clone());
+        self.retryable_push_logs(&tenant, collection_id, logs, cmek)
+            .await?;
+        Ok(())
+    }
+
+    pub async fn get_attached_function(
+        &mut self,
+        _tenant_name: String,
+        _database_name: String,
+        collection_id: String,
+        function_name: String,
+    ) -> Result<chroma_types::AttachedFunction, chroma_sysdb::GetAttachedFunctionError> {
+        // Parse collection_id from path parameter - client-side validation
+        let collection_uuid =
+            CollectionUuid(uuid::Uuid::parse_str(&collection_id).map_err(|e| {
+                chroma_sysdb::GetAttachedFunctionError::FailedToGetAttachedFunction(
+                    tonic::Status::invalid_argument(format!(
+                        "Client validation error: Invalid collection_id UUID format: {}",
+                        e
+                    )),
+                )
+            })?);
+
+        // Get the attached function by name
+        self.sysdb_client
+            .get_attached_function_by_name(collection_uuid, function_name)
+            .await
     }
 
     pub async fn detach_function(
         &mut self,
         _tenant_id: String,
         _database_name: String,
-        attached_function_id: String,
+        collection_id: String,
+        name: String,
         DetachFunctionRequest { delete_output, .. }: DetachFunctionRequest,
     ) -> Result<DetachFunctionResponse, DetachFunctionError> {
-        // Parse attached_function_id from path parameter - client-side validation
-        let attached_function_uuid = chroma_types::AttachedFunctionUuid(
-            uuid::Uuid::parse_str(&attached_function_id).map_err(|e| {
+        // Parse collection_id from path parameter - client-side validation
+        let collection_uuid =
+            chroma_types::CollectionUuid(uuid::Uuid::parse_str(&collection_id).map_err(|e| {
                 DetachFunctionError::Internal(Box::new(chroma_error::TonicError(
                     tonic::Status::invalid_argument(format!(
-                        "Client validation error: Invalid attached_function_id UUID format: {}",
+                        "Client validation error: Invalid collection_id UUID format: {}",
                         e
                     )),
                 )))
-            })?,
-        );
+            })?);
 
         // Detach function - soft delete it to prevent further runs
         // If delete_output is true, also delete the output collection
         self.sysdb_client
-            .soft_delete_attached_function(attached_function_uuid, delete_output)
+            .soft_delete_attached_function(name.clone(), collection_uuid, delete_output)
             .await
             .map_err(|e| match e {
                 chroma_sysdb::DeleteAttachedFunctionError::NotFound => {
-                    DetachFunctionError::NotFound(attached_function_id.clone())
+                    DetachFunctionError::NotFound(name.clone())
                 }
                 chroma_sysdb::DeleteAttachedFunctionError::FailedToDeleteAttachedFunction(s) => {
                     DetachFunctionError::Internal(Box::new(chroma_error::TonicError(s)))

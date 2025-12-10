@@ -128,8 +128,9 @@ options:
         description:
           - The type of storage component.
           - Set storage_type to C(HCPS_S3) for HCPS S3 storage component.
+          - Set storage_type to C(ARRAY) for VSP SDS Block storage component.
         type: str
-        "choices": ['HCPS_S3']
+        "choices": ['HCPS_S3', 'ARRAY']
         required: false
       storage_custom_metadata:
         description: The metadata assigned to the storage component.
@@ -318,6 +319,14 @@ options:
             required: false
           node:
             description: The node on the Kubernetes cluster on which the storage is to be allocated.
+            type: str
+            required: false
+          array_name:
+            description: The name of the storage array.
+            type: str
+            required: false
+          array_storage_tier:
+            description: The storage tier on the storage array.
             type: str
             required: false
 """
@@ -516,6 +525,22 @@ storage_component:
           description: Whether to use a proxy for the storage component.
           type: bool
           sample: false
+        array_lun:
+          description: The LUN on the storage array.
+          type: str
+          sample: "lun1"
+        array_name:
+          description: The name of the storage array.
+          type: str
+          sample: "vsp_array_01"
+        array_namespace:
+          description: The namespace on the storage array.
+          type: str
+          sample: "namespace1"
+        array_storage_tier:
+          description: The storage tier on the storage array.
+          type: str
+          sample: "nvme-tlc"
     storage_custom_metadata:
       description: Custom metadata for the storage component.
       type: dict
@@ -673,6 +698,7 @@ def main():
                 raw_message = storage_component_res.create_one()
                 changed = raw_message.pop("changed", False)
         except Exception as err:
+            logger.writeDebug(err)
             module.fail_json(msg=SCMA.ERR_CREATE_STORAGE_COMPONENT.value.format(err))
     registration_message = validate_ansible_product_registration()
     response = {

@@ -15,6 +15,12 @@ Classes:
 """
 
 from abc import ABC, abstractmethod
+from random import randint
+
+try:
+    from pyVmomi import vim
+except ImportError:
+    pass
 
 
 class AbstractVsphereObject(ABC):
@@ -25,6 +31,9 @@ class AbstractVsphereObject(ABC):
     1. Input parameters: An object that represents the desired state of a vSphere object.
     2. Live object: An object that represents the current state of a vSphere object.
 
+    Parameter representations are (potentially) linked to live objects. The live object
+    should have a corresponding raw_object, which is the original VMware object from pyVmomi.
+
     Key Features:
     - Change detection through linked device comparison
     - VMware specification generation for both new and update operations
@@ -32,7 +41,7 @@ class AbstractVsphereObject(ABC):
 
     Attributes:
         _raw_object: Original VMware object from pyVmomi (optional, only makes sense for live objects)
-        _live_object: Corresponding live device for change detection (optional, only makes sense for input parameters)
+        _live_object: AbstractVsphereObject that represents a live VM device
     """
 
     def __init__(self, raw_object=None):
@@ -45,6 +54,7 @@ class AbstractVsphereObject(ABC):
         """
         self._raw_object = raw_object
         self._live_object = None
+        self._new_spec_key = -randint(1, 99999)
 
     @classmethod
     @abstractmethod
@@ -64,7 +74,9 @@ class AbstractVsphereObject(ABC):
         Raises:
             NotImplementedError: Must be implemented by subclasses
         """
-        raise NotImplementedError("from_live_device_spec must be implemented by subclasses")
+        raise NotImplementedError(
+            "from_live_device_spec must be implemented by subclasses"
+        )
 
     @abstractmethod
     def to_new_spec(self):
@@ -99,6 +111,28 @@ class AbstractVsphereObject(ABC):
             NotImplementedError: Must be implemented by subclasses
         """
         raise NotImplementedError("to_update_spec must be implemented by subclasses")
+
+    def to_removal_spec(self):
+        """
+        Generate VMware specification for object removal.
+
+        Creates a VMware device specification that can be used to remove
+        an existing object in vSphere.
+
+        Returns:
+            VMware device specification object
+
+        Raises:
+        """
+        if not self._raw_object:
+            raise AttributeError(
+                "Cannot create a removal spec for a device that has no raw_object attached."
+            )
+
+        spec = vim.vm.device.VirtualDeviceSpec()
+        spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.remove
+        spec.device = self._raw_object
+        return spec
 
     @abstractmethod
     def differs_from_live_object(self):
@@ -164,6 +198,18 @@ class AbstractVsphereObject(ABC):
         """
         raise NotImplementedError("_to_module_output must be implemented by subclasses")
 
+    def represents_live_vm_device(self):
+        """
+        Helper method that indicates if this object was created from a live VM device
+        """
+        return self._raw_object is not None
+
+    def has_a_linked_live_vm_device(self):
+        """
+        Helper method that indicates if this object has already been linked to a live VM device
+        """
+        return self._live_object is not None and not self.represents_live_vm_device()
+
     def to_change_set_output(self):
         """
         Generate change set output for configuration tracking.
@@ -183,10 +229,14 @@ class AbstractVsphereObject(ABC):
                 "old_value": {"name": "old_name", "size": 512}
             }
         """
-        new_value = self._to_module_output()
-        old_value = {}
-        if self._live_object is not None:
-            old_value = self._live_object._to_module_output()
+        if self.represents_live_vm_device():
+            new_value = {}
+            old_value = self._to_module_output()
+        else:
+            new_value = self._to_module_output()
+            old_value = {}
+            if self.has_a_linked_live_vm_device():
+                old_value = self._live_object._to_module_output()
 
         # Remove None values from both new and old values
         for key, value in new_value.copy().items():
@@ -200,7 +250,9 @@ class AbstractVsphereObject(ABC):
             "old_value": old_value,
         }
 
-    def link_corresponding_live_object(self, abstract_vsphere_object: "AbstractVsphereObject"):
+    def link_corresponding_live_object(
+        self, abstract_vsphere_object: "AbstractVsphereObject"
+    ):
         """
         Link this object to its corresponding live device for change detection.
 
@@ -218,7 +270,33 @@ class AbstractVsphereObject(ABC):
             This method should be called when setting up change detection
             between desired and current object states.
         """
-        if self._live_object is not None:
-            raise Exception("Linked device already set, cannot link another one.")
+        if self.represents_live_vm_device():
+            raise ValueError(
+                "Cannot link a live VM object representation to another live VM object representation."
+            )
+
+        if self.has_a_linked_live_vm_device():
+            raise ValueError("Linked device already set for %s, cannot link another one." % str(self))
 
         self._live_object = abstract_vsphere_object
+
+    @property
+    def key(self):
+        """
+        Get the VMware device key for this object.
+
+        The device key is VMware's unique identifier for the object. This
+        property returns the key from either the existing device or the
+        generated specification.
+
+        If no object exists in vSphere, the key is a randomly generated negative integer.
+
+        Returns:
+            int or None: VMware object key
+        """
+        if self.represents_live_vm_device():
+            return self._raw_object.key
+        if self.has_a_linked_live_vm_device():
+            return self._live_object.key
+
+        return self._new_spec_key

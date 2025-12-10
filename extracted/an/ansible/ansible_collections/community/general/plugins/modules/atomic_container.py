@@ -103,16 +103,15 @@ msg:
 import traceback
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.text.converters import to_native
 
 
 def do_install(module, mode, rootfs, container, image, values_list, backend):
     system_list = ["--system"] if mode == "system" else []
     user_list = ["--user"] if mode == "user" else []
-    rootfs_list = ["--rootfs=%s" % rootfs] if rootfs else []
+    rootfs_list = [f"--rootfs={rootfs}"] if rootfs else []
     atomic_bin = module.get_bin_path("atomic")
     args = (
-        [atomic_bin, "install", "--storage=%s" % backend, "--name=%s" % container]
+        [atomic_bin, "install", f"--storage={backend}", f"--name={container}"]
         + system_list
         + user_list
         + rootfs_list
@@ -129,7 +128,7 @@ def do_install(module, mode, rootfs, container, image, values_list, backend):
 
 def do_update(module, container, image, values_list):
     atomic_bin = module.get_bin_path("atomic")
-    args = [atomic_bin, "containers", "update", "--rebase=%s" % image] + values_list + [container]
+    args = [atomic_bin, "containers", "update", f"--rebase={image}"] + values_list + [container]
     rc, out, err = module.run_command(args, check_rc=False)
     if rc != 0:
         module.fail_json(rc=rc, msg=err)
@@ -140,7 +139,7 @@ def do_update(module, container, image, values_list):
 
 def do_uninstall(module, name, backend):
     atomic_bin = module.get_bin_path("atomic")
-    args = [atomic_bin, "uninstall", "--storage=%s" % backend, name]
+    args = [atomic_bin, "uninstall", f"--storage={backend}", name]
     rc, out, err = module.run_command(args, check_rc=False)
     if rc != 0:
         module.fail_json(rc=rc, msg=err)
@@ -170,7 +169,7 @@ def core(module):
     atomic_bin = module.get_bin_path("atomic")
     module.run_command_environ_update = dict(LANG="C", LC_ALL="C", LC_MESSAGES="C")
 
-    values_list = ["--set=%s" % x for x in values] if values else []
+    values_list = [f"--set={x}" for x in values] if values else []
 
     args = [
         atomic_bin,
@@ -180,9 +179,9 @@ def core(module):
         "-n",
         "--all",
         "-f",
-        "backend=%s" % backend,
+        f"backend={backend}",
         "-f",
-        "container=%s" % name,
+        f"container={name}",
     ]
     rc, out, err = module.run_command(args, check_rc=False)
     if rc != 0:
@@ -227,7 +226,7 @@ def main():
     try:
         core(module)
     except Exception as e:
-        module.fail_json(msg="Unanticipated error running atomic: %s" % to_native(e), exception=traceback.format_exc())
+        module.fail_json(msg=f"Unanticipated error running atomic: {e}", exception=traceback.format_exc())
 
 
 if __name__ == "__main__":

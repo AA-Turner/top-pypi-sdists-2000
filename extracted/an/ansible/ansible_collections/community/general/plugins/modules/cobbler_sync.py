@@ -74,7 +74,6 @@ import ssl
 import xmlrpc.client as xmlrpc_client
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.text.converters import to_text
 
 from ansible_collections.community.general.plugins.module_utils.datetime import (
     now,
@@ -110,29 +109,17 @@ def main():
 
     start = now()
 
-    ssl_context = None
-    if not validate_certs:
-        try:
-            ssl_context = ssl._create_unverified_context()
-        except AttributeError:
-            # Legacy Python that doesn't verify HTTPS certificates by default
-            pass
-        else:
-            # Handle target environment that doesn't support HTTPS verification
-            ssl._create_default_https_context = ssl._create_unverified_context
+    ssl_context = None if validate_certs or not use_ssl else ssl._create_unverified_context()
 
     url = "{proto}://{host}:{port}/cobbler_api".format(**module.params)
-    if ssl_context:
-        conn = xmlrpc_client.ServerProxy(url, context=ssl_context)
-    else:
-        conn = xmlrpc_client.Server(url)
+    conn = xmlrpc_client.ServerProxy(url, context=ssl_context)
 
     try:
         token = conn.login(username, password)
     except xmlrpc_client.Fault as e:
         module.fail_json(
             msg="Failed to log in to Cobbler '{url}' as '{username}'. {error}".format(
-                url=url, error=to_text(e), **module.params
+                url=url, error=f"{e}", **module.params
             )
         )
     except Exception as e:

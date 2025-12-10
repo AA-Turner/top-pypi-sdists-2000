@@ -15,8 +15,6 @@ short_description: Create and manage Zone RRSets on the Hetzner Cloud.
 description:
   - Create, update and delete Zone RRSets on the Hetzner Cloud.
   - See the L(Zone RRSets API documentation,https://docs.hetzner.cloud/reference/cloud#zone-rrsets) for more details.
-  - B(Experimental:) DNS API is in beta, breaking changes may occur within minor releases.
-    See https://docs.hetzner.cloud/changelog#2025-10-07-dns-beta for more details.
 
 author:
     - Jonas Lammler (@jooola)
@@ -93,6 +91,15 @@ EXAMPLES = """
         comment: web server 2
     state: present
 
+- name: Create a TXT record
+  hetzner.hcloud.zone_rrset:
+    zone: example.com
+    name: "@"
+    type: "TXT"
+    records:
+      - value: "{{ 'v=spf1 include:_spf.example.net ~all' | hetzner.hcloud.txt_record }}"
+    state: present
+
 - name: Delete a Zone RRSet
   hetzner.hcloud.zone_rrset:
     zone: 42
@@ -165,7 +172,6 @@ from typing import Literal
 
 from ansible.module_utils.basic import AnsibleModule
 
-from ..module_utils.experimental import dns_experimental_warning
 from ..module_utils.hcloud import AnsibleHCloud
 from ..module_utils.vendor.hcloud import APIException, HCloudException
 from ..module_utils.vendor.hcloud.actions import BoundAction
@@ -176,10 +182,6 @@ class AnsibleHCloudZoneRRSet(AnsibleHCloud):
     represent = "hcloud_zone_rrset"
 
     hcloud_zone_rrset: BoundZoneRRSet | None = None
-
-    def __init__(self, module: AnsibleModule):
-        dns_experimental_warning(module)
-        super().__init__(module)
 
     def _prepare_result(self):
         return {
@@ -197,7 +199,7 @@ class AnsibleHCloudZoneRRSet(AnsibleHCloud):
     def _prepare_result_record(self, record: ZoneRecord):
         return {
             "value": record.value,
-            "comment": record.comment,
+            "comment": record.comment or "",  # API defaults to "", this ensure idempotency
         }
 
     def _get(self):
@@ -318,6 +320,9 @@ class AnsibleHCloudZoneRRSet(AnsibleHCloud):
     def _diff_records(self) -> bool:
         current = [self._prepare_result_record(o) for o in self.hcloud_zone_rrset.records]
         wanted = [self._prepare_result_record(ZoneRecord.from_dict(o)) for o in self.module.params.get("records")]
+
+        current = sorted(current, key=lambda x: x["value"])
+        wanted = sorted(wanted, key=lambda x: x["value"])
 
         return current != wanted
 

@@ -159,7 +159,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/activate_cluster_placement_group.py.html>`__ to see an example of how to use activate_cluster_placement_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/activate_cluster_placement_group.py.html>`__ to see an example of how to use activate_cluster_placement_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterPlacementGroupId']
@@ -269,7 +269,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -389,7 +389,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/change_cluster_placement_group_compartment.py.html>`__ to see an example of how to use change_cluster_placement_group_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/change_cluster_placement_group_compartment.py.html>`__ to see an example of how to use change_cluster_placement_group_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterPlacementGroupId']
@@ -502,7 +502,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/create_cluster_placement_group.py.html>`__ to see an example of how to use create_cluster_placement_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/create_cluster_placement_group.py.html>`__ to see an example of how to use create_cluster_placement_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -609,7 +609,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/deactivate_cluster_placement_group.py.html>`__ to see an example of how to use deactivate_cluster_placement_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/deactivate_cluster_placement_group.py.html>`__ to see an example of how to use deactivate_cluster_placement_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterPlacementGroupId']
@@ -719,7 +719,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/delete_cluster_placement_group.py.html>`__ to see an example of how to use delete_cluster_placement_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/delete_cluster_placement_group.py.html>`__ to see an example of how to use delete_cluster_placement_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterPlacementGroupId']
@@ -817,7 +817,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/get_cluster_placement_group.py.html>`__ to see an example of how to use get_cluster_placement_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/get_cluster_placement_group.py.html>`__ to see an example of how to use get_cluster_placement_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterPlacementGroupId']
@@ -915,7 +915,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1048,7 +1048,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/list_cluster_placement_groups.py.html>`__ to see an example of how to use list_cluster_placement_groups API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/list_cluster_placement_groups.py.html>`__ to see an example of how to use list_cluster_placement_groups API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1197,7 +1197,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1339,7 +1339,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1494,7 +1494,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1633,7 +1633,7 @@ class ClusterPlacementGroupsCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/clusterplacementgroups/update_cluster_placement_group.py.html>`__ to see an example of how to use update_cluster_placement_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/clusterplacementgroups/update_cluster_placement_group.py.html>`__ to see an example of how to use update_cluster_placement_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterPlacementGroupId']

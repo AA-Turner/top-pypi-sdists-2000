@@ -13,9 +13,9 @@ author:
   - Patrick Ogenstad (@ogenstad)
 short_description: Retrieve facts for a device using SNMP
 description:
-  - Retrieve facts for a device using SNMP, the facts are inserted to the C(ansible_facts) key.
+  - Retrieve facts for a device using SNMP. The facts are inserted to the RV(ansible_facts) key.
 requirements:
-  - pysnmp
+  - pysnmp < 6.2.4 - that version removed components used by this module.
 extends_documentation_fragment:
   - community.general.attributes
   - community.general.attributes.facts
@@ -107,81 +107,86 @@ EXAMPLES = r"""
 """
 
 RETURN = r"""
-ansible_sysdescr:
-  description: A textual description of the entity.
-  returned: success
-  type: str
-  sample: "Linux ubuntu-user 4.4.0-93-generic #116-Ubuntu SMP Fri Aug 11 21:17:51 UTC 2017 x86_64"
-ansible_sysobjectid:
-  description: The vendor's authoritative identification of the network management subsystem contained in the entity.
-  returned: success
-  type: str
-  sample: 1.3.6.1.4.1.8072.3.2.10
-ansible_sysuptime:
-  description: The time (in hundredths of a second) since the network management portion of the system was last re-initialized.
-  returned: success
-  type: int
-  sample: 42388
-ansible_syscontact:
-  description: The textual identification of the contact person for this managed node, together with information on how to
-    contact this person.
-  returned: success
-  type: str
-  sample: Me <me@example.org>
-ansible_sysname:
-  description: An administratively-assigned name for this managed node.
-  returned: success
-  type: str
-  sample: ubuntu-user
-ansible_syslocation:
-  description: The physical location of this node (for example, V(telephone closet, 3rd floor)).
-  returned: success
-  type: str
-  sample: Sitting on the Dock of the Bay
-ansible_all_ipv4_addresses:
-  description: List of all IPv4 addresses.
-  returned: success
-  type: list
-  sample: ["127.0.0.1", "172.17.0.1"]
-ansible_interfaces:
-  description: Dictionary of each network interface and its metadata.
+ansible_facts:
+  description: The returned facts.
   returned: success
   type: dict
-  sample:
-    {
-      "1": {
-        "adminstatus": "up",
-        "description": "",
-        "ifindex": "1",
-        "ipv4": [
-          {
-            "address": "127.0.0.1",
-            "netmask": "255.0.0.0"
+  contains:
+    ansible_sysdescr:
+      description: A textual description of the entity.
+      returned: success
+      type: str
+      sample: "Linux ubuntu-user 4.4.0-93-generic #116-Ubuntu SMP Fri Aug 11 21:17:51 UTC 2017 x86_64"
+    ansible_sysobjectid:
+      description: The vendor's authoritative identification of the network management subsystem contained in the entity.
+      returned: success
+      type: str
+      sample: 1.3.6.1.4.1.8072.3.2.10
+    ansible_sysuptime:
+      description: The time (in hundredths of a second) since the network management portion of the system was last re-initialized.
+      returned: success
+      type: int
+      sample: 42388
+    ansible_syscontact:
+      description: The textual identification of the contact person for this managed node, together with information on how to
+        contact this person.
+      returned: success
+      type: str
+      sample: Me <me@example.org>
+    ansible_sysname:
+      description: An administratively-assigned name for this managed node.
+      returned: success
+      type: str
+      sample: ubuntu-user
+    ansible_syslocation:
+      description: The physical location of this node (for example, V(telephone closet, 3rd floor)).
+      returned: success
+      type: str
+      sample: Sitting on the Dock of the Bay
+    ansible_all_ipv4_addresses:
+      description: List of all IPv4 addresses.
+      returned: success
+      type: list
+      sample: ["127.0.0.1", "172.17.0.1"]
+    ansible_interfaces:
+      description: Dictionary of each network interface and its metadata.
+      returned: success
+      type: dict
+      sample:
+        {
+          "1": {
+            "adminstatus": "up",
+            "description": "",
+            "ifindex": "1",
+            "ipv4": [
+              {
+                "address": "127.0.0.1",
+                "netmask": "255.0.0.0"
+              }
+            ],
+            "mac": "",
+            "mtu": "65536",
+            "name": "lo",
+            "operstatus": "up",
+            "speed": "65536"
+          },
+          "2": {
+            "adminstatus": "up",
+            "description": "",
+            "ifindex": "2",
+            "ipv4": [
+              {
+                "address": "192.168.213.128",
+                "netmask": "255.255.255.0"
+              }
+            ],
+            "mac": "000a305a52a1",
+            "mtu": "1500",
+            "name": "Intel Corporation 82545EM Gigabit Ethernet Controller (Copper)",
+            "operstatus": "up",
+            "speed": "1500"
           }
-        ],
-        "mac": "",
-        "mtu": "65536",
-        "name": "lo",
-        "operstatus": "up",
-        "speed": "65536"
-      },
-      "2": {
-        "adminstatus": "up",
-        "description": "",
-        "ifindex": "2",
-        "ipv4": [
-          {
-            "address": "192.168.213.128",
-            "netmask": "255.255.255.0"
-          }
-        ],
-        "mac": "000a305a52a1",
-        "mtu": "1500",
-        "name": "Intel Corporation 82545EM Gigabit Ethernet Controller (Copper)",
-        "operstatus": "up",
-        "speed": "1500"
-      }
-    }
+        }
 """
 
 import binascii
@@ -244,9 +249,7 @@ def decode_mac(hexstring):
 
 def lookup_adminstatus(int_adminstatus):
     adminstatus_options = {1: "up", 2: "down", 3: "testing"}
-    if int_adminstatus in adminstatus_options:
-        return adminstatus_options[int_adminstatus]
-    return ""
+    return adminstatus_options.get(int_adminstatus, "")
 
 
 def lookup_operstatus(int_operstatus):
@@ -259,9 +262,7 @@ def lookup_operstatus(int_operstatus):
         6: "notPresent",
         7: "lowerLayerDown",
     }
-    if int_operstatus in operstatus_options:
-        return operstatus_options[int_operstatus]
-    return ""
+    return operstatus_options.get(int_operstatus, "")
 
 
 def main():
@@ -283,6 +284,11 @@ def main():
             ["username", "level", "integrity", "authkey"],
             ["privacy", "privkey"],
         ),
+        required_if=[
+            ("version", "v2", ["community"]),
+            ("version", "v2c", ["community"]),
+            ("version", "v3", ["username", "authkey", "level"]),
+        ],
         supports_check_mode=True,
     )
 
@@ -293,17 +299,9 @@ def main():
     cmdGen = cmdgen.CommandGenerator()
     transport_opts = {k: m_args[k] for k in ("timeout", "retries") if m_args[k] is not None}
 
-    # Verify that we receive a community when using snmp v2
-    if m_args["version"] in ("v2", "v2c"):
-        if m_args["community"] is None:
-            module.fail_json(msg="Community not set when using snmp version 2")
-
     integrity_proto = None
     privacy_proto = None
     if m_args["version"] == "v3":
-        if m_args["username"] is None:
-            module.fail_json(msg="Username not set when using snmp version 3")
-
         if m_args["level"] == "authPriv" and m_args["privacy"] is None:
             module.fail_json(msg="Privacy algorithm not set when using authPriv")
 

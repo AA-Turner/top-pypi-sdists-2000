@@ -29,6 +29,7 @@ from ansible_collections.community.docker.plugins.module_utils._common_api impor
     RequestException,
 )
 from ansible_collections.community.docker.plugins.module_utils._module_container.base import (
+    _DEFAULT_IP_REPLACEMENT_STRING,
     OPTION_AUTO_REMOVE,
     OPTION_BLKIO_WEIGHT,
     OPTION_CAP_DROP,
@@ -125,11 +126,6 @@ if t.TYPE_CHECKING:
     from .base import Option, OptionGroup
 
     Sentry = object
-
-
-_DEFAULT_IP_REPLACEMENT_STRING = (
-    "[[DEFAULT_IP:iewahhaeB4Sae6Aen8IeShairoh4zeph7xaekoh8Geingunaesaeweiy3ooleiwi]]"
-)
 
 
 _SENTRY: Sentry = object()
@@ -1970,10 +1966,20 @@ def _get_values_ports(
     config = container["Config"]
 
     # "ExposedPorts": null returns None type & causes AttributeError - PR #5517
+    expected_exposed: list[str] = []
     if config.get("ExposedPorts") is not None:
-        expected_exposed = [_normalize_port(p) for p in config.get("ExposedPorts", {})]
-    else:
-        expected_exposed = []
+        for port_and_protocol in config.get("ExposedPorts", {}):
+            port, protocol = _normalize_port(port_and_protocol).rsplit("/")
+            try:
+                start, end = port.split("-", 1)
+                start_port = int(start)
+                end_port = int(end)
+                for port_no in range(start_port, end_port + 1):
+                    expected_exposed.append(f"{port_no}/{protocol}")
+                continue
+            except ValueError:
+                # Either it is not a range, or a broken one - in both cases, simply add the original form
+                expected_exposed.append(f"{port}/{protocol}")
 
     return {
         "published_ports": host_config.get("PortBindings"),
@@ -2027,17 +2033,14 @@ def _get_expected_values_ports(
                 ]
         expected_values["published_ports"] = expected_bound_ports
 
-    image_ports = []
+    image_ports: set[str] = set()
     if image:
         image_exposed_ports = image["Config"].get("ExposedPorts") or {}
-        image_ports = [_normalize_port(p) for p in image_exposed_ports]
-    param_ports = []
+        image_ports = {_normalize_port(p) for p in image_exposed_ports}
+    param_ports: set[str] = set()
     if "ports" in values:
-        param_ports = [
-            to_text(p[0], errors="surrogate_or_strict") + "/" + p[1]
-            for p in values["ports"]
-        ]
-    result = list(set(image_ports + param_ports))
+        param_ports = {f"{p[0]}/{p[1]}" for p in values["ports"]}
+    result = sorted(image_ports | param_ports)
     expected_values["exposed_ports"] = result
 
     if "publish_all_ports" in values:
@@ -2086,16 +2089,26 @@ def _preprocess_value_ports(
     if "published_ports" not in values:
         return values
     found = False
-    for port_spec in values["published_ports"].values():
-        if port_spec[0] == _DEFAULT_IP_REPLACEMENT_STRING:
-            found = True
-            break
+    for port_specs in values["published_ports"].values():
+        if not isinstance(port_specs, list):
+            port_specs = [port_specs]
+        for port_spec in port_specs:
+            if port_spec[0] == _DEFAULT_IP_REPLACEMENT_STRING:
+                found = True
+                break
     if not found:
         return values
     default_ip = _get_default_host_ip(module, client)
-    for port, port_spec in values["published_ports"].items():
-        if port_spec[0] == _DEFAULT_IP_REPLACEMENT_STRING:
-            values["published_ports"][port] = tuple([default_ip] + list(port_spec[1:]))
+    for port, port_specs in values["published_ports"].items():
+        if isinstance(port_specs, list):
+            for index, port_spec in enumerate(port_specs):
+                if port_spec[0] == _DEFAULT_IP_REPLACEMENT_STRING:
+                    port_specs[index] = tuple([default_ip] + list(port_spec[1:]))
+        else:
+            if port_specs[0] == _DEFAULT_IP_REPLACEMENT_STRING:
+                values["published_ports"][port] = tuple(
+                    [default_ip] + list(port_specs[1:])
+                )
     return values
 
 

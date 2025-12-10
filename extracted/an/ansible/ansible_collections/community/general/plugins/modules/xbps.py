@@ -216,10 +216,7 @@ def update_package_db(module, xbps_path):
         module.fail_json(msg="Failed to import pubkey for repository")
     if rc != 0:
         module.fail_json(msg="Could not update package db")
-    if "avg rate" in stdout:
-        return True
-    else:
-        return False
+    return "avg rate" in stdout
 
 
 def upgrade_xbps(module, xbps_path, exit_on_success=False):
@@ -286,7 +283,7 @@ def remove_packages(module, xbps_path, packages):
 def install_packages(module, xbps_path, state, packages):
     """Returns true if package install succeeds."""
     toInstall = []
-    for i, package in enumerate(packages):
+    for package in packages:
         """If the package is installed and state == present or state == latest
         and is up-to-date then skip"""
         installed, updated = query_package(module, xbps_path, package)
