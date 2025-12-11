@@ -76,6 +76,8 @@ float8_e5m2: dtype
 "8-bit floating-point data type.\n\nDetails in https://github.com/jax-ml/ml_dtypes#float8_e5m2\n\nGroup:\n  Data types\n"
 float8_e5m2fnuz: dtype
 "8-bit floating-point data type.\n\nDetails in https://github.com/jax-ml/ml_dtypes#float8_e5m2fnuz\n\nGroup:\n  Data types\n"
+float4_e2m1fn: dtype
+"8-bit floating-point data type.\n\nDetails in https://github.com/jax-ml/ml_dtypes#float4_e2m1fn\n\nGroup:\n  Data types\n"
 float16: dtype
 ":wikipedia:`IEEE 754 binary16 <Half-precision_floating-point_format>` half-precision floating-point data type.  Correspond to ``numpy.float16``.\n\nGroup:\n  Data types\n"
 bfloat16: dtype
@@ -169,6 +171,7 @@ __all__ = [
     "experimental_update_verbose_logging",
     "float16",
     "float32",
+    "float4_e2m1fn",
     "float64",
     "float8_e3m4",
     "float8_e4m3b11fnuz",
@@ -5435,7 +5438,7 @@ class KvStore:
 
         __hash__: typing.ClassVar[None] = None
 
-        def __add__(self, suffix: str) -> KvStore.Spec:
+        def __add__(self, suffix: str | bytes) -> KvStore.Spec:
             """
             Returns a key-value store with the suffix appended to the path.
 
@@ -5504,7 +5507,7 @@ class KvStore:
                 KvStore.Spec({'driver': 'file', 'path': 'tmp/data/'})
             """
 
-        def __truediv__(self, component: str) -> KvStore.Spec:
+        def __truediv__(self, component: str | bytes) -> KvStore.Spec:
             """
             Returns a key-value store with an additional path component joined to the path.
 
@@ -5671,7 +5674,7 @@ class KvStore:
             """
 
         @path.setter
-        def path(self, arg1: str) -> None: ...
+        def path(self, arg1: str | bytes) -> None: ...
 
         @property
         def url(self) -> str:
@@ -5836,7 +5839,7 @@ class KvStore:
           Operators
         """
 
-    def __contains__(self, key: str) -> bool:
+    def __contains__(self, key: str | bytes) -> bool:
         """
         Synchronously checks if the given key is present.
 
@@ -5878,7 +5881,7 @@ class KvStore:
 
     def __copy__(self) -> KvStore: ...
 
-    def __delitem__(self, key: str) -> None:
+    def __delitem__(self, key: str | bytes) -> None:
         """
         Synchronously deletes a single key.
 

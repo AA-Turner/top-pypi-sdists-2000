@@ -267,6 +267,7 @@ class QueueStats(TypedDict):
     n_running: int
     pending_runs_wait_time_max_secs: float | None
     pending_runs_wait_time_med_secs: float | None
+    pending_unblocked_runs_wait_time_max_secs: float | None
 
 
 # Canonical field sets for select= validation and type aliases for ops

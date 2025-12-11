@@ -830,6 +830,12 @@ class GenieSpace:
     description: Optional[str] = None
     """Description of the Genie Space"""
 
+    serialized_space: Optional[str] = None
+    """The contents of the Genie Space in serialized string form. This field is excluded in List Genie
+    spaces responses. Use the [Get Genie Space](:method:genie/getspace) API to retrieve an example
+    response, which includes the `serialized_space` field. This field provides the structure of the
+    JSON string that represents the space's layout and components."""
+
     warehouse_id: Optional[str] = None
     """Warehouse associated with the Genie Space"""
 
@@ -838,6 +844,8 @@ class GenieSpace:
         body = {}
         if self.description is not None:
             body["description"] = self.description
+        if self.serialized_space is not None:
+            body["serialized_space"] = self.serialized_space
         if self.space_id is not None:
             body["space_id"] = self.space_id
         if self.title is not None:
@@ -851,6 +859,8 @@ class GenieSpace:
         body = {}
         if self.description is not None:
             body["description"] = self.description
+        if self.serialized_space is not None:
+            body["serialized_space"] = self.serialized_space
         if self.space_id is not None:
             body["space_id"] = self.space_id
         if self.title is not None:
@@ -864,6 +874,7 @@ class GenieSpace:
         """Deserializes the GenieSpace from a dictionary."""
         return cls(
             description=d.get("description", None),
+            serialized_space=d.get("serialized_space", None),
             space_id=d.get("space_id", None),
             title=d.get("title", None),
             warehouse_id=d.get("warehouse_id", None),
@@ -1161,7 +1172,6 @@ class MessageErrorType(Enum):
     INTERNAL_CATALOG_PATH_OVERLAP_EXCEPTION = "INTERNAL_CATALOG_PATH_OVERLAP_EXCEPTION"
     INVALID_CERTIFIED_ANSWER_FUNCTION_EXCEPTION = "INVALID_CERTIFIED_ANSWER_FUNCTION_EXCEPTION"
     INVALID_CERTIFIED_ANSWER_IDENTIFIER_EXCEPTION = "INVALID_CERTIFIED_ANSWER_IDENTIFIER_EXCEPTION"
-    INVALID_CHAT_COMPLETION_ARGUMENTS_JSON_EXCEPTION = "INVALID_CHAT_COMPLETION_ARGUMENTS_JSON_EXCEPTION"
     INVALID_CHAT_COMPLETION_JSON_EXCEPTION = "INVALID_CHAT_COMPLETION_JSON_EXCEPTION"
     INVALID_COMPLETION_REQUEST_EXCEPTION = "INVALID_COMPLETION_REQUEST_EXCEPTION"
     INVALID_FUNCTION_CALL_EXCEPTION = "INVALID_FUNCTION_CALL_EXCEPTION"
@@ -1639,6 +1649,9 @@ class TextAttachment:
 
     id: Optional[str] = None
 
+    purpose: Optional[TextAttachmentPurpose] = None
+    """Purpose/intent of this text attachment"""
+
     def as_dict(self) -> dict:
         """Serializes the TextAttachment into a dictionary suitable for use as a JSON request body."""
         body = {}
@@ -1646,6 +1659,8 @@ class TextAttachment:
             body["content"] = self.content
         if self.id is not None:
             body["id"] = self.id
+        if self.purpose is not None:
+            body["purpose"] = self.purpose.value
         return body
 
     def as_shallow_dict(self) -> dict:
@@ -1655,12 +1670,22 @@ class TextAttachment:
             body["content"] = self.content
         if self.id is not None:
             body["id"] = self.id
+        if self.purpose is not None:
+            body["purpose"] = self.purpose
         return body
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]) -> TextAttachment:
         """Deserializes the TextAttachment from a dictionary."""
-        return cls(content=d.get("content", None), id=d.get("id", None))
+        return cls(
+            content=d.get("content", None), id=d.get("id", None), purpose=_enum(d, "purpose", TextAttachmentPurpose)
+        )
+
+
+class TextAttachmentPurpose(Enum):
+    """Purpose/intent of a text attachment"""
+
+    FOLLOW_UP_QUESTION = "FOLLOW_UP_QUESTION"
 
 
 @dataclass
@@ -1786,6 +1811,53 @@ class GenieAPI:
         return self.create_message(content=content, conversation_id=conversation_id, space_id=space_id).result(
             timeout=timeout
         )
+
+    def create_space(
+        self,
+        warehouse_id: str,
+        serialized_space: str,
+        *,
+        description: Optional[str] = None,
+        parent_path: Optional[str] = None,
+        title: Optional[str] = None,
+    ) -> GenieSpace:
+        """Creates a Genie space from a serialized payload.
+
+        :param warehouse_id: str
+          Warehouse to associate with the new space
+        :param serialized_space: str
+          The contents of the Genie Space in serialized string form. Use the [Get Genie
+          Space](:method:genie/getspace) API to retrieve an example response, which includes the
+          `serialized_space` field. This field provides the structure of the JSON string that represents the
+          space's layout and components.
+        :param description: str (optional)
+          Optional description
+        :param parent_path: str (optional)
+          Parent folder path where the space will be registered
+        :param title: str (optional)
+          Optional title override
+
+        :returns: :class:`GenieSpace`
+        """
+
+        body = {}
+        if description is not None:
+            body["description"] = description
+        if parent_path is not None:
+            body["parent_path"] = parent_path
+        if serialized_space is not None:
+            body["serialized_space"] = serialized_space
+        if title is not None:
+            body["title"] = title
+        if warehouse_id is not None:
+            body["warehouse_id"] = warehouse_id
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        }
+
+        res = self._api.do("POST", "/api/2.0/genie/spaces", body=body, headers=headers)
+        return GenieSpace.from_dict(res)
 
     def delete_conversation(self, space_id: str, conversation_id: str):
         """Delete a conversation.
@@ -1992,20 +2064,26 @@ class GenieAPI:
         )
         return GenieGetMessageQueryResultResponse.from_dict(res)
 
-    def get_space(self, space_id: str) -> GenieSpace:
+    def get_space(self, space_id: str, *, include_serialized_space: Optional[bool] = None) -> GenieSpace:
         """Get details of a Genie Space.
 
         :param space_id: str
           The ID associated with the Genie space
+        :param include_serialized_space: bool (optional)
+          Whether to include the serialized space export in the response. Requires at least CAN EDIT
+          permission on the space.
 
         :returns: :class:`GenieSpace`
         """
 
+        query = {}
+        if include_serialized_space is not None:
+            query["include_serialized_space"] = include_serialized_space
         headers = {
             "Accept": "application/json",
         }
 
-        res = self._api.do("GET", f"/api/2.0/genie/spaces/{space_id}", headers=headers)
+        res = self._api.do("GET", f"/api/2.0/genie/spaces/{space_id}", query=query, headers=headers)
         return GenieSpace.from_dict(res)
 
     def list_conversation_messages(
@@ -2184,6 +2262,51 @@ class GenieAPI:
 
         self._api.do("DELETE", f"/api/2.0/genie/spaces/{space_id}", headers=headers)
 
+    def update_space(
+        self,
+        space_id: str,
+        *,
+        description: Optional[str] = None,
+        serialized_space: Optional[str] = None,
+        title: Optional[str] = None,
+        warehouse_id: Optional[str] = None,
+    ) -> GenieSpace:
+        """Updates a Genie space with a serialized payload.
+
+        :param space_id: str
+          Genie space ID
+        :param description: str (optional)
+          Optional description
+        :param serialized_space: str (optional)
+          The contents of the Genie Space in serialized string form (full replacement). Use the [Get Genie
+          Space](:method:genie/getspace) API to retrieve an example response, which includes the
+          `serialized_space` field. This field provides the structure of the JSON string that represents the
+          space's layout and components.
+        :param title: str (optional)
+          Optional title override
+        :param warehouse_id: str (optional)
+          Optional warehouse override
+
+        :returns: :class:`GenieSpace`
+        """
+
+        body = {}
+        if description is not None:
+            body["description"] = description
+        if serialized_space is not None:
+            body["serialized_space"] = serialized_space
+        if title is not None:
+            body["title"] = title
+        if warehouse_id is not None:
+            body["warehouse_id"] = warehouse_id
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        }
+
+        res = self._api.do("PATCH", f"/api/2.0/genie/spaces/{space_id}", body=body, headers=headers)
+        return GenieSpace.from_dict(res)
+
 
 class LakeviewAPI:
     """These APIs provide specific management operations for Lakeview dashboards. Generic resource management can
@@ -2192,21 +2315,36 @@ class LakeviewAPI:
     def __init__(self, api_client):
         self._api = api_client
 
-    def create(self, dashboard: Dashboard) -> Dashboard:
+    def create(
+        self, dashboard: Dashboard, *, dataset_catalog: Optional[str] = None, dataset_schema: Optional[str] = None
+    ) -> Dashboard:
         """Create a draft dashboard.
 
         :param dashboard: :class:`Dashboard`
+        :param dataset_catalog: str (optional)
+          Sets the default catalog for all datasets in this dashboard. Does not impact table references that
+          use fully qualified catalog names (ex: samples.nyctaxi.trips). Leave blank to keep each dataset’s
+          existing configuration.
+        :param dataset_schema: str (optional)
+          Sets the default schema for all datasets in this dashboard. Does not impact table references that
+          use fully qualified schema names (ex: nyctaxi.trips). Leave blank to keep each dataset’s existing
+          configuration.
 
         :returns: :class:`Dashboard`
         """
 
         body = dashboard.as_dict()
+        query = {}
+        if dataset_catalog is not None:
+            query["dataset_catalog"] = dataset_catalog
+        if dataset_schema is not None:
+            query["dataset_schema"] = dataset_schema
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
         }
 
-        res = self._api.do("POST", "/api/2.0/lakeview/dashboards", body=body, headers=headers)
+        res = self._api.do("POST", "/api/2.0/lakeview/dashboards", query=query, body=body, headers=headers)
         return Dashboard.from_dict(res)
 
     def create_schedule(self, dashboard_id: str, schedule: Schedule) -> Schedule:
@@ -2614,23 +2752,45 @@ class LakeviewAPI:
 
         self._api.do("DELETE", f"/api/2.0/lakeview/dashboards/{dashboard_id}/published", headers=headers)
 
-    def update(self, dashboard_id: str, dashboard: Dashboard) -> Dashboard:
+    def update(
+        self,
+        dashboard_id: str,
+        dashboard: Dashboard,
+        *,
+        dataset_catalog: Optional[str] = None,
+        dataset_schema: Optional[str] = None,
+    ) -> Dashboard:
         """Update a draft dashboard.
 
         :param dashboard_id: str
           UUID identifying the dashboard.
         :param dashboard: :class:`Dashboard`
+        :param dataset_catalog: str (optional)
+          Sets the default catalog for all datasets in this dashboard. Does not impact table references that
+          use fully qualified catalog names (ex: samples.nyctaxi.trips). Leave blank to keep each dataset’s
+          existing configuration.
+        :param dataset_schema: str (optional)
+          Sets the default schema for all datasets in this dashboard. Does not impact table references that
+          use fully qualified schema names (ex: nyctaxi.trips). Leave blank to keep each dataset’s existing
+          configuration.
 
         :returns: :class:`Dashboard`
         """
 
         body = dashboard.as_dict()
+        query = {}
+        if dataset_catalog is not None:
+            query["dataset_catalog"] = dataset_catalog
+        if dataset_schema is not None:
+            query["dataset_schema"] = dataset_schema
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
         }
 
-        res = self._api.do("PATCH", f"/api/2.0/lakeview/dashboards/{dashboard_id}", body=body, headers=headers)
+        res = self._api.do(
+            "PATCH", f"/api/2.0/lakeview/dashboards/{dashboard_id}", query=query, body=body, headers=headers
+        )
         return Dashboard.from_dict(res)
 
     def update_schedule(self, dashboard_id: str, schedule_id: str, schedule: Schedule) -> Schedule:

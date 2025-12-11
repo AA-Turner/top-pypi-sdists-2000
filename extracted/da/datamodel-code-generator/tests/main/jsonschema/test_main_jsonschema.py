@@ -40,7 +40,6 @@ from tests.main.jsonschema.conftest import EXPECTED_JSON_SCHEMA_PATH, assert_fil
 if TYPE_CHECKING:
     from pytest_mock import MockerFixture
 
-
 FixtureRequest = pytest.FixtureRequest
 
 
@@ -936,6 +935,18 @@ def test_main_all_of_merge_boolean_property(output_file: Path) -> None:
         )
 
 
+def test_main_all_of_ref_with_property_override(output_file: Path) -> None:
+    """Test allOf with $ref preserves inheritance when properties are overridden."""
+    with chdir(JSON_SCHEMA_DATA_PATH):
+        run_main_and_assert(
+            input_path=Path("all_of_ref_with_property_override.json"),
+            output_path=output_file,
+            input_file_type="jsonschema",
+            assert_func=assert_file_content,
+            expected_file="all_of_ref_with_property_override.py",
+        )
+
+
 @pytest.mark.skipif(
     black.__version__.split(".")[0] >= "24",
     reason="Installed black doesn't support the old style",
@@ -1051,24 +1062,28 @@ def test_main_generate_custom_class_name_generator_additional_properties(tmp_pat
 def test_main_http_jsonschema(mocker: MockerFixture, output_file: Path) -> None:
     """Test HTTP JSON Schema fetching."""
     external_directory = JSON_SCHEMA_DATA_PATH / "external_files_in_directory"
+    base_url = "https://example.com/external_files_in_directory/"
 
-    def get_mock_response(path: str) -> mocker.Mock:
+    url_to_path = {
+        f"{base_url}person.json": "person.json",
+        f"{base_url}definitions/relative/animal/pet/pet.json": "definitions/relative/animal/pet/pet.json",
+        f"{base_url}definitions/relative/animal/fur.json": "definitions/relative/animal/fur.json",
+        f"{base_url}definitions/friends.json": "definitions/friends.json",
+        f"{base_url}definitions/food.json": "definitions/food.json",
+        f"{base_url}definitions/machine/robot.json": "definitions/machine/robot.json",
+        f"{base_url}definitions/drink/coffee.json": "definitions/drink/coffee.json",
+        f"{base_url}definitions/drink/tea.json": "definitions/drink/tea.json",
+    }
+
+    def get_mock_response(url: str, **_: object) -> mocker.Mock:
+        path = url_to_path.get(url)
         mock = mocker.Mock()
         mock.text = (external_directory / path).read_text()
         return mock
 
     httpx_get_mock = mocker.patch(
         "httpx.get",
-        side_effect=[
-            get_mock_response("person.json"),
-            get_mock_response("definitions/relative/animal/pet/pet.json"),
-            get_mock_response("definitions/relative/animal/fur.json"),
-            get_mock_response("definitions/friends.json"),
-            get_mock_response("definitions/food.json"),
-            get_mock_response("definitions/machine/robot.json"),
-            get_mock_response("definitions/drink/coffee.json"),
-            get_mock_response("definitions/drink/tea.json"),
-        ],
+        side_effect=get_mock_response,
     )
     run_main_url_and_assert(
         url="https://example.com/external_files_in_directory/person.json",
@@ -1081,64 +1096,68 @@ def test_main_http_jsonschema(mocker: MockerFixture, output_file: Path) -> None:
             "#   filename:  person.json",
         ),
     )
-    httpx_get_mock.assert_has_calls([
-        call(
-            "https://example.com/external_files_in_directory/person.json",
-            headers=None,
-            verify=True,
-            follow_redirects=True,
-            params=None,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/relative/animal/pet/pet.json",
-            headers=None,
-            verify=True,
-            follow_redirects=True,
-            params=None,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/relative/animal/fur.json",
-            headers=None,
-            verify=True,
-            follow_redirects=True,
-            params=None,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/friends.json",
-            headers=None,
-            verify=True,
-            follow_redirects=True,
-            params=None,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/food.json",
-            headers=None,
-            verify=True,
-            follow_redirects=True,
-            params=None,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/machine/robot.json",
-            headers=None,
-            verify=True,
-            follow_redirects=True,
-            params=None,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/drink/coffee.json",
-            headers=None,
-            verify=True,
-            follow_redirects=True,
-            params=None,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/drink/tea.json",
-            headers=None,
-            verify=True,
-            follow_redirects=True,
-            params=None,
-        ),
-    ])
+    httpx_get_mock.assert_has_calls(
+        [
+            call(
+                "https://example.com/external_files_in_directory/person.json",
+                headers=None,
+                verify=True,
+                follow_redirects=True,
+                params=None,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/relative/animal/pet/pet.json",
+                headers=None,
+                verify=True,
+                follow_redirects=True,
+                params=None,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/relative/animal/fur.json",
+                headers=None,
+                verify=True,
+                follow_redirects=True,
+                params=None,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/friends.json",
+                headers=None,
+                verify=True,
+                follow_redirects=True,
+                params=None,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/food.json",
+                headers=None,
+                verify=True,
+                follow_redirects=True,
+                params=None,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/machine/robot.json",
+                headers=None,
+                verify=True,
+                follow_redirects=True,
+                params=None,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/drink/coffee.json",
+                headers=None,
+                verify=True,
+                follow_redirects=True,
+                params=None,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/drink/tea.json",
+                headers=None,
+                verify=True,
+                follow_redirects=True,
+                params=None,
+            ),
+        ],
+        any_order=True,
+    )
+    assert httpx_get_mock.call_count == 8
 
 
 @pytest.mark.parametrize(
@@ -1177,24 +1196,28 @@ def test_main_http_jsonschema_with_http_headers_and_http_query_parameters_and_ig
 ) -> None:
     """Test HTTP JSON Schema with headers, query params, and TLS ignore."""
     external_directory = JSON_SCHEMA_DATA_PATH / "external_files_in_directory"
+    base_url = "https://example.com/external_files_in_directory/"
 
-    def get_mock_response(path: str) -> mocker.Mock:
+    url_to_path = {
+        f"{base_url}person.json": "person.json",
+        f"{base_url}definitions/relative/animal/pet/pet.json": "definitions/relative/animal/pet/pet.json",
+        f"{base_url}definitions/relative/animal/fur.json": "definitions/relative/animal/fur.json",
+        f"{base_url}definitions/friends.json": "definitions/friends.json",
+        f"{base_url}definitions/food.json": "definitions/food.json",
+        f"{base_url}definitions/machine/robot.json": "definitions/machine/robot.json",
+        f"{base_url}definitions/drink/coffee.json": "definitions/drink/coffee.json",
+        f"{base_url}definitions/drink/tea.json": "definitions/drink/tea.json",
+    }
+
+    def get_mock_response(url: str, **_: object) -> mocker.Mock:
+        path = url_to_path.get(url)
         mock = mocker.Mock()
         mock.text = (external_directory / path).read_text()
         return mock
 
     httpx_get_mock = mocker.patch(
         "httpx.get",
-        side_effect=[
-            get_mock_response("person.json"),
-            get_mock_response("definitions/relative/animal/pet/pet.json"),
-            get_mock_response("definitions/relative/animal/fur.json"),
-            get_mock_response("definitions/friends.json"),
-            get_mock_response("definitions/food.json"),
-            get_mock_response("definitions/machine/robot.json"),
-            get_mock_response("definitions/drink/coffee.json"),
-            get_mock_response("definitions/drink/tea.json"),
-        ],
+        side_effect=get_mock_response,
     )
     output_file: Path = tmp_path / "output.py"
     extra_args = [
@@ -1218,64 +1241,68 @@ def test_main_http_jsonschema_with_http_headers_and_http_query_parameters_and_ig
             "#   filename:  person.json",
         ),
     )
-    httpx_get_mock.assert_has_calls([
-        call(
-            "https://example.com/external_files_in_directory/person.json",
-            headers=headers_requests,
-            verify=bool(not http_ignore_tls),
-            follow_redirects=True,
-            params=query_parameters_requests,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/relative/animal/pet/pet.json",
-            headers=headers_requests,
-            verify=bool(not http_ignore_tls),
-            follow_redirects=True,
-            params=query_parameters_requests,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/relative/animal/fur.json",
-            headers=headers_requests,
-            verify=bool(not http_ignore_tls),
-            follow_redirects=True,
-            params=query_parameters_requests,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/friends.json",
-            headers=headers_requests,
-            verify=bool(not http_ignore_tls),
-            follow_redirects=True,
-            params=query_parameters_requests,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/food.json",
-            headers=headers_requests,
-            verify=bool(not http_ignore_tls),
-            follow_redirects=True,
-            params=query_parameters_requests,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/machine/robot.json",
-            headers=headers_requests,
-            verify=bool(not http_ignore_tls),
-            follow_redirects=True,
-            params=query_parameters_requests,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/drink/coffee.json",
-            headers=headers_requests,
-            verify=bool(not http_ignore_tls),
-            follow_redirects=True,
-            params=query_parameters_requests,
-        ),
-        call(
-            "https://example.com/external_files_in_directory/definitions/drink/tea.json",
-            headers=headers_requests,
-            verify=bool(not http_ignore_tls),
-            follow_redirects=True,
-            params=query_parameters_requests,
-        ),
-    ])
+    httpx_get_mock.assert_has_calls(
+        [
+            call(
+                "https://example.com/external_files_in_directory/person.json",
+                headers=headers_requests,
+                verify=bool(not http_ignore_tls),
+                follow_redirects=True,
+                params=query_parameters_requests,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/relative/animal/pet/pet.json",
+                headers=headers_requests,
+                verify=bool(not http_ignore_tls),
+                follow_redirects=True,
+                params=query_parameters_requests,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/relative/animal/fur.json",
+                headers=headers_requests,
+                verify=bool(not http_ignore_tls),
+                follow_redirects=True,
+                params=query_parameters_requests,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/friends.json",
+                headers=headers_requests,
+                verify=bool(not http_ignore_tls),
+                follow_redirects=True,
+                params=query_parameters_requests,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/food.json",
+                headers=headers_requests,
+                verify=bool(not http_ignore_tls),
+                follow_redirects=True,
+                params=query_parameters_requests,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/machine/robot.json",
+                headers=headers_requests,
+                verify=bool(not http_ignore_tls),
+                follow_redirects=True,
+                params=query_parameters_requests,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/drink/coffee.json",
+                headers=headers_requests,
+                verify=bool(not http_ignore_tls),
+                follow_redirects=True,
+                params=query_parameters_requests,
+            ),
+            call(
+                "https://example.com/external_files_in_directory/definitions/drink/tea.json",
+                headers=headers_requests,
+                verify=bool(not http_ignore_tls),
+                follow_redirects=True,
+                params=query_parameters_requests,
+            ),
+        ],
+        any_order=True,
+    )
+    assert httpx_get_mock.call_count == 8
 
 
 def test_main_self_reference(output_file: Path) -> None:
@@ -1894,6 +1921,18 @@ def test_main_jsonschema_nullable_object(output_file: Path) -> None:
         input_file_type="jsonschema",
         assert_func=assert_file_content,
         expected_file="nullable_object.py",
+    )
+
+
+def test_main_jsonschema_ref_type_has_null(output_file: Path) -> None:
+    """Test that type: [type, null] from $ref schema is propagated."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "ref_type_has_null.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="ref_type_has_null.py",
+        extra_args=["--use-union-operator"],
     )
 
 
@@ -3608,5 +3647,131 @@ def test_main_jsonschema_reserved_field_name_pydantic(output_file: Path) -> None
             "pydantic_v2.BaseModel",
             "--target-python-version",
             "3.11",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+@LEGACY_BLACK_SKIP
+def test_main_bundled_schema_with_id_local_file(output_file: Path) -> None:
+    """Test bundled schema with $id using local file input (Issue #1798)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "bundled_schema_with_id.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="bundled_schema_with_id.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+@LEGACY_BLACK_SKIP
+def test_main_bundled_schema_with_id_url(mocker: MockerFixture, output_file: Path) -> None:
+    """Test bundled schema with $id using URL input produces same output as local file."""
+    schema_path = JSON_SCHEMA_DATA_PATH / "bundled_schema_with_id.json"
+
+    mock_response = mocker.Mock()
+    mock_response.text = schema_path.read_text()
+
+    httpx_get_mock = mocker.patch(
+        "httpx.get",
+        return_value=mock_response,
+    )
+
+    run_main_url_and_assert(
+        url="https://cdn.example.com/schemas/bundled_schema_with_id.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="bundled_schema_with_id.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+        transform=lambda s: s.replace(
+            "#   filename:  https://cdn.example.com/schemas/bundled_schema_with_id.json",
+            "#   filename:  bundled_schema_with_id.json",
+        ),
+    )
+
+    httpx_get_mock.assert_called_once_with(
+        "https://cdn.example.com/schemas/bundled_schema_with_id.json",
+        headers=None,
+        verify=True,
+        follow_redirects=True,
+        params=None,
+    )
+
+
+@pytest.mark.benchmark
+@LEGACY_BLACK_SKIP
+def test_main_use_frozen_field_pydantic_v2(output_file: Path) -> None:
+    """Test --use-frozen-field with Pydantic v2 generates Field(frozen=True) for readOnly fields."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_frozen_field.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_frozen_field_v2.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-frozen-field",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_use_frozen_field_pydantic_v1(output_file: Path) -> None:
+    """Test --use-frozen-field with Pydantic v1 generates Field(allow_mutation=False) for readOnly fields."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_frozen_field.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_frozen_field_v1.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic.BaseModel",
+            "--use-frozen-field",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+@LEGACY_BLACK_SKIP
+def test_main_use_frozen_field_no_readonly(output_file: Path) -> None:
+    """Test --use-frozen-field with no readOnly fields produces no frozen fields."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "user.json",  # Has no readOnly fields
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_frozen_field_no_readonly.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-frozen-field",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_use_frozen_field_dataclass(output_file: Path) -> None:
+    """Test --use-frozen-field with dataclass silently ignores (no error, no frozen)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_frozen_field.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_frozen_field_dataclass.py",
+        extra_args=[
+            "--output-model-type",
+            "dataclasses.dataclass",
+            "--use-frozen-field",
         ],
     )

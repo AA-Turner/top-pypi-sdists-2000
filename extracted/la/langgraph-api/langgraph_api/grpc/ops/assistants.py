@@ -147,7 +147,7 @@ class Assistants(Authenticated):
         # Build the gRPC request
         request = pb.GetAssistantRequest(
             assistant_id=str(assistant_id),
-            filters=auth_filters or {},
+            filters=auth_filters,
         )
 
         client = await get_shared_client()
@@ -200,7 +200,7 @@ class Assistants(Authenticated):
         request = pb.CreateAssistantRequest(
             assistant_id=str(assistant_id),
             graph_id=graph_id,
-            filters=auth_filters or {},
+            filters=auth_filters,
             if_exists=on_conflict,
             config=config_conversion.config_to_proto(config),
             context_json=json_dumpb_optional(context),
@@ -256,7 +256,7 @@ class Assistants(Authenticated):
         # Build the gRPC request
         request = pb.PatchAssistantRequest(
             assistant_id=str(assistant_id),
-            filters=auth_filters or {},
+            filters=auth_filters,
             graph_id=graph_id,
             context_json=json_dumpb_optional(context),
             metadata_json=json_dumpb_optional(metadata),
@@ -294,7 +294,7 @@ class Assistants(Authenticated):
         # Build the gRPC request
         request = pb.DeleteAssistantRequest(
             assistant_id=str(assistant_id),
-            filters=auth_filters or {},
+            filters=auth_filters,
         )
 
         client = await get_shared_client()
@@ -328,7 +328,7 @@ class Assistants(Authenticated):
         request = pb.SetLatestAssistantRequest(
             assistant_id=str(assistant_id),
             version=version,
-            filters=auth_filters or {},
+            filters=auth_filters,
         )
 
         client = await get_shared_client()
@@ -362,7 +362,7 @@ class Assistants(Authenticated):
         # Build the gRPC request
         request = pb.GetAssistantVersionsRequest(
             assistant_id=str(assistant_id),
-            filters=auth_filters or {},
+            filters=auth_filters,
             metadata_json=json_dumpb_optional(metadata),
             limit=limit,
             offset=offset,
@@ -409,7 +409,7 @@ class Assistants(Authenticated):
 
         # Build the gRPC request
         request = pb.CountAssistantsRequest(
-            filters=auth_filters or {},
+            filters=auth_filters,
             graph_id=graph_id,
             name=name,
             metadata_json=json_dumpb_optional(metadata),

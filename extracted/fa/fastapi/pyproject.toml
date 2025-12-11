@@ -54,7 +54,7 @@ dependencies = [
     "typing-extensions>=4.8.0",
     "annotated-doc>=0.0.2",
 ]
-version = "0.124.0"
+version = "0.124.2"
 
 [project.urls]
 Homepage = "https://github.com/fastapi/fastapi"
@@ -220,10 +220,31 @@ ignore = [
 "docs_src/path_operation_advanced_configuration/tutorial007.py" = [
     "B904",
 ]
+"docs_src/path_operation_advanced_configuration/tutorial007_py39.py" = [
+    "B904",
+]
 "docs_src/path_operation_advanced_configuration/tutorial007_pv1.py" = [
     "B904",
 ]
+"docs_src/path_operation_advanced_configuration/tutorial007_pv1_py39.py" = [
+    "B904",
+]
 "docs_src/custom_request_and_route/tutorial002.py" = [
+    "B904",
+]
+"docs_src/custom_request_and_route/tutorial002_py39.py" = [
+    "B904",
+]
+"docs_src/custom_request_and_route/tutorial002_py310.py" = [
+    "B904",
+]
+"docs_src/custom_request_and_route/tutorial002_an.py" = [
+    "B904",
+]
+"docs_src/custom_request_and_route/tutorial002_an_py39.py" = [
+    "B904",
+]
+"docs_src/custom_request_and_route/tutorial002_an_py310.py" = [
     "B904",
 ]
 "docs_src/dependencies/tutorial008_an.py" = [

@@ -567,6 +567,7 @@ class Parser(ABC):
         keyword_only: bool = False,
         frozen_dataclasses: bool = False,
         no_alias: bool = False,
+        use_frozen_field: bool = False,
         formatters: list[Formatter] = DEFAULT_FORMATTERS,
         parent_scoped_naming: bool = False,
         dataclass_arguments: DataclassArguments | None = None,
@@ -704,6 +705,7 @@ class Parser(ABC):
         self.formatters: list[Formatter] = formatters
         self.type_mappings: dict[tuple[str, str], str] = Parser._parse_type_mappings(type_mappings)
         self.read_only_write_only_model_type: ReadOnlyWriteOnlyModelType | None = read_only_write_only_model_type
+        self.use_frozen_field: bool = use_frozen_field
 
     @property
     def field_name_model_type(self) -> ModelType:
@@ -938,8 +940,13 @@ class Parser(ABC):
                         from_ = from_[rel_path_depth:]
 
                     ref_module = tuple(data_type.full_name.split(".")[:-1])
-                    if from_ and ref_module in internal_modules:
-                        from_ = f"{from_}{import_}"
+
+                    is_module_class_collision = (
+                        ref_module and import_ == data_type.reference.short_name and ref_module[-1] == import_
+                    )
+
+                    if from_ and (ref_module in internal_modules or is_module_class_collision):
+                        from_ = f"{from_}{import_}" if from_.endswith(".") else f"{from_}.{import_}"
                         import_ = data_type.reference.short_name
                         full_path = from_, import_
 
@@ -1079,7 +1086,27 @@ class Parser(ABC):
                                 for base_class in discriminator_model.base_classes:
                                     check_paths(base_class.reference, mapping)  # pyright: ignore[reportArgumentType]
                         else:
-                            type_names = [discriminator_model.path.split("/")[-1]]
+                            for discriminator_field in discriminator_model.fields:
+                                if field_name not in {discriminator_field.original_name, discriminator_field.name}:
+                                    continue
+
+                                literals = discriminator_field.data_type.literals
+                                if literals and len(literals) == 1:  # pragma: no cover
+                                    type_names = [str(v) for v in literals]
+                                    break
+
+                                enum_source = discriminator_field.data_type.find_source(Enum)
+                                if enum_source and len(enum_source.fields) == 1:
+                                    first_field = enum_source.fields[0]
+                                    raw_default = first_field.default
+                                    if isinstance(raw_default, str):
+                                        type_names = [raw_default.strip("'\"")]
+                                    else:  # pragma: no cover
+                                        type_names = [str(raw_default)]
+                                    break
+
+                            if not type_names:
+                                type_names = [discriminator_model.path.split("/")[-1]]
 
                     if not type_names:  # pragma: no cover
                         msg = f"Discriminator type is not found. {data_type.reference.path}"

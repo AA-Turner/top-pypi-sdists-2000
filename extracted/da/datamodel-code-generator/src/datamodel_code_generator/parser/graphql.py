@@ -186,6 +186,7 @@ class GraphQLParser(Parser):
         type_mappings: list[str] | None = None,
         read_only_write_only_model_type: ReadOnlyWriteOnlyModelType | None = None,
         use_serialize_as_any: bool = False,
+        use_frozen_field: bool = False,
     ) -> None:
         """Initialize the GraphQL parser with configuration options."""
         super().__init__(
@@ -276,6 +277,7 @@ class GraphQLParser(Parser):
             type_mappings=type_mappings,
             read_only_write_only_model_type=read_only_write_only_model_type,
             use_serialize_as_any=use_serialize_as_any,
+            use_frozen_field=use_frozen_field,
         )
 
         self.data_model_scalar_type = data_model_scalar_type
@@ -482,7 +484,8 @@ class GraphQLParser(Parser):
             data_type.reference = self.references[obj.name]
 
         obj = graphql.assert_named_type(obj)
-        data_type.type = obj.name
+        if data_type.reference is None:
+            data_type.type = obj.name
 
         required = (not self.force_optional_for_required_fields) and (not final_data_type.is_optional)
 

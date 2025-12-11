@@ -238,7 +238,7 @@ class Threads(Authenticated):
             for thread_id in normalized_ids:
                 request = pb.GetThreadRequest(
                     thread_id=pb.UUID(value=_normalize_uuid(thread_id)),
-                    filters=auth_filters or {},
+                    filters=auth_filters,
                 )
                 response = await client.threads.Get(request)
                 thread = proto_to_thread(response)
@@ -262,7 +262,7 @@ class Threads(Authenticated):
             return generate_results(), cursor
 
         request_kwargs: dict[str, Any] = {
-            "filters": auth_filters or {},
+            "filters": auth_filters,
             "metadata_json": json_dumpb_optional(metadata),
             "values_json": json_dumpb_optional(values),
             "limit": limit,
@@ -320,7 +320,7 @@ class Threads(Authenticated):
         )
 
         request_kwargs: dict[str, Any] = {
-            "filters": auth_filters or {},
+            "filters": auth_filters,
             "metadata_json": json_dumpb_optional(metadata),
             "values_json": json_dumpb_optional(values),
         }
@@ -350,7 +350,7 @@ class Threads(Authenticated):
 
         request = pb.GetThreadRequest(
             thread_id=pb.UUID(value=_normalize_uuid(thread_id)),
-            filters=auth_filters or {},
+            filters=auth_filters,
         )
         client = await get_shared_client()
         response = await client.threads.Get(request)
@@ -386,7 +386,7 @@ class Threads(Authenticated):
 
         request = pb.CreateThreadRequest(
             thread_id=pb.UUID(value=_normalize_uuid(thread_id)),
-            filters=auth_filters or {},
+            filters=auth_filters,
             if_exists=map_if_exists(if_exists),
             metadata_json=json_dumpb_optional(metadata),
         )
@@ -425,7 +425,7 @@ class Threads(Authenticated):
 
         request = pb.PatchThreadRequest(
             thread_id=pb.UUID(value=_normalize_uuid(thread_id)),
-            filters=auth_filters or {},
+            filters=auth_filters,
             metadata_json=json_dumpb_optional(metadata),
         )
 
@@ -459,7 +459,7 @@ class Threads(Authenticated):
 
         request = pb.DeleteThreadRequest(
             thread_id=pb.UUID(value=_normalize_uuid(thread_id)),
-            filters=auth_filters or {},
+            filters=auth_filters,
         )
 
         client = await get_shared_client()
@@ -485,10 +485,19 @@ class Threads(Authenticated):
                 "thread_id": str(thread_id),
             },
         )
+        # Validate that the user also has create permissions
+        # Filters will be the same as the read filters, so we can toss these
+        await Threads.handle_event(
+            ctx,
+            "create",
+            {
+                "thread_id": str(thread_id),
+            },
+        )
 
         request = pb.CopyThreadRequest(
             thread_id=pb.UUID(value=_normalize_uuid(thread_id)),
-            filters=auth_filters or {},
+            filters=auth_filters,
         )
 
         client = await get_shared_client()

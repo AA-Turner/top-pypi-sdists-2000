@@ -102,24 +102,44 @@ class Tags(_message.Message):
     def __init__(self, values: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class EqAuthFilter(_message.Message):
-    __slots__ = ("match",)
+    __slots__ = ("key", "match")
+    KEY_FIELD_NUMBER: _ClassVar[int]
     MATCH_FIELD_NUMBER: _ClassVar[int]
+    key: str
     match: str
-    def __init__(self, match: _Optional[str] = ...) -> None: ...
+    def __init__(self, key: _Optional[str] = ..., match: _Optional[str] = ...) -> None: ...
 
 class ContainsAuthFilter(_message.Message):
-    __slots__ = ("matches",)
+    __slots__ = ("key", "matches")
+    KEY_FIELD_NUMBER: _ClassVar[int]
     MATCHES_FIELD_NUMBER: _ClassVar[int]
-    matches: _containers.RepeatedCompositeFieldContainer[_struct_pb2.Value]
-    def __init__(self, matches: _Optional[_Iterable[_Union[_struct_pb2.Value, _Mapping]]] = ...) -> None: ...
+    key: str
+    matches: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, key: _Optional[str] = ..., matches: _Optional[_Iterable[str]] = ...) -> None: ...
+
+class OrAuthFilter(_message.Message):
+    __slots__ = ("filters",)
+    FILTERS_FIELD_NUMBER: _ClassVar[int]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    def __init__(self, filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
+
+class AndAuthFilter(_message.Message):
+    __slots__ = ("filters",)
+    FILTERS_FIELD_NUMBER: _ClassVar[int]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    def __init__(self, filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
 
 class AuthFilter(_message.Message):
-    __slots__ = ("eq", "contains")
+    __slots__ = ("eq", "contains", "or_filter", "and_filter")
     EQ_FIELD_NUMBER: _ClassVar[int]
     CONTAINS_FIELD_NUMBER: _ClassVar[int]
+    OR_FILTER_FIELD_NUMBER: _ClassVar[int]
+    AND_FILTER_FIELD_NUMBER: _ClassVar[int]
     eq: EqAuthFilter
     contains: ContainsAuthFilter
-    def __init__(self, eq: _Optional[_Union[EqAuthFilter, _Mapping]] = ..., contains: _Optional[_Union[ContainsAuthFilter, _Mapping]] = ...) -> None: ...
+    or_filter: OrAuthFilter
+    and_filter: AndAuthFilter
+    def __init__(self, eq: _Optional[_Union[EqAuthFilter, _Mapping]] = ..., contains: _Optional[_Union[ContainsAuthFilter, _Mapping]] = ..., or_filter: _Optional[_Union[OrAuthFilter, _Mapping]] = ..., and_filter: _Optional[_Union[AndAuthFilter, _Mapping]] = ...) -> None: ...
 
 class UUID(_message.Message):
     __slots__ = ("value",)
@@ -191,13 +211,6 @@ class AssistantVersion(_message.Message):
 
 class CreateAssistantRequest(_message.Message):
     __slots__ = ("assistant_id", "graph_id", "filters", "if_exists", "config", "context_json", "name", "description", "metadata_json")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     ASSISTANT_ID_FIELD_NUMBER: _ClassVar[int]
     GRAPH_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
@@ -209,39 +222,25 @@ class CreateAssistantRequest(_message.Message):
     METADATA_JSON_FIELD_NUMBER: _ClassVar[int]
     assistant_id: str
     graph_id: str
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     if_exists: OnConflictBehavior
     config: _engine_common_pb2.EngineRunnableConfig
     context_json: bytes
     name: str
     description: str
     metadata_json: bytes
-    def __init__(self, assistant_id: _Optional[str] = ..., graph_id: _Optional[str] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ..., if_exists: _Optional[_Union[OnConflictBehavior, str]] = ..., config: _Optional[_Union[_engine_common_pb2.EngineRunnableConfig, _Mapping]] = ..., context_json: _Optional[bytes] = ..., name: _Optional[str] = ..., description: _Optional[str] = ..., metadata_json: _Optional[bytes] = ...) -> None: ...
+    def __init__(self, assistant_id: _Optional[str] = ..., graph_id: _Optional[str] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., if_exists: _Optional[_Union[OnConflictBehavior, str]] = ..., config: _Optional[_Union[_engine_common_pb2.EngineRunnableConfig, _Mapping]] = ..., context_json: _Optional[bytes] = ..., name: _Optional[str] = ..., description: _Optional[str] = ..., metadata_json: _Optional[bytes] = ...) -> None: ...
 
 class GetAssistantRequest(_message.Message):
     __slots__ = ("assistant_id", "filters")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     ASSISTANT_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     assistant_id: str
-    filters: _containers.MessageMap[str, AuthFilter]
-    def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ...) -> None: ...
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
 
 class PatchAssistantRequest(_message.Message):
     __slots__ = ("assistant_id", "filters", "graph_id", "config", "context_json", "name", "description", "metadata_json")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     ASSISTANT_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     GRAPH_ID_FIELD_NUMBER: _ClassVar[int]
@@ -251,29 +250,22 @@ class PatchAssistantRequest(_message.Message):
     DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
     METADATA_JSON_FIELD_NUMBER: _ClassVar[int]
     assistant_id: str
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     graph_id: str
     config: _engine_common_pb2.EngineRunnableConfig
     context_json: bytes
     name: str
     description: str
     metadata_json: bytes
-    def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ..., graph_id: _Optional[str] = ..., config: _Optional[_Union[_engine_common_pb2.EngineRunnableConfig, _Mapping]] = ..., context_json: _Optional[bytes] = ..., name: _Optional[str] = ..., description: _Optional[str] = ..., metadata_json: _Optional[bytes] = ...) -> None: ...
+    def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., graph_id: _Optional[str] = ..., config: _Optional[_Union[_engine_common_pb2.EngineRunnableConfig, _Mapping]] = ..., context_json: _Optional[bytes] = ..., name: _Optional[str] = ..., description: _Optional[str] = ..., metadata_json: _Optional[bytes] = ...) -> None: ...
 
 class DeleteAssistantRequest(_message.Message):
     __slots__ = ("assistant_id", "filters")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     ASSISTANT_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     assistant_id: str
-    filters: _containers.MessageMap[str, AuthFilter]
-    def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ...) -> None: ...
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
 
 class DeleteAssistantsResponse(_message.Message):
     __slots__ = ("assistant_ids",)
@@ -283,30 +275,16 @@ class DeleteAssistantsResponse(_message.Message):
 
 class SetLatestAssistantRequest(_message.Message):
     __slots__ = ("assistant_id", "version", "filters")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     ASSISTANT_ID_FIELD_NUMBER: _ClassVar[int]
     VERSION_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     assistant_id: str
     version: int
-    filters: _containers.MessageMap[str, AuthFilter]
-    def __init__(self, assistant_id: _Optional[str] = ..., version: _Optional[int] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ...) -> None: ...
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    def __init__(self, assistant_id: _Optional[str] = ..., version: _Optional[int] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
 
 class SearchAssistantsRequest(_message.Message):
     __slots__ = ("filters", "graph_id", "metadata_json", "limit", "offset", "sort_by", "sort_order", "select", "name")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     GRAPH_ID_FIELD_NUMBER: _ClassVar[int]
     METADATA_JSON_FIELD_NUMBER: _ClassVar[int]
@@ -316,7 +294,7 @@ class SearchAssistantsRequest(_message.Message):
     SORT_ORDER_FIELD_NUMBER: _ClassVar[int]
     SELECT_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     graph_id: str
     metadata_json: bytes
     limit: int
@@ -325,7 +303,7 @@ class SearchAssistantsRequest(_message.Message):
     sort_order: SortOrder
     select: _containers.RepeatedScalarFieldContainer[str]
     name: str
-    def __init__(self, filters: _Optional[_Mapping[str, AuthFilter]] = ..., graph_id: _Optional[str] = ..., metadata_json: _Optional[bytes] = ..., limit: _Optional[int] = ..., offset: _Optional[int] = ..., sort_by: _Optional[_Union[AssistantsSortBy, str]] = ..., sort_order: _Optional[_Union[SortOrder, str]] = ..., select: _Optional[_Iterable[str]] = ..., name: _Optional[str] = ...) -> None: ...
+    def __init__(self, filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., graph_id: _Optional[str] = ..., metadata_json: _Optional[bytes] = ..., limit: _Optional[int] = ..., offset: _Optional[int] = ..., sort_by: _Optional[_Union[AssistantsSortBy, str]] = ..., sort_order: _Optional[_Union[SortOrder, str]] = ..., select: _Optional[_Iterable[str]] = ..., name: _Optional[str] = ...) -> None: ...
 
 class SearchAssistantsResponse(_message.Message):
     __slots__ = ("assistants",)
@@ -335,24 +313,17 @@ class SearchAssistantsResponse(_message.Message):
 
 class GetAssistantVersionsRequest(_message.Message):
     __slots__ = ("assistant_id", "filters", "metadata_json", "limit", "offset")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     ASSISTANT_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     METADATA_JSON_FIELD_NUMBER: _ClassVar[int]
     LIMIT_FIELD_NUMBER: _ClassVar[int]
     OFFSET_FIELD_NUMBER: _ClassVar[int]
     assistant_id: str
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     metadata_json: bytes
     limit: int
     offset: int
-    def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ..., metadata_json: _Optional[bytes] = ..., limit: _Optional[int] = ..., offset: _Optional[int] = ...) -> None: ...
+    def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., metadata_json: _Optional[bytes] = ..., limit: _Optional[int] = ..., offset: _Optional[int] = ...) -> None: ...
 
 class GetAssistantVersionsResponse(_message.Message):
     __slots__ = ("versions",)
@@ -362,22 +333,15 @@ class GetAssistantVersionsResponse(_message.Message):
 
 class CountAssistantsRequest(_message.Message):
     __slots__ = ("filters", "graph_id", "metadata_json", "name")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     GRAPH_ID_FIELD_NUMBER: _ClassVar[int]
     METADATA_JSON_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     graph_id: str
     metadata_json: bytes
     name: str
-    def __init__(self, filters: _Optional[_Mapping[str, AuthFilter]] = ..., graph_id: _Optional[str] = ..., metadata_json: _Optional[bytes] = ..., name: _Optional[str] = ...) -> None: ...
+    def __init__(self, filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., graph_id: _Optional[str] = ..., metadata_json: _Optional[bytes] = ..., name: _Optional[str] = ...) -> None: ...
 
 class TruncateRequest(_message.Message):
     __slots__ = ("runs", "threads", "assistants", "checkpointer", "store")
@@ -507,98 +471,56 @@ class Thread(_message.Message):
 
 class CreateThreadRequest(_message.Message):
     __slots__ = ("thread_id", "filters", "if_exists", "metadata_json", "ttl")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     IF_EXISTS_FIELD_NUMBER: _ClassVar[int]
     METADATA_JSON_FIELD_NUMBER: _ClassVar[int]
     TTL_FIELD_NUMBER: _ClassVar[int]
     thread_id: UUID
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     if_exists: OnConflictBehavior
     metadata_json: bytes
     ttl: ThreadTTLConfig
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ..., if_exists: _Optional[_Union[OnConflictBehavior, str]] = ..., metadata_json: _Optional[bytes] = ..., ttl: _Optional[_Union[ThreadTTLConfig, _Mapping]] = ...) -> None: ...
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., if_exists: _Optional[_Union[OnConflictBehavior, str]] = ..., metadata_json: _Optional[bytes] = ..., ttl: _Optional[_Union[ThreadTTLConfig, _Mapping]] = ...) -> None: ...
 
 class GetThreadRequest(_message.Message):
     __slots__ = ("thread_id", "filters")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     thread_id: UUID
-    filters: _containers.MessageMap[str, AuthFilter]
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ...) -> None: ...
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
 
 class PatchThreadRequest(_message.Message):
     __slots__ = ("thread_id", "filters", "metadata_json", "ttl")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     METADATA_JSON_FIELD_NUMBER: _ClassVar[int]
     TTL_FIELD_NUMBER: _ClassVar[int]
     thread_id: UUID
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     metadata_json: bytes
     ttl: ThreadTTLConfig
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ..., metadata_json: _Optional[bytes] = ..., ttl: _Optional[_Union[ThreadTTLConfig, _Mapping]] = ...) -> None: ...
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., metadata_json: _Optional[bytes] = ..., ttl: _Optional[_Union[ThreadTTLConfig, _Mapping]] = ...) -> None: ...
 
 class DeleteThreadRequest(_message.Message):
     __slots__ = ("thread_id", "filters")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     thread_id: UUID
-    filters: _containers.MessageMap[str, AuthFilter]
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ...) -> None: ...
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
 
 class CopyThreadRequest(_message.Message):
     __slots__ = ("thread_id", "filters")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     thread_id: UUID
-    filters: _containers.MessageMap[str, AuthFilter]
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ...) -> None: ...
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
 
 class SearchThreadsRequest(_message.Message):
     __slots__ = ("filters", "metadata_json", "values_json", "status", "limit", "offset", "sort_by", "sort_order", "select")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     METADATA_JSON_FIELD_NUMBER: _ClassVar[int]
     VALUES_JSON_FIELD_NUMBER: _ClassVar[int]
@@ -608,7 +530,7 @@ class SearchThreadsRequest(_message.Message):
     SORT_BY_FIELD_NUMBER: _ClassVar[int]
     SORT_ORDER_FIELD_NUMBER: _ClassVar[int]
     SELECT_FIELD_NUMBER: _ClassVar[int]
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     metadata_json: bytes
     values_json: bytes
     status: _enum_thread_status_pb2.ThreadStatus
@@ -617,7 +539,7 @@ class SearchThreadsRequest(_message.Message):
     sort_by: ThreadsSortBy
     sort_order: SortOrder
     select: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, filters: _Optional[_Mapping[str, AuthFilter]] = ..., metadata_json: _Optional[bytes] = ..., values_json: _Optional[bytes] = ..., status: _Optional[_Union[_enum_thread_status_pb2.ThreadStatus, str]] = ..., limit: _Optional[int] = ..., offset: _Optional[int] = ..., sort_by: _Optional[_Union[ThreadsSortBy, str]] = ..., sort_order: _Optional[_Union[SortOrder, str]] = ..., select: _Optional[_Iterable[str]] = ...) -> None: ...
+    def __init__(self, filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., metadata_json: _Optional[bytes] = ..., values_json: _Optional[bytes] = ..., status: _Optional[_Union[_enum_thread_status_pb2.ThreadStatus, str]] = ..., limit: _Optional[int] = ..., offset: _Optional[int] = ..., sort_by: _Optional[_Union[ThreadsSortBy, str]] = ..., sort_order: _Optional[_Union[SortOrder, str]] = ..., select: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class SearchThreadsResponse(_message.Message):
     __slots__ = ("threads",)
@@ -627,22 +549,15 @@ class SearchThreadsResponse(_message.Message):
 
 class CountThreadsRequest(_message.Message):
     __slots__ = ("filters", "metadata_json", "values_json", "status")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     METADATA_JSON_FIELD_NUMBER: _ClassVar[int]
     VALUES_JSON_FIELD_NUMBER: _ClassVar[int]
     STATUS_FIELD_NUMBER: _ClassVar[int]
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     metadata_json: bytes
     values_json: bytes
     status: _enum_thread_status_pb2.ThreadStatus
-    def __init__(self, filters: _Optional[_Mapping[str, AuthFilter]] = ..., metadata_json: _Optional[bytes] = ..., values_json: _Optional[bytes] = ..., status: _Optional[_Union[_enum_thread_status_pb2.ThreadStatus, str]] = ...) -> None: ...
+    def __init__(self, filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., metadata_json: _Optional[bytes] = ..., values_json: _Optional[bytes] = ..., status: _Optional[_Union[_enum_thread_status_pb2.ThreadStatus, str]] = ...) -> None: ...
 
 class SweepThreadsTTLResponse(_message.Message):
     __slots__ = ("expired", "deleted")
@@ -706,22 +621,15 @@ class JointRollbackRequest(_message.Message):
 
 class StreamThreadRequest(_message.Message):
     __slots__ = ("thread_id", "filters", "last_event_id", "stream_modes")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     LAST_EVENT_ID_FIELD_NUMBER: _ClassVar[int]
     STREAM_MODES_FIELD_NUMBER: _ClassVar[int]
     thread_id: UUID
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     last_event_id: str
     stream_modes: _containers.RepeatedScalarFieldContainer[_enum_thread_stream_mode_pb2.ThreadStreamMode]
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ..., last_event_id: _Optional[str] = ..., stream_modes: _Optional[_Iterable[_Union[_enum_thread_stream_mode_pb2.ThreadStreamMode, str]]] = ...) -> None: ...
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., last_event_id: _Optional[str] = ..., stream_modes: _Optional[_Iterable[_Union[_enum_thread_stream_mode_pb2.ThreadStreamMode, str]]] = ...) -> None: ...
 
 class RunKwargs(_message.Message):
     __slots__ = ("config", "context_json", "input_json", "command_json", "stream_mode", "interrupt_before", "interrupt_after", "webhook", "feedback_keys", "temporary", "subgraphs", "resumable", "checkpoint_during", "durability")
@@ -744,8 +652,8 @@ class RunKwargs(_message.Message):
     input_json: bytes
     command_json: bytes
     stream_mode: _enum_stream_mode_pb2.StreamMode
-    interrupt_before: _containers.RepeatedScalarFieldContainer[str]
-    interrupt_after: _containers.RepeatedScalarFieldContainer[str]
+    interrupt_before: _engine_common_pb2.StaticInterruptConfig
+    interrupt_after: _engine_common_pb2.StaticInterruptConfig
     webhook: str
     feedback_keys: _containers.RepeatedScalarFieldContainer[str]
     temporary: bool
@@ -753,7 +661,7 @@ class RunKwargs(_message.Message):
     resumable: bool
     checkpoint_during: bool
     durability: str
-    def __init__(self, config: _Optional[_Union[_engine_common_pb2.EngineRunnableConfig, _Mapping]] = ..., context_json: _Optional[bytes] = ..., input_json: _Optional[bytes] = ..., command_json: _Optional[bytes] = ..., stream_mode: _Optional[_Union[_enum_stream_mode_pb2.StreamMode, str]] = ..., interrupt_before: _Optional[_Iterable[str]] = ..., interrupt_after: _Optional[_Iterable[str]] = ..., webhook: _Optional[str] = ..., feedback_keys: _Optional[_Iterable[str]] = ..., temporary: bool = ..., subgraphs: bool = ..., resumable: bool = ..., checkpoint_during: bool = ..., durability: _Optional[str] = ...) -> None: ...
+    def __init__(self, config: _Optional[_Union[_engine_common_pb2.EngineRunnableConfig, _Mapping]] = ..., context_json: _Optional[bytes] = ..., input_json: _Optional[bytes] = ..., command_json: _Optional[bytes] = ..., stream_mode: _Optional[_Union[_enum_stream_mode_pb2.StreamMode, str]] = ..., interrupt_before: _Optional[_Union[_engine_common_pb2.StaticInterruptConfig, _Mapping]] = ..., interrupt_after: _Optional[_Union[_engine_common_pb2.StaticInterruptConfig, _Mapping]] = ..., webhook: _Optional[str] = ..., feedback_keys: _Optional[_Iterable[str]] = ..., temporary: bool = ..., subgraphs: bool = ..., resumable: bool = ..., checkpoint_during: bool = ..., durability: _Optional[str] = ...) -> None: ...
 
 class Run(_message.Message):
     __slots__ = ("run_id", "thread_id", "assistant_id", "created_at", "updated_at", "status", "metadata", "kwargs", "multitask_strategy")
@@ -813,13 +721,6 @@ class NextRunResponse(_message.Message):
 
 class CreateRunRequest(_message.Message):
     __slots__ = ("assistant_id", "kwargs_json", "filters", "thread_id", "user_id", "run_id", "status", "metadata_json", "prevent_insert_if_inflight", "multitask_strategy", "if_not_exists", "after_seconds", "thread_ttl")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     ASSISTANT_ID_FIELD_NUMBER: _ClassVar[int]
     KWARGS_JSON_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
@@ -835,7 +736,7 @@ class CreateRunRequest(_message.Message):
     THREAD_TTL_FIELD_NUMBER: _ClassVar[int]
     assistant_id: UUID
     kwargs_json: bytes
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     thread_id: UUID
     user_id: str
     run_id: UUID
@@ -846,41 +747,27 @@ class CreateRunRequest(_message.Message):
     if_not_exists: CreateRunBehavior
     after_seconds: int
     thread_ttl: ThreadTTLConfig
-    def __init__(self, assistant_id: _Optional[_Union[UUID, _Mapping]] = ..., kwargs_json: _Optional[bytes] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., user_id: _Optional[str] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., status: _Optional[_Union[_enum_run_status_pb2.RunStatus, str]] = ..., metadata_json: _Optional[bytes] = ..., prevent_insert_if_inflight: bool = ..., multitask_strategy: _Optional[_Union[_enum_multitask_strategy_pb2.MultitaskStrategy, str]] = ..., if_not_exists: _Optional[_Union[CreateRunBehavior, str]] = ..., after_seconds: _Optional[int] = ..., thread_ttl: _Optional[_Union[ThreadTTLConfig, _Mapping]] = ...) -> None: ...
+    def __init__(self, assistant_id: _Optional[_Union[UUID, _Mapping]] = ..., kwargs_json: _Optional[bytes] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., user_id: _Optional[str] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., status: _Optional[_Union[_enum_run_status_pb2.RunStatus, str]] = ..., metadata_json: _Optional[bytes] = ..., prevent_insert_if_inflight: bool = ..., multitask_strategy: _Optional[_Union[_enum_multitask_strategy_pb2.MultitaskStrategy, str]] = ..., if_not_exists: _Optional[_Union[CreateRunBehavior, str]] = ..., after_seconds: _Optional[int] = ..., thread_ttl: _Optional[_Union[ThreadTTLConfig, _Mapping]] = ...) -> None: ...
 
 class GetRunRequest(_message.Message):
     __slots__ = ("run_id", "thread_id", "filters")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     RUN_ID_FIELD_NUMBER: _ClassVar[int]
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     run_id: UUID
     thread_id: UUID
-    filters: _containers.MessageMap[str, AuthFilter]
-    def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ...) -> None: ...
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
 
 class DeleteRunRequest(_message.Message):
     __slots__ = ("run_id", "thread_id", "filters")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     RUN_ID_FIELD_NUMBER: _ClassVar[int]
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     run_id: UUID
     thread_id: UUID
-    filters: _containers.MessageMap[str, AuthFilter]
-    def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ...) -> None: ...
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
 
 class CancelRunIdsTarget(_message.Message):
     __slots__ = ("thread_id", "run_ids")
@@ -898,32 +785,18 @@ class CancelStatusTarget(_message.Message):
 
 class CancelRunRequest(_message.Message):
     __slots__ = ("filters", "run_ids", "status", "action")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     RUN_IDS_FIELD_NUMBER: _ClassVar[int]
     STATUS_FIELD_NUMBER: _ClassVar[int]
     ACTION_FIELD_NUMBER: _ClassVar[int]
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     run_ids: CancelRunIdsTarget
     status: CancelStatusTarget
     action: _enum_cancel_run_action_pb2.CancelRunAction
-    def __init__(self, filters: _Optional[_Mapping[str, AuthFilter]] = ..., run_ids: _Optional[_Union[CancelRunIdsTarget, _Mapping]] = ..., status: _Optional[_Union[CancelStatusTarget, _Mapping]] = ..., action: _Optional[_Union[_enum_cancel_run_action_pb2.CancelRunAction, str]] = ...) -> None: ...
+    def __init__(self, filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., run_ids: _Optional[_Union[CancelRunIdsTarget, _Mapping]] = ..., status: _Optional[_Union[CancelStatusTarget, _Mapping]] = ..., action: _Optional[_Union[_enum_cancel_run_action_pb2.CancelRunAction, str]] = ...) -> None: ...
 
 class SearchRunsRequest(_message.Message):
     __slots__ = ("thread_id", "filters", "limit", "offset", "status", "select")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
     LIMIT_FIELD_NUMBER: _ClassVar[int]
@@ -931,12 +804,12 @@ class SearchRunsRequest(_message.Message):
     STATUS_FIELD_NUMBER: _ClassVar[int]
     SELECT_FIELD_NUMBER: _ClassVar[int]
     thread_id: UUID
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     limit: int
     offset: int
     status: _enum_run_status_pb2.RunStatus
     select: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ..., limit: _Optional[int] = ..., offset: _Optional[int] = ..., status: _Optional[_Union[_enum_run_status_pb2.RunStatus, str]] = ..., select: _Optional[_Iterable[str]] = ...) -> None: ...
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., limit: _Optional[int] = ..., offset: _Optional[int] = ..., status: _Optional[_Union[_enum_run_status_pb2.RunStatus, str]] = ..., select: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class SearchRunsResponse(_message.Message):
     __slots__ = ("runs",)
@@ -960,13 +833,6 @@ class SweepRunsResponse(_message.Message):
 
 class StreamRunRequest(_message.Message):
     __slots__ = ("thread_id", "run_id", "filters", "last_event_id", "stream_modes", "ignore_run_not_found", "cancel_on_disconnect")
-    class FiltersEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: str
-        value: AuthFilter
-        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[AuthFilter, _Mapping]] = ...) -> None: ...
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     RUN_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
@@ -976,9 +842,9 @@ class StreamRunRequest(_message.Message):
     CANCEL_ON_DISCONNECT_FIELD_NUMBER: _ClassVar[int]
     thread_id: UUID
     run_id: UUID
-    filters: _containers.MessageMap[str, AuthFilter]
+    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     last_event_id: str
     stream_modes: _containers.RepeatedScalarFieldContainer[_enum_stream_mode_pb2.StreamMode]
     ignore_run_not_found: bool
     cancel_on_disconnect: bool
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Mapping[str, AuthFilter]] = ..., last_event_id: _Optional[str] = ..., stream_modes: _Optional[_Iterable[_Union[_enum_stream_mode_pb2.StreamMode, str]]] = ..., ignore_run_not_found: bool = ..., cancel_on_disconnect: bool = ...) -> None: ...
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., last_event_id: _Optional[str] = ..., stream_modes: _Optional[_Iterable[_Union[_enum_stream_mode_pb2.StreamMode, str]]] = ..., ignore_run_not_found: bool = ..., cancel_on_disconnect: bool = ...) -> None: ...

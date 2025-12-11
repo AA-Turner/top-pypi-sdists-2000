@@ -589,6 +589,7 @@ class JsonSchemaParser(Parser):
         keyword_only: bool = False,
         frozen_dataclasses: bool = False,
         no_alias: bool = False,
+        use_frozen_field: bool = False,
         formatters: list[Formatter] = DEFAULT_FORMATTERS,
         parent_scoped_naming: bool = False,
         dataclass_arguments: DataclassArguments | None = None,
@@ -680,6 +681,7 @@ class JsonSchemaParser(Parser):
             keyword_only=keyword_only,
             frozen_dataclasses=frozen_dataclasses,
             no_alias=no_alias,
+            use_frozen_field=use_frozen_field,
             formatters=formatters,
             parent_scoped_naming=parent_scoped_naming,
             dataclass_arguments=dataclass_arguments,
@@ -1011,6 +1013,7 @@ class JsonSchemaParser(Parser):
             type_has_null=field.type_has_null,
             read_only=self._resolve_field_flag(field, "readOnly"),
             write_only=self._resolve_field_flag(field, "writeOnly"),
+            use_frozen_field=self.use_frozen_field,
         )
 
     def get_data_type(self, obj: JsonSchemaObject) -> DataType:
@@ -1038,7 +1041,11 @@ class JsonSchemaParser(Parser):
     def get_ref_data_type(self, ref: str) -> DataType:
         """Get a data type from a reference string."""
         reference = self.model_resolver.add_ref(ref)
-        return self.data_type(reference=reference)
+        ref_schema = self._load_ref_schema_object(ref)
+        is_optional = (
+            ref_schema.type_has_null or ref_schema.type == "null" or (self.strict_nullable and ref_schema.nullable)
+        )
+        return self.data_type(reference=reference, is_optional=is_optional)
 
     def set_additional_properties(self, path: str, obj: JsonSchemaObject) -> None:
         """Set additional properties flag in extra template data."""
@@ -1365,7 +1372,15 @@ class JsonSchemaParser(Parser):
         return json.dumps(prop_schema.dict(exclude_unset=True, by_alias=True), sort_keys=True, default=repr)
 
     def _merge_all_of_object(self, obj: JsonSchemaObject) -> JsonSchemaObject | None:
-        """Merge allOf items when they share object properties to avoid duplicate models."""
+        """Merge allOf items when they share object properties to avoid duplicate models.
+
+        Skip merging when there is exactly one $ref (inheritance with property overrides).
+        Continue merging when multiple $refs share properties to avoid duplicate fields.
+        """
+        ref_count = sum(1 for item in obj.allOf if item.ref)
+        if ref_count == 1:
+            return None
+
         resolved_items: list[JsonSchemaObject] = []
         property_signatures: dict[str, set[str | bool]] = {}
         for item in obj.allOf:

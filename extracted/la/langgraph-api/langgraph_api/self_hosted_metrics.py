@@ -123,6 +123,13 @@ def initialize_self_hosted_metrics():
             callbacks=[_get_pending_runs_wait_time_med_callback],
         )
 
+        meter.create_observable_gauge(
+            name="lg_api_pending_unblocked_runs_wait_time_max",
+            description="The maximum time a run has been pending excluding runs blocked by another run on the same thread, in seconds",
+            unit="s",
+            callbacks=[_get_pending_unblocked_runs_wait_time_max_callback],
+        )
+
         if config.N_JOBS_PER_WORKER > 0:
             meter.create_observable_gauge(
                 name="lg_api_workers_max",
@@ -251,6 +258,7 @@ def _get_queue_stats():
                 "n_running": 0,
                 "pending_runs_wait_time_max_secs": 0,
                 "pending_runs_wait_time_med_secs": 0,
+                "pending_unblocked_runs_wait_time_max_secs": 0,
             }
 
     try:
@@ -263,6 +271,7 @@ def _get_queue_stats():
             "n_running": 0,
             "pending_runs_wait_time_max_secs": 0,
             "pending_runs_wait_time_med_secs": 0,
+            "pending_unblocked_runs_wait_time_max_secs": 0,
         }
 
 
@@ -323,6 +332,17 @@ def _get_pending_runs_wait_time_med_callback(options: CallbackOptions):
         return [Observation(value, attributes=_customer_attributes)]
     except Exception as e:
         logger.warning("Failed to get median pending wait time", exc_info=e)
+        return [Observation(0, attributes=_customer_attributes)]
+
+
+def _get_pending_unblocked_runs_wait_time_max_callback(options: CallbackOptions):
+    try:
+        stats = _get_queue_stats()
+        value = stats.get("pending_unblocked_runs_wait_time_max_secs")
+        value = 0 if value is None else value
+        return [Observation(value, attributes=_customer_attributes)]
+    except Exception as e:
+        logger.warning("Failed to get max unblocked pending wait time", exc_info=e)
         return [Observation(0, attributes=_customer_attributes)]
 
 

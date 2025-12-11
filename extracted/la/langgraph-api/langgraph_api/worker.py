@@ -11,6 +11,7 @@ from starlette.exceptions import HTTPException
 from typing_extensions import TypedDict
 
 import langgraph_api.logging as lg_logging
+from langgraph_api.api.encryption_middleware import decrypt_response
 from langgraph_api.auth.custom import SimpleUser, normalize_user
 from langgraph_api.config import (
     BG_JOB_ISOLATED_LOOPS,
@@ -115,6 +116,7 @@ async def worker(
     )
     temporary = run["kwargs"].get("temporary", False)
     resumable = run["kwargs"].get("resumable", False)
+    run_created_at_dt = run["created_at"]
     run_created_at = run["created_at"].isoformat()
     lg_logging.set_logging_context(
         {
@@ -204,6 +206,10 @@ async def worker(
                 set_auth_ctx_for_run(run["kwargs"]),
                 set_encryption_ctx_for_run(run["kwargs"]),
             ):
+                # Decrypt kwargs fields (input, config, context) before streaming
+                run["kwargs"] = await decrypt_response(
+                    run["kwargs"], "run", ["input", "config", "context"]
+                )
                 if temporary:
                     stream = astream_state(run, attempt, done)
                 else:
@@ -250,6 +256,7 @@ async def worker(
                     if request_created_at is not None
                     else None
                 ),
+                "run_wait_time_ms": ms(run_started_at_dt, run_created_at_dt),
             }
 
             if exception is None:

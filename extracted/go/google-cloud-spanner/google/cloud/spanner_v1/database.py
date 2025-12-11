@@ -203,8 +203,11 @@ class Database(object):
 
         self._pool = pool
         pool.bind(self)
+        is_experimental_host = self._instance.experimental_host is not None
 
-        self._sessions_manager = DatabaseSessionsManager(self, pool)
+        self._sessions_manager = DatabaseSessionsManager(
+            self, pool, is_experimental_host
+        )
 
     @classmethod
     def from_pb(cls, database_pb, instance, pool=None):
@@ -447,6 +450,16 @@ class Database(object):
                 )
                 self._spanner_api = SpannerClient(
                     client_info=client_info, transport=transport
+                )
+                return self._spanner_api
+            if self._instance.experimental_host is not None:
+                transport = SpannerGrpcTransport(
+                    channel=grpc.insecure_channel(self._instance.experimental_host)
+                )
+                self._spanner_api = SpannerClient(
+                    client_info=client_info,
+                    transport=transport,
+                    client_options=client_options,
                 )
                 return self._spanner_api
             credentials = self._instance._client.credentials
@@ -1012,8 +1025,14 @@ class Database(object):
             reraises any non-ABORT exceptions raised by ``func``.
         """
         observability_options = getattr(self, "observability_options", None)
+        transaction_tag = kw.get("transaction_tag")
+        extra_attributes = {}
+        if transaction_tag:
+            extra_attributes["transaction.tag"] = transaction_tag
+
         with trace_call(
             "CloudSpanner.Database.run_in_transaction",
+            extra_attributes=extra_attributes,
             observability_options=observability_options,
         ), MetricsCapture():
             # Sanity check: Is there a transaction already running?

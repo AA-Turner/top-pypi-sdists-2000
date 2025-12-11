@@ -7851,6 +7851,142 @@ _UpdateAgentEngineMemoryRequestParametersOrDict = Union[
 ]
 
 
+class PurgeAgentEngineMemoriesConfig(_common.BaseModel):
+    """Config for purging memories."""
+
+    http_options: Optional[genai_types.HttpOptions] = Field(
+        default=None, description="""Used to override HTTP request options."""
+    )
+    wait_for_completion: Optional[bool] = Field(
+        default=True,
+        description="""Waits for the operation to complete before returning.""",
+    )
+
+
+class PurgeAgentEngineMemoriesConfigDict(TypedDict, total=False):
+    """Config for purging memories."""
+
+    http_options: Optional[genai_types.HttpOptionsDict]
+    """Used to override HTTP request options."""
+
+    wait_for_completion: Optional[bool]
+    """Waits for the operation to complete before returning."""
+
+
+PurgeAgentEngineMemoriesConfigOrDict = Union[
+    PurgeAgentEngineMemoriesConfig, PurgeAgentEngineMemoriesConfigDict
+]
+
+
+class _PurgeAgentEngineMemoriesRequestParameters(_common.BaseModel):
+    """Parameters for purging agent engine memories."""
+
+    name: Optional[str] = Field(
+        default=None, description="""Name of the Agent Engine to purge memories from."""
+    )
+    filter: Optional[str] = Field(
+        default=None,
+        description="""The standard list filter to determine which memories to purge.
+      More detail in [AIP-160](https://google.aip.dev/160).""",
+    )
+    force: Optional[bool] = Field(
+        default=None,
+        description="""If true, the memories will actually be purged. If false, the purge request will be validated but not executed.""",
+    )
+    config: Optional[PurgeAgentEngineMemoriesConfig] = Field(
+        default=None, description=""""""
+    )
+
+
+class _PurgeAgentEngineMemoriesRequestParametersDict(TypedDict, total=False):
+    """Parameters for purging agent engine memories."""
+
+    name: Optional[str]
+    """Name of the Agent Engine to purge memories from."""
+
+    filter: Optional[str]
+    """The standard list filter to determine which memories to purge.
+      More detail in [AIP-160](https://google.aip.dev/160)."""
+
+    force: Optional[bool]
+    """If true, the memories will actually be purged. If false, the purge request will be validated but not executed."""
+
+    config: Optional[PurgeAgentEngineMemoriesConfigDict]
+    """"""
+
+
+_PurgeAgentEngineMemoriesRequestParametersOrDict = Union[
+    _PurgeAgentEngineMemoriesRequestParameters,
+    _PurgeAgentEngineMemoriesRequestParametersDict,
+]
+
+
+class PurgeMemoriesResponse(_common.BaseModel):
+    """The response for purging memories."""
+
+    purge_count: Optional[int] = Field(
+        default=None, description="""The number of memories that were purged."""
+    )
+
+
+class PurgeMemoriesResponseDict(TypedDict, total=False):
+    """The response for purging memories."""
+
+    purge_count: Optional[int]
+    """The number of memories that were purged."""
+
+
+PurgeMemoriesResponseOrDict = Union[PurgeMemoriesResponse, PurgeMemoriesResponseDict]
+
+
+class AgentEnginePurgeMemoriesOperation(_common.BaseModel):
+    """Operation that purges memories from an agent engine."""
+
+    name: Optional[str] = Field(
+        default=None,
+        description="""The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the `name` should be a resource name ending with `operations/{unique_id}`.""",
+    )
+    metadata: Optional[dict[str, Any]] = Field(
+        default=None,
+        description="""Service-specific metadata associated with the operation. It typically contains progress information and common metadata such as create time. Some services might not provide such metadata.  Any method that returns a long-running operation should document the metadata type, if any.""",
+    )
+    done: Optional[bool] = Field(
+        default=None,
+        description="""If the value is `false`, it means the operation is still in progress. If `true`, the operation is completed, and either `error` or `response` is available.""",
+    )
+    error: Optional[dict[str, Any]] = Field(
+        default=None,
+        description="""The error result of the operation in case of failure or cancellation.""",
+    )
+    response: Optional[PurgeMemoriesResponse] = Field(
+        default=None, description="""The response for purging memories."""
+    )
+
+
+class AgentEnginePurgeMemoriesOperationDict(TypedDict, total=False):
+    """Operation that purges memories from an agent engine."""
+
+    name: Optional[str]
+    """The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the `name` should be a resource name ending with `operations/{unique_id}`."""
+
+    metadata: Optional[dict[str, Any]]
+    """Service-specific metadata associated with the operation. It typically contains progress information and common metadata such as create time. Some services might not provide such metadata.  Any method that returns a long-running operation should document the metadata type, if any."""
+
+    done: Optional[bool]
+    """If the value is `false`, it means the operation is still in progress. If `true`, the operation is completed, and either `error` or `response` is available."""
+
+    error: Optional[dict[str, Any]]
+    """The error result of the operation in case of failure or cancellation."""
+
+    response: Optional[PurgeMemoriesResponseDict]
+    """The response for purging memories."""
+
+
+AgentEnginePurgeMemoriesOperationOrDict = Union[
+    AgentEnginePurgeMemoriesOperation, AgentEnginePurgeMemoriesOperationDict
+]
+
+
 class GetAgentEngineMemoryRevisionConfig(_common.BaseModel):
     """Config for getting an Agent Engine Memory Revision."""
 
@@ -9735,33 +9871,6 @@ ListAgentEngineSessionEventsResponseOrDict = Union[
 ]
 
 
-class AssembleDatasetConfig(_common.BaseModel):
-    """Config for assembling a multimodal dataset resource."""
-
-    http_options: Optional[genai_types.HttpOptions] = Field(
-        default=None, description="""Used to override HTTP request options."""
-    )
-    timeout: Optional[int] = Field(
-        default=90,
-        description="""The timeout for the assemble dataset request in seconds. If not
-      set, the default timeout is 90 seconds.""",
-    )
-
-
-class AssembleDatasetConfigDict(TypedDict, total=False):
-    """Config for assembling a multimodal dataset resource."""
-
-    http_options: Optional[genai_types.HttpOptionsDict]
-    """Used to override HTTP request options."""
-
-    timeout: Optional[int]
-    """The timeout for the assemble dataset request in seconds. If not
-      set, the default timeout is 90 seconds."""
-
-
-AssembleDatasetConfigOrDict = Union[AssembleDatasetConfig, AssembleDatasetConfigDict]
-
-
 class GeminiExample(_common.BaseModel):
     """Represents a Gemini example."""
 
@@ -9881,26 +9990,53 @@ GeminiRequestReadConfigOrDict = Union[
 ]
 
 
+class AssembleDatasetConfig(_common.BaseModel):
+    """Config for assembling a multimodal dataset resource."""
+
+    http_options: Optional[genai_types.HttpOptions] = Field(
+        default=None, description="""Used to override HTTP request options."""
+    )
+    timeout: Optional[int] = Field(
+        default=90,
+        description="""The timeout for the assemble dataset request in seconds. If not
+      set, the default timeout is 90 seconds.""",
+    )
+
+
+class AssembleDatasetConfigDict(TypedDict, total=False):
+    """Config for assembling a multimodal dataset resource."""
+
+    http_options: Optional[genai_types.HttpOptionsDict]
+    """Used to override HTTP request options."""
+
+    timeout: Optional[int]
+    """The timeout for the assemble dataset request in seconds. If not
+      set, the default timeout is 90 seconds."""
+
+
+AssembleDatasetConfigOrDict = Union[AssembleDatasetConfig, AssembleDatasetConfigDict]
+
+
 class _AssembleDatasetParameters(_common.BaseModel):
     """Parameters for assembling a multimodal dataset resource."""
 
-    config: Optional[AssembleDatasetConfig] = Field(default=None, description="""""")
     name: Optional[str] = Field(default=None, description="""""")
     gemini_request_read_config: Optional[GeminiRequestReadConfig] = Field(
         default=None, description=""""""
     )
+    config: Optional[AssembleDatasetConfig] = Field(default=None, description="""""")
 
 
 class _AssembleDatasetParametersDict(TypedDict, total=False):
     """Parameters for assembling a multimodal dataset resource."""
 
-    config: Optional[AssembleDatasetConfigDict]
-    """"""
-
     name: Optional[str]
     """"""
 
     gemini_request_read_config: Optional[GeminiRequestReadConfigDict]
+    """"""
+
+    config: Optional[AssembleDatasetConfigDict]
     """"""
 
 
@@ -9955,33 +10091,6 @@ class MultimodalDatasetOperationDict(TypedDict, total=False):
 MultimodalDatasetOperationOrDict = Union[
     MultimodalDatasetOperation, MultimodalDatasetOperationDict
 ]
-
-
-class AssessDatasetConfig(_common.BaseModel):
-    """Config for assessing a multimodal dataset resource."""
-
-    http_options: Optional[genai_types.HttpOptions] = Field(
-        default=None, description="""Used to override HTTP request options."""
-    )
-    timeout: Optional[int] = Field(
-        default=90,
-        description="""The timeout for the assess dataset request in seconds. If not set,
-      the default timeout is 90 seconds.""",
-    )
-
-
-class AssessDatasetConfigDict(TypedDict, total=False):
-    """Config for assessing a multimodal dataset resource."""
-
-    http_options: Optional[genai_types.HttpOptionsDict]
-    """Used to override HTTP request options."""
-
-    timeout: Optional[int]
-    """The timeout for the assess dataset request in seconds. If not set,
-      the default timeout is 90 seconds."""
-
-
-AssessDatasetConfigOrDict = Union[AssessDatasetConfig, AssessDatasetConfigDict]
 
 
 class TuningResourceUsageAssessmentConfig(_common.BaseModel):
@@ -10062,10 +10171,36 @@ BatchPredictionValidationAssessmentConfigOrDict = Union[
 ]
 
 
+class AssessDatasetConfig(_common.BaseModel):
+    """Config for assessing a multimodal dataset resource."""
+
+    http_options: Optional[genai_types.HttpOptions] = Field(
+        default=None, description="""Used to override HTTP request options."""
+    )
+    timeout: Optional[int] = Field(
+        default=90,
+        description="""The timeout for the assess dataset request in seconds. If not set,
+      the default timeout is 90 seconds.""",
+    )
+
+
+class AssessDatasetConfigDict(TypedDict, total=False):
+    """Config for assessing a multimodal dataset resource."""
+
+    http_options: Optional[genai_types.HttpOptionsDict]
+    """Used to override HTTP request options."""
+
+    timeout: Optional[int]
+    """The timeout for the assess dataset request in seconds. If not set,
+      the default timeout is 90 seconds."""
+
+
+AssessDatasetConfigOrDict = Union[AssessDatasetConfig, AssessDatasetConfigDict]
+
+
 class _AssessDatasetParameters(_common.BaseModel):
     """Parameters for assessing a multimodal dataset resource."""
 
-    config: Optional[AssessDatasetConfig] = Field(default=None, description="""""")
     name: Optional[str] = Field(default=None, description="""""")
     gemini_request_read_config: Optional[GeminiRequestReadConfig] = Field(
         default=None, description=""""""
@@ -10082,13 +10217,11 @@ class _AssessDatasetParameters(_common.BaseModel):
     batch_prediction_validation_assessment_config: Optional[
         BatchPredictionValidationAssessmentConfig
     ] = Field(default=None, description="""""")
+    config: Optional[AssessDatasetConfig] = Field(default=None, description="""""")
 
 
 class _AssessDatasetParametersDict(TypedDict, total=False):
     """Parameters for assessing a multimodal dataset resource."""
-
-    config: Optional[AssessDatasetConfigDict]
-    """"""
 
     name: Optional[str]
     """"""
@@ -10112,6 +10245,9 @@ class _AssessDatasetParametersDict(TypedDict, total=False):
     batch_prediction_validation_assessment_config: Optional[
         BatchPredictionValidationAssessmentConfigDict
     ]
+    """"""
+
+    config: Optional[AssessDatasetConfigDict]
     """"""
 
 

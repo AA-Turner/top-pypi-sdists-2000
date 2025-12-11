@@ -299,6 +299,7 @@ from types_aiobotocore_networkmanager.client import NetworkManagerClient
 from types_aiobotocore_networkmonitor.client import CloudWatchNetworkMonitorClient
 from types_aiobotocore_notifications.client import UserNotificationsClient
 from types_aiobotocore_notificationscontacts.client import UserNotificationsContactsClient
+from types_aiobotocore_nova_act.client import NovaActServiceClient
 from types_aiobotocore_oam.client import CloudWatchObservabilityAccessManagerClient
 from types_aiobotocore_observabilityadmin.client import CloudWatchObservabilityAdminServiceClient
 from types_aiobotocore_odb.client import OdbClient
@@ -5713,6 +5714,25 @@ class AioSession(BotocoreSession):
     ) -> ClientCreatorContext[UserNotificationsContactsClient]:
         """
         Create client for UserNotificationsContacts service.
+        """
+
+    @overload  # type: ignore[override]
+    def create_client(  # type: ignore[override]
+        self,
+        service_name: Literal["nova-act"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: AioConfig | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> ClientCreatorContext[NovaActServiceClient]:
+        """
+        Create client for NovaActService service.
         """
 
     @overload  # type: ignore[override]

@@ -10,6 +10,7 @@ import structlog
 from starlette.exceptions import HTTPException
 from typing_extensions import TypedDict
 
+from langgraph_api.api.encryption_middleware import encrypt_request
 from langgraph_api.encryption.context import get_encryption_context
 from langgraph_api.graph import GRAPHS, get_assistant_id
 from langgraph_api.schema import (
@@ -86,13 +87,13 @@ class RunCreateDict(TypedDict):
     stream_mode: list[StreamMode] | StreamMode
     """One or more of "values", "messages", "updates" or "events".
     - "values": Stream the thread state any time it changes.
-    - "messages": Stream chat messages from thread state and calls to chat models, 
+    - "messages": Stream chat messages from thread state and calls to chat models,
       token-by-token where possible.
     - "updates": Stream the state updates returned by each node.
     - "events": Stream all events produced by sub-runs (eg. nodes, LLMs, etc.).
     - "custom": Stream custom events produced by your nodes.
-    
-    Note: __interrupt__ events are always included in the updates stream, even when "updates" 
+
+    Note: __interrupt__ events are always included in the updates stream, even when "updates"
     is not explicitly requested, to ensure interrupt events are always visible.
     """
     stream_subgraphs: bool | None
@@ -263,14 +264,28 @@ async def create_valid_run(
     if webhook := payload.get("webhook"):
         await validate_webhook_url_or_raise(str(webhook))
 
+    # We can't pass payload directly because config and context have
+    # been modified above (with auth context, checkpoint info, etc.)
+    encrypted = await encrypt_request(
+        {
+            "metadata": payload.get("metadata"),
+            "input": payload.get("input"),
+            "config": config,
+            "context": context,
+            "command": payload.get("command"),
+        },
+        "run",
+        ["metadata", "input", "config", "context", "command"],
+    )
+
     run_coro = Runs.put(
         conn,
         assistant_id,
         {
-            "input": payload.get("input"),
-            "command": payload.get("command"),
-            "config": config,
-            "context": context,
+            "input": encrypted.get("input"),
+            "command": encrypted.get("command"),
+            "config": encrypted.get("config"),
+            "context": encrypted.get("context"),
             "stream_mode": stream_mode,
             "interrupt_before": payload.get("interrupt_before"),
             "interrupt_after": payload.get("interrupt_after"),
@@ -282,7 +297,7 @@ async def create_valid_run(
             "checkpoint_during": payload.get("checkpoint_during", True),
             "durability": durability,
         },
-        metadata=payload.get("metadata"),
+        metadata=encrypted.get("metadata"),
         status="pending",
         user_id=user_id,
         thread_id=thread_id_,

@@ -734,6 +734,12 @@ class Environment:
             None,
         )
         if match is not None:
+            # For VCS dependencies (editable or not), we cannot reliably determine
+            # if the installed version matches the requested ref/commit. Always return
+            # False to force reinstall, which will ensure the correct commit is checked out.
+            # See: https://github.com/pypa/pipenv/issues/5791
+            if req.link and req.link.is_vcs:
+                return False
             if req.specifier is not None:
                 return SpecifierSet(str(req.specifier)).contains(
                     match.version, prereleases=True
@@ -748,10 +754,10 @@ class Environment:
                     parsed_url = urlparse(requested_path)
                     local_path = parsed_url.path
                 return requested_path and os.path.samefile(local_path, match.location)
-            elif match.has_metadata("direct_url.json") or (req.link and req.link.is_vcs):
-                # Direct URL installs and VCS installs we assume are not satisfied
-                # since due to skip-lock we may be installing from Pipfile we have insufficient
-                # information to determine if a branch or ref has actually changed.
+            elif match.has_metadata("direct_url.json"):
+                # Direct URL installs we assume are not satisfied since we may be
+                # installing from Pipfile and have insufficient information to determine
+                # if the content has changed.
                 return False
             return True
         return False

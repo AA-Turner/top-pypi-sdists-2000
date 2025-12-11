@@ -16,6 +16,7 @@ from starlette.routing import BaseRoute
 from langgraph_api import store as api_store
 from langgraph_api.api.encryption_middleware import (
     decrypt_response,
+    decrypt_responses,
     encrypt_request,
 )
 from langgraph_api.feature_flags import FF_USE_CORE_API, USE_RUNTIME_CONTEXT_API
@@ -241,7 +242,7 @@ async def search_assistants(
     )
 
     # Decrypt metadata, config, and context in all returned assistants
-    decrypted_assistants = await decrypt_response(
+    decrypted_assistants = await decrypt_responses(
         assistants,
         "assistant",
         ["metadata", "config", "context"],
@@ -509,7 +510,7 @@ async def get_assistant_versions(request: ApiRequest) -> ApiResponse:
         )
 
     # Decrypt metadata, config, and context in all assistant versions
-    decrypted_assistants = await decrypt_response(
+    decrypted_assistants = await decrypt_responses(
         assistants,
         "assistant",
         ["metadata", "config", "context"],

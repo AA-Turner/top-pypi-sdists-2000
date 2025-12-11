@@ -33,11 +33,9 @@ async def cron_scheduler():
                         run_payload = json_loads(run_payload)
                     run_payload = cast("dict", run_payload)
 
-                    # Decrypt payload.metadata and payload.context (encrypted as "run" model type)
-                    if run_payload.get("metadata") or run_payload.get("context"):
-                        run_payload = await decrypt_response(
-                            run_payload, "run", ["metadata", "context"]
-                        )
+                    run_payload = await decrypt_response(
+                        run_payload, "cron", ["metadata", "context", "input", "config"]
+                    )
 
                     if on_run_completed == "keep":
                         run_payload.setdefault("on_completion", "keep")  # type: ignore[union-attr]

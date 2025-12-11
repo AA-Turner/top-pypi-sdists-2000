@@ -7,6 +7,8 @@ import functools
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any, overload
 
+import orjson
+import structlog
 from google.protobuf.json_format import MessageToDict
 from google.protobuf.struct_pb2 import Struct  # type: ignore[import]
 from grpc import StatusCode
@@ -14,12 +16,17 @@ from grpc.aio import AioRpcError
 from langgraph_sdk.schema import Config
 from starlette.exceptions import HTTPException
 
+from langgraph_api.auth.custom import handle_event as auth_handle_event
+from langgraph_api.grpc.generated import core_api_pb2 as pb
 from langgraph_api.serde import json_dumpb
+from langgraph_api.utils import get_auth_ctx
 
 if TYPE_CHECKING:
     from langgraph_api.schema import Context
 
 __all__ = ["Assistants", "Threads"]
+
+logger = structlog.stdlib.get_logger(__name__)
 
 GRPC_STATUS_TO_HTTP_STATUS = {
     StatusCode.NOT_FOUND: HTTPStatus.NOT_FOUND,
@@ -122,6 +129,108 @@ def _handle_grpc_error(error: AioRpcError) -> None:
     )
 
 
+def _serialize_filter_value(value: Any) -> str:
+    """Serialize a filter value to a valid JSON string for JSONB comparison.
+
+    Uses orjson for serialization to handle UUIDs, datetimes, etc.
+    All values are returned as valid JSON strings that can be parsed with ::jsonb.
+
+    Examples:
+        "johndoe" -> '"johndoe"' (JSON string)
+        uuid.UUID("...") -> '"uuid-string"' (JSON string)
+        datetime(...) -> '"2024-03-15T12:15:00+00:00"' (JSON string)
+        42 -> '42' (JSON number)
+        {"foo": "bar"} -> '{"foo": "bar"}' (JSON object)
+    """
+    # Serialize everything with orjson to get valid JSON
+    json_bytes = orjson.dumps(value)
+    return json_bytes.decode("utf-8")
+
+
+def _filters_to_proto(filters: dict[str, Any] | None) -> list[pb.AuthFilter]:
+    """Convert Python auth filters to gRPC proto format.
+
+    We have some weird auth semantics today:
+    - Objects are supported in the $eq operator, but not in the $contains operator or default case.
+    - List of numbers in contains don't work anywhere. This is fine and can be removed in the future.
+    - Odd nesting doesn't work anywhere (e.g. filter {"outer_key": "inner_value"} won't match on {"outer_key": {"inner_key": "inner_value"}})
+
+    Args:
+        filters: Python dict with filter values, e.g., {"owner": "user123"}
+
+    Returns:
+        List of AuthFilter proto messages, empty list if no filters
+    """
+    if not filters:
+        return []
+
+    proto_filters: list[pb.AuthFilter] = []
+
+    for key, filter_value in filters.items():
+        auth_filter = pb.AuthFilter()
+
+        if key == "$or":
+            # Recursively convert each filter and flatten the results
+            nested_filters = []
+            for filter_dict in filter_value:
+                nested_filters.extend(_filters_to_proto(filter_dict))
+            auth_filter.or_filter.CopyFrom(pb.OrAuthFilter(filters=nested_filters))
+            proto_filters.append(auth_filter)
+        elif key == "$and":
+            # Recursively convert each filter and flatten the results
+            nested_filters = []
+            for filter_dict in filter_value:
+                nested_filters.extend(_filters_to_proto(filter_dict))
+            auth_filter.and_filter.CopyFrom(pb.AndAuthFilter(filters=nested_filters))
+            proto_filters.append(auth_filter)
+        else:
+            # We expect one key in the dict with a specific known value
+            if isinstance(filter_value, dict):
+                if len(filter_value.keys()) != 1:
+                    logger.error(
+                        "Error parsing filter: filter_value is not a dict with one key"
+                    )
+                    raise HTTPException(
+                        status_code=500,
+                        detail="Your auth handler returned a filter with an invalid value. The value must be a dict with one key. Check the filter returned by your auth handler.",
+                    )
+
+                operator = next(iter(filter_value.keys()))
+                value = filter_value[operator]
+
+                if operator == "$eq":
+                    matchstr = _serialize_filter_value(value)
+                    auth_filter.eq.CopyFrom(pb.EqAuthFilter(key=key, match=matchstr))
+                elif operator == "$contains":
+                    if isinstance(value, list):
+                        matches = [_serialize_filter_value(item) for item in value]
+                        auth_filter.contains.CopyFrom(
+                            pb.ContainsAuthFilter(key=key, matches=matches)
+                        )
+                    else:
+                        # If the value itself is not a list, wrap it as a single-item list
+                        serialized = _serialize_filter_value(value)
+                        auth_filter.contains.CopyFrom(
+                            pb.ContainsAuthFilter(key=key, matches=[serialized])
+                        )
+                else:
+                    logger.error(
+                        "Error parsing filter: operator is not $eq or $contains"
+                    )
+                    raise HTTPException(
+                        status_code=500,
+                        detail="Your auth handler returned a filter with an invalid key. The key must be one of $eq or $contains. Check the filter returned by your auth handler.",
+                    )
+            # Otherwise, it's the default case - simple value means equality check
+            else:
+                # Serialize with orjson (for proper datetime/UUID handling), then unwrap if it's a JSON string
+                matchstr = _serialize_filter_value(filter_value)
+                auth_filter.eq.CopyFrom(pb.EqAuthFilter(key=key, match=matchstr))
+            proto_filters.append(auth_filter)
+
+    return proto_filters
+
+
 class Authenticated:
     """Base class for authenticated operations (matches storage_postgres interface)."""
 
@@ -133,11 +242,40 @@ class Authenticated:
         ctx: Any,  # Auth context
         action: str,
         value: Any,
-    ) -> dict[str, Any] | None:
-        """Handle authentication event - stub implementation for now."""
-        # TODO: Implement proper auth handling that converts auth context
-        # to gRPC AuthFilter format when needed
-        return None
+    ) -> list[pb.AuthFilter]:
+        """Handle authentication event and convert filters to gRPC proto format.
+
+        Args:
+            ctx: Auth context (from get_auth_ctx())
+            action: Action being performed (e.g., "create", "read", "update", "delete", "search")
+            value: Value being operated on
+
+        Returns:
+            List of AuthFilter proto messages, empty list if no filters
+        """
+        # Get auth context if not provided
+        if ctx is None:
+            ctx = get_auth_ctx()
+
+        # If still no context, no auth filters needed
+        if ctx is None:
+            return []
+
+        # Create auth context for the handler
+        from langgraph_sdk import Auth
+
+        auth_ctx = Auth.types.AuthContext(
+            resource=cls.resource,
+            action=action,
+            user=ctx.user,
+            permissions=ctx.permissions,
+        )
+
+        # Call the auth system to get filters
+        filters = await auth_handle_event(auth_ctx, value)
+
+        # Convert Python filters to gRPC proto format
+        return _filters_to_proto(filters)
 
 
 def grpc_error_guard(cls):

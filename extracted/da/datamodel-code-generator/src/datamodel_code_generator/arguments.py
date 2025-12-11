@@ -399,7 +399,7 @@ typing_options.add_argument(
 )
 typing_options.add_argument(
     "--use-specialized-enum",
-    help="Don't use specialized Enum class (StrEnum, IntEnum) even if the target Python version supports it",
+    help="Use specialized Enum class (StrEnum, IntEnum). Requires --target-python-version 3.11+",
     action=BooleanOptionalAction,
     default=None,
 )
@@ -545,6 +545,12 @@ field_options.add_argument(
     "--no-alias",
     help="""Do not add a field alias. E.g., if --snake-case-field is used along with a base class, which has an
             alias_generator""",
+    action="store_true",
+    default=None,
+)
+field_options.add_argument(
+    "--use-frozen-field",
+    help="Use Field(frozen=True) for readOnly fields (Pydantic v2) or Field(allow_mutation=False) (Pydantic v1)",
     action="store_true",
     default=None,
 )

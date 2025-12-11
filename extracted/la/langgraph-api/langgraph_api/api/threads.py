@@ -7,6 +7,7 @@ from starlette.routing import BaseRoute
 
 from langgraph_api.api.encryption_middleware import (
     decrypt_response,
+    decrypt_responses,
     encrypt_request,
 )
 from langgraph_api.feature_flags import FF_USE_CORE_API
@@ -119,7 +120,7 @@ async def search_threads(
     )
 
     # Decrypt metadata, values, interrupts, and error in all returned threads
-    decrypted_threads = await decrypt_response(
+    decrypted_threads = await decrypt_responses(
         threads,
         "thread",
         ["metadata", "values", "interrupts", "error"],
@@ -370,7 +371,14 @@ async def copy_thread(request: ApiRequest):
     thread_id = request.path_params["thread_id"]
     async with connect() as conn:
         iter = await CrudThreads.copy(conn, thread_id)
-    return ApiResponse(await fetchone(iter, not_found_code=409))
+    thread_data = await fetchone(iter, not_found_code=409)
+    # Decrypt metadata, values, interrupts, and error in response
+    thread_data = await decrypt_response(
+        thread_data,
+        "thread",
+        ["metadata", "values", "interrupts", "error"],
+    )
+    return ApiResponse(thread_data)
 
 
 @retry_db

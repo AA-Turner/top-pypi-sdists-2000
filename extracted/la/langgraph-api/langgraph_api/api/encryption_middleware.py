@@ -25,7 +25,7 @@ from langgraph_api.encryption.custom import (
     ModelType,
     get_encryption_instance,
 )
-from langgraph_api.serde import json_loads
+from langgraph_api.serde import Fragment, json_loads
 
 if TYPE_CHECKING:
     from langgraph_sdk import Encryption
@@ -223,7 +223,12 @@ async def _decrypt_field(
     """Decrypt a single field, returning (field_name, decrypted_value).
 
     Special handling for 'config' field: also decrypts config['configurable']
-    since the ops layer syncs context into config['configurable'].
+    (synced from context by the ops layer) and config['metadata'] (merged from
+    assistant/thread/run metadata).
+
+    Special handling for 'kwargs' field: also decrypts kwargs['input'],
+    kwargs['config'], and kwargs['context'] since these are encrypted
+    separately during run creation.
 
     Returns (field_name, None) if field doesn't exist or is falsy.
     """
@@ -231,8 +236,19 @@ async def _decrypt_field(
         return (field_name, obj.get(field_name))
 
     value = obj[field_name]
-    if not isinstance(value, dict):
+    # Database fields come back as either:
+    # - dict: already parsed JSONB (psycopg JSON adapter)
+    # - bytes/bytearray/memoryview/str: raw JSON to parse (psycopg binary mode)
+    # - Fragment: wrapper around bytes (used by serde layer)
+    if isinstance(value, dict):
+        pass  # already parsed
+    elif isinstance(value, (bytes, bytearray, memoryview, str, Fragment)):
         value = json_loads(value)
+    else:
+        raise TypeError(
+            f"Cannot decrypt field '{field_name}': expected dict or JSON-serialized "
+            f"bytes/str, got {type(value).__name__}"
+        )
 
     decrypted = await decrypt_json_if_needed(
         value, encryption_instance, model_type, field=field_name
@@ -240,12 +256,27 @@ async def _decrypt_field(
 
     # Special case: config['configurable'] is synced from context by the ops layer,
     # so it may contain encrypted data that needs decryption.
+    # config['metadata'] is merged from assistant/thread/run metadata, so also needs decryption.
     if field_name == "config" and isinstance(decrypted, dict):
         configurable = decrypted.get("configurable")
         if configurable and isinstance(configurable, dict):
             decrypted["configurable"] = await decrypt_json_if_needed(
                 configurable, encryption_instance, model_type, field="context"
             )
+        metadata = decrypted.get("metadata")
+        if metadata and isinstance(metadata, dict):
+            decrypted["metadata"] = await decrypt_json_if_needed(
+                metadata, encryption_instance, model_type, field="metadata"
+            )
+
+    # Special case: kwargs contains encrypted subfields (input, config, context, command)
+    # that were encrypted separately during run creation.
+    if field_name == "kwargs" and isinstance(decrypted, dict):
+        for subfield in ["input", "config", "context", "command"]:
+            if subfield in decrypted:
+                _, decrypted[subfield] = await _decrypt_field(
+                    decrypted, subfield, encryption_instance, model_type
+                )
 
     return (field_name, decrypted)
 
@@ -272,49 +303,85 @@ async def _decrypt_object(
 
 
 async def decrypt_response(
-    objects: list[dict[str, Any]] | dict[str, Any],
+    obj: dict[str, Any],
     model_type: ModelType,
     fields: list[str],
     encryption_instance: Encryption | None = None,
-) -> list[dict[str, Any]] | dict[str, Any]:
-    """Decrypt specified fields in response objects (from database).
+) -> dict[str, Any]:
+    """Decrypt specified fields in a response object (from database).
 
-    This is a generic helper that handles decryption for any object type.
-    It automatically handles JSON parsing from bytes/memoryview/Fragment.
+    IMPORTANT: This function only parses and decrypts fields when encryption is
+    enabled. When encryption is disabled, fields are returned unchanged (as bytes
+    if that's how they came from the DB). This is intentional: some fields can be
+    very large, and we want to avoid parsing overhead when the bytes can be passed
+    through directly to the response. Callers that need parsed dicts regardless of
+    encryption state should use json_loads() on the fields they need to inspect.
+
+    When encryption IS enabled, this parses bytes/memoryview/Fragment to dicts
+    before decryption.
 
     Special handling: When 'config' is in fields, also decrypts config['configurable']
     since the ops layer syncs context into config['configurable'].
 
     Args:
-        objects: Single dict or list of dicts from database
+        obj: Single dict from database (fields may be bytes or already-parsed dicts)
         model_type: Type identifier passed to EncryptionContext.model (e.g., "run", "cron", "thread")
         fields: List of field names to decrypt (e.g., ["metadata", "kwargs"])
         encryption_instance: Optional encryption instance (auto-fetched if None)
 
     Returns:
-        Same structure as input (single dict or list) with decrypted fields
+        The same dict, with fields decrypted (and parsed) only if encryption is enabled
+    """
+    if encryption_instance is None:
+        encryption_instance = get_encryption_instance()
+        if encryption_instance is None:
+            return obj
 
-    Example:
-        runs = await decrypt_response(
-            runs_list,
-            "run",
-            ["metadata", "kwargs"]
-        )
+    await _decrypt_object(obj, model_type, fields, encryption_instance)
+    return obj
+
+
+async def decrypt_responses(
+    objects: list[dict[str, Any]],
+    model_type: ModelType,
+    fields: list[str],
+    encryption_instance: Encryption | None = None,
+) -> list[dict[str, Any]]:
+    """Decrypt specified fields in multiple response objects (from database).
+
+    IMPORTANT: This function only parses and decrypts fields when encryption is
+    enabled. When encryption is disabled, fields are returned unchanged (as bytes
+    if that's how they came from the DB). This is intentional: some fields can be
+    very large, and we want to avoid parsing overhead when the bytes can be passed
+    through directly to the response. Callers that need parsed dicts regardless of
+    encryption state should use json_loads() on the fields they need to inspect.
+
+    When encryption IS enabled, this parses bytes/memoryview/Fragment to dicts
+    before decryption.
+
+    Special handling: When 'config' is in fields, also decrypts config['configurable']
+    since the ops layer syncs context into config['configurable'].
+
+    Args:
+        objects: List of dicts from database (fields may be bytes or already-parsed dicts)
+        model_type: Type identifier passed to EncryptionContext.model (e.g., "run", "cron", "thread")
+        fields: List of field names to decrypt (e.g., ["metadata", "kwargs"])
+        encryption_instance: Optional encryption instance (auto-fetched if None)
+
+    Returns:
+        The same list, with fields decrypted (and parsed) only if encryption is enabled
     """
     if encryption_instance is None:
         encryption_instance = get_encryption_instance()
         if encryption_instance is None:
             return objects
 
-    if isinstance(objects, dict):
-        await _decrypt_object(objects, model_type, fields, encryption_instance)
-    else:
-        await asyncio.gather(
-            *[
-                _decrypt_object(obj, model_type, fields, encryption_instance)
-                for obj in objects
-            ]
-        )
+    await asyncio.gather(
+        *[
+            _decrypt_object(obj, model_type, fields, encryption_instance)
+            for obj in objects
+        ]
+    )
     return objects
 
 

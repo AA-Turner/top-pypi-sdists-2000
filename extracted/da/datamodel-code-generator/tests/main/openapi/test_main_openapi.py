@@ -133,6 +133,82 @@ def test_main_openapi_discriminator_enum_duplicate(output_file: Path) -> None:
     )
 
 
+@pytest.mark.skipif(
+    black.__version__.split(".")[0] == "19",
+    reason="Installed black doesn't support the old style",
+)
+def test_main_openapi_discriminator_enum_single_value(output_file: Path) -> None:
+    """Single-value enum discriminator with allOf inheritance."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "discriminator_enum_single_value.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "discriminator" / "enum_single_value.py",
+        extra_args=["--target-python-version", "3.10", "--output-model-type", "pydantic_v2.BaseModel"],
+    )
+
+
+@pytest.mark.skipif(
+    black.__version__.split(".")[0] == "19",
+    reason="Installed black doesn't support the old style",
+)
+def test_main_openapi_discriminator_enum_single_value_use_enum(output_file: Path) -> None:
+    """Single-value enum with allOf + --use-enum-values-in-discriminator."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "discriminator_enum_single_value.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "discriminator" / "enum_single_value_use_enum.py",
+        extra_args=[
+            "--target-python-version",
+            "3.10",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-enum-values-in-discriminator",
+        ],
+    )
+
+
+@pytest.mark.skipif(
+    black.__version__.split(".")[0] == "19",
+    reason="Installed black doesn't support the old style",
+)
+def test_main_openapi_discriminator_enum_single_value_anyof(output_file: Path) -> None:
+    """Single-value enum discriminator with anyOf - uses enum value, not model name."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "discriminator_enum_single_value_anyof.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "discriminator" / "enum_single_value_anyof.py",
+        extra_args=["--target-python-version", "3.10", "--output-model-type", "pydantic_v2.BaseModel"],
+    )
+
+
+@pytest.mark.skipif(
+    black.__version__.split(".")[0] == "19",
+    reason="Installed black doesn't support the old style",
+)
+def test_main_openapi_discriminator_enum_single_value_anyof_use_enum(output_file: Path) -> None:
+    """Single-value enum with anyOf + --use-enum-values-in-discriminator."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "discriminator_enum_single_value_anyof.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "discriminator" / "enum_single_value_anyof_use_enum.py",
+        extra_args=[
+            "--target-python-version",
+            "3.10",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-enum-values-in-discriminator",
+        ],
+    )
+
+
 def test_main_openapi_discriminator_with_properties(output_file: Path) -> None:
     """Test OpenAPI generation with discriminator properties."""
     run_main_and_assert(
@@ -1078,6 +1154,18 @@ def test_main_openapi_nullable_strict_nullable(output_file: Path) -> None:
         assert_func=assert_file_content,
         expected_file="nullable_strict_nullable.py",
         extra_args=["--strict-nullable"],
+    )
+
+
+def test_main_openapi_ref_nullable_strict_nullable(output_file: Path) -> None:
+    """Test that nullable attribute from $ref schema is propagated."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "ref_nullable.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="ref_nullable_strict_nullable.py",
+        extra_args=["--strict-nullable", "--use-union-operator"],
     )
 
 
@@ -3318,3 +3406,60 @@ def test_main_allof_enum_ref(output_file: Path) -> None:
         input_file_type=None,
         assert_func=assert_file_content,
     )
+
+
+@pytest.mark.skipif(
+    version.parse(pydantic.VERSION) < version.parse("2.0.0"),
+    reason="Require Pydantic version 2.0.0 or later",
+)
+def test_main_openapi_module_class_name_collision_pydantic_v2(output_dir: Path) -> None:
+    """Test Issue #1994: module and class name collision (e.g., A.A schema)."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "module_class_name_collision" / "openapi.json",
+        output_path=output_dir,
+        expected_directory=EXPECTED_OPENAPI_PATH / "module_class_name_collision",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--openapi-scopes",
+            "schemas",
+            "--openapi-scopes",
+            "paths",
+        ],
+    )
+
+
+@pytest.mark.skipif(
+    version.parse(pydantic.VERSION) < version.parse("2.0.0"),
+    reason="Require Pydantic version 2.0.0 or later",
+)
+def test_main_openapi_module_class_name_collision_deep_pydantic_v2(output_dir: Path) -> None:
+    """Test Issue #1994: deep module collision (e.g., A.B.B schema)."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "module_class_name_collision_deep" / "openapi.json",
+        output_path=output_dir,
+        expected_directory=EXPECTED_OPENAPI_PATH / "module_class_name_collision_deep",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--openapi-scopes",
+            "schemas",
+            "--openapi-scopes",
+            "paths",
+        ],
+    )
+
+
+def test_main_nested_package_enum_default(output_dir: Path) -> None:
+    """Test enum default values use short names in same module with nested package paths."""
+    with freeze_time(TIMESTAMP):
+        run_main_and_assert(
+            input_path=OPEN_API_DATA_PATH / "nested_package_enum_default.json",
+            output_path=output_dir,
+            expected_directory=EXPECTED_OPENAPI_PATH / "nested_package_enum_default",
+            extra_args=[
+                "--output-model-type",
+                "dataclasses.dataclass",
+                "--set-default-enum-member",
+            ],
+        )

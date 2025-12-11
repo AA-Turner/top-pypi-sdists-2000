@@ -194,7 +194,7 @@ class ChannelVersions(_message.Message):
     def __init__(self, channel_versions: _Optional[_Mapping[str, str]] = ...) -> None: ...
 
 class EngineRunnableConfig(_message.Message):
-    __slots__ = ("tags", "metadata_json", "run_name", "max_concurrency", "recursion_limit", "run_id", "extra_configurable_json", "extra_json", "runtime", "resuming", "task_id", "thread_id", "checkpoint_map", "checkpoint_id", "checkpoint_ns", "durability", "resume_map", "graph_id", "run_attempt", "server_run_id")
+    __slots__ = ("tags", "metadata_json", "run_name", "max_concurrency", "recursion_limit", "run_id", "extra_configurable_json", "extra_json", "runtime", "resuming", "task_id", "thread_id", "checkpoint_map", "checkpoint_id", "checkpoint_ns", "durability", "resume_map", "graph_id", "stream", "run_attempt", "server_run_id")
     class MetadataJsonEntry(_message.Message):
         __slots__ = ("key", "value")
         KEY_FIELD_NUMBER: _ClassVar[int]
@@ -248,6 +248,7 @@ class EngineRunnableConfig(_message.Message):
     DURABILITY_FIELD_NUMBER: _ClassVar[int]
     RESUME_MAP_FIELD_NUMBER: _ClassVar[int]
     GRAPH_ID_FIELD_NUMBER: _ClassVar[int]
+    STREAM_FIELD_NUMBER: _ClassVar[int]
     RUN_ATTEMPT_FIELD_NUMBER: _ClassVar[int]
     SERVER_RUN_ID_FIELD_NUMBER: _ClassVar[int]
     tags: _containers.RepeatedScalarFieldContainer[str]
@@ -268,9 +269,10 @@ class EngineRunnableConfig(_message.Message):
     durability: _enum_durability_pb2.Durability
     resume_map: _containers.MessageMap[str, SerializedValue]
     graph_id: str
+    stream: bool
     run_attempt: int
     server_run_id: str
-    def __init__(self, tags: _Optional[_Iterable[str]] = ..., metadata_json: _Optional[_Mapping[str, bytes]] = ..., run_name: _Optional[str] = ..., max_concurrency: _Optional[int] = ..., recursion_limit: _Optional[int] = ..., run_id: _Optional[str] = ..., extra_configurable_json: _Optional[_Mapping[str, bytes]] = ..., extra_json: _Optional[_Mapping[str, bytes]] = ..., runtime: _Optional[_Union[Runtime, _Mapping]] = ..., resuming: bool = ..., task_id: _Optional[str] = ..., thread_id: _Optional[str] = ..., checkpoint_map: _Optional[_Mapping[str, str]] = ..., checkpoint_id: _Optional[str] = ..., checkpoint_ns: _Optional[str] = ..., durability: _Optional[_Union[_enum_durability_pb2.Durability, str]] = ..., resume_map: _Optional[_Mapping[str, SerializedValue]] = ..., graph_id: _Optional[str] = ..., run_attempt: _Optional[int] = ..., server_run_id: _Optional[str] = ...) -> None: ...
+    def __init__(self, tags: _Optional[_Iterable[str]] = ..., metadata_json: _Optional[_Mapping[str, bytes]] = ..., run_name: _Optional[str] = ..., max_concurrency: _Optional[int] = ..., recursion_limit: _Optional[int] = ..., run_id: _Optional[str] = ..., extra_configurable_json: _Optional[_Mapping[str, bytes]] = ..., extra_json: _Optional[_Mapping[str, bytes]] = ..., runtime: _Optional[_Union[Runtime, _Mapping]] = ..., resuming: bool = ..., task_id: _Optional[str] = ..., thread_id: _Optional[str] = ..., checkpoint_map: _Optional[_Mapping[str, str]] = ..., checkpoint_id: _Optional[str] = ..., checkpoint_ns: _Optional[str] = ..., durability: _Optional[_Union[_enum_durability_pb2.Durability, str]] = ..., resume_map: _Optional[_Mapping[str, SerializedValue]] = ..., graph_id: _Optional[str] = ..., stream: bool = ..., run_attempt: _Optional[int] = ..., server_run_id: _Optional[str] = ...) -> None: ...
 
 class Runtime(_message.Message):
     __slots__ = ("langgraph_context_json",)
@@ -683,3 +685,16 @@ class PathSegment(_message.Message):
     int_value: int
     bool_value: bool
     def __init__(self, string_value: _Optional[str] = ..., int_value: _Optional[int] = ..., bool_value: bool = ...) -> None: ...
+
+class StaticInterruptConfig(_message.Message):
+    __slots__ = ("all", "node_names")
+    class NodeNames(_message.Message):
+        __slots__ = ("names",)
+        NAMES_FIELD_NUMBER: _ClassVar[int]
+        names: _containers.RepeatedScalarFieldContainer[str]
+        def __init__(self, names: _Optional[_Iterable[str]] = ...) -> None: ...
+    ALL_FIELD_NUMBER: _ClassVar[int]
+    NODE_NAMES_FIELD_NUMBER: _ClassVar[int]
+    all: bool
+    node_names: StaticInterruptConfig.NodeNames
+    def __init__(self, all: bool = ..., node_names: _Optional[_Union[StaticInterruptConfig.NodeNames, _Mapping]] = ...) -> None: ...

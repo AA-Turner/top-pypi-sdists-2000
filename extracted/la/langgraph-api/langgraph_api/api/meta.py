@@ -92,6 +92,9 @@ async def meta_metrics(request: ApiRequest):
                         "# HELP lg_api_pending_runs_wait_time_med The median pending wait time across runs, in seconds.",
                         "# TYPE lg_api_pending_runs_wait_time_med gauge",
                         f'lg_api_pending_runs_wait_time_med{{project_id="{metadata.PROJECT_ID}", revision_id="{metadata.HOST_REVISION_ID}"}} {queue_stats.get("pending_runs_wait_time_med_secs") or 0}',
+                        "# HELP lg_api_pending_unblocked_runs_wait_time_max The maximum time a run has been pending excluding runs blocked by another run on the same thread, in seconds.",
+                        "# TYPE lg_api_pending_unblocked_runs_wait_time_max gauge",
+                        f'lg_api_pending_unblocked_runs_wait_time_max{{project_id="{metadata.PROJECT_ID}", revision_id="{metadata.HOST_REVISION_ID}"}} {queue_stats.get("pending_unblocked_runs_wait_time_max_secs") or 0}',
                     ]
                 )
         except Exception as e:
