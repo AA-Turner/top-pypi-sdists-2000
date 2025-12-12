@@ -30,6 +30,7 @@ __all__ = (
     "ResourceServiceName",
     "SecretsManagerServiceName",
     "ServiceName",
+    "SortByTypeType",
     "SortOrderTypeType",
     "StatusTypeType",
 )
@@ -39,6 +40,7 @@ FilterNameStringTypeType = Literal[
     "all", "description", "name", "owning-service", "primary-region", "tag-key", "tag-value"
 ]
 ListSecretsPaginatorName = Literal["list_secrets"]
+SortByTypeType = Literal["created-date", "last-accessed-date", "last-changed-date", "name"]
 SortOrderTypeType = Literal["asc", "desc"]
 StatusTypeType = Literal["Failed", "InProgress", "InSync"]
 SecretsManagerServiceName = Literal["secretsmanager"]

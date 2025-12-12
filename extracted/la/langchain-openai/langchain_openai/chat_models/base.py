@@ -846,9 +846,15 @@ class BaseChatOpenAI(BaseChatModel):
         if model_lower.startswith("o1") and "temperature" not in values:
             values["temperature"] = 1
 
-        # For gpt-5 models, handle temperature restrictions
-        # Note that gpt-5-chat models do support temperature
-        if model_lower.startswith("gpt-5") and "chat" not in model_lower:
+        # For gpt-5 models, handle temperature restrictions. Temperature is supported
+        # by gpt-5-chat and gpt-5 models with reasoning_effort='none' or
+        # reasoning={'effort': 'none'}.
+        if (
+            model_lower.startswith("gpt-5")
+            and ("chat" not in model_lower)
+            and values.get("reasoning_effort") != "none"
+            and (values.get("reasoning") or {}).get("effort") != "none"
+        ):
             temperature = values.get("temperature")
             if temperature is not None and temperature != 1:
                 # For gpt-5 (non-chat), only temperature=1 is supported
@@ -1815,8 +1821,8 @@ class BaseChatOpenAI(BaseChatModel):
 
         Args:
             tools: A list of tool definitions to bind to this chat model.
-                Supports any tool definition handled by
-                `langchain_core.utils.function_calling.convert_to_openai_tool`.
+
+                Supports any tool definition handled by [`convert_to_openai_tool`][langchain_core.utils.function_calling.convert_to_openai_tool].
             tool_choice: Which tool to require the model to call. Options are:
 
                 - `str` of the form `'<<tool_name>>'`: calls `<<tool_name>>` tool.
@@ -1886,9 +1892,10 @@ class BaseChatOpenAI(BaseChatModel):
             ):
                 # compat with langchain.agents.create_agent response_format, which is
                 # an approximation of OpenAI format
+                strict = response_format["json_schema"].get("strict", None)
                 response_format = cast(dict, response_format["json_schema"]["schema"])
             kwargs["response_format"] = _convert_to_openai_response_format(
-                response_format
+                response_format, strict=strict
             )
         return super().bind(tools=formatted_tools, **kwargs)
 
@@ -3018,6 +3025,7 @@ class ChatOpenAI(BaseChatOpenAI):  # type: ignore[override]
         method: Literal["function_calling", "json_mode", "json_schema"] = "json_schema",
         include_raw: bool = False,
         strict: bool | None = None,
+        tools: list | None = None,
         **kwargs: Any,
     ) -> Runnable[LanguageModelInput, _DictOrPydantic]:
         r"""Model wrapper that returns outputs formatted to match the given schema.
@@ -3411,7 +3419,12 @@ class ChatOpenAI(BaseChatOpenAI):  # type: ignore[override]
 
         """  # noqa: E501
         return super().with_structured_output(
-            schema, method=method, include_raw=include_raw, strict=strict, **kwargs
+            schema,
+            method=method,
+            include_raw=include_raw,
+            strict=strict,
+            tools=tools,
+            **kwargs,
         )
 
 
@@ -3738,8 +3751,14 @@ def _construct_responses_api_payload(
         payload["reasoning"] = {"effort": payload.pop("reasoning_effort")}
 
     # Remove temperature parameter for models that don't support it in responses API
+    # gpt-5-chat supports temperature, and gpt-5 models with reasoning.effort='none'
+    # also support temperature
     model = payload.get("model") or ""
-    if model.startswith("gpt-5") and "chat" not in model:  # gpt-5-chat supports
+    if (
+        model.startswith("gpt-5")
+        and ("chat" not in model)  # gpt-5-chat supports
+        and (payload.get("reasoning") or {}).get("effort") != "none"
+    ):
         payload.pop("temperature", None)
 
     payload["input"] = _construct_responses_api_input(messages)

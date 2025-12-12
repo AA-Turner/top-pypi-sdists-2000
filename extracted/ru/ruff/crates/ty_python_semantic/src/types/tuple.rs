@@ -23,6 +23,7 @@ use itertools::{Either, EitherOrBoth, Itertools};
 
 use crate::semantic_index::definition::Definition;
 use crate::subscript::{Nth, OutOfBoundsError, PyIndex, PySlice, StepSizeZeroError};
+use crate::types::builder::RecursivelyDefined;
 use crate::types::class::{ClassType, KnownClass};
 use crate::types::constraints::{ConstraintSet, IteratorConstraintsExtension};
 use crate::types::generics::InferableTypeVars;
@@ -287,6 +288,23 @@ impl<'db> TupleType<'db> {
         )
     }
 
+    pub(crate) fn is_disjoint_from_impl(
+        self,
+        db: &'db dyn Db,
+        other: Self,
+        inferable: InferableTypeVars<'_, 'db>,
+        disjointness_visitor: &IsDisjointVisitor<'db>,
+        relation_visitor: &HasRelationToVisitor<'db>,
+    ) -> ConstraintSet<'db> {
+        self.tuple(db).is_disjoint_from_impl(
+            db,
+            other.tuple(db),
+            inferable,
+            disjointness_visitor,
+            relation_visitor,
+        )
+    }
+
     pub(crate) fn is_equivalent_to_impl(
         self,
         db: &'db dyn Db,
@@ -346,6 +364,10 @@ impl<T> FixedLengthTuple<T> {
 
     pub(crate) fn elements_slice(&self) -> &[T] {
         &self.0
+    }
+
+    pub(crate) fn owned_elements(self) -> Box<[T]> {
+        self.0
     }
 
     pub(crate) fn elements(&self) -> impl DoubleEndedIterator<Item = &T> + ExactSizeIterator + '_ {
@@ -993,10 +1015,22 @@ impl<'db> VariableLengthTuple<Type<'db>> {
                             relation_visitor,
                             disjointness_visitor,
                         ),
-                        EitherOrBoth::Right(_) => {
+                        EitherOrBoth::Right(other_ty) => {
                             // The rhs has a required element that the lhs is not guaranteed to
-                            // provide.
-                            return ConstraintSet::from(false);
+                            // provide, unless the lhs has a dynamic variable-length portion
+                            // that can materialize to provide it (for assignability only),
+                            // as in `tuple[Any, ...]` matching `tuple[int, int]`.
+                            if !relation.is_assignability() || !self.variable.is_dynamic() {
+                                return ConstraintSet::from(false);
+                            }
+                            self.variable.has_relation_to_impl(
+                                db,
+                                other_ty,
+                                inferable,
+                                relation,
+                                relation_visitor,
+                                disjointness_visitor,
+                            )
                         }
                     };
                     if result
@@ -1032,10 +1066,22 @@ impl<'db> VariableLengthTuple<Type<'db>> {
                             relation_visitor,
                             disjointness_visitor,
                         ),
-                        EitherOrBoth::Right(_) => {
+                        EitherOrBoth::Right(other_ty) => {
                             // The rhs has a required element that the lhs is not guaranteed to
-                            // provide.
-                            return ConstraintSet::from(false);
+                            // provide, unless the lhs has a dynamic variable-length portion
+                            // that can materialize to provide it (for assignability only),
+                            // as in `tuple[Any, ...]` matching `tuple[int, int]`.
+                            if !relation.is_assignability() || !self.variable.is_dynamic() {
+                                return ConstraintSet::from(false);
+                            }
+                            self.variable.has_relation_to_impl(
+                                db,
+                                *other_ty,
+                                inferable,
+                                relation,
+                                relation_visitor,
+                                disjointness_visitor,
+                            )
                         }
                     };
                     if result
@@ -1458,7 +1504,7 @@ impl<'db> Tuple<Type<'db>> {
             // those techniques ensure that union elements are deduplicated and unions are eagerly simplified
             // into other types where necessary. Here, however, we know that there are no duplicates
             // in this union, so it's probably more efficient to use `UnionType::new()` directly.
-            Type::Union(UnionType::new(db, elements))
+            Type::Union(UnionType::new(db, elements, RecursivelyDefined::No))
         };
 
         TupleSpec::heterogeneous([

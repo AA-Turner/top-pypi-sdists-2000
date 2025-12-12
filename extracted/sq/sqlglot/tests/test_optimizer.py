@@ -244,6 +244,14 @@ class TestOptimizer(unittest.TestCase):
         )
 
     def test_qualify_tables(self):
+        tables = set()
+        optimizer.qualify.qualify(
+            parse_one("with foo AS (select * from bar) select * from foo join baz"),
+            qualify_columns=False,
+            on_qualify=lambda t: tables.add(t.name),
+        )
+        self.assertEqual(tables, {"bar", "baz"})
+
         self.assertEqual(
             optimizer.qualify.qualify(
                 parse_one("WITH tesT AS (SELECT * FROM t1) SELECT * FROM test", "bigquery"),
@@ -263,7 +271,7 @@ class TestOptimizer(unittest.TestCase):
                 db="db",
                 catalog="catalog",
             ).sql(),
-            "WITH cte AS (SELECT * FROM catalog.db.t AS t) SELECT * FROM cte AS cte PIVOT(SUM(c) FOR v IN ('x', 'y')) AS \"_0\"",
+            "WITH cte AS (SELECT * FROM catalog.db.t AS t) SELECT * FROM cte AS cte PIVOT(SUM(c) FOR v IN ('x', 'y')) AS _0",
         )
 
         self.assertEqual(
@@ -514,6 +522,48 @@ class TestOptimizer(unittest.TestCase):
                 quote_identifiers=False,
             ).sql("postgres"),
             "SELECT a.b_id AS b_id FROM a AS a JOIN b AS b ON a.b_id = b.b_id JOIN c AS c ON b.b_id = c.b_id JOIN d AS d ON b.d_id = d.d_id",
+        )
+
+        self.assertEqual(
+            optimizer.qualify.qualify(
+                parse_one(
+                    """
+                    SELECT
+                      (SELECT SUM(c.amount)
+                       FROM UNNEST(credits) AS c
+                       WHERE type != 'promotion') as total
+                    FROM billing
+                    """,
+                    read="bigquery",
+                ),
+                schema={"billing": {"credits": "ARRAY<STRUCT<amount FLOAT64, type STRING>>"}},
+                dialect="bigquery",
+            ).sql(dialect="bigquery"),
+            "SELECT (SELECT SUM(`c`.`amount`) AS `_col_0` FROM UNNEST(`billing`.`credits`) AS `c` WHERE `type` <> 'promotion') AS `total` FROM `billing` AS `billing`",
+        )
+
+        self.assertEqual(
+            optimizer.qualify.qualify(
+                parse_one(
+                    """
+                    WITH cte AS (SELECT * FROM base_table)
+                    SELECT
+                      (SELECT SUM(item.price)
+                       FROM UNNEST(items) AS item
+                       WHERE category = 'electronics') as electronics_total
+                    FROM cte
+                    """,
+                    read="bigquery",
+                ),
+                schema={
+                    "base_table": {
+                        "id": "INT64",
+                        "items": "ARRAY<STRUCT<price FLOAT64, category STRING>>",
+                    }
+                },
+                dialect="bigquery",
+            ).sql(dialect="bigquery"),
+            "WITH `cte` AS (SELECT `base_table`.`id` AS `id`, `base_table`.`items` AS `items` FROM `base_table` AS `base_table`) SELECT (SELECT SUM(`item`.`price`) AS `_col_0` FROM UNNEST(`cte`.`items`) AS `item` WHERE `category` = 'electronics') AS `electronics_total` FROM `cte` AS `cte`",
         )
 
         self.check_file(
@@ -979,7 +1029,10 @@ SELECT :with_,WITH :expressions,CTE :this,UNION :this,SELECT :expressions,1,:exp
             result = parse_and_optimize(annotate_types, sql, dialect, dialect=dialect)
 
             with self.subTest(title):
-                self.assertEqual(result.type.sql(), exp.DataType.build(expected).sql())
+                self.assertEqual(
+                    result.type.sql(dialect),
+                    exp.DataType.build(expected, dialect=dialect).sql(dialect),
+                )
 
     def test_annotate_funcs(self):
         test_schema = {
@@ -988,6 +1041,7 @@ SELECT :with_,WITH :expressions,CTE :this,UNION :this,SELECT :expressions,1,:exp
                 "str_col": "STRING",
                 "bignum_col": "BIGNUMERIC",
                 "date_col": "DATE",
+                "decfloat_col": "DECFLOAT",
                 "timestamp_col": "TIMESTAMP",
                 "double_col": "DOUBLE",
                 "bigint_col": "BIGINT",
@@ -1494,6 +1548,7 @@ SELECT :with_,WITH :expressions,CTE :this,UNION :this,SELECT :expressions,1,:exp
     def test_union_annotation(self):
         for left, right, expected_type in (
             ("SELECT 1::INT AS c", "SELECT 2::BIGINT AS c", "BIGINT"),
+            ("SELECT 1::INT AS c", "SELECT 2::BIGDECIMAL AS c", "BIGDECIMAL"),
             ("SELECT 1 AS c", "SELECT NULL AS c", "INT"),
             ("SELECT FOO() AS c", "SELECT 1 AS c", "UNKNOWN"),
             ("SELECT FOO() AS c", "SELECT BAR() AS c", "UNKNOWN"),
@@ -1551,6 +1606,40 @@ SELECT :with_,WITH :expressions,CTE :this,UNION :this,SELECT :expressions,1,:exp
             SELECT col FROM t;
         """
         self.assertEqual(optimizer.optimize(sql).selects[0].type.this, exp.DataType.Type.VARCHAR)
+
+        # BigQuery: STRING coerces to temporal types in UNION
+        for left, right, expected_type in (
+            ("SELECT '2010-01-01' AS c", "SELECT DATE '2020-02-02' AS c", "DATE"),
+            (
+                "SELECT '2010-01-01 00:00:00' AS c",
+                "SELECT DATETIME '2020-02-02 00:00:00' AS c",
+                "DATETIME",
+            ),
+            ("SELECT '00:00:00' AS c", "SELECT TIME '00:01:00' AS c", "TIME"),
+            (
+                "SELECT '2010-01-01 00:00:00' AS c",
+                "SELECT TIMESTAMP '2020-02-02 00:00:00' AS c",
+                "TIMESTAMP",
+            ),
+        ):
+            with self.subTest(f"left: {left}, right: {right}, expected: {expected_type}"):
+                lr = annotate_types(
+                    parse_one(
+                        f"SELECT t.c FROM ({left} UNION ALL {right}) t(c)", dialect="bigquery"
+                    ),
+                    dialect="bigquery",
+                )
+                rl = annotate_types(
+                    parse_one(
+                        f"SELECT t.c FROM ({right} UNION ALL {left}) t(c)", dialect="bigquery"
+                    ),
+                    dialect="bigquery",
+                )
+                assert (
+                    lr.selects[0].type
+                    == rl.selects[0].type
+                    == exp.DataType.build(expected_type, dialect="bigquery")
+                )
 
     def test_udtf_annotation(self):
         table_udtf = parse_one(
@@ -1898,3 +1987,15 @@ SELECT :with_,WITH :expressions,CTE :this,UNION :this,SELECT :expressions,1,:exp
         annotated = annotate_types(parse_one(binary_sql), schema={"t": {"a": "INT"}})
         self.assertEqual(annotated.sql(), binary_sql)
         self.assertEqual(annotated.selects[0].type.this, exp.DataType.Type.INT)
+
+    def test_null_coerce_annotation(self):
+        null_sql = "SELECT t.foo FROM (SELECT CAST(1 AS BIGDECIMAL) AS foo UNION ALL SELECT NULL AS foo) AS t"
+        annotated = parse_and_optimize(annotate_types, null_sql, "bigquery", dialect="bigquery")
+
+        self.assertEqual(annotated.sql(), null_sql)
+        self.assertEqual(annotated.selects[0].type.this, exp.DataType.Type.BIGDECIMAL)
+
+        null_sql = "SELECT t.foo FROM (SELECT NULL AS foo UNION ALL SELECT CAST(1 AS BIGDECIMAL) AS foo) AS t"
+        annotated = parse_and_optimize(annotate_types, null_sql, "bigquery", dialect="bigquery")
+        self.assertEqual(annotated.sql(), null_sql)
+        self.assertEqual(annotated.selects[0].type.this, exp.DataType.Type.BIGDECIMAL)

@@ -406,7 +406,7 @@ class Node(metaclass=jsii.JSIIMeta, jsii_type="constructs.Node"):
         return typing.cast("Node", jsii.sinvoke(cls, "of", [construct]))
 
     @jsii.member(jsii_name="addDependency")
-    def add_dependency(self, *deps: IDependable) -> None:
+    def add_dependency(self, *deps: "IDependable") -> None:
         '''Add an ordering dependency on another construct.
 
         An ``IDependable``
@@ -451,7 +451,7 @@ class Node(metaclass=jsii.JSIIMeta, jsii_type="constructs.Node"):
         return typing.cast(None, jsii.invoke(self, "addMetadata", [type, data, options]))
 
     @jsii.member(jsii_name="addValidation")
-    def add_validation(self, validation: IValidation) -> None:
+    def add_validation(self, validation: "IValidation") -> None:
         '''Adds a validation to this construct.
 
         When ``node.validate()`` is called, the ``validate()`` method will be called on
@@ -467,7 +467,7 @@ class Node(metaclass=jsii.JSIIMeta, jsii_type="constructs.Node"):
     @jsii.member(jsii_name="findAll")
     def find_all(
         self,
-        order: typing.Optional[ConstructOrder] = None,
+        order: typing.Optional["ConstructOrder"] = None,
     ) -> typing.List["IConstruct"]:
         '''Return this construct and all of its children in the given order.
 
@@ -662,12 +662,12 @@ class Node(metaclass=jsii.JSIIMeta, jsii_type="constructs.Node"):
 
     @builtins.property
     @jsii.member(jsii_name="metadata")
-    def metadata(self) -> typing.List[MetadataEntry]:
+    def metadata(self) -> typing.List["MetadataEntry"]:
         '''An immutable array of metadata objects associated with this construct.
 
         This can be used, for example, to implement support for deprecation notices, source mapping, etc.
         '''
-        return typing.cast(typing.List[MetadataEntry], jsii.get(self, "metadata"))
+        return typing.cast(typing.List["MetadataEntry"], jsii.get(self, "metadata"))
 
     @builtins.property
     @jsii.member(jsii_name="path")
@@ -747,7 +747,7 @@ class DependencyGroup(metaclass=jsii.JSIIMeta, jsii_type="constructs.DependencyG
     construct tree needs to be combined to be used as a single dependable.
     '''
 
-    def __init__(self, *deps: IDependable) -> None:
+    def __init__(self, *deps: "IDependable") -> None:
         '''
         :param deps: -
         '''
@@ -757,7 +757,7 @@ class DependencyGroup(metaclass=jsii.JSIIMeta, jsii_type="constructs.DependencyG
         jsii.create(self.__class__, self, [*deps])
 
     @jsii.member(jsii_name="add")
-    def add(self, *scopes: IDependable) -> None:
+    def add(self, *scopes: "IDependable") -> None:
         '''Add a construct to the dependency roots.
 
         :param scopes: -
@@ -774,7 +774,7 @@ class IConstruct(IDependable, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="node")
-    def node(self) -> Node:
+    def node(self) -> "Node":
         '''The tree node.'''
         ...
 
@@ -788,9 +788,9 @@ class _IConstructProxy(
 
     @builtins.property
     @jsii.member(jsii_name="node")
-    def node(self) -> Node:
+    def node(self) -> "Node":
         '''The tree node.'''
-        return typing.cast(Node, jsii.get(self, "node"))
+        return typing.cast("Node", jsii.get(self, "node"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConstruct).__jsii_proxy_class__ = lambda : _IConstructProxy
@@ -851,9 +851,9 @@ class Construct(metaclass=jsii.JSIIMeta, jsii_type="constructs.Construct"):
 
     @builtins.property
     @jsii.member(jsii_name="node")
-    def node(self) -> Node:
+    def node(self) -> "Node":
         '''The tree node.'''
-        return typing.cast(Node, jsii.get(self, "node"))
+        return typing.cast("Node", jsii.get(self, "node"))
 
 
 class RootConstruct(

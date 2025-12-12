@@ -23,7 +23,7 @@ from typing import IO, Any, Union
 
 from botocore.response import StreamingBody
 
-from .literals import FilterNameStringTypeType, SortOrderTypeType, StatusTypeType
+from .literals import FilterNameStringTypeType, SortByTypeType, SortOrderTypeType, StatusTypeType
 
 if sys.version_info >= (3, 12):
     from typing import NotRequired, TypedDict
@@ -239,6 +239,7 @@ class ListSecretsRequestTypeDef(TypedDict):
     NextToken: NotRequired[str]
     Filters: NotRequired[Sequence[FilterTypeDef]]
     SortOrder: NotRequired[SortOrderTypeType]
+    SortBy: NotRequired[SortByTypeType]
 
 class CancelRotateSecretResponseTypeDef(TypedDict):
     ARN: str
@@ -463,6 +464,7 @@ class ListSecretsRequestPaginateTypeDef(TypedDict):
     IncludePlannedDeletion: NotRequired[bool]
     Filters: NotRequired[Sequence[FilterTypeDef]]
     SortOrder: NotRequired[SortOrderTypeType]
+    SortBy: NotRequired[SortByTypeType]
     PaginationConfig: NotRequired[PaginatorConfigTypeDef]
 
 class ValidateResourcePolicyResponseTypeDef(TypedDict):

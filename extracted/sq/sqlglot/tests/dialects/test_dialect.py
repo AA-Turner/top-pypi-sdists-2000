@@ -618,6 +618,42 @@ class TestDialect(Validator):
             },
         )
 
+    def test_to_binary(self):
+        self.validate_all(
+            "TO_BINARY('1C')",
+            read={
+                "": "TO_BINARY('1C')",
+                "snowflake": "TO_BINARY('1C')",
+                "starrocks": "TO_BINARY('1C')",
+                "duckdb": "TO_BINARY('1C')",
+                "spark": "TO_BINARY('1C')",
+                "databricks": "TO_BINARY('1C')",
+            },
+            write={
+                "snowflake": "TO_BINARY('1C')",
+                "starrocks": "TO_BINARY('1C')",
+                "duckdb": "TO_BINARY('1C')",
+                "spark": "TO_BINARY('1C')",
+                "databricks": "TO_BINARY('1C')",
+            },
+        )
+        self.validate_all(
+            "TO_BINARY('1C', 'HEX')",
+            read={
+                "": "TO_BINARY('1C', 'HEX')",
+                "snowflake": "TO_BINARY('1C', 'HEX')",
+                "starrocks": "TO_BINARY('1C', 'HEX')",
+                "spark": "TO_BINARY('1C', 'HEX')",
+                "databricks": "TO_BINARY('1C', 'HEX')",
+            },
+            write={
+                "snowflake": "TO_BINARY('1C', 'HEX')",
+                "starrocks": "TO_BINARY('1C', 'HEX')",
+                "spark": "TO_BINARY('1C', 'HEX')",
+                "databricks": "TO_BINARY('1C', 'HEX')",
+            },
+        )
+
     def test_if_null(self):
         self.validate_all(
             "SELECT IFNULL(1, NULL) FROM foo",
@@ -858,7 +894,7 @@ class TestDialect(Validator):
         self.validate_all(
             "TIME_TO_STR(x, '%Y-%m-%d')",
             write={
-                "bigquery": "FORMAT_DATE('%Y-%m-%d', x)",
+                "bigquery": "FORMAT_DATE('%F', x)",
                 "drill": "TO_CHAR(x, 'yyyy-MM-dd')",
                 "duckdb": "STRFTIME(x, '%Y-%m-%d')",
                 "hive": "DATE_FORMAT(x, 'yyyy-MM-dd')",
@@ -3907,6 +3943,101 @@ FROM subquery2""",
             },
         )
 
+    def test_regr_count(self):
+        self.validate_all(
+            "REGR_COUNT(x, y)",
+            read={
+                "": "REGR_COUNT(x, y)",
+                "databricks": "REGR_COUNT(x, y)",
+                "duckdb": "REGR_COUNT(x, y)",
+                "exasol": "REGR_COUNT(x, y)",
+                "hive": "REGR_COUNT(x, y)",
+                "oracle": "REGR_COUNT(x, y)",
+                "postgres": "REGR_COUNT(x, y)",
+                "presto": "REGR_COUNT(x, y)",
+                "snowflake": "REGR_COUNT(x, y)",
+                "spark": "REGR_COUNT(x, y)",
+                "teradata": "REGR_COUNT(x, y)",
+                "trino": "REGR_COUNT(x, y)",
+            },
+            write={
+                "": "REGR_COUNT(x, y)",
+                "databricks": "REGR_COUNT(x, y)",
+                "duckdb": "REGR_COUNT(x, y)",
+                "exasol": "REGR_COUNT(x, y)",
+                "hive": "REGR_COUNT(x, y)",
+                "oracle": "REGR_COUNT(x, y)",
+                "postgres": "REGR_COUNT(x, y)",
+                "presto": "REGR_COUNT(x, y)",
+                "snowflake": "REGR_COUNT(x, y)",
+                "spark": "REGR_COUNT(x, y)",
+                "teradata": "REGR_COUNT(x, y)",
+                "trino": "REGR_COUNT(x, y)",
+            },
+        )
+
+    def test_regr_intercept(self):
+        self.validate_all(
+            "REGR_INTERCEPT(x, y)",
+            read={
+                "": "REGR_INTERCEPT(x, y)",
+                "databricks": "REGR_INTERCEPT(x, y)",
+                "duckdb": "REGR_INTERCEPT(x, y)",
+                "exasol": "REGR_INTERCEPT(x, y)",
+                "hive": "REGR_INTERCEPT(x, y)",
+                "oracle": "REGR_INTERCEPT(x, y)",
+                "postgres": "REGR_INTERCEPT(x, y)",
+                "presto": "REGR_INTERCEPT(x, y)",
+                "snowflake": "REGR_INTERCEPT(x, y)",
+                "spark": "REGR_INTERCEPT(x, y)",
+                "teradata": "REGR_INTERCEPT(x, y)",
+            },
+            write={
+                "": "REGR_INTERCEPT(x, y)",
+                "databricks": "REGR_INTERCEPT(x, y)",
+                "duckdb": "REGR_INTERCEPT(x, y)",
+                "exasol": "REGR_INTERCEPT(x, y)",
+                "hive": "REGR_INTERCEPT(x, y)",
+                "oracle": "REGR_INTERCEPT(x, y)",
+                "postgres": "REGR_INTERCEPT(x, y)",
+                "presto": "REGR_INTERCEPT(x, y)",
+                "snowflake": "REGR_INTERCEPT(x, y)",
+                "spark": "REGR_INTERCEPT(x, y)",
+                "teradata": "REGR_INTERCEPT(x, y)",
+            },
+        )
+
+    def test_regr_r2(self):
+        self.validate_all(
+            "REGR_R2(x, y)",
+            read={
+                "": "REGR_R2(x, y)",
+                "databricks": "REGR_R2(x, y)",
+                "duckdb": "REGR_R2(x, y)",
+                "exasol": "REGR_R2(x, y)",
+                "hive": "REGR_R2(x, y)",
+                "oracle": "REGR_R2(x, y)",
+                "postgres": "REGR_R2(x, y)",
+                "presto": "REGR_R2(x, y)",
+                "snowflake": "REGR_R2(x, y)",
+                "spark": "REGR_R2(x, y)",
+                "teradata": "REGR_R2(x, y)",
+            },
+            write={
+                "": "REGR_R2(x, y)",
+                "databricks": "REGR_R2(x, y)",
+                "duckdb": "REGR_R2(x, y)",
+                "exasol": "REGR_R2(x, y)",
+                "hive": "REGR_R2(x, y)",
+                "oracle": "REGR_R2(x, y)",
+                "postgres": "REGR_R2(x, y)",
+                "presto": "REGR_R2(x, y)",
+                "snowflake": "REGR_R2(x, y)",
+                "spark": "REGR_R2(x, y)",
+                "teradata": "REGR_R2(x, y)",
+            },
+        )
+
     def test_regr_slope(self):
         self.validate_all(
             "REGR_SLOPE(x, y)",
@@ -3935,6 +4066,99 @@ FROM subquery2""",
                 "spark": "REGR_SLOPE(x, y)",
                 "teradata": "REGR_SLOPE(x, y)",
                 "trino": "REGR_SLOPE(x, y)",
+            },
+        )
+
+    def test_regr_sxx(self):
+        self.validate_all(
+            "REGR_SXX(x, y)",
+            read={
+                "": "REGR_SXX(x, y)",
+                "databricks": "REGR_SXX(x, y)",
+                "duckdb": "REGR_SXX(x, y)",
+                "exasol": "REGR_SXX(x, y)",
+                "hive": "REGR_SXX(x, y)",
+                "oracle": "REGR_SXX(x, y)",
+                "postgres": "REGR_SXX(x, y)",
+                "presto": "REGR_SXX(x, y)",
+                "snowflake": "REGR_SXX(x, y)",
+                "spark": "REGR_SXX(x, y)",
+                "teradata": "REGR_SXX(x, y)",
+            },
+            write={
+                "": "REGR_SXX(x, y)",
+                "databricks": "REGR_SXX(x, y)",
+                "duckdb": "REGR_SXX(x, y)",
+                "exasol": "REGR_SXX(x, y)",
+                "hive": "REGR_SXX(x, y)",
+                "oracle": "REGR_SXX(x, y)",
+                "postgres": "REGR_SXX(x, y)",
+                "presto": "REGR_SXX(x, y)",
+                "snowflake": "REGR_SXX(x, y)",
+                "spark": "REGR_SXX(x, y)",
+                "teradata": "REGR_SXX(x, y)",
+            },
+        )
+
+    def test_regr_sxy(self):
+        self.validate_all(
+            "REGR_SXY(x, y)",
+            read={
+                "": "REGR_SXY(x, y)",
+                "databricks": "REGR_SXY(x, y)",
+                "duckdb": "REGR_SXY(x, y)",
+                "exasol": "REGR_SXY(x, y)",
+                "hive": "REGR_SXY(x, y)",
+                "oracle": "REGR_SXY(x, y)",
+                "postgres": "REGR_SXY(x, y)",
+                "presto": "REGR_SXY(x, y)",
+                "snowflake": "REGR_SXY(x, y)",
+                "spark": "REGR_SXY(x, y)",
+                "teradata": "REGR_SXY(x, y)",
+            },
+            write={
+                "": "REGR_SXY(x, y)",
+                "databricks": "REGR_SXY(x, y)",
+                "duckdb": "REGR_SXY(x, y)",
+                "exasol": "REGR_SXY(x, y)",
+                "hive": "REGR_SXY(x, y)",
+                "oracle": "REGR_SXY(x, y)",
+                "postgres": "REGR_SXY(x, y)",
+                "presto": "REGR_SXY(x, y)",
+                "snowflake": "REGR_SXY(x, y)",
+                "spark": "REGR_SXY(x, y)",
+                "teradata": "REGR_SXY(x, y)",
+            },
+        )
+
+    def test_regr_syy(self):
+        self.validate_all(
+            "REGR_SYY(x, y)",
+            read={
+                "": "REGR_SYY(x, y)",
+                "databricks": "REGR_SYY(x, y)",
+                "duckdb": "REGR_SYY(x, y)",
+                "exasol": "REGR_SYY(x, y)",
+                "hive": "REGR_SYY(x, y)",
+                "oracle": "REGR_SYY(x, y)",
+                "postgres": "REGR_SYY(x, y)",
+                "presto": "REGR_SYY(x, y)",
+                "snowflake": "REGR_SYY(x, y)",
+                "spark": "REGR_SYY(x, y)",
+                "teradata": "REGR_SYY(x, y)",
+            },
+            write={
+                "": "REGR_SYY(x, y)",
+                "databricks": "REGR_SYY(x, y)",
+                "duckdb": "REGR_SYY(x, y)",
+                "exasol": "REGR_SYY(x, y)",
+                "hive": "REGR_SYY(x, y)",
+                "oracle": "REGR_SYY(x, y)",
+                "postgres": "REGR_SYY(x, y)",
+                "presto": "REGR_SYY(x, y)",
+                "snowflake": "REGR_SYY(x, y)",
+                "spark": "REGR_SYY(x, y)",
+                "teradata": "REGR_SYY(x, y)",
             },
         )
 
@@ -4541,3 +4765,39 @@ FROM subquery2""",
                     select = parse_one(sql, dialect=dialect)
                     select.selects[0].assert_is(exp.Column)
                     self.assertEqual(select.sql(dialect), sql)
+
+    def test_current_catalog(self):
+        sql = "SELECT CURRENT_CATALOG"
+
+        unsupported_dialects = [
+            "bigquery",
+            "mysql",
+            "oracle",
+            "clickhouse",
+            "snowflake",
+            "spark",
+            "databricks",
+            "presto",
+        ]
+
+        for dialect in unsupported_dialects:
+            with self.subTest(f"Testing CURRENT_CATALOG as Column in {dialect}"):
+                select = parse_one(sql, dialect=dialect)
+                select.selects[0].assert_is(exp.Column)
+                self.assertEqual(select.sql(dialect), sql)
+
+        supported_dialects = [
+            "postgres",
+            "duckdb",
+            "trino",
+            "databricks",
+        ]
+
+        for dialect in supported_dialects:
+            with self.subTest(f"Testing CURRENT_CATALOG expression in {dialect}"):
+                if dialect == "databricks":
+                    sql = "SELECT CURRENT_CATALOG()"
+                select = parse_one(sql, dialect=dialect)
+                select.selects[0].assert_is(exp.CurrentCatalog)
+
+                self.assertEqual(select.sql(dialect), sql)

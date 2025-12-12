@@ -57,12 +57,13 @@ class TestBigQuery(Validator):
         self.assertEqual(select_with_quoted_udf.selects[0].name, "p.d.UdF")
 
         self.validate_identity("SELECT EXP(1)")
+        self.validate_identity("NET.HOST('http://example.com')").assert_is(exp.NetHost)
         self.validate_identity("DATE_TRUNC(x, @foo)").unit.assert_is(exp.Parameter)
         self.validate_identity("ARRAY_CONCAT_AGG(x ORDER BY ARRAY_LENGTH(x) LIMIT 2)")
         self.validate_identity("ARRAY_CONCAT_AGG(x LIMIT 2)")
         self.validate_identity("ARRAY_CONCAT_AGG(x ORDER BY ARRAY_LENGTH(x))")
         self.validate_identity("ARRAY_CONCAT_AGG(x)")
-        self.validate_identity("PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%E*S%z', x)")
+        self.validate_identity("PARSE_TIMESTAMP('%FT%H:%M:%E*S%z', x)")
         self.validate_identity("SELECT ARRAY_CONCAT([1])")
         self.validate_identity("SELECT * FROM READ_CSV('bla.csv')")
         self.validate_identity("CAST(x AS STRUCT<list ARRAY<INT64>>)")
@@ -199,7 +200,7 @@ class TestBigQuery(Validator):
             """WITH t AS (SELECT '{"x-y": "z"}' AS c) SELECT JSON_EXTRACT(c, '$.x-y') FROM t"""
         ).selects[0].expression.assert_is(exp.JSONPath)
         self.validate_identity(
-            "SELECT FORMAT_TIMESTAMP('%Y-%m-%d %H:%M:%S', CURRENT_TIMESTAMP(), 'Europe/Berlin') AS ts"
+            "SELECT FORMAT_TIMESTAMP('%F %T', CURRENT_TIMESTAMP(), 'Europe/Berlin') AS ts"
         )
         self.validate_identity(
             "SELECT cars, apples FROM some_table PIVOT(SUM(total_counts) FOR products IN ('general.cars' AS cars, 'food.apples' AS apples))"
@@ -427,7 +428,7 @@ LANGUAGE js AS
         self.validate_all(
             "PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%E6S%z', x)",
             write={
-                "bigquery": "PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%E6S%z', x)",
+                "bigquery": "PARSE_TIMESTAMP('%FT%H:%M:%E6S%z', x)",
                 "duckdb": "STRPTIME(x, '%Y-%m-%dT%H:%M:%S.%f%z')",
             },
         )
@@ -501,7 +502,7 @@ LANGUAGE js AS
         self.validate_all(
             "PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%E6S%z', x)",
             write={
-                "bigquery": "PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%E6S%z', x)",
+                "bigquery": "PARSE_TIMESTAMP('%FT%H:%M:%E6S%z', x)",
                 "duckdb": "STRPTIME(x, '%Y-%m-%dT%H:%M:%S.%f%z')",
             },
         )
@@ -2820,7 +2821,7 @@ OPTIONS (
             "SELECT REGEXP_EXTRACT(abc, 'pattern(group)', 2) FROM table",
             write={
                 "bigquery": "SELECT REGEXP_EXTRACT(abc, 'pattern(group)', 2) FROM table",
-                "duckdb": '''SELECT REGEXP_EXTRACT(SUBSTRING(abc, 2), 'pattern(group)', 1) FROM "table"''',
+                "duckdb": '''SELECT REGEXP_EXTRACT(NULLIF(SUBSTRING(abc, 2), ''), 'pattern(group)', 1) FROM "table"''',
             },
         )
 
@@ -2838,7 +2839,7 @@ OPTIONS (
             "SELECT REGEXP_EXTRACT(abc, 'pattern(group)', 2, 3) FROM table",
             write={
                 "bigquery": "SELECT REGEXP_EXTRACT(abc, 'pattern(group)', 2, 3) FROM table",
-                "duckdb": '''SELECT ARRAY_EXTRACT(REGEXP_EXTRACT_ALL(SUBSTRING(abc, 2), 'pattern(group)', 1), 3) FROM "table"''',
+                "duckdb": '''SELECT ARRAY_EXTRACT(REGEXP_EXTRACT_ALL(NULLIF(SUBSTRING(abc, 2), ''), 'pattern(group)', 1), 3) FROM "table"''',
             },
         )
 
@@ -2890,7 +2891,7 @@ OPTIONS (
         self.validate_all(
             "SELECT FORMAT_DATETIME('%Y%m%d %H:%M:%S', DATETIME '2023-12-25 15:30:00')",
             write={
-                "bigquery": "SELECT FORMAT_DATETIME('%Y%m%d %H:%M:%S', CAST('2023-12-25 15:30:00' AS DATETIME))",
+                "bigquery": "SELECT FORMAT_DATETIME('%Y%m%d %T', CAST('2023-12-25 15:30:00' AS DATETIME))",
                 "duckdb": "SELECT STRFTIME(CAST('2023-12-25 15:30:00' AS TIMESTAMP), '%Y%m%d %H:%M:%S')",
             },
         )
@@ -2899,6 +2900,27 @@ OPTIONS (
             write={
                 "bigquery": "SELECT FORMAT_DATETIME('%D', '2023-12-25 15:30:00')",
                 "duckdb": "SELECT STRFTIME(CAST('2023-12-25 15:30:00' AS TIMESTAMP), '%m/%d/%y')",
+            },
+        )
+        self.validate_all(
+            "SELECT FORMAT_DATETIME('%F %T', DATETIME '2023-10-15 14:30:45')",
+            write={
+                "bigquery": "SELECT FORMAT_DATETIME('%F %T', CAST('2023-10-15 14:30:45' AS DATETIME))",
+                "duckdb": "SELECT STRFTIME(CAST('2023-10-15 14:30:45' AS TIMESTAMP), '%Y-%m-%d %H:%M:%S')",
+            },
+        )
+        self.validate_all(
+            "SELECT FORMAT_DATETIME('%c', DATETIME '2008-12-25 15:30:00')",
+            write={
+                "bigquery": "SELECT FORMAT_DATETIME('%c', CAST('2008-12-25 15:30:00' AS DATETIME))",
+                "duckdb": "SELECT STRFTIME(CAST('2008-12-25 15:30:00' AS TIMESTAMP), '%a %b %-d %H:%M:%S %Y')",
+            },
+        )
+        self.validate_all(
+            "SELECT FORMAT_DATETIME('%Y-%m-%e', DATETIME '2020-09-09 10:15:30')",
+            write={
+                "bigquery": "SELECT FORMAT_DATETIME('%Y-%m-%e', CAST('2020-09-09 10:15:30' AS DATETIME))",
+                "duckdb": "SELECT STRFTIME(CAST('2020-09-09 10:15:30' AS TIMESTAMP), '%Y-%m-%-d')",
             },
         )
         self.validate_all(
@@ -3210,13 +3232,88 @@ OPTIONS (
         self.validate_identity("DATE_TRUNC(date, WEEK(MONDAY))")
         self.validate_identity(
             "LAST_DAY(DATETIME '2008-11-10 15:30:00', WEEK(SUNDAY))",
-            "LAST_DAY(CAST('2008-11-10 15:30:00' AS DATETIME), WEEK(SUNDAY))",
+            "LAST_DAY(CAST('2008-11-10 15:30:00' AS DATETIME), WEEK)",
         )
         self.validate_identity("DATE_DIFF('2017-12-18', '2017-12-17', WEEK(SATURDAY))")
         self.validate_identity("DATETIME_DIFF('2017-12-18', '2017-12-17', WEEK(MONDAY))")
         self.validate_identity(
             "EXTRACT(WEEK(THURSDAY) FROM DATE '2013-12-25')",
             "EXTRACT(WEEK(THURSDAY) FROM CAST('2013-12-25' AS DATE))",
+        )
+
+        # BigQuery → DuckDB transpilation tests for DATE_DIFF with week units
+        self.validate_all(
+            "SELECT DATE_DIFF('2024-06-15', '2024-01-08', WEEK(MONDAY))",
+            write={
+                "bigquery": "SELECT DATE_DIFF('2024-06-15', '2024-01-08', WEEK(MONDAY))",
+                "duckdb": "SELECT DATE_DIFF('WEEK', DATE_TRUNC('WEEK', CAST('2024-01-08' AS DATE)), DATE_TRUNC('WEEK', CAST('2024-06-15' AS DATE)))",
+            },
+        )
+        self.validate_all(
+            "SELECT DATE_DIFF('2026-01-15', '2024-01-08', WEEK(SUNDAY))",
+            write={
+                "bigquery": "SELECT DATE_DIFF('2026-01-15', '2024-01-08', WEEK)",
+                "duckdb": "SELECT DATE_DIFF('WEEK', DATE_TRUNC('WEEK', CAST('2024-01-08' AS DATE) + INTERVAL '1' DAY), DATE_TRUNC('WEEK', CAST('2026-01-15' AS DATE) + INTERVAL '1' DAY))",
+            },
+        )
+        self.validate_all(
+            "SELECT DATE_DIFF('2024-01-15', '2022-04-28', WEEK(SATURDAY))",
+            write={
+                "bigquery": "SELECT DATE_DIFF('2024-01-15', '2022-04-28', WEEK(SATURDAY))",
+                "duckdb": "SELECT DATE_DIFF('WEEK', DATE_TRUNC('WEEK', CAST('2022-04-28' AS DATE) + INTERVAL '-5' DAY), DATE_TRUNC('WEEK', CAST('2024-01-15' AS DATE) + INTERVAL '-5' DAY))",
+            },
+        )
+        self.validate_all(
+            "SELECT DATE_DIFF('2024-01-15', '2024-01-08', WEEK)",
+            write={
+                "bigquery": "SELECT DATE_DIFF('2024-01-15', '2024-01-08', WEEK)",
+                "duckdb": "SELECT DATE_DIFF('WEEK', DATE_TRUNC('WEEK', CAST('2024-01-08' AS DATE) + INTERVAL '1' DAY), DATE_TRUNC('WEEK', CAST('2024-01-15' AS DATE) + INTERVAL '1' DAY))",
+            },
+        )
+        # Test WEEK - Saturday to Sunday boundary (critical test for Sunday-start weeks)
+        # In BigQuery: Saturday -> Sunday crosses week boundary = 1 week
+        # Without fix: DuckDB treats as Monday-start weeks = 0 weeks (both in same week)
+        self.validate_all(
+            "SELECT DATE_DIFF('2024-01-07', '2024-01-06', WEEK)",
+            write={
+                "bigquery": "SELECT DATE_DIFF('2024-01-07', '2024-01-06', WEEK)",
+                "duckdb": "SELECT DATE_DIFF('WEEK', DATE_TRUNC('WEEK', CAST('2024-01-06' AS DATE) + INTERVAL '1' DAY), DATE_TRUNC('WEEK', CAST('2024-01-07' AS DATE) + INTERVAL '1' DAY))",
+            },
+        )
+        self.validate_all(
+            "SELECT DATE_DIFF('2024-01-15', '2024-01-08', ISOWEEK)",
+            write={
+                "bigquery": "SELECT DATE_DIFF('2024-01-15', '2024-01-08', ISOWEEK)",
+                "duckdb": "SELECT DATE_DIFF('WEEK', DATE_TRUNC('WEEK', CAST('2024-01-08' AS DATE)), DATE_TRUNC('WEEK', CAST('2024-01-15' AS DATE)))",
+            },
+        )
+        self.validate_all(
+            "SELECT DATE_DIFF(DATE '2024-09-15', DATE '2024-01-08', WEEK(MONDAY))",
+            write={
+                "bigquery": "SELECT DATE_DIFF(CAST('2024-09-15' AS DATE), CAST('2024-01-08' AS DATE), WEEK(MONDAY))",
+                "duckdb": "SELECT DATE_DIFF('WEEK', DATE_TRUNC('WEEK', CAST('2024-01-08' AS DATE)), DATE_TRUNC('WEEK', CAST('2024-09-15' AS DATE)))",
+            },
+        )
+        self.validate_all(
+            "SELECT DATE_DIFF(DATE '2024-01-01', DATE '2024-01-15', WEEK(SUNDAY))",
+            write={
+                "bigquery": "SELECT DATE_DIFF(CAST('2024-01-01' AS DATE), CAST('2024-01-15' AS DATE), WEEK)",
+                "duckdb": "SELECT DATE_DIFF('WEEK', DATE_TRUNC('WEEK', CAST('2024-01-15' AS DATE) + INTERVAL '1' DAY), DATE_TRUNC('WEEK', CAST('2024-01-01' AS DATE) + INTERVAL '1' DAY))",
+            },
+        )
+        self.validate_all(
+            "SELECT DATE_DIFF(DATE '2023-05-01', DATE '2024-01-15', ISOWEEK)",
+            write={
+                "bigquery": "SELECT DATE_DIFF(CAST('2023-05-01' AS DATE), CAST('2024-01-15' AS DATE), ISOWEEK)",
+                "duckdb": "SELECT DATE_DIFF('WEEK', DATE_TRUNC('WEEK', CAST('2024-01-15' AS DATE)), DATE_TRUNC('WEEK', CAST('2023-05-01' AS DATE)))",
+            },
+        )
+        self.validate_all(
+            "SELECT DATE_DIFF(DATE '2024-01-01', DATE '2024-01-15', DAY)",
+            write={
+                "bigquery": "SELECT DATE_DIFF(CAST('2024-01-01' AS DATE), CAST('2024-01-15' AS DATE), DAY)",
+                "duckdb": "SELECT DATE_DIFF('DAY', CAST('2024-01-15' AS DATE), CAST('2024-01-01' AS DATE))",
+            },
         )
 
     def test_approx_qunatiles(self):

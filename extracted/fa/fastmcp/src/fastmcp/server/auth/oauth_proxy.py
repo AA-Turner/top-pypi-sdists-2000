@@ -36,10 +36,6 @@ from key_value.aio.adapters.pydantic import PydanticAdapter
 from key_value.aio.protocols import AsyncKeyValue
 from key_value.aio.stores.disk import DiskStore
 from key_value.aio.wrappers.encryption import FernetEncryptionWrapper
-from mcp.server.auth.handlers.token import TokenErrorResponse, TokenSuccessResponse
-from mcp.server.auth.handlers.token import TokenHandler as _SDKTokenHandler
-from mcp.server.auth.json_response import PydanticJSONResponse
-from mcp.server.auth.middleware.client_auth import ClientAuthenticator
 from mcp.server.auth.provider import (
     AccessToken,
     AuthorizationCode,
@@ -48,7 +44,6 @@ from mcp.server.auth.provider import (
     RefreshToken,
     TokenError,
 )
-from mcp.server.auth.routes import cors_middleware
 from mcp.server.auth.settings import (
     ClientRegistrationOptions,
     RevocationOptions,
@@ -95,6 +90,9 @@ logger = get_logger(__name__)
 
 # Default token expiration times
 DEFAULT_ACCESS_TOKEN_EXPIRY_SECONDS: Final[int] = 60 * 60  # 1 hour
+DEFAULT_ACCESS_TOKEN_EXPIRY_NO_REFRESH_SECONDS: Final[int] = (
+    60 * 60 * 24 * 365
+)  # 1 year
 DEFAULT_AUTH_CODE_EXPIRY_SECONDS: Final[int] = 5 * 60  # 5 minutes
 
 # HTTP client timeout
@@ -438,7 +436,7 @@ def create_error_html(
     Args:
         error_title: The error title (e.g., "OAuth Error", "Authorization Failed")
         error_message: The main error message to display
-        error_details: Optional dictionary of error details to show (e.g., {"Error Code": "invalid_client"})
+        error_details: Optional dictionary of error details to show (e.g., `{"Error Code": "invalid_client"}`)
         server_name: Optional server name to display
         server_icon_url: Optional URL to server icon/logo
 
@@ -512,60 +510,6 @@ def create_error_html(
         additional_styles=additional_styles,
         csp_policy=csp_policy,
     )
-
-
-# -------------------------------------------------------------------------
-# Handler Classes
-# -------------------------------------------------------------------------
-
-
-class TokenHandler(_SDKTokenHandler):
-    """TokenHandler that returns OAuth 2.1 compliant error responses.
-
-    The MCP SDK always returns HTTP 400 for all client authentication issues.
-    However, OAuth 2.1 Section 5.3 and the MCP specification require that
-    invalid or expired tokens MUST receive a HTTP 401 response.
-
-    This handler extends the base MCP SDK TokenHandler to transform client
-    authentication failures into OAuth 2.1 compliant responses:
-    - Changes 'unauthorized_client' to 'invalid_client' error code
-    - Returns HTTP 401 status code instead of 400 for client auth failures
-
-    Per OAuth 2.1 Section 5.3: "The authorization server MAY return an HTTP 401
-    (Unauthorized) status code to indicate which HTTP authentication schemes
-    are supported."
-
-    Per MCP spec: "Invalid or expired tokens MUST receive a HTTP 401 response."
-    """
-
-    def response(self, obj: TokenSuccessResponse | TokenErrorResponse):
-        """Override response method to provide OAuth 2.1 compliant error handling."""
-        # Check if this is a client authentication failure (not just unauthorized for grant type)
-        # unauthorized_client can mean two things:
-        # 1. Client authentication failed (client_id not found or wrong credentials) -> invalid_client 401
-        # 2. Client not authorized for this grant type -> unauthorized_client 400 (correct per spec)
-        if (
-            isinstance(obj, TokenErrorResponse)
-            and obj.error == "unauthorized_client"
-            and obj.error_description
-            and "Invalid client_id" in obj.error_description
-        ):
-            # Transform client auth failure to OAuth 2.1 compliant response
-            return PydanticJSONResponse(
-                content=TokenErrorResponse(
-                    error="invalid_client",
-                    error_description=obj.error_description,
-                    error_uri=obj.error_uri,
-                ),
-                status_code=401,
-                headers={
-                    "Cache-Control": "no-store",
-                    "Pragma": "no-cache",
-                },
-            )
-
-        # Otherwise use default behavior from parent class
-        return super().response(obj)
 
 
 class OAuthProxy(OAuthProvider):
@@ -712,6 +656,8 @@ class OAuthProxy(OAuthProvider):
         # Consent screen configuration
         require_authorization_consent: bool = True,
         consent_csp_policy: str | None = None,
+        # Token expiry fallback
+        fallback_access_token_expiry_seconds: int | None = None,
     ):
         """Initialize the OAuth proxy provider.
 
@@ -761,6 +707,11 @@ class OAuthProxy(OAuthProvider):
                 If a non-empty string, uses that as the CSP policy value.
                 This allows organizations with their own CSP policies to override or disable
                 the built-in CSP directives.
+            fallback_access_token_expiry_seconds: Expiry time to use when upstream provider
+                doesn't return `expires_in` in the token response. If not set, uses smart
+                defaults: 1 hour if a refresh token is available (since we can refresh),
+                or 1 year if no refresh token (for API-key-style tokens like GitHub OAuth Apps).
+                Set explicitly to override these defaults.
         """
 
         # Always enable DCR since we implement it locally for MCP clients
@@ -831,6 +782,11 @@ class OAuthProxy(OAuthProvider):
         # Extra parameters for authorization and token endpoints
         self._extra_authorize_params: dict[str, str] = extra_authorize_params or {}
         self._extra_token_params: dict[str, str] = extra_token_params or {}
+
+        # Token expiry fallback (None means use smart default based on refresh token)
+        self._fallback_access_token_expiry_seconds: int | None = (
+            fallback_access_token_expiry_seconds
+        )
 
         if jwt_signing_key is None:
             jwt_signing_key = derive_jwt_key(
@@ -993,9 +949,13 @@ class OAuthProxy(OAuthProvider):
         # Create a ProxyDCRClient with configured redirect URI validation
         if client_info.client_id is None:
             raise ValueError("client_id is required for client registration")
+        # We use token_endpoint_auth_method="none" because the proxy handles
+        # all upstream authentication. The client_secret must also be None
+        # because the SDK requires secrets to be provided if they're set,
+        # regardless of auth method.
         proxy_client: ProxyDCRClient = ProxyDCRClient(
             client_id=client_info.client_id,
-            client_secret=client_info.client_secret,
+            client_secret=None,
             redirect_uris=client_info.redirect_uris or [AnyUrl("http://localhost")],
             grant_types=client_info.grant_types
             or ["authorization_code", "refresh_token"],
@@ -1061,7 +1021,8 @@ class OAuthProxy(OAuthProvider):
         # Store transaction data for IdP callback processing
         if client.client_id is None:
             raise AuthorizeError(
-                error="invalid_client", error_description="Client ID is required"
+                error="invalid_client",  # type: ignore[arg-type]
+                error_description="Client ID is required",
             )
         transaction = OAuthTransaction(
             txn_id=txn_id,
@@ -1143,7 +1104,8 @@ class OAuthProxy(OAuthProvider):
         # Create authorization code object with PKCE challenge
         if client.client_id is None:
             raise AuthorizeError(
-                error="invalid_client", error_description="Client ID is required"
+                error="invalid_client",  # type: ignore[arg-type]
+                error_description="Client ID is required",
             )
         return AuthorizationCode(
             code=authorization_code,
@@ -1195,9 +1157,18 @@ class OAuthProxy(OAuthProvider):
         )
 
         # Calculate token expiry times
-        expires_in = int(
-            idp_tokens.get("expires_in", DEFAULT_ACCESS_TOKEN_EXPIRY_SECONDS)
-        )
+        # If upstream provides expires_in, use it. Otherwise use fallback based on:
+        # - User-provided fallback if set
+        # - 1 hour if refresh token available (can refresh when expired)
+        # - 1 year if no refresh token (likely API-key-style token like GitHub OAuth Apps)
+        if "expires_in" in idp_tokens:
+            expires_in = int(idp_tokens["expires_in"])
+        elif self._fallback_access_token_expiry_seconds is not None:
+            expires_in = self._fallback_access_token_expiry_seconds
+        elif idp_tokens.get("refresh_token"):
+            expires_in = DEFAULT_ACCESS_TOKEN_EXPIRY_SECONDS
+        else:
+            expires_in = DEFAULT_ACCESS_TOKEN_EXPIRY_NO_REFRESH_SECONDS
 
         # Calculate refresh token expiry if provided by upstream
         # Some providers include refresh_expires_in, some don't
@@ -1434,9 +1405,14 @@ class OAuthProxy(OAuthProvider):
             raise TokenError("invalid_grant", f"Upstream refresh failed: {e}") from e
 
         # Update stored upstream token
-        new_expires_in = int(
-            token_response.get("expires_in", DEFAULT_ACCESS_TOKEN_EXPIRY_SECONDS)
-        )
+        # In refresh flow, we know there's a refresh token, so default to 1 hour
+        # (user override still applies if set)
+        if "expires_in" in token_response:
+            new_expires_in = int(token_response["expires_in"])
+        elif self._fallback_access_token_expiry_seconds is not None:
+            new_expires_in = self._fallback_access_token_expiry_seconds
+        else:
+            new_expires_in = DEFAULT_ACCESS_TOKEN_EXPIRY_SECONDS
         upstream_token_set.access_token = token_response["access_token"]
         upstream_token_set.expires_at = time.time() + new_expires_in
 
@@ -1567,7 +1543,7 @@ class OAuthProxy(OAuthProvider):
     # Token Validation
     # -------------------------------------------------------------------------
 
-    async def load_access_token(self, token: str) -> AccessToken | None:
+    async def load_access_token(self, token: str) -> AccessToken | None:  # type: ignore[override]
         """Validate FastMCP JWT by swapping for upstream token.
 
         This implements the token swap pattern:
@@ -1671,10 +1647,9 @@ class OAuthProxy(OAuthProvider):
                 This is used to advertise the resource URL in metadata.
         """
         # Get standard OAuth routes from parent class
+        # Note: parent already replaces /token with TokenHandler for proper error codes
         routes = super().get_routes(mcp_path)
         custom_routes = []
-        token_route_found = False
-        authorize_route_found = False
 
         logger.debug(
             f"get_routes called - configuring OAuth routes in {len(routes)} routes"
@@ -1692,7 +1667,6 @@ class OAuthProxy(OAuthProvider):
                 and route.methods is not None
                 and ("GET" in route.methods or "POST" in route.methods)
             ):
-                authorize_route_found = True
                 # Replace with our enhanced authorization handler
                 # Note: self.base_url is guaranteed to be set in parent __init__
                 authorize_handler = AuthorizationHandler(
@@ -1706,27 +1680,6 @@ class OAuthProxy(OAuthProvider):
                         path="/authorize",
                         endpoint=authorize_handler.handle,
                         methods=["GET", "POST"],
-                    )
-                )
-            # Replace the token endpoint with our custom handler that returns proper OAuth 2.1 error codes
-            elif (
-                isinstance(route, Route)
-                and route.path == "/token"
-                and route.methods is not None
-                and "POST" in route.methods
-            ):
-                token_route_found = True
-                # Replace with our OAuth 2.1 compliant token handler
-                token_handler = TokenHandler(
-                    provider=self, client_authenticator=ClientAuthenticator(self)
-                )
-                custom_routes.append(
-                    Route(
-                        path="/token",
-                        endpoint=cors_middleware(
-                            token_handler.handle, ["POST", "OPTIONS"]
-                        ),
-                        methods=["POST", "OPTIONS"],
                     )
                 )
             else:
@@ -1750,9 +1703,6 @@ class OAuthProxy(OAuthProvider):
             )
         )
 
-        logger.debug(
-            f"✅ OAuth routes configured: authorize_endpoint={authorize_route_found}, token_endpoint={token_route_found}, total routes={len(custom_routes)} (includes OAuth callback + consent)"
-        )
         return custom_routes
 
     # -------------------------------------------------------------------------

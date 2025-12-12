@@ -19,6 +19,7 @@ class TestDuckDB(Validator):
         )
         self.validate_identity("SELECT str[0:1]")
         self.validate_identity("SELECT COSH(1.5)")
+        self.validate_identity("SELECT MODE(category)")
         with self.assertRaises(ParseError):
             parse_one("1 //", read="duckdb")
 
@@ -43,6 +44,12 @@ class TestDuckDB(Validator):
             "STRUCT(k TEXT, v STRUCT(v_str TEXT, v_int INT, v_int_arr INT[]))[]",
         )
 
+        self.validate_all(
+            "(c LIKE 'a' OR c LIKE 'b') AND other_cond",
+            read={
+                "databricks": "c LIKE ANY ('a', 'b') AND other_cond",
+            },
+        )
         self.validate_all(
             "SELECT FIRST_VALUE(c IGNORE NULLS) OVER (PARTITION BY gb ORDER BY ob) FROM t",
             write={
@@ -373,6 +380,7 @@ class TestDuckDB(Validator):
         self.validate_identity("SELECT LIST_TRANSFORM([5, NULL, 6], LAMBDA x : COALESCE(x, 0) + 1)")
         self.validate_identity("SELECT LIST_TRANSFORM(nbr, LAMBDA x : x + 1) FROM article AS a")
         self.validate_identity("SELECT * FROM my_ducklake.demo AT (VERSION => 2)")
+        self.validate_identity("SELECT TO_BINARY('test')")
         self.validate_identity("SELECT UUIDV7()")
         self.validate_identity("SELECT TRY(LOG(0))")
         self.validate_identity("x::timestamp", "CAST(x AS TIMESTAMP)")
@@ -632,6 +640,7 @@ class TestDuckDB(Validator):
             },
             write={
                 "": "VARIANCE_POP(x)",
+                "duckdb": "VAR_POP(x)",
             },
         )
         self.validate_all(
@@ -700,6 +709,23 @@ class TestDuckDB(Validator):
                 "duckdb": "CREATE TABLE IF NOT EXISTS t (cola INT, colb TEXT)",
             },
         )
+
+        expr = self.parse_one("TO_BINARY('48454C50', 'HEX')", dialect="snowflake")
+        annotated = annotate_types(expr, dialect="snowflake")
+        self.assertEqual(annotated.sql("duckdb"), "UNHEX('48454C50')")
+
+        expr = self.parse_one("TO_BINARY('48454C50')", dialect="snowflake")
+        annotated = annotate_types(expr, dialect="snowflake")
+        self.assertEqual(annotated.sql("duckdb"), "UNHEX('48454C50')")
+
+        expr = self.parse_one("TO_BINARY('TEST', 'UTF-8')", dialect="snowflake")
+        annotated = annotate_types(expr, dialect="snowflake")
+        self.assertEqual(annotated.sql("duckdb"), "ENCODE('TEST')")
+
+        expr = self.parse_one("TO_BINARY('SEVMUA==', 'BASE64')", dialect="snowflake")
+        annotated = annotate_types(expr, dialect="snowflake")
+        self.assertEqual(annotated.sql("duckdb"), "FROM_BASE64('SEVMUA==')")
+
         self.validate_all(
             "[0, 1, 2]",
             read={
@@ -1246,6 +1272,7 @@ class TestDuckDB(Validator):
         )
         self.validate_identity("SELECT GREATEST(1.0, 2.5, NULL, 3.7)")
         self.validate_identity("FROM t1, t2 SELECT *", "SELECT * FROM t1, t2")
+        self.validate_identity("ROUND(2.256, 1)")
 
         # TODO: This is incorrect AST, DATE_PART creates a STRUCT of values but it's stored in 'year' arg
         self.validate_identity("SELECT MAKE_DATE(DATE_PART(['year', 'month', 'day'], TODAY()))")
@@ -1389,7 +1416,7 @@ class TestDuckDB(Validator):
         self.validate_all(
             "STRFTIME(x, '%Y-%m-%d %H:%M:%S')",
             write={
-                "bigquery": "FORMAT_DATE('%Y-%m-%d %H:%M:%S', x)",
+                "bigquery": "FORMAT_DATE('%F %T', x)",
                 "duckdb": "STRFTIME(x, '%Y-%m-%d %H:%M:%S')",
                 "presto": "DATE_FORMAT(x, '%Y-%m-%d %T')",
                 "hive": "DATE_FORMAT(x, 'yyyy-MM-dd HH:mm:ss')",

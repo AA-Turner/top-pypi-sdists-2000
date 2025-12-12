@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: aiodns
-Version: 3.6.0
+Version: 3.6.1
 Summary: Simple DNS resolver for asyncio
 Home-page: https://github.com/saghul/aiodns
 Author: Saúl Ibarra Corretgé
@@ -23,7 +23,7 @@ Classifier: Programming Language :: Python :: 3.13
 Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: LICENSE
-Requires-Dist: pycares>=4.9.0
+Requires-Dist: pycares<5,>=4.9.0
 Dynamic: author
 Dynamic: author-email
 Dynamic: classifier

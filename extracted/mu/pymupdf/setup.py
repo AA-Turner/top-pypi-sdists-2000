@@ -39,6 +39,9 @@ Environmental variables:
             Directory containing MuPDF libraries, (libmupdf.so,
             libmupdfcpp.so).
     
+    PIPCL_SHOW_ENV
+        If '0', we do not show environment variables on startup.
+    
     PYMUPDF_SETUP_DEVENV
         Location of devenv.com on Windows. If unset we search for it - see
         wdev.py. if that fails we use just 'devenv.com'.
@@ -1023,7 +1026,12 @@ def build_mupdf_unix(
     if PYMUPDF_SETUP_SWIG:
         command += f' --swig {shlex.quote(PYMUPDF_SETUP_SWIG)}'
     command += f' -d build/{build_prefix}{build_type} -b'
-    #command += f' --m-target libs'
+    if sys.implementation.name == 'graalpy':
+        # Force rerun of swig.
+        pipcl.run(f'ls -l {mupdf_local}/platform/python/')
+        for p in glob.glob(f'{mupdf_local}/platform/python/mupdfcpp*.i.cpp'):
+            pipcl.log(f'Graal, deleting: {p!r}')
+            pipcl.fs_remove(p)
     if PYMUPDF_SETUP_MUPDF_REFCHECK_IF:
         command += f' --refcheck-if "{PYMUPDF_SETUP_MUPDF_REFCHECK_IF}"'
     if PYMUPDF_SETUP_MUPDF_TRACE_IF:
@@ -1268,9 +1276,9 @@ classifier = [
 #
 
 # PyMuPDF version.
-version_p = '1.26.6'
+version_p = '1.26.7'
 
-version_mupdf = '1.26.11'
+version_mupdf = '1.26.12'
 
 # PyMuPDFb version. This is the PyMuPDF version whose PyMuPDFb wheels we will
 # (re)use if generating separate PyMuPDFb wheels. Though as of PyMuPDF-1.24.11
@@ -1412,8 +1420,9 @@ else:
             print(f'OpenBSD: pip install of swig does not build; assuming `pkg_add swig`.')
         elif PYMUPDF_SETUP_SWIG:
             pass
-        elif darwin:
-            # 2025-10-27: new swig-4.4.0 fails badly at runtime.
+        elif darwin or os.environ.get('PYODIDE_ROOT'):
+            # 2025-10-27: new swig-4.4.0 fails badly at runtime on macos.
+            # 2025-11-06: similar for pyodide.
             ret.append('swig==4.3.1')
         else:
             ret.append('swig')

@@ -107,6 +107,18 @@ class ServerServicesEventPersisterSettings(ServicesBaseSetting):
         ),
     )
 
+    queue_max_size: int = Field(
+        default=50_000,
+        gt=0,
+        description="The maximum number of events that can be queued in memory for persistence. When the queue is full, new events will be dropped.",
+    )
+
+    max_flush_retries: int = Field(
+        default=5,
+        gt=0,
+        description="The maximum number of consecutive flush failures before events are dropped instead of being re-queued.",
+    )
+
 
 class ServerServicesEventLoggerSettings(ServicesBaseSetting):
     """
@@ -464,6 +476,18 @@ class ServerServicesTaskRunRecorderSettings(ServicesBaseSetting):
         default=1,
         gt=0,
         description="The number of task runs the task run recorder will attempt to read from the message broker in one batch.",
+    )
+
+    batch_size: int = Field(
+        default=1,
+        gt=0,
+        description="The number of task runs the task run recorder will attempt to insert in one batch.",
+    )
+
+    flush_interval: float = Field(
+        default=5,
+        gt=0.0,
+        description="The maximum number of seconds between flushes of the task run recorder.",
     )
 
 

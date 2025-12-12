@@ -30,6 +30,7 @@ pub(crate) use self::infer::{
     TypeContext, infer_deferred_types, infer_definition_types, infer_expression_type,
     infer_expression_types, infer_scope_types, static_expression_truthiness,
 };
+pub use self::signatures::ParameterKind;
 pub(crate) use self::signatures::{CallableSignature, Signature};
 pub(crate) use self::subclass_of::{SubclassOfInner, SubclassOfType};
 pub use crate::diagnostic::add_inferred_python_version_hint_to_diagnostic;
@@ -44,6 +45,7 @@ use crate::semantic_index::scope::ScopeId;
 use crate::semantic_index::{imported_modules, place_table, semantic_index};
 use crate::suppression::check_suppressions;
 use crate::types::bound_super::BoundSuperType;
+use crate::types::builder::RecursivelyDefined;
 use crate::types::call::{Binding, Bindings, CallArguments, CallableBinding};
 pub(crate) use crate::types::class_base::ClassBase;
 use crate::types::constraints::{
@@ -67,7 +69,7 @@ pub(crate) use crate::types::narrow::infer_narrowing_constraint;
 use crate::types::newtype::NewType;
 pub(crate) use crate::types::signatures::{Parameter, Parameters};
 use crate::types::signatures::{ParameterForm, walk_signature};
-use crate::types::tuple::{TupleSpec, TupleSpecBuilder};
+use crate::types::tuple::{Tuple, TupleSpec, TupleSpecBuilder};
 pub(crate) use crate::types::typed_dict::{TypedDictParams, TypedDictType, walk_typed_dict_type};
 pub use crate::types::variance::TypeVarVariance;
 use crate::types::variance::VarianceInferable;
@@ -876,7 +878,7 @@ impl<'db> Type<'db> {
         Self::Dynamic(DynamicType::Any)
     }
 
-    pub(crate) const fn unknown() -> Self {
+    pub const fn unknown() -> Self {
         Self::Dynamic(DynamicType::Unknown)
     }
 
@@ -910,8 +912,19 @@ impl<'db> Type<'db> {
         previous: Self,
         cycle: &salsa::Cycle,
     ) -> Self {
-        UnionType::from_elements_cycle_recovery(db, [self, previous])
-            .recursive_type_normalized(db, cycle)
+        // Avoid unioning two generic aliases of the same class together; this union will never
+        // simplify and is likely to cause downstream problems. This introduces the theoretical
+        // possibility of cycle oscillation involving such types (because we are not strictly
+        // widening the type on each iteration), but so far we have not seen an example of that.
+        match (previous, self) {
+            (Type::GenericAlias(prev_alias), Type::GenericAlias(curr_alias))
+                if prev_alias.origin(db) == curr_alias.origin(db) =>
+            {
+                self
+            }
+            _ => UnionType::from_elements_cycle_recovery(db, [self, previous]),
+        }
+        .recursive_type_normalized(db, cycle)
     }
 
     fn is_none(&self, db: &'db dyn Db) -> bool {
@@ -1250,7 +1263,7 @@ impl<'db> Type<'db> {
         }
     }
 
-    pub(crate) const fn is_union(&self) -> bool {
+    pub(crate) const fn is_union(self) -> bool {
         matches!(self, Type::Union(_))
     }
 
@@ -1264,6 +1277,16 @@ impl<'db> Type<'db> {
     #[track_caller]
     pub(crate) const fn expect_union(self) -> UnionType<'db> {
         self.as_union().expect("Expected a Type::Union variant")
+    }
+
+    /// Returns whether this is a "real" intersection type. (Negated types are represented by an
+    /// intersection containing a single negative branch, which this method does _not_ consider a
+    /// "real" intersection.)
+    pub(crate) fn is_nontrivial_intersection(self, db: &'db dyn Db) -> bool {
+        match self {
+            Type::Intersection(intersection) => !intersection.is_simple_negation(db),
+            _ => false,
+        }
     }
 
     pub(crate) const fn as_function_literal(self) -> Option<FunctionType<'db>> {
@@ -1459,6 +1482,7 @@ impl<'db> Type<'db> {
     /// - Strips the types of default values from parameters in `Callable` types: only whether a parameter
     ///   *has* or *does not have* a default value is relevant to whether two `Callable` types  are equivalent.
     /// - Converts class-based protocols into synthesized protocols
+    /// - Converts class-based typeddicts into synthesized typeddicts
     #[must_use]
     pub(crate) fn normalized(self, db: &'db dyn Db) -> Self {
         self.normalized_impl(db, &NormalizedVisitor::default())
@@ -1517,10 +1541,9 @@ impl<'db> Type<'db> {
                 // Always normalize single-member enums to their class instance (`Literal[Single.VALUE]` => `Single`)
                 enum_literal.enum_class_instance(db)
             }
-            Type::TypedDict(_) => {
-                // TODO: Normalize TypedDicts
-                self
-            }
+            Type::TypedDict(typed_dict) => visitor.visit(self, || {
+                Type::TypedDict(typed_dict.normalized_impl(db, visitor))
+            }),
             Type::TypeAlias(alias) => alias.value_type(db).normalized_impl(db, visitor),
             Type::NewTypeInstance(newtype) => {
                 visitor.visit(self, || {
@@ -1795,14 +1818,14 @@ impl<'db> Type<'db> {
             Type::KnownBoundMethod(method) => Some(CallableTypes::one(CallableType::new(
                 db,
                 CallableSignature::from_overloads(method.signatures(db)),
-                false,
+                CallableTypeKind::Regular,
             ))),
 
             Type::WrapperDescriptor(wrapper_descriptor) => {
                 Some(CallableTypes::one(CallableType::new(
                     db,
                     CallableSignature::from_overloads(wrapper_descriptor.signatures(db)),
-                    false,
+                    CallableTypeKind::Regular,
                 )))
             }
 
@@ -2703,6 +2726,34 @@ impl<'db> Type<'db> {
                     )
                 })
                 .unwrap_or_else(|| ConstraintSet::from(relation.is_assignability())),
+
+            // Similarly, `<class 'C'>` is assignable to `<class 'C[...]'>` (a generic-alias type)
+            // if the default specialization of `C` is assignable to `C[...]`. This scenario occurs
+            // with final generic types, where `type[C[...]]` is simplified to the generic-alias
+            // type `<class 'C[...]'>`, due to the fact that `C[...]` has no subclasses.
+            (Type::ClassLiteral(class), Type::GenericAlias(target_alias)) => {
+                class.default_specialization(db).has_relation_to_impl(
+                    db,
+                    ClassType::Generic(target_alias),
+                    inferable,
+                    relation,
+                    relation_visitor,
+                    disjointness_visitor,
+                )
+            }
+
+            // For generic aliases, we delegate to the underlying class type.
+            (Type::GenericAlias(self_alias), Type::GenericAlias(target_alias)) => {
+                ClassType::Generic(self_alias).has_relation_to_impl(
+                    db,
+                    ClassType::Generic(target_alias),
+                    inferable,
+                    relation,
+                    relation_visitor,
+                    disjointness_visitor,
+                )
+            }
+
             (Type::GenericAlias(alias), Type::SubclassOf(target_subclass_ty)) => target_subclass_ty
                 .subclass_of()
                 .into_class(db)
@@ -3013,6 +3064,10 @@ impl<'db> Type<'db> {
                 left.is_equivalent_to_impl(db, right, inferable, visitor)
             }
 
+            (Type::TypedDict(left), Type::TypedDict(right)) => visitor.visit((self, other), || {
+                left.is_equivalent_to_impl(db, right, inferable, visitor)
+            }),
+
             _ => ConstraintSet::from(false),
         }
     }
@@ -3313,7 +3368,6 @@ impl<'db> Type<'db> {
                 | Type::WrapperDescriptor(..)
                 | Type::ModuleLiteral(..)
                 | Type::ClassLiteral(..)
-                | Type::GenericAlias(..)
                 | Type::SpecialForm(..)
                 | Type::KnownInstance(..)),
                 right @ (Type::BooleanLiteral(..)
@@ -3327,7 +3381,6 @@ impl<'db> Type<'db> {
                 | Type::WrapperDescriptor(..)
                 | Type::ModuleLiteral(..)
                 | Type::ClassLiteral(..)
-                | Type::GenericAlias(..)
                 | Type::SpecialForm(..)
                 | Type::KnownInstance(..)),
             ) => ConstraintSet::from(left != right),
@@ -3510,13 +3563,39 @@ impl<'db> Type<'db> {
                 ConstraintSet::from(true)
             }
 
+            (Type::GenericAlias(left_alias), Type::GenericAlias(right_alias)) => {
+                ConstraintSet::from(left_alias.origin(db) != right_alias.origin(db)).or(db, || {
+                    left_alias.specialization(db).is_disjoint_from_impl(
+                        db,
+                        right_alias.specialization(db),
+                        inferable,
+                        disjointness_visitor,
+                        relation_visitor,
+                    )
+                })
+            }
+
+            (Type::ClassLiteral(class_literal), other @ Type::GenericAlias(_))
+            | (other @ Type::GenericAlias(_), Type::ClassLiteral(class_literal)) => class_literal
+                .default_specialization(db)
+                .into_generic_alias()
+                .when_none_or(|alias| {
+                    other.is_disjoint_from_impl(
+                        db,
+                        Type::GenericAlias(alias),
+                        inferable,
+                        disjointness_visitor,
+                        relation_visitor,
+                    )
+                }),
+
             (Type::SubclassOf(subclass_of_ty), Type::ClassLiteral(class_b))
             | (Type::ClassLiteral(class_b), Type::SubclassOf(subclass_of_ty)) => {
                 match subclass_of_ty.subclass_of() {
                     SubclassOfInner::Dynamic(_) => ConstraintSet::from(false),
-                    SubclassOfInner::Class(class_a) => {
-                        class_b.when_subclass_of(db, None, class_a).negate(db)
-                    }
+                    SubclassOfInner::Class(class_a) => ConstraintSet::from(
+                        !class_a.could_exist_in_mro_of(db, ClassType::NonGeneric(class_b)),
+                    ),
                     SubclassOfInner::TypeVar(_) => unreachable!(),
                 }
             }
@@ -3525,9 +3604,9 @@ impl<'db> Type<'db> {
             | (Type::GenericAlias(alias_b), Type::SubclassOf(subclass_of_ty)) => {
                 match subclass_of_ty.subclass_of() {
                     SubclassOfInner::Dynamic(_) => ConstraintSet::from(false),
-                    SubclassOfInner::Class(class_a) => ClassType::from(alias_b)
-                        .when_subclass_of(db, class_a, inferable)
-                        .negate(db),
+                    SubclassOfInner::Class(class_a) => ConstraintSet::from(
+                        !class_a.could_exist_in_mro_of(db, ClassType::Generic(alias_b)),
+                    ),
                     SubclassOfInner::TypeVar(_) => unreachable!(),
                 }
             }
@@ -3821,6 +3900,8 @@ impl<'db> Type<'db> {
                     relation_visitor,
                 )
             }
+
+            (Type::GenericAlias(_), _) | (_, Type::GenericAlias(_)) => ConstraintSet::from(true),
         }
     }
 
@@ -4985,11 +5066,17 @@ impl<'db> Type<'db> {
                     .into()
             }
 
-            Type::KnownInstance(KnownInstanceType::TypeVar(typevar))
-                if typevar.kind(db).is_paramspec()
-                    && matches!(name.as_str(), "args" | "kwargs") =>
-            {
-                Place::bound(todo_type!("ParamSpecArgs / ParamSpecKwargs")).into()
+            Type::TypeVar(typevar) if name_str == "args" && typevar.is_paramspec(db) => {
+                Place::declared(Type::TypeVar(
+                    typevar.with_paramspec_attr(db, ParamSpecAttrKind::Args),
+                ))
+                .into()
+            }
+            Type::TypeVar(typevar) if name_str == "kwargs" && typevar.is_paramspec(db) => {
+                Place::declared(Type::TypeVar(
+                    typevar.with_paramspec_attr(db, ParamSpecAttrKind::Kwargs),
+                ))
+                .into()
             }
 
             Type::NominalInstance(instance)
@@ -5400,9 +5487,9 @@ impl<'db> Type<'db> {
                     Some(TypeVarBoundOrConstraints::UpperBound(bound)) => {
                         bound.try_bool_impl(db, allow_short_circuit, visitor)?
                     }
-                    Some(TypeVarBoundOrConstraints::Constraints(constraints)) => {
-                        try_union(constraints)?
-                    }
+                    Some(TypeVarBoundOrConstraints::Constraints(constraints)) => constraints
+                        .as_type(db)
+                        .try_bool_impl(db, allow_short_circuit, visitor)?,
                 }
             }
 
@@ -6452,7 +6539,7 @@ impl<'db> Type<'db> {
                     TypeVarBoundOrConstraints::UpperBound(bound) => {
                         non_async_special_case(db, bound)
                     }
-                    TypeVarBoundOrConstraints::Constraints(union) => non_async_special_case(db, Type::Union(union)),
+                    TypeVarBoundOrConstraints::Constraints(constraints) => non_async_special_case(db, constraints.as_type(db)),
                 },
                 Type::Union(union) => {
                     let elements = union.elements(db);
@@ -7196,6 +7283,9 @@ impl<'db> Type<'db> {
                 KnownInstanceType::TypeAliasType(alias) => Ok(Type::TypeAlias(*alias)),
                 KnownInstanceType::NewType(newtype) => Ok(Type::NewTypeInstance(*newtype)),
                 KnownInstanceType::TypeVar(typevar) => {
+                    // TODO: A `ParamSpec` type variable cannot be used in type expressions. This
+                    // requires storing additional context as it's allowed in some places
+                    // (`Concatenate`, `Callable`) but not others.
                     let index = semantic_index(db, scope_id.file(db));
                     Ok(bind_typevar(
                         db,
@@ -7309,7 +7399,9 @@ impl<'db> Type<'db> {
                         });
                     };
 
-                    Ok(typing_self(db, scope_id, typevar_binding_context, class).unwrap_or(*self))
+                    Ok(typing_self(db, scope_id, typevar_binding_context, class)
+                        .map(Type::TypeVar)
+                        .unwrap_or(*self))
                 }
                 // We ensure that `typing.TypeAlias` used in the expected position (annotating an
                 // annotated assignment statement) doesn't reach here. Using it in any other type
@@ -7422,9 +7514,6 @@ impl<'db> Type<'db> {
                 Some(KnownClass::TypeVar) => Ok(todo_type!(
                     "Support for `typing.TypeVar` instances in type expressions"
                 )),
-                Some(
-                    KnownClass::ParamSpec | KnownClass::ParamSpecArgs | KnownClass::ParamSpecKwargs,
-                ) => Ok(todo_type!("Support for `typing.ParamSpec`")),
                 Some(KnownClass::TypeVarTuple) => Ok(todo_type!(
                     "Support for `typing.TypeVarTuple` instances in type expressions"
                 )),
@@ -7508,7 +7597,13 @@ impl<'db> Type<'db> {
             Type::ProtocolInstance(protocol) => protocol.to_meta_type(db),
             // `TypedDict` instances are instances of `dict` at runtime, but its important that we
             // understand a more specific meta type in order to correctly handle `__getitem__`.
-            Type::TypedDict(typed_dict) => SubclassOfType::from(db, typed_dict.defining_class()),
+            Type::TypedDict(typed_dict) => match typed_dict {
+                TypedDictType::Class(class) => SubclassOfType::from(db, class),
+                TypedDictType::Synthesized(_) => SubclassOfType::from(
+                    db,
+                    todo_type!("TypedDict synthesized meta-type").expect_dynamic(),
+                ),
+            },
             Type::TypeAlias(alias) => alias.value_type(db).to_meta_type(db),
             Type::NewTypeInstance(newtype) => Type::from(newtype.base_class_type(db)),
         }
@@ -7603,7 +7698,7 @@ impl<'db> Type<'db> {
                 KnownInstanceType::TypeVar(typevar) => {
                     match type_mapping {
                         TypeMapping::BindLegacyTypevars(binding_context) => {
-                            Type::TypeVar(BoundTypeVarInstance::new(db, typevar, *binding_context))
+                            Type::TypeVar(BoundTypeVarInstance::new(db, typevar, *binding_context, None))
                         }
                         TypeMapping::Specialization(_) |
                         TypeMapping::PartialSpecialization(_) |
@@ -7857,18 +7952,28 @@ impl<'db> Type<'db> {
         typevars: &mut FxOrderSet<BoundTypeVarInstance<'db>>,
         visitor: &FindLegacyTypeVarsVisitor<'db>,
     ) {
-        let is_matching_typevar = |bound_typevar: &BoundTypeVarInstance<'db>| {
-            matches!(
-                bound_typevar.typevar(db).kind(db),
-                TypeVarKind::Legacy | TypeVarKind::TypingSelf | TypeVarKind::ParamSpec
-            ) && binding_context.is_none_or(|binding_context| {
-                bound_typevar.binding_context(db) == BindingContext::Definition(binding_context)
-            })
+        let matching_typevar = |bound_typevar: &BoundTypeVarInstance<'db>| {
+            match bound_typevar.typevar(db).kind(db) {
+                TypeVarKind::Legacy | TypeVarKind::TypingSelf
+                    if binding_context.is_none_or(|binding_context| {
+                        bound_typevar.binding_context(db)
+                            == BindingContext::Definition(binding_context)
+                    }) =>
+                {
+                    Some(*bound_typevar)
+                }
+                TypeVarKind::ParamSpec => {
+                    // For `ParamSpec`, we're only interested in `P` itself, not `P.args` or
+                    // `P.kwargs`.
+                    Some(bound_typevar.without_paramspec_attr(db))
+                }
+                _ => None,
+            }
         };
 
         match self {
             Type::TypeVar(bound_typevar) => {
-                if is_matching_typevar(&bound_typevar) {
+                if let Some(bound_typevar) = matching_typevar(&bound_typevar) {
                     typevars.insert(bound_typevar);
                 }
             }
@@ -8010,7 +8115,7 @@ impl<'db> Type<'db> {
 
             Type::Dynamic(DynamicType::UnknownGeneric(generic_context)) => {
                 for variable in generic_context.variables(db) {
-                    if is_matching_typevar(&variable) {
+                    if let Some(variable) = matching_typevar(&variable) {
                         typevars.insert(variable);
                     }
                 }
@@ -8207,7 +8312,7 @@ impl<'db> Type<'db> {
             },
 
             Self::TypedDict(typed_dict) => {
-                Some(TypeDefinition::Class(typed_dict.defining_class().definition(db)))
+                typed_dict.definition(db).map(TypeDefinition::Class)
             }
 
             Self::Union(_) | Self::Intersection(_) => None,
@@ -8534,12 +8639,9 @@ impl<'db> TypeMapping<'_, 'db> {
             | TypeMapping::Materialize(_)
             | TypeMapping::ReplaceParameterDefaults
             | TypeMapping::EagerExpansion => context,
-            TypeMapping::BindSelf { .. } => GenericContext::from_typevar_instances(
-                db,
-                context
-                    .variables(db)
-                    .filter(|var| !var.typevar(db).is_self(db)),
-            ),
+            TypeMapping::BindSelf {
+                binding_context, ..
+            } => context.remove_self(db, *binding_context),
             TypeMapping::ReplaceSelf { new_upper_bound } => GenericContext::from_typevar_instances(
                 db,
                 context.variables(db).map(|typevar| {
@@ -8815,7 +8917,7 @@ impl<'db> KnownInstanceType<'db> {
     fn class(self, db: &'db dyn Db) -> KnownClass {
         match self {
             Self::SubscriptedProtocol(_) | Self::SubscriptedGeneric(_) => KnownClass::SpecialForm,
-            Self::TypeVar(typevar_instance) if typevar_instance.kind(db).is_paramspec() => {
+            Self::TypeVar(typevar_instance) if typevar_instance.is_paramspec(db) => {
                 KnownClass::ParamSpec
             }
             Self::TypeVar(_) => KnownClass::TypeVar,
@@ -9463,7 +9565,7 @@ impl<'db> TypeVarInstance<'db> {
         db: &'db dyn Db,
         binding_context: Definition<'db>,
     ) -> BoundTypeVarInstance<'db> {
-        BoundTypeVarInstance::new(db, self, BindingContext::Definition(binding_context))
+        BoundTypeVarInstance::new(db, self, BindingContext::Definition(binding_context), None)
     }
 
     pub(crate) fn name(self, db: &'db dyn Db) -> &'db ast::name::Name {
@@ -9480,6 +9582,10 @@ impl<'db> TypeVarInstance<'db> {
 
     pub(crate) fn is_self(self, db: &'db dyn Db) -> bool {
         matches!(self.kind(db), TypeVarKind::TypingSelf)
+    }
+
+    pub(crate) fn is_paramspec(self, db: &'db dyn Db) -> bool {
+        self.kind(db).is_paramspec()
     }
 
     pub(crate) fn upper_bound(self, db: &'db dyn Db) -> Option<Type<'db>> {
@@ -9593,7 +9699,7 @@ impl<'db> TypeVarInstance<'db> {
                 TypeVarBoundOrConstraints::UpperBound(upper_bound.to_instance(db)?)
             }
             TypeVarBoundOrConstraints::Constraints(constraints) => {
-                TypeVarBoundOrConstraints::Constraints(constraints.to_instance(db)?.as_union()?)
+                TypeVarBoundOrConstraints::Constraints(constraints.to_instance(db)?)
             }
         };
         let identity = TypeVarIdentity::new(
@@ -9612,6 +9718,7 @@ impl<'db> TypeVarInstance<'db> {
     }
 
     #[salsa::tracked(
+        cycle_fn=lazy_bound_or_constraints_cycle_recover,
         cycle_initial=lazy_bound_or_constraints_cycle_initial,
         heap_size=ruff_memory_usage::heap_size
     )]
@@ -9636,28 +9743,37 @@ impl<'db> TypeVarInstance<'db> {
     }
 
     #[salsa::tracked(
+        cycle_fn=lazy_bound_or_constraints_cycle_recover,
         cycle_initial=lazy_bound_or_constraints_cycle_initial,
         heap_size=ruff_memory_usage::heap_size
     )]
     fn lazy_constraints(self, db: &'db dyn Db) -> Option<TypeVarBoundOrConstraints<'db>> {
         let definition = self.definition(db)?;
         let module = parsed_module(db, definition.file(db)).load(db);
-        let ty = match definition.kind(db) {
+        let constraints = match definition.kind(db) {
             // PEP 695 typevar
             DefinitionKind::TypeVar(typevar) => {
                 let typevar_node = typevar.node(&module);
-                definition_expression_type(db, definition, typevar_node.bound.as_ref()?)
-                    .as_union()?
+                let bound =
+                    definition_expression_type(db, definition, typevar_node.bound.as_ref()?);
+                let constraints = if let Some(tuple) = bound
+                    .as_nominal_instance()
+                    .and_then(|instance| instance.tuple_spec(db))
+                {
+                    if let Tuple::Fixed(tuple) = tuple.into_owned() {
+                        tuple.owned_elements()
+                    } else {
+                        vec![Type::unknown()].into_boxed_slice()
+                    }
+                } else {
+                    vec![Type::unknown()].into_boxed_slice()
+                };
+                TypeVarConstraints::new(db, constraints)
             }
             // legacy typevar
             DefinitionKind::Assignment(assignment) => {
                 let call_expr = assignment.value(&module).as_call_expr()?;
-                // We don't use `UnionType::from_elements` or `UnionBuilder` here,
-                // because we don't want to simplify the list of constraints as we would with
-                // an actual union type.
-                // TODO: We probably shouldn't use `UnionType` to store these at all? TypeVar
-                // constraints are not a union.
-                UnionType::new(
+                TypeVarConstraints::new(
                     db,
                     call_expr
                         .arguments
@@ -9670,11 +9786,50 @@ impl<'db> TypeVarInstance<'db> {
             }
             _ => return None,
         };
-        Some(TypeVarBoundOrConstraints::Constraints(ty))
+        Some(TypeVarBoundOrConstraints::Constraints(constraints))
     }
 
     #[salsa::tracked(cycle_fn=lazy_default_cycle_recover, cycle_initial=lazy_default_cycle_initial, heap_size=ruff_memory_usage::heap_size)]
     fn lazy_default(self, db: &'db dyn Db) -> Option<Type<'db>> {
+        fn convert_type_to_paramspec_value<'db>(db: &'db dyn Db, ty: Type<'db>) -> Type<'db> {
+            let parameters = match ty {
+                Type::NominalInstance(nominal_instance)
+                    if nominal_instance.has_known_class(db, KnownClass::EllipsisType) =>
+                {
+                    Parameters::gradual_form()
+                }
+                Type::NominalInstance(nominal_instance) => nominal_instance
+                    .own_tuple_spec(db)
+                    .map_or_else(Parameters::unknown, |tuple_spec| {
+                        Parameters::new(
+                            db,
+                            tuple_spec.all_elements().map(|ty| {
+                                Parameter::positional_only(None).with_annotated_type(*ty)
+                            }),
+                        )
+                    }),
+                Type::Dynamic(dynamic) => match dynamic {
+                    DynamicType::Todo(_)
+                    | DynamicType::TodoUnpack
+                    | DynamicType::TodoStarredExpression => Parameters::todo(),
+                    DynamicType::Any
+                    | DynamicType::Unknown
+                    | DynamicType::UnknownGeneric(_)
+                    | DynamicType::Divergent(_) => Parameters::unknown(),
+                },
+                Type::TypeVar(typevar) if typevar.is_paramspec(db) => {
+                    return ty;
+                }
+                Type::KnownInstance(KnownInstanceType::TypeVar(typevar))
+                    if typevar.is_paramspec(db) =>
+                {
+                    return ty;
+                }
+                _ => Parameters::unknown(),
+            };
+            Type::paramspec_value_callable(db, parameters)
+        }
+
         let definition = self.definition(db)?;
         let module = parsed_module(db, definition.file(db)).load(db);
         match definition.kind(db) {
@@ -9687,27 +9842,35 @@ impl<'db> TypeVarInstance<'db> {
                     typevar_node.default.as_ref()?,
                 ))
             }
-            // legacy typevar
+            // legacy typevar / ParamSpec
             DefinitionKind::Assignment(assignment) => {
                 let call_expr = assignment.value(&module).as_call_expr()?;
+                let func_ty = definition_expression_type(db, definition, &call_expr.func);
+                let known_class = func_ty.as_class_literal().and_then(|cls| cls.known(db));
                 let expr = &call_expr.arguments.find_keyword("default")?.value;
-                Some(definition_expression_type(db, definition, expr))
+                let default_type = definition_expression_type(db, definition, expr);
+                if known_class == Some(KnownClass::ParamSpec) {
+                    Some(convert_type_to_paramspec_value(db, default_type))
+                } else {
+                    Some(default_type)
+                }
             }
             // PEP 695 ParamSpec
             DefinitionKind::ParamSpec(paramspec) => {
                 let paramspec_node = paramspec.node(&module);
-                Some(definition_expression_type(
-                    db,
-                    definition,
-                    paramspec_node.default.as_ref()?,
-                ))
+                let default_ty =
+                    definition_expression_type(db, definition, paramspec_node.default.as_ref()?);
+                Some(convert_type_to_paramspec_value(db, default_ty))
             }
             _ => None,
         }
     }
 
     pub fn bind_pep695(self, db: &'db dyn Db) -> Option<BoundTypeVarInstance<'db>> {
-        if self.identity(db).kind(db) != TypeVarKind::Pep695 {
+        if !matches!(
+            self.identity(db).kind(db),
+            TypeVarKind::Pep695 | TypeVarKind::Pep695ParamSpec
+        ) {
             return None;
         }
         let typevar_definition = self.definition(db)?;
@@ -9730,7 +9893,23 @@ fn lazy_bound_or_constraints_cycle_initial<'db>(
     None
 }
 
-#[allow(clippy::ref_option)]
+#[expect(clippy::ref_option)]
+fn lazy_bound_or_constraints_cycle_recover<'db>(
+    db: &'db dyn Db,
+    cycle: &salsa::Cycle,
+    previous: &Option<TypeVarBoundOrConstraints<'db>>,
+    current: Option<TypeVarBoundOrConstraints<'db>>,
+    _typevar: TypeVarInstance<'db>,
+) -> Option<TypeVarBoundOrConstraints<'db>> {
+    // Normalize the bounds/constraints to ensure cycle convergence.
+    match (previous, current) {
+        (Some(prev), Some(current)) => Some(current.cycle_normalized(db, *prev, cycle)),
+        (None, Some(current)) => Some(current.recursive_type_normalized(db, cycle)),
+        (_, None) => None,
+    }
+}
+
+#[expect(clippy::ref_option)]
 fn lazy_default_cycle_recover<'db>(
     db: &'db dyn Db,
     cycle: &salsa::Cycle,
@@ -9738,6 +9917,7 @@ fn lazy_default_cycle_recover<'db>(
     default: Option<Type<'db>>,
     _typevar: TypeVarInstance<'db>,
 ) -> Option<Type<'db>> {
+    // Normalize the default to ensure cycle convergence.
     match (previous_default, default) {
         (Some(prev), Some(default)) => Some(default.cycle_normalized(db, *prev, cycle)),
         (None, Some(default)) => Some(default.recursive_type_normalized(db, cycle)),
@@ -9785,6 +9965,21 @@ impl<'db> BindingContext<'db> {
     }
 }
 
+#[derive(Copy, Clone, Debug, Hash, PartialEq, Eq, PartialOrd, Ord, get_size2::GetSize)]
+pub enum ParamSpecAttrKind {
+    Args,
+    Kwargs,
+}
+
+impl std::fmt::Display for ParamSpecAttrKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ParamSpecAttrKind::Args => f.write_str("args"),
+            ParamSpecAttrKind::Kwargs => f.write_str("kwargs"),
+        }
+    }
+}
+
 /// The identity of a bound type variable.
 ///
 /// This identifies a specific binding of a typevar to a context (e.g., `T@ClassC` vs `T@FunctionF`),
@@ -9797,14 +9992,26 @@ impl<'db> BindingContext<'db> {
 pub struct BoundTypeVarIdentity<'db> {
     pub(crate) identity: TypeVarIdentity<'db>,
     pub(crate) binding_context: BindingContext<'db>,
+    /// If [`Some`], this indicates that this type variable is the `args` or `kwargs` component
+    /// of a `ParamSpec` i.e., `P.args` or `P.kwargs`.
+    paramspec_attr: Option<ParamSpecAttrKind>,
 }
 
 /// A type variable that has been bound to a generic context, and which can be specialized to a
 /// concrete type.
+///
+/// # Ordering
+///
+/// Ordering is based on the wrapped data's salsa-assigned id and not on its values.
+/// The id may change between runs, or when e.g. a `BoundTypeVarInstance` was garbage-collected and recreated.
 #[salsa::interned(debug, heap_size=ruff_memory_usage::heap_size)]
+#[derive(PartialOrd, Ord)]
 pub struct BoundTypeVarInstance<'db> {
     pub typevar: TypeVarInstance<'db>,
     binding_context: BindingContext<'db>,
+    /// If [`Some`], this indicates that this type variable is the `args` or `kwargs` component
+    /// of a `ParamSpec` i.e., `P.args` or `P.kwargs`.
+    paramspec_attr: Option<ParamSpecAttrKind>,
 }
 
 // The Salsa heap is tracked separately.
@@ -9819,7 +10026,81 @@ impl<'db> BoundTypeVarInstance<'db> {
         BoundTypeVarIdentity {
             identity: self.typevar(db).identity(db),
             binding_context: self.binding_context(db),
+            paramspec_attr: self.paramspec_attr(db),
         }
+    }
+
+    pub(crate) fn name(self, db: &'db dyn Db) -> &'db ast::name::Name {
+        self.typevar(db).name(db)
+    }
+
+    pub(crate) fn kind(self, db: &'db dyn Db) -> TypeVarKind {
+        self.typevar(db).kind(db)
+    }
+
+    pub(crate) fn is_paramspec(self, db: &'db dyn Db) -> bool {
+        self.kind(db).is_paramspec()
+    }
+
+    /// Returns a new bound typevar instance with the given `ParamSpec` attribute set.
+    ///
+    /// This method will also set an appropriate upper bound on the typevar, based on the
+    /// attribute kind. For `P.args`, the upper bound will be `tuple[object, ...]`, and for
+    /// `P.kwargs`, the upper bound will be `Top[dict[str, Any]]`.
+    ///
+    /// It's the caller's responsibility to ensure that this method is only called on a `ParamSpec`
+    /// type variable.
+    pub(crate) fn with_paramspec_attr(self, db: &'db dyn Db, kind: ParamSpecAttrKind) -> Self {
+        debug_assert!(
+            self.is_paramspec(db),
+            "Expected a ParamSpec, got {:?}",
+            self.kind(db)
+        );
+
+        let upper_bound = TypeVarBoundOrConstraints::UpperBound(match kind {
+            ParamSpecAttrKind::Args => Type::homogeneous_tuple(db, Type::object()),
+            ParamSpecAttrKind::Kwargs => KnownClass::Dict
+                .to_specialized_instance(db, [KnownClass::Str.to_instance(db), Type::any()])
+                .top_materialization(db),
+        });
+
+        let typevar = TypeVarInstance::new(
+            db,
+            self.typevar(db).identity(db),
+            Some(TypeVarBoundOrConstraintsEvaluation::Eager(upper_bound)),
+            None, // ParamSpecs cannot have explicit variance
+            None, // `P.args` and `P.kwargs` cannot have defaults even though `P` can
+        );
+
+        Self::new(db, typevar, self.binding_context(db), Some(kind))
+    }
+
+    /// Returns a new bound typevar instance without any `ParamSpec` attribute set.
+    ///
+    /// This method will also remove any upper bound that was set by `with_paramspec_attr`. This
+    /// means that the returned typevar will have no upper bound or constraints.
+    ///
+    /// It's the caller's responsibility to ensure that this method is only called on a `ParamSpec`
+    /// type variable.
+    pub(crate) fn without_paramspec_attr(self, db: &'db dyn Db) -> Self {
+        debug_assert!(
+            self.is_paramspec(db),
+            "Expected a ParamSpec, got {:?}",
+            self.kind(db)
+        );
+
+        Self::new(
+            db,
+            TypeVarInstance::new(
+                db,
+                self.typevar(db).identity(db),
+                None, // Remove the upper bound set by `with_paramspec_attr`
+                None, // ParamSpecs cannot have explicit variance
+                None, // `P.args` and `P.kwargs` cannot have defaults even though `P` can
+            ),
+            self.binding_context(db),
+            None,
+        )
     }
 
     /// Returns whether two bound typevars represent the same logical typevar, regardless of e.g.
@@ -9848,7 +10129,7 @@ impl<'db> BoundTypeVarInstance<'db> {
             Some(variance),
             None, // _default
         );
-        Self::new(db, typevar, BindingContext::Synthetic)
+        Self::new(db, typevar, BindingContext::Synthetic, None)
     }
 
     /// Create a new synthetic `Self` type variable with the given upper bound.
@@ -9870,7 +10151,7 @@ impl<'db> BoundTypeVarInstance<'db> {
             Some(TypeVarVariance::Invariant),
             None, // _default
         );
-        Self::new(db, typevar, binding_context)
+        Self::new(db, typevar, binding_context, None)
     }
 
     /// Returns an identical type variable with its `TypeVarBoundOrConstraints` mapped by the
@@ -9889,7 +10170,12 @@ impl<'db> BoundTypeVarInstance<'db> {
             self.typevar(db)._default(db),
         );
 
-        Self::new(db, typevar, self.binding_context(db))
+        Self::new(
+            db,
+            typevar,
+            self.binding_context(db),
+            self.paramspec_attr(db),
+        )
     }
 
     pub(crate) fn variance_with_polarity(
@@ -9921,10 +10207,42 @@ impl<'db> BoundTypeVarInstance<'db> {
     ) -> Type<'db> {
         match type_mapping {
             TypeMapping::Specialization(specialization) => {
-                specialization.get(db, self).unwrap_or(Type::TypeVar(self))
+                let typevar = if self.is_paramspec(db) {
+                    self.without_paramspec_attr(db)
+                } else {
+                    self
+                };
+                specialization
+                    .get(db, typevar)
+                    .map(|ty| {
+                        if let Some(attr) = self.paramspec_attr(db)
+                            && let Type::TypeVar(typevar) = ty
+                            && typevar.is_paramspec(db)
+                        {
+                            return Type::TypeVar(typevar.with_paramspec_attr(db, attr));
+                        }
+                        ty
+                    })
+                    .unwrap_or(Type::TypeVar(self))
             }
             TypeMapping::PartialSpecialization(partial) => {
-                partial.get(db, self).unwrap_or(Type::TypeVar(self))
+                let typevar = if self.is_paramspec(db) {
+                    self.without_paramspec_attr(db)
+                } else {
+                    self
+                };
+                partial
+                    .get(db, typevar)
+                    .map(|ty| {
+                        if let Some(attr) = self.paramspec_attr(db)
+                            && let Type::TypeVar(typevar) = ty
+                            && typevar.is_paramspec(db)
+                        {
+                            return Type::TypeVar(typevar.with_paramspec_attr(db, attr));
+                        }
+                        ty
+                    })
+                    .unwrap_or(Type::TypeVar(self))
             }
             TypeMapping::BindSelf {
                 self_type,
@@ -10007,6 +10325,7 @@ impl<'db> BoundTypeVarInstance<'db> {
             db,
             self.typevar(db).normalized_impl(db, visitor),
             self.binding_context(db),
+            self.paramspec_attr(db),
         )
     }
 
@@ -10021,6 +10340,7 @@ impl<'db> BoundTypeVarInstance<'db> {
             self.typevar(db)
                 .materialize_impl(db, materialization_kind, visitor),
             self.binding_context(db),
+            self.paramspec_attr(db),
         )
     }
 
@@ -10029,6 +10349,7 @@ impl<'db> BoundTypeVarInstance<'db> {
             db,
             self.typevar(db).to_instance(db)?,
             self.binding_context(db),
+            self.paramspec_attr(db),
         ))
     }
 }
@@ -10065,10 +10386,133 @@ impl<'db> From<TypeVarBoundOrConstraints<'db>> for TypeVarBoundOrConstraintsEval
     }
 }
 
+/// Type variable constraints (e.g. `T: (int, str)`).
+/// This is structurally identical to [`UnionType`], except that it does not perform simplification and preserves the element types.
+#[salsa::interned(debug, heap_size=ruff_memory_usage::heap_size)]
+pub struct TypeVarConstraints<'db> {
+    #[returns(ref)]
+    elements: Box<[Type<'db>]>,
+}
+
+impl get_size2::GetSize for TypeVarConstraints<'_> {}
+
+fn walk_type_var_constraints<'db, V: visitor::TypeVisitor<'db> + ?Sized>(
+    db: &'db dyn Db,
+    constraints: TypeVarConstraints<'db>,
+    visitor: &V,
+) {
+    for ty in constraints.elements(db) {
+        visitor.visit_type(db, *ty);
+    }
+}
+
+impl<'db> TypeVarConstraints<'db> {
+    fn as_type(self, db: &'db dyn Db) -> Type<'db> {
+        let mut builder = UnionBuilder::new(db);
+        for ty in self.elements(db) {
+            builder = builder.add(*ty);
+        }
+        builder.build()
+    }
+
+    fn to_instance(self, db: &'db dyn Db) -> Option<TypeVarConstraints<'db>> {
+        let mut instance_elements = Vec::new();
+        for ty in self.elements(db) {
+            instance_elements.push(ty.to_instance(db)?);
+        }
+        Some(TypeVarConstraints::new(
+            db,
+            instance_elements.into_boxed_slice(),
+        ))
+    }
+
+    fn map(self, db: &'db dyn Db, transform_fn: impl FnMut(&Type<'db>) -> Type<'db>) -> Self {
+        let mapped = self
+            .elements(db)
+            .iter()
+            .map(transform_fn)
+            .collect::<Box<_>>();
+        TypeVarConstraints::new(db, mapped)
+    }
+
+    pub(crate) fn map_with_boundness_and_qualifiers(
+        self,
+        db: &'db dyn Db,
+        mut transform_fn: impl FnMut(&Type<'db>) -> PlaceAndQualifiers<'db>,
+    ) -> PlaceAndQualifiers<'db> {
+        let mut builder = UnionBuilder::new(db);
+        let mut qualifiers = TypeQualifiers::empty();
+
+        let mut all_unbound = true;
+        let mut possibly_unbound = false;
+        let mut origin = TypeOrigin::Declared;
+        for ty in self.elements(db) {
+            let PlaceAndQualifiers {
+                place: ty_member,
+                qualifiers: new_qualifiers,
+            } = transform_fn(ty);
+            qualifiers |= new_qualifiers;
+            match ty_member {
+                Place::Undefined => {
+                    possibly_unbound = true;
+                }
+                Place::Defined(ty_member, member_origin, member_boundness) => {
+                    origin = origin.merge(member_origin);
+                    if member_boundness == Definedness::PossiblyUndefined {
+                        possibly_unbound = true;
+                    }
+
+                    all_unbound = false;
+                    builder = builder.add(ty_member);
+                }
+            }
+        }
+        PlaceAndQualifiers {
+            place: if all_unbound {
+                Place::Undefined
+            } else {
+                Place::Defined(
+                    builder.build(),
+                    origin,
+                    if possibly_unbound {
+                        Definedness::PossiblyUndefined
+                    } else {
+                        Definedness::AlwaysDefined
+                    },
+                )
+            },
+            qualifiers,
+        }
+    }
+
+    fn normalized_impl(self, db: &'db dyn Db, visitor: &NormalizedVisitor<'db>) -> Self {
+        let normalized = self
+            .elements(db)
+            .iter()
+            .map(|ty| ty.normalized_impl(db, visitor))
+            .collect::<Box<_>>();
+        TypeVarConstraints::new(db, normalized)
+    }
+
+    fn materialize_impl(
+        self,
+        db: &'db dyn Db,
+        materialization_kind: MaterializationKind,
+        visitor: &ApplyTypeMappingVisitor<'db>,
+    ) -> Self {
+        let materialized = self
+            .elements(db)
+            .iter()
+            .map(|ty| ty.materialize(db, materialization_kind, visitor))
+            .collect::<Box<_>>();
+        TypeVarConstraints::new(db, materialized)
+    }
+}
+
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, salsa::Update, get_size2::GetSize)]
 pub enum TypeVarBoundOrConstraints<'db> {
     UpperBound(Type<'db>),
-    Constraints(UnionType<'db>),
+    Constraints(TypeVarConstraints<'db>),
 }
 
 fn walk_type_var_bounds<'db, V: visitor::TypeVisitor<'db> + ?Sized>(
@@ -10079,7 +10523,7 @@ fn walk_type_var_bounds<'db, V: visitor::TypeVisitor<'db> + ?Sized>(
     match bounds {
         TypeVarBoundOrConstraints::UpperBound(bound) => visitor.visit_type(db, bound),
         TypeVarBoundOrConstraints::Constraints(constraints) => {
-            visitor.visit_union_type(db, constraints);
+            walk_type_var_constraints(db, constraints, visitor);
         }
     }
 }
@@ -10091,17 +10535,60 @@ impl<'db> TypeVarBoundOrConstraints<'db> {
                 TypeVarBoundOrConstraints::UpperBound(bound.normalized_impl(db, visitor))
             }
             TypeVarBoundOrConstraints::Constraints(constraints) => {
-                // Constraints are a non-normalized union by design (it's not really a union at
-                // all, we are just using a union to store the types). Normalize the types but not
-                // the containing union.
-                TypeVarBoundOrConstraints::Constraints(UnionType::new(
+                TypeVarBoundOrConstraints::Constraints(constraints.normalized_impl(db, visitor))
+            }
+        }
+    }
+
+    /// Normalize for cycle recovery by combining with the previous value and
+    /// removing divergent types introduced by the cycle.
+    ///
+    /// See [`Type::cycle_normalized`] for more details on how this works.
+    fn cycle_normalized(self, db: &'db dyn Db, previous: Self, cycle: &salsa::Cycle) -> Self {
+        match (self, previous) {
+            (
+                TypeVarBoundOrConstraints::UpperBound(bound),
+                TypeVarBoundOrConstraints::UpperBound(prev_bound),
+            ) => {
+                TypeVarBoundOrConstraints::UpperBound(bound.cycle_normalized(db, prev_bound, cycle))
+            }
+            (
+                TypeVarBoundOrConstraints::Constraints(constraints),
+                TypeVarBoundOrConstraints::Constraints(prev_constraints),
+            ) => {
+                // Normalize each constraint with its corresponding previous constraint
+                let current_elements = constraints.elements(db);
+                let prev_elements = prev_constraints.elements(db);
+                TypeVarBoundOrConstraints::Constraints(TypeVarConstraints::new(
                     db,
-                    constraints
-                        .elements(db)
+                    current_elements
                         .iter()
-                        .map(|ty| ty.normalized_impl(db, visitor))
+                        .zip(prev_elements.iter())
+                        .map(|(ty, prev_ty)| ty.cycle_normalized(db, *prev_ty, cycle))
                         .collect::<Box<_>>(),
                 ))
+            }
+            // The choice of whether it's an upper bound or constraints is purely syntactic and
+            // thus can never change in a cycle: `parsed_module` does not participate in cycles,
+            // the AST will never change from one iteration to the next.
+            _ => unreachable!(
+                "TypeVar switched from bound to constraints (or vice versa) in fixpoint iteration"
+            ),
+        }
+    }
+
+    /// Normalize recursive types for cycle recovery when there's no previous value.
+    ///
+    /// See [`Type::recursive_type_normalized`] for more details.
+    fn recursive_type_normalized(self, db: &'db dyn Db, cycle: &salsa::Cycle) -> Self {
+        match self {
+            TypeVarBoundOrConstraints::UpperBound(bound) => {
+                TypeVarBoundOrConstraints::UpperBound(bound.recursive_type_normalized(db, cycle))
+            }
+            TypeVarBoundOrConstraints::Constraints(constraints) => {
+                TypeVarBoundOrConstraints::Constraints(
+                    constraints.map(db, |ty| ty.recursive_type_normalized(db, cycle)),
+                )
             }
         }
     }
@@ -10117,13 +10604,10 @@ impl<'db> TypeVarBoundOrConstraints<'db> {
                 bound.materialize(db, materialization_kind, visitor),
             ),
             TypeVarBoundOrConstraints::Constraints(constraints) => {
-                TypeVarBoundOrConstraints::Constraints(UnionType::new(
+                TypeVarBoundOrConstraints::Constraints(constraints.materialize_impl(
                     db,
-                    constraints
-                        .elements(db)
-                        .iter()
-                        .map(|ty| ty.materialize(db, materialization_kind, visitor))
-                        .collect::<Box<_>>(),
+                    materialization_kind,
+                    visitor,
                 ))
             }
         }
@@ -11101,7 +11585,7 @@ impl<'db> BoolError<'db> {
                 not_boolable_type, ..
             } => {
                 let mut diag = builder.into_diagnostic(format_args!(
-                    "Boolean conversion is unsupported for type `{}`",
+                    "Boolean conversion is not supported for type `{}`",
                     not_boolable_type.display(context.db())
                 ));
                 let mut sub = SubDiagnostic::new(
@@ -11126,7 +11610,7 @@ impl<'db> BoolError<'db> {
                 return_type,
             } => {
                 let mut diag = builder.into_diagnostic(format_args!(
-                    "Boolean conversion is unsupported for type `{not_boolable}`",
+                    "Boolean conversion is not supported for type `{not_boolable}`",
                     not_boolable = not_boolable_type.display(context.db()),
                 ));
                 let mut sub = SubDiagnostic::new(
@@ -11152,7 +11636,7 @@ impl<'db> BoolError<'db> {
             }
             Self::NotCallable { not_boolable_type } => {
                 let mut diag = builder.into_diagnostic(format_args!(
-                    "Boolean conversion is unsupported for type `{}`",
+                    "Boolean conversion is not supported for type `{}`",
                     not_boolable_type.display(context.db())
                 ));
                 let sub = SubDiagnostic::new(
@@ -11175,7 +11659,7 @@ impl<'db> BoolError<'db> {
                     .unwrap();
 
                 builder.into_diagnostic(format_args!(
-                    "Boolean conversion is unsupported for union `{}` \
+                    "Boolean conversion is not supported for union `{}` \
                      because `{}` doesn't implement `__bool__` correctly",
                     Type::Union(*union).display(context.db()),
                     first_error.not_boolable_type().display(context.db()),
@@ -11184,7 +11668,7 @@ impl<'db> BoolError<'db> {
 
             Self::Other { not_boolable_type } => {
                 builder.into_diagnostic(format_args!(
-                    "Boolean conversion is unsupported for type `{}`; \
+                    "Boolean conversion is not supported for type `{}`; \
                      it incorrectly implements `__bool__`",
                     not_boolable_type.display(context.db())
                 ));
@@ -11609,7 +12093,7 @@ impl<'db> BoundMethodType<'db> {
                     .iter()
                     .map(|signature| signature.bind_self(db, Some(self_instance))),
             ),
-            true,
+            CallableTypeKind::FunctionLike,
         )
     }
 
@@ -11690,6 +12174,20 @@ impl<'db> BoundMethodType<'db> {
     }
 }
 
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, get_size2::GetSize)]
+pub enum CallableTypeKind {
+    /// Represents regular callable objects.
+    Regular,
+
+    /// Represents function-like objects, like the synthesized methods of dataclasses or
+    /// `NamedTuples`. These callables act like real functions when accessed as attributes on
+    /// instances, i.e. they bind `self`.
+    FunctionLike,
+
+    /// Represents the value bound to a `typing.ParamSpec` type variable.
+    ParamSpecValue,
+}
+
 /// This type represents the set of all callable objects with a certain, possibly overloaded,
 /// signature.
 ///
@@ -11706,10 +12204,7 @@ pub struct CallableType<'db> {
     #[returns(ref)]
     pub(crate) signatures: CallableSignature<'db>,
 
-    /// We use `CallableType` to represent function-like objects, like the synthesized methods
-    /// of dataclasses or NamedTuples. These callables act like real functions when accessed
-    /// as attributes on instances, i.e. they bind `self`.
-    is_function_like: bool,
+    kind: CallableTypeKind,
 }
 
 pub(super) fn walk_callable_type<'db, V: visitor::TypeVisitor<'db> + ?Sized>(
@@ -11737,20 +12232,52 @@ impl<'db> Type<'db> {
     pub(crate) fn function_like_callable(db: &'db dyn Db, signature: Signature<'db>) -> Type<'db> {
         Type::Callable(CallableType::function_like(db, signature))
     }
+
+    /// Create a non-overloaded callable type which represents the value bound to a `ParamSpec`
+    /// type variable.
+    pub(crate) fn paramspec_value_callable(
+        db: &'db dyn Db,
+        parameters: Parameters<'db>,
+    ) -> Type<'db> {
+        Type::Callable(CallableType::paramspec_value(db, parameters))
+    }
 }
 
 impl<'db> CallableType<'db> {
     pub(crate) fn single(db: &'db dyn Db, signature: Signature<'db>) -> CallableType<'db> {
-        CallableType::new(db, CallableSignature::single(signature), false)
+        CallableType::new(
+            db,
+            CallableSignature::single(signature),
+            CallableTypeKind::Regular,
+        )
     }
 
     pub(crate) fn function_like(db: &'db dyn Db, signature: Signature<'db>) -> CallableType<'db> {
-        CallableType::new(db, CallableSignature::single(signature), true)
+        CallableType::new(
+            db,
+            CallableSignature::single(signature),
+            CallableTypeKind::FunctionLike,
+        )
+    }
+
+    pub(crate) fn paramspec_value(
+        db: &'db dyn Db,
+        parameters: Parameters<'db>,
+    ) -> CallableType<'db> {
+        CallableType::new(
+            db,
+            CallableSignature::single(Signature::new(parameters, None)),
+            CallableTypeKind::ParamSpecValue,
+        )
     }
 
     /// Create a callable type which accepts any parameters and returns an `Unknown` type.
     pub(crate) fn unknown(db: &'db dyn Db) -> CallableType<'db> {
         Self::single(db, Signature::unknown())
+    }
+
+    pub(crate) fn is_function_like(self, db: &'db dyn Db) -> bool {
+        matches!(self.kind(db), CallableTypeKind::FunctionLike)
     }
 
     pub(crate) fn bind_self(
@@ -11761,7 +12288,7 @@ impl<'db> CallableType<'db> {
         CallableType::new(
             db,
             self.signatures(db).bind_self(db, self_type),
-            self.is_function_like(db),
+            self.kind(db),
         )
     }
 
@@ -11769,7 +12296,7 @@ impl<'db> CallableType<'db> {
         CallableType::new(
             db,
             self.signatures(db).apply_self(db, self_type),
-            self.is_function_like(db),
+            self.kind(db),
         )
     }
 
@@ -11778,7 +12305,7 @@ impl<'db> CallableType<'db> {
     /// Specifically, this represents a callable type with a single signature:
     /// `(*args: object, **kwargs: object) -> Never`.
     pub(crate) fn bottom(db: &'db dyn Db) -> CallableType<'db> {
-        Self::new(db, CallableSignature::bottom(), false)
+        Self::new(db, CallableSignature::bottom(), CallableTypeKind::Regular)
     }
 
     /// Return a "normalized" version of this `Callable` type.
@@ -11788,7 +12315,7 @@ impl<'db> CallableType<'db> {
         CallableType::new(
             db,
             self.signatures(db).normalized_impl(db, visitor),
-            self.is_function_like(db),
+            self.kind(db),
         )
     }
 
@@ -11802,7 +12329,7 @@ impl<'db> CallableType<'db> {
             db,
             self.signatures(db)
                 .recursive_type_normalized_impl(db, div, nested)?,
-            self.is_function_like(db),
+            self.kind(db),
         ))
     }
 
@@ -11817,7 +12344,7 @@ impl<'db> CallableType<'db> {
             db,
             self.signatures(db)
                 .apply_type_mapping_impl(db, type_mapping, tcx, visitor),
-            self.is_function_like(db),
+            self.kind(db),
         )
     }
 
@@ -13065,6 +13592,9 @@ pub struct UnionType<'db> {
     /// The union type includes values in any of these types.
     #[returns(deref)]
     pub elements: Box<[Type<'db>]>,
+    /// Whether the value pointed to by this type is recursively defined.
+    /// If `Yes`, union literal widening is performed early.
+    recursively_defined: RecursivelyDefined,
 }
 
 pub(crate) fn walk_union<'db, V: visitor::TypeVisitor<'db> + ?Sized>(
@@ -13149,7 +13679,14 @@ impl<'db> UnionType<'db> {
         db: &'db dyn Db,
         transform_fn: impl FnMut(&Type<'db>) -> Type<'db>,
     ) -> Type<'db> {
-        Self::from_elements(db, self.elements(db).iter().map(transform_fn))
+        self.elements(db)
+            .iter()
+            .map(transform_fn)
+            .fold(UnionBuilder::new(db), |builder, element| {
+                builder.add(element)
+            })
+            .recursively_defined(self.recursively_defined(db))
+            .build()
     }
 
     /// A fallible version of [`UnionType::map`].
@@ -13164,7 +13701,12 @@ impl<'db> UnionType<'db> {
         db: &'db dyn Db,
         transform_fn: impl FnMut(&Type<'db>) -> Option<Type<'db>>,
     ) -> Option<Type<'db>> {
-        Self::try_from_elements(db, self.elements(db).iter().map(transform_fn))
+        let mut builder = UnionBuilder::new(db);
+        for element in self.elements(db).iter().map(transform_fn) {
+            builder = builder.add(element?);
+        }
+        builder = builder.recursively_defined(self.recursively_defined(db));
+        Some(builder.build())
     }
 
     pub(crate) fn to_instance(self, db: &'db dyn Db) -> Option<Type<'db>> {
@@ -13176,7 +13718,14 @@ impl<'db> UnionType<'db> {
         db: &'db dyn Db,
         mut f: impl FnMut(&Type<'db>) -> bool,
     ) -> Type<'db> {
-        Self::from_elements(db, self.elements(db).iter().filter(|ty| f(ty)))
+        self.elements(db)
+            .iter()
+            .filter(|ty| f(ty))
+            .fold(UnionBuilder::new(db), |builder, element| {
+                builder.add(*element)
+            })
+            .recursively_defined(self.recursively_defined(db))
+            .build()
     }
 
     pub(crate) fn map_with_boundness(
@@ -13211,7 +13760,9 @@ impl<'db> UnionType<'db> {
             Place::Undefined
         } else {
             Place::Defined(
-                builder.build(),
+                builder
+                    .recursively_defined(self.recursively_defined(db))
+                    .build(),
                 origin,
                 if possibly_unbound {
                     Definedness::PossiblyUndefined
@@ -13259,7 +13810,9 @@ impl<'db> UnionType<'db> {
                 Place::Undefined
             } else {
                 Place::Defined(
-                    builder.build(),
+                    builder
+                        .recursively_defined(self.recursively_defined(db))
+                        .build(),
                     origin,
                     if possibly_unbound {
                         Definedness::PossiblyUndefined
@@ -13294,6 +13847,7 @@ impl<'db> UnionType<'db> {
                     .unpack_aliases(true),
                 UnionBuilder::add,
             )
+            .recursively_defined(self.recursively_defined(db))
             .build()
     }
 
@@ -13306,7 +13860,8 @@ impl<'db> UnionType<'db> {
         let mut builder = UnionBuilder::new(db)
             .order_elements(false)
             .unpack_aliases(false)
-            .cycle_recovery(true);
+            .cycle_recovery(true)
+            .recursively_defined(self.recursively_defined(db));
         let mut empty = true;
         for ty in self.elements(db) {
             if nested {
@@ -13321,6 +13876,7 @@ impl<'db> UnionType<'db> {
                 // `Divergent` in a union type does not mean true divergence, so we skip it if not nested.
                 // e.g. T | Divergent == T | (T | (T | (T | ...))) == T
                 if ty == &div {
+                    builder = builder.recursively_defined(RecursivelyDefined::Yes);
                     continue;
                 }
                 builder = builder.add(
@@ -13640,8 +14196,16 @@ impl<'db> IntersectionType<'db> {
         self.positive(db).iter().copied()
     }
 
+    pub fn iter_negative(self, db: &'db dyn Db) -> impl Iterator<Item = Type<'db>> {
+        self.negative(db).iter().copied()
+    }
+
     pub(crate) fn has_one_element(self, db: &'db dyn Db) -> bool {
         (self.positive(db).len() + self.negative(db).len()) == 1
+    }
+
+    pub(crate) fn is_simple_negation(self, db: &'db dyn Db) -> bool {
+        self.positive(db).is_empty() && self.negative(db).len() == 1
     }
 
     fn heap_size((positive, negative): &(FxOrderSet<Type<'db>>, FxOrderSet<Type<'db>>)) -> usize {

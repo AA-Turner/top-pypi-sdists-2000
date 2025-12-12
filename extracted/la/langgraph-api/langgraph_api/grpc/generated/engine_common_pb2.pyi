@@ -541,12 +541,14 @@ class AIFields(_message.Message):
     def __init__(self, usage_metadata: _Optional[_Union[UsageMetadata, _Mapping]] = ..., response_metadata: _Optional[_Union[ResponseMetadata, _Mapping]] = ..., tool_calls: _Optional[_Iterable[_Union[ToolCall, _Mapping]]] = ..., tool_call_chunks: _Optional[_Iterable[_Union[ToolCallChunk, _Mapping]]] = ..., invalid_tool_calls: _Optional[_Iterable[_Union[InvalidToolCall, _Mapping]]] = ..., reasoning_content: _Optional[_Union[_wrappers_pb2.StringValue, _Mapping]] = ...) -> None: ...
 
 class ToolFields(_message.Message):
-    __slots__ = ("tool_call_id", "status")
+    __slots__ = ("tool_call_id", "status", "artifact")
     TOOL_CALL_ID_FIELD_NUMBER: _ClassVar[int]
     STATUS_FIELD_NUMBER: _ClassVar[int]
+    ARTIFACT_FIELD_NUMBER: _ClassVar[int]
     tool_call_id: _wrappers_pb2.StringValue
     status: str
-    def __init__(self, tool_call_id: _Optional[_Union[_wrappers_pb2.StringValue, _Mapping]] = ..., status: _Optional[str] = ...) -> None: ...
+    artifact: SerializedValue
+    def __init__(self, tool_call_id: _Optional[_Union[_wrappers_pb2.StringValue, _Mapping]] = ..., status: _Optional[str] = ..., artifact: _Optional[_Union[SerializedValue, _Mapping]] = ...) -> None: ...
 
 class HumanFields(_message.Message):
     __slots__ = ()
