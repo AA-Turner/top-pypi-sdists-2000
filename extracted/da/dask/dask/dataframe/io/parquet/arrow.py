@@ -718,14 +718,14 @@ class ArrowDatasetEngine(Engine):
             if set(names) != set(df.columns) - set(partition_on):
                 raise ValueError(
                     "Appended columns not the same.\n"
-                    "Previous: {} | New: {}".format(names, list(df.columns))
+                    f"Previous: {names} | New: {list(df.columns)}"
                 )
-            elif pd.Series(dtypes).loc[names].tolist() != df[names].dtypes.tolist():
+            elif pd.Series(dtypes).loc[names].tolist() != [
+                str(dtype) for dtype in df[names].dtypes.tolist()
+            ]:
                 # TODO Coerce values for compatible but different dtypes
                 raise ValueError(
-                    "Appended dtypes differ.\n{}".format(
-                        set(dtypes.items()) ^ set(df.dtypes.items())
-                    )
+                    f"Appended dtypes differ.\n{set(dtypes.items()) ^ set(df.dtypes.items())}"
                 )
 
             # Check divisions if necessary
@@ -1186,9 +1186,7 @@ class ArrowDatasetEngine(Engine):
                 raise ValueError(
                     "No partition-columns should be written in the \n"
                     "file unless they are ALL written in the file.\n"
-                    "physical columns: {} | partitions: {}".format(
-                        physical_column_names, partitions
-                    )
+                    f"physical columns: {physical_column_names} | partitions: {partitions}"
                 )
 
         # Get all available column names
@@ -1202,7 +1200,7 @@ class ArrowDatasetEngine(Engine):
             if not set(categories).intersection(all_columns):
                 raise ValueError(
                     "categories not in available columns.\n"
-                    "categories: {} | columns: {}".format(categories, list(all_columns))
+                    f"categories: {categories} | columns: {list(all_columns)}"
                 )
 
             # Make sure all categories are set to "unknown".
@@ -1421,8 +1419,8 @@ class ArrowDatasetEngine(Engine):
                             stats += stat
                     return parts, stats
 
-                gather_parts_dsk["final-" + name] = (_combine_parts, finalize_list)
-                parts, stats = Delayed("final-" + name, gather_parts_dsk).compute()
+                gather_parts_dsk[f"final-{name}"] = (_combine_parts, finalize_list)
+                parts, stats = Delayed(f"final-{name}", gather_parts_dsk).compute()
 
         return parts, stats, common_kwargs
 

@@ -68,11 +68,7 @@ class _StreamReaderThroughServer(typing.Generic[T]):
         """Process logs from the server and yield complete lines only."""
         ...
 
-    def _ensure_stream(self) -> collections.abc.AsyncGenerator[T, None]: ...
-    async def __anext__(self) -> T:
-        """mdmd:hidden"""
-        ...
-
+    def __aiter__(self) -> collections.abc.AsyncGenerator[T, None]: ...
     async def aclose(self):
         """mdmd:hidden"""
         ...
@@ -90,6 +86,9 @@ def _decode_bytes_stream_to_str(
 def _stream_by_line(stream: collections.abc.AsyncGenerator[bytes, None]) -> collections.abc.AsyncGenerator[bytes, None]:
     """Yield complete lines only (ending with
     ), buffering partial lines until complete.
+
+        When this generator returns, the underlying generator is closed.
+
     """
     ...
 
@@ -140,9 +139,8 @@ class _BytesStreamReaderThroughCommandRouter:
     @property
     def file_descriptor(self) -> int: ...
     async def read(self) -> bytes: ...
-    def __aiter__(self) -> collections.abc.AsyncIterator[bytes]: ...
-    async def __anext__(self) -> bytes: ...
-    async def aclose(self): ...
+    def __aiter__(self) -> collections.abc.AsyncGenerator[bytes, None]: ...
+    async def _print_all(self, output_stream: typing.TextIO) -> None: ...
 
 class _TextStreamReaderThroughCommandRouter:
     """StreamReader implementation that will read directly from the worker
@@ -157,9 +155,8 @@ class _TextStreamReaderThroughCommandRouter:
     @property
     def file_descriptor(self) -> int: ...
     async def read(self) -> str: ...
-    def __aiter__(self) -> collections.abc.AsyncIterator[str]: ...
-    async def __anext__(self) -> str: ...
-    async def aclose(self): ...
+    def __aiter__(self) -> collections.abc.AsyncGenerator[str, None]: ...
+    async def _print_all(self, output_stream: typing.TextIO) -> None: ...
 
 class _StdoutPrintingStreamReaderThroughCommandRouter(typing.Generic[T]):
     """StreamReader implementation for StreamType.STDOUT when using the task command router.
@@ -214,6 +211,7 @@ class _StreamReader(typing.Generic[T]):
         _BytesStreamReaderThroughCommandRouter,
         _StdoutPrintingStreamReaderThroughCommandRouter,
     ]
+    _read_gen: typing.Optional[collections.abc.AsyncGenerator[T, None]]
 
     def __init__(
         self,
@@ -240,12 +238,13 @@ class _StreamReader(typing.Generic[T]):
         """Fetch the entire contents of the stream until EOF."""
         ...
 
-    def __aiter__(self) -> collections.abc.AsyncIterator[T]:
-        """mdmd:hidden"""
-        ...
-
+    def __aiter__(self) -> collections.abc.AsyncGenerator[T, None]: ...
     async def __anext__(self) -> T:
-        """mdmd:hidden"""
+        """Deprecated: This exists for backwards compatibility and will be removed in a future version of Modal
+
+        Only use next/anext on the return value of iter/aiter on the StreamReader object (treat streamreader as
+        an iterable, not an iterator).
+        """
         ...
 
     async def aclose(self):
@@ -383,6 +382,7 @@ class StreamReader(typing.Generic[T]):
         _BytesStreamReaderThroughCommandRouter,
         _StdoutPrintingStreamReaderThroughCommandRouter,
     ]
+    _read_gen: typing.Optional[collections.abc.AsyncGenerator[T, None]]
 
     def __init__(
         self,
@@ -416,20 +416,22 @@ class StreamReader(typing.Generic[T]):
 
     read: __read_spec[T, typing_extensions.Self]
 
-    def __iter__(self) -> typing.Iterator[T]:
-        """mdmd:hidden"""
-        ...
-
-    def __aiter__(self) -> collections.abc.AsyncIterator[T]:
-        """mdmd:hidden"""
-        ...
-
+    def __iter__(self) -> typing.Generator[T, None, None]: ...
+    def __aiter__(self) -> collections.abc.AsyncGenerator[T, None]: ...
     def __next__(self) -> T:
-        """mdmd:hidden"""
+        """Deprecated: This exists for backwards compatibility and will be removed in a future version of Modal
+
+        Only use next/anext on the return value of iter/aiter on the StreamReader object (treat streamreader as
+        an iterable, not an iterator).
+        """
         ...
 
     async def __anext__(self) -> T:
-        """mdmd:hidden"""
+        """Deprecated: This exists for backwards compatibility and will be removed in a future version of Modal
+
+        Only use next/anext on the return value of iter/aiter on the StreamReader object (treat streamreader as
+        an iterable, not an iterator).
+        """
         ...
 
     def close(self):

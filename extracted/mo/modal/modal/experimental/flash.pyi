@@ -1,4 +1,5 @@
 import modal.client
+import modal_proto.api_pb2
 import subprocess
 import typing
 import typing_extensions
@@ -10,6 +11,8 @@ class _FlashManager:
         port: int,
         process: typing.Optional[subprocess.Popen] = None,
         health_check_url: typing.Optional[str] = None,
+        startup_timeout: int = 30,
+        exit_grace_period: int = 0,
         h2_enabled: bool = False,
     ):
         """Initialize self.  See help(type(self)) for accurate signature."""
@@ -37,6 +40,8 @@ class FlashManager:
         port: int,
         process: typing.Optional[subprocess.Popen] = None,
         health_check_url: typing.Optional[str] = None,
+        startup_timeout: int = 30,
+        exit_grace_period: int = 0,
         h2_enabled: bool = False,
     ): ...
 
@@ -94,6 +99,8 @@ class __flash_forward_spec(typing_extensions.Protocol):
         port: int,
         process: typing.Optional[subprocess.Popen] = None,
         health_check_url: typing.Optional[str] = None,
+        startup_timeout: int = 30,
+        exit_grace_period: int = 0,
         h2_enabled: bool = False,
     ) -> FlashManager:
         """Forward a port to the Modal Flash service, exposing that port as a stable web endpoint.
@@ -108,6 +115,8 @@ class __flash_forward_spec(typing_extensions.Protocol):
         port: int,
         process: typing.Optional[subprocess.Popen] = None,
         health_check_url: typing.Optional[str] = None,
+        startup_timeout: int = 30,
+        exit_grace_period: int = 0,
         h2_enabled: bool = False,
     ) -> FlashManager:
         """Forward a port to the Modal Flash service, exposing that port as a stable web endpoint.
@@ -382,3 +391,54 @@ class __flash_get_containers_spec(typing_extensions.Protocol):
         ...
 
 flash_get_containers: __flash_get_containers_spec
+
+def _http_server(
+    port: typing.Optional[int] = None,
+    *,
+    proxy_regions: list[str] = [],
+    startup_timeout: int = 30,
+    exit_grace_period: typing.Optional[int] = None,
+    h2_enabled: bool = False,
+):
+    """Decorator for Flash-enabled HTTP servers on Modal classes.
+
+    Args:
+        port: The local port to forward to the HTTP server.
+        proxy_regions: The regions to proxy the HTTP server to.
+        startup_timeout: The maximum time to wait for the HTTP server to start.
+        exit_grace_period: The time to wait for the HTTP server to exit gracefully.
+    """
+    ...
+
+def http_server(
+    port: typing.Optional[int] = None,
+    *,
+    proxy_regions: list[str] = [],
+    startup_timeout: int = 30,
+    exit_grace_period: typing.Optional[int] = None,
+    h2_enabled: bool = False,
+):
+    """Decorator for Flash-enabled HTTP servers on Modal classes.
+
+    Args:
+        port: The local port to forward to the HTTP server.
+        proxy_regions: The regions to proxy the HTTP server to.
+        startup_timeout: The maximum time to wait for the HTTP server to start.
+        exit_grace_period: The time to wait for the HTTP server to exit gracefully.
+    """
+    ...
+
+class _FlashContainerEntry:
+    """A class that manages the lifecycle of Flash manager for Flash containers.
+
+    It is intentional that stop() runs before exit handlers and close().
+    This ensures the container is deregistered first, preventing new requests from being routed to it
+    while exit handlers execute and the exit grace period elapses, before finally closing the tunnel.
+    """
+    def __init__(self, http_config: modal_proto.api_pb2.HTTPConfig):
+        """Initialize self.  See help(type(self)) for accurate signature."""
+        ...
+
+    def enter(self): ...
+    def stop(self): ...
+    def close(self): ...

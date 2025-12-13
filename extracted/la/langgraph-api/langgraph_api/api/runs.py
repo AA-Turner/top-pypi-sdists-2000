@@ -49,6 +49,14 @@ logger = structlog.stdlib.get_logger(__name__)
 _RunResultFallback = Callable[[], Awaitable[bytes]]
 
 
+def _ensure_crons_enabled() -> None:
+    if not (config.FF_CRONS_ENABLED and plus_features_enabled()):
+        raise HTTPException(
+            status_code=403,
+            detail="Crons are currently only available in the cloud version of LangSmith Deployment or with a self-hosting enterprise license. Please visit https://docs.langchain.com/langsmith/deployments to learn more about deployment options, or contact sales@langchain.com for more information",
+        )
+
+
 def _thread_values_fallback(thread_id: UUID) -> _RunResultFallback:
     async def fetch_thread_values() -> bytes:
         async with connect() as conn:
@@ -642,6 +650,7 @@ async def delete_run(request: ApiRequest):
 @retry_db
 async def create_cron(request: ApiRequest):
     """Create a cron with new thread."""
+    _ensure_crons_enabled()
     payload = await request.json(CronCreate)
     if webhook := payload.get("webhook"):
         await validate_webhook_url_or_raise(str(webhook))
@@ -679,6 +688,7 @@ async def create_cron(request: ApiRequest):
 @retry_db
 async def create_thread_cron(request: ApiRequest):
     """Create a thread specific cron."""
+    _ensure_crons_enabled()
     thread_id = request.path_params["thread_id"]
     validate_uuid(thread_id, "Invalid thread ID: must be a UUID")
     payload = await request.json(ThreadCronCreate)
@@ -718,6 +728,7 @@ async def create_thread_cron(request: ApiRequest):
 @retry_db
 async def delete_cron(request: ApiRequest):
     """Delete a cron by ID."""
+    _ensure_crons_enabled()
     cron_id = request.path_params["cron_id"]
     validate_uuid(cron_id, "Invalid cron ID: must be a UUID")
 
@@ -733,6 +744,7 @@ async def delete_cron(request: ApiRequest):
 @retry_db
 async def search_crons(request: ApiRequest):
     """List all cron jobs for an assistant"""
+    _ensure_crons_enabled()
     payload = await request.json(CronSearch)
     select = validate_select_columns(payload.get("select") or None, CRON_FIELDS)
     if assistant_id := payload.get("assistant_id"):
@@ -773,6 +785,7 @@ async def search_crons(request: ApiRequest):
 @retry_db
 async def count_crons(request: ApiRequest):
     """Count cron jobs."""
+    _ensure_crons_enabled()
     payload = await request.json(CronCountRequest)
     if assistant_id := payload.get("assistant_id"):
         validate_uuid(assistant_id, "Invalid assistant ID: must be a UUID")
@@ -794,21 +807,9 @@ runs_routes = [
     ApiRoute("/runs", create_stateless_run, methods=["POST"]),
     ApiRoute("/runs/batch", create_stateless_run_batch, methods=["POST"]),
     ApiRoute("/runs/cancel", cancel_runs, methods=["POST"]),
-    (
-        ApiRoute("/runs/crons", create_cron, methods=["POST"])
-        if config.FF_CRONS_ENABLED and plus_features_enabled()
-        else None
-    ),
-    (
-        ApiRoute("/runs/crons/search", search_crons, methods=["POST"])
-        if config.FF_CRONS_ENABLED and plus_features_enabled()
-        else None
-    ),
-    (
-        ApiRoute("/runs/crons/count", count_crons, methods=["POST"])
-        if config.FF_CRONS_ENABLED and plus_features_enabled()
-        else None
-    ),
+    ApiRoute("/runs/crons", create_cron, methods=["POST"]),
+    ApiRoute("/runs/crons/search", search_crons, methods=["POST"]),
+    ApiRoute("/runs/crons/count", count_crons, methods=["POST"]),
     ApiRoute("/threads/{thread_id}/runs/{run_id}/join", join_run, methods=["GET"]),
     ApiRoute(
         "/threads/{thread_id}/runs/{run_id}/stream",
@@ -821,19 +822,9 @@ runs_routes = [
     ApiRoute("/threads/{thread_id}/runs/stream", stream_run, methods=["POST"]),
     ApiRoute("/threads/{thread_id}/runs/wait", wait_run, methods=["POST"]),
     ApiRoute("/threads/{thread_id}/runs", create_run, methods=["POST"]),
-    (
-        ApiRoute(
-            "/threads/{thread_id}/runs/crons", create_thread_cron, methods=["POST"]
-        )
-        if config.FF_CRONS_ENABLED and plus_features_enabled()
-        else None
-    ),
+    ApiRoute("/threads/{thread_id}/runs/crons", create_thread_cron, methods=["POST"]),
     ApiRoute("/threads/{thread_id}/runs", list_runs, methods=["GET"]),
-    (
-        ApiRoute("/runs/crons/{cron_id}", delete_cron, methods=["DELETE"])
-        if config.FF_CRONS_ENABLED and plus_features_enabled()
-        else None
-    ),
+    ApiRoute("/runs/crons/{cron_id}", delete_cron, methods=["DELETE"]),
 ]
 
 runs_routes = [route for route in runs_routes if route is not None]

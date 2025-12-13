@@ -133,8 +133,8 @@ if "clean" not in sys.argv:
         int, re.findall("[0-9]+", gdalversion)[:3]
     )
 
-    if (gdal_major_version, gdal_minor_version) < (3, 5):
-        raise SystemExit("ERROR: GDAL >= 3.5 is required for rasterio. "
+    if (gdal_major_version, gdal_minor_version) < (3, 6):
+        raise SystemExit("ERROR: GDAL >= 3.6 is required for rasterio. "
                  "Please upgrade GDAL.")
 
 # Conditionally copy the GDAL data. To be used in conjunction with
@@ -207,9 +207,9 @@ elif cpp11_flag not in eca:
 cpp_ext_options['extra_compile_args'] = eca
 
 # Configure optional Cython coverage.
-cythonize_options = {"language_level": sys.version_info[0]}
+cythonize_options = {"language_level": sys.version_info[0], "compiler_directives": {"freethreading_compatible": True}}
 if os.environ.get('CYTHON_COVERAGE'):
-    cythonize_options['compiler_directives'] = {'linetrace': True}
+    cythonize_options['compiler_directives'].update(linetrace=True)
     cythonize_options['annotate'] = True
     ext_options['define_macros'].extend(
         [('CYTHON_TRACE', '1'), ('CYTHON_TRACE_NOGIL', '1')])
@@ -249,9 +249,9 @@ inst_reqs = [
     "affine",
     "attrs",
     "certifi",
-    "click>=4.0",
+    # Avoid pallets/click#2939.
+    "click>=4.0,!=8.2.*",
     "cligj>=0.5",
-    "importlib-metadata ; python_version < '3.10'",
     "numpy>=1.24",
     "click-plugins",
     "pyparsing",
@@ -295,11 +295,11 @@ setup_args = dict(
         "License :: OSI Approved :: BSD License",
         "Programming Language :: C",
         "Programming Language :: Cython",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Programming Language :: Python :: 3",
         "Topic :: Multimedia :: Graphics :: Graphics Conversion",
         "Topic :: Scientific/Engineering :: GIS",
@@ -316,7 +316,7 @@ setup_args = dict(
     zip_safe=False,
     install_requires=inst_reqs,
     extras_require=extra_reqs,
-    python_requires=">=3.9",
+    python_requires=">=3.10",
 )
 
 if os.environ.get('PACKAGE_DATA'):

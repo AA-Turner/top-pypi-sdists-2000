@@ -22,7 +22,18 @@ DEPS_URLS = dict(
     abseil     = _CR_PREFIX + "chromium/src/third_party/abseil-cpp",
     fast_float = _CR_PREFIX + "external/github.com/fastfloat/fast_float",
     catapult   = _CR_PREFIX + "catapult",  # android
-    icu        = _CR_PREFIX + "chromium/deps/icu",  # for cibuildwheel
+    # vendorable dependencies
+    icu         = _CR_PREFIX + "chromium/deps/icu",  # cibuildwheel
+    buildtools  = _CR_PREFIX + "chromium/src/buildtools",
+    libcxx      = _CR_PREFIX + "external/github.com/llvm/llvm-project/libcxx",
+    libcxxabi   = _CR_PREFIX + "external/github.com/llvm/llvm-project/libcxxabi",
+    llvm_libc   = _CR_PREFIX + "external/github.com/llvm/llvm-project/libc",
+    freetype    = _CR_PREFIX + "chromium/src/third_party/freetype2",
+    jpeg_turbo  = _CR_PREFIX + "chromium/deps/libjpeg_turbo",
+    nasm_source = _CR_PREFIX + "chromium/deps/nasm",
+    libpng      = _CR_PREFIX + "chromium/src/third_party/libpng",
+    zlib        = _CR_PREFIX + "chromium/src/third_party/zlib",
+    # unittests
     gtest      = _CR_PREFIX + "external/github.com/google/googletest",
     test_fonts = _CR_PREFIX + "chromium/src/third_party/test_fonts",
 )
@@ -45,16 +56,6 @@ DefaultConfig = {
     "pdf_use_skia": False,
     "pdf_use_partition_alloc": False,
     "use_sysroot": False,
-    "use_system_freetype": True,
-    "pdf_bundle_freetype": False,
-    "use_system_lcms2": True,
-    "use_system_libjpeg": True,
-    "use_system_libopenjpeg2": True,
-    "use_system_libpng": True,
-    "use_system_libtiff": True,
-    "use_system_zlib": True,
-    "use_custom_libcxx": False,
-    "use_libcxx_modules": False,
 }
 
 IS_ANDROID = Host.system == SysNames.android
@@ -145,7 +146,7 @@ def autopatch_dir(dir, globexpr, pattern, repl, is_regex, exp_count=None):
         autopatch(file, pattern, repl, is_regex, exp_count)
 
 
-def get_sources(deps_info, short_ver, with_tests, compiler, clang_path, no_libclang_rt, reset, vendor_deps):
+def get_sources(deps_info, short_ver, with_tests, compiler, clang_ver, clang_path, no_libclang_rt, reset, vendor_deps):
     
     assert not IGNORE_FULLVER
     full_ver, pdfium_rev, chromium_rev = handle_sbuild_vers(short_ver)
@@ -199,9 +200,10 @@ def get_sources(deps_info, short_ver, with_tests, compiler, clang_path, no_libcl
             git_apply_patch(PatchDir/"ffp_contract.patch", cwd=PDFIUM_DIR/"build")
         elif compiler is Compiler.clang:
             # https://crbug.com/410883044
-            clang_patches = ("system_libcxx_with_clang", "avoid_new_clang_flags")
-            for patchname in clang_patches:
-                git_apply_patch(PatchDir/f"{patchname}.patch", cwd=PDFIUM_DIR/"build")
+            if "libc++" not in vendor_deps:
+                git_apply_patch(PatchDir/"system_libcxx_with_clang.patch", cwd=PDFIUM_DIR/"build")
+            if clang_ver < 21:  # guessed
+                git_apply_patch(PatchDir/"avoid_new_clang_flags.patch", cwd=PDFIUM_DIR/"build")
             # TODO should we handle other OSes here?
             # see also https://groups.google.com/g/llvm-dev/c/k3q_ATl-K_0/m/MjEb6gsCCAAJ
             lld_path = clang_path/"bin"/"ld.lld"
@@ -221,8 +223,24 @@ def get_sources(deps_info, short_ver, with_tests, compiler, clang_path, no_libcl
     _fetch_dep(deps_info, "fast_float", PDFIUM_3RDPARTY/"fast_float"/"src")
     if IS_ANDROID:
         _fetch_dep(deps_info, "catapult", PDFIUM_3RDPARTY/"catapult")
+    
+    if "libc++" in vendor_deps:
+        _fetch_dep(deps_info, "buildtools", PDFIUM_DIR/"buildtools")
+        _fetch_dep(deps_info, "libcxx", PDFIUM_3RDPARTY/"libc++"/"src")
+        _fetch_dep(deps_info, "libcxxabi", PDFIUM_3RDPARTY/"libc++abi"/"src")
+        _fetch_dep(deps_info, "llvm_libc", PDFIUM_3RDPARTY/"llvm-libc"/"src")
     if "icu" in vendor_deps:
         _fetch_dep(deps_info, "icu", PDFIUM_3RDPARTY/"icu")
+    if "freetype" in vendor_deps:
+        _fetch_dep(deps_info, "freetype", PDFIUM_3RDPARTY/"freetype"/"src")
+    if "libjpeg" in vendor_deps:
+        _fetch_dep(deps_info, "jpeg_turbo", PDFIUM_3RDPARTY/"libjpeg_turbo")
+        _fetch_dep(deps_info, "nasm_source", PDFIUM_3RDPARTY/"nasm")
+    if "libpng" in vendor_deps:
+        _fetch_dep(deps_info, "libpng", PDFIUM_3RDPARTY/"libpng")
+    if "zlib" in vendor_deps:
+        _fetch_dep(deps_info, "zlib", PDFIUM_3RDPARTY/"zlib")
+    
     if with_tests:
         _fetch_dep(deps_info, "gtest", PDFIUM_3RDPARTY/"googletest"/"src")
         _fetch_dep(deps_info, "test_fonts", PDFIUM_3RDPARTY/"test_fonts")
@@ -283,19 +301,69 @@ def _get_clang_ver(clang_path):
     log(f"Determined clang version {version!r}")
     return version
 
-def setup_compiler(config, compiler, clang_path):
+def setup_compiler(config, compiler, clang_ver, clang_path):
     if compiler is Compiler.gcc:
         config["is_clang"] = False
     elif compiler is Compiler.clang:
         assert clang_path, "Clang path must be set"
-        clang_version = _get_clang_ver(clang_path)
         config.update({
             "is_clang": True,
-            "clang_base_path": str(clang_path),
-            "clang_version": clang_version,
+            "clang_base_path": str(clang_path),  # without trailing slash
+            "clang_version": clang_ver,
         })
     else:
         assert False, f"Unhandled compiler {compiler}"
+
+
+def handle_deps(config, vendor_deps, with_tests):
+    
+    deps_fields = ["build", "abseil", "fast_float"]
+    if IS_ANDROID:
+        deps_fields.append("catapult")
+    
+    if "libc++" in vendor_deps:
+        deps_fields += ("buildtools", "libcxx", "libcxxabi", "llvm_libc")
+    else:
+        config["use_custom_libcxx"] = False
+        config["use_libcxx_modules"] = False
+    
+    if "icu" in vendor_deps:
+        deps_fields.append("icu")
+    
+    if "freetype" in vendor_deps:
+        deps_fields.append("freetype")
+    else:
+        config["use_system_freetype"] = True
+        config["pdf_bundle_freetype"] = False
+    
+    if "libjpeg" in vendor_deps:
+        deps_fields += ("jpeg_turbo", "nasm_source")
+    else:
+        config["use_system_libjpeg"] = True
+    
+    if "libpng" in vendor_deps:
+        deps_fields.append("libpng")
+    else:
+        config["use_system_libpng"] = True
+    
+    if "zlib" in vendor_deps:
+        deps_fields.append("zlib")
+    else:
+        config["use_system_zlib"] = True
+    
+    if "lcms2" not in vendor_deps:
+        config["use_system_lcms2"] = True
+    if "openjpeg" not in vendor_deps:
+        config["use_system_libopenjpeg2"] = True
+    if "libtiff" not in vendor_deps:
+        config["use_system_libtiff"] = True
+    
+    if with_tests:
+        deps_fields += ("gtest", "test_fonts")
+    
+    return _DeferredInfo(deps_fields)
+
+VendorableDeps = ("libc++", "icu", "freetype", "libjpeg", "libpng", "zlib", "lcms2", "openjpeg", "libtiff")
 
 
 def main(build_ver=None, with_tests=False, n_jobs=None, compiler=None, clang_path=None, no_libclang_rt=False, reset=False, vendor_deps=None):
@@ -312,25 +380,21 @@ def main(build_ver=None, with_tests=False, n_jobs=None, compiler=None, clang_pat
             compiler = Compiler.clang
         else:
             raise RuntimeError("Neither gcc nor clang installed.")
-    if compiler is Compiler.clang and clang_path is None:
-        clang_path = Host.usr
+    if compiler is Compiler.clang:
+        if clang_path is None:
+            clang_path = Host.usr
+        clang_ver = _get_clang_ver(clang_path)
+    else:
+        clang_ver = None
     
     build_dir = PDFIUM_DIR/"out"/"Default"
     config = DefaultConfig.copy()
-    
-    deps_fields = ["build", "abseil", "fast_float"]
-    if IS_ANDROID:
-        deps_fields.append("catapult")
-    if "icu" in vendor_deps:
-        deps_fields.append("icu")
-    if with_tests:
-        deps_fields += ("gtest", "test_fonts")
-    
-    deps_info = _DeferredInfo(deps_fields)
+    log(vendor_deps)
+    deps_info = handle_deps(config, vendor_deps, with_tests)
     
     mkdir(SOURCES_DIR)
-    full_ver = get_sources(deps_info, build_ver, with_tests, compiler, clang_path, no_libclang_rt, reset, vendor_deps)
-    setup_compiler(config, compiler, clang_path)
+    full_ver = get_sources(deps_info, build_ver, with_tests, compiler, clang_ver, clang_path, no_libclang_rt, reset, vendor_deps)
+    setup_compiler(config, compiler, clang_ver, clang_path)
     prepare(config, build_dir, vendor_deps)
     build(with_tests, build_dir, n_jobs)
     if with_tests:
@@ -377,28 +441,38 @@ def parse_args(argv):
     parser.add_argument(
         "--clang-path",
         type = lambda p: Path(p).expanduser().resolve(),
-        help = "Path to clang release folder, without trailing slash. Passing `--compiler clang` is a pre-requisite. By default, we try '/usr' or similar, but your system's folder structure might not match the layout expected by pdfium. Consider creating symlinks as described in pypdfium2's README.md.",
+        help = "Path to clang release folder, if `--compiler clang` is used. By default, we try '/usr' or similar, but your system's folder structure might not match the layout expected by pdfium. Consider creating symlinks as described in pypdfium2's README.md.",
     )
     parser.add_argument(
         "--no-libclang-rt",
         action = "store_true",
         help = "If using clang, whether to patch pdfium so that it does not insist on libclang_rt.builtins.a, and will use the compiler's default instead (commonly libgcc).",
     )
-    # The --vendor option is provided for cibuildwheel clients:
     # - libicudata pulled in from the system via `auditwheel repair` is quite big. Using vendored ICU reduces wheel size by about 10 MB (compressed).
-    # - libc++ is used but not pulled in by auditwheel. This appears to be ABI-unsafe (although the wheels seem to work across different hosts according to downstream feedback), so we may want to add that in the future. Actually, options to use system libc++ are deprecated upstream anyway.
+    # - With clang, using the vendored libc++ may be desirable. Also, there is some uncertainty whether using system libc++ might be ABI-unsafe. Actually, options to use system libc++ appear to be deprecated upstream.
     parser.add_argument(
         "--vendor",
         dest = "vendor_deps",
         nargs = "+",
         action = "extend",
-        help = "Dependencies to vendor. Note, this only supports libraries where there is a specific reason to vendor despite the native build. Currently this means 'icu' only ('libc++' may be added in the future). For an exhaustive vendored build, use build_toolchained.py"
+        help = f"Dependencies to vendor. Possible values: {VendorableDeps}. Use 'all' to vendor all of these libraries."
+    )
+    parser.add_argument(
+        "--no-vendor",
+        nargs = "+",
+        action = "extend",
+        help = "Dependencies not to vendor. Overrides --vendor.",
     )
     args = parser.parse_args(argv)
     if args.compiler:
         args.compiler = Compiler[args.compiler]
     if args.vendor_deps:
+        if args.vendor_deps == ["all"]:
+            args.vendor_deps = VendorableDeps
         args.vendor_deps = set(args.vendor_deps)
+        if args.no_vendor:
+            args.vendor_deps -= set(args.no_vendor)
+    del args.no_vendor
     return args
 
 

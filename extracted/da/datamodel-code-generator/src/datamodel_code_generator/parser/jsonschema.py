@@ -333,7 +333,8 @@ class JsonSchemaObject(BaseModel):
     required: list[str] = []  # noqa: RUF012
     ref: Optional[str] = Field(default=None, alias="$ref")  # noqa: UP045
     nullable: Optional[bool] = False  # noqa: UP045
-    x_enum_varnames: list[str] = Field(default=[], alias="x-enum-varnames")
+    x_enum_varnames: list[str] = Field(default_factory=list, alias="x-enum-varnames")
+    x_enum_names: list[str] = Field(default_factory=list, alias="x-enumNames")
     description: Optional[str] = None  # noqa: UP045
     title: Optional[str] = None  # noqa: UP045
     example: Any = None
@@ -1518,6 +1519,24 @@ class JsonSchemaParser(Parser):
                     class_name=name,
                 )
             )
+        if base_classes:
+            for field in fields:
+                current_type = field.data_type
+                field_name = field.original_name or field.name
+                if current_type and current_type.type == ANY and field_name:
+                    inherited_type = self._get_inherited_field_type(field_name, base_classes)
+                    if inherited_type is not None:
+                        if PYDANTIC_V2:
+                            new_type = inherited_type.model_copy(deep=True)
+                        else:
+                            new_type = inherited_type.copy(deep=True)
+                        new_type.is_optional = new_type.is_optional or current_type.is_optional
+                        new_type.is_dict = new_type.is_dict or current_type.is_dict
+                        new_type.is_list = new_type.is_list or current_type.is_list
+                        new_type.is_set = new_type.is_set or current_type.is_set
+                        if new_type.kwargs is None and current_type.kwargs is not None:  # pragma: no cover
+                            new_type.kwargs = current_type.kwargs
+                        field.data_type = new_type
         # ignore an undetected object
         if ignore_duplicate_model and not fields and len(base_classes) == 1:
             with self.model_resolver.current_base_path_context(self.model_resolver._base_path):  # noqa: SLF001
@@ -2390,14 +2409,16 @@ class JsonSchemaParser(Parser):
 
         exclude_field_names: set[str] = set()
 
+        enum_names = obj.x_enum_varnames or obj.x_enum_names
+
         for i, enum_part in enumerate(enum_times):
             if obj.type == "string" or isinstance(enum_part, str):
                 default = f"'{enum_part.translate(escape_characters)}'" if isinstance(enum_part, str) else enum_part
-                field_name = obj.x_enum_varnames[i] if obj.x_enum_varnames else str(enum_part)
+                field_name = enum_names[i] if enum_names and i < len(enum_names) and enum_names[i] else str(enum_part)
             else:
                 default = enum_part
-                if obj.x_enum_varnames:
-                    field_name = obj.x_enum_varnames[i]
+                if enum_names and i < len(enum_names) and enum_names[i]:
+                    field_name = enum_names[i]
                 elif isinstance(enum_part, dict):
                     field_name = self._get_field_name_from_dict_enum(enum_part, i)
                 else:

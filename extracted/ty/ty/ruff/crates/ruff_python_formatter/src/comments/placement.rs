@@ -871,7 +871,20 @@ fn handle_parameter_comment<'a>(
             CommentPlacement::Default(comment)
         }
     } else if comment.start() < parameter.name.start() {
-        CommentPlacement::leading(parameter, comment)
+        // For lambdas, where the parameters cannot be parenthesized and the first parameter thus
+        // starts at the same position as the parent parameters, mark a comment before the first
+        // parameter as leading on the parameters rather than the individual parameter to prevent
+        // the whole parameter list from breaking.
+        //
+        // Note that this check is not needed above because lambda parameters cannot have
+        // annotations.
+        if let Some(AnyNodeRef::Parameters(parameters)) = comment.enclosing_parent()
+            && parameters.start() == parameter.start()
+        {
+            CommentPlacement::leading(parameters, comment)
+        } else {
+            CommentPlacement::leading(parameter, comment)
+        }
     } else {
         CommentPlacement::Default(comment)
     }
@@ -1835,10 +1848,8 @@ fn handle_lambda_comment<'a>(
         // )
         // ```
         if comment.start() < parameters.start() {
-            return if let Some(first) = parameters.iter().next()
-                && comment.line_position().is_own_line()
-            {
-                CommentPlacement::leading(first.as_parameter(), comment)
+            return if comment.line_position().is_own_line() {
+                CommentPlacement::leading(parameters, comment)
             } else {
                 CommentPlacement::dangling(comment.enclosing_node(), comment)
             };
@@ -1963,8 +1974,8 @@ fn handle_unary_op_comment<'a>(
 /// )
 /// ```
 ///
-/// The comment will be attached to the [`Arguments`] node as a dangling comment, to ensure
-/// that it remains on the same line as open parenthesis.
+/// The comment will be attached to the [`Arguments`](ast::Arguments) node as a dangling comment, to
+/// ensure that it remains on the same line as open parenthesis.
 ///
 /// Similarly, given:
 /// ```python
@@ -1973,8 +1984,8 @@ fn handle_unary_op_comment<'a>(
 /// ] = ...
 /// ```
 ///
-/// The comment will be attached to the [`TypeParams`] node as a dangling comment, to ensure
-/// that it remains on the same line as open bracket.
+/// The comment will be attached to the [`TypeParams`](ast::TypeParams) node as a dangling comment,
+/// to ensure that it remains on the same line as open bracket.
 fn handle_bracketed_end_of_line_comment<'a>(
     comment: DecoratedComment<'a>,
     source: &str,

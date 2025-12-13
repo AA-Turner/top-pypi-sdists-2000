@@ -97,13 +97,13 @@ def _map_thread_ttl(ttl: dict[str, Any] | None) -> pb.ThreadTTLConfig | None:
 
 
 def fragment_to_value(fragment: pb.Fragment | None) -> Any:
-    if fragment is None or not fragment.value:
-        return {}
+    if fragment is None or not fragment.value or fragment.value == b"{}":
+        return None
     try:
         return json_loads(fragment.value)
     except orjson.JSONDecodeError:
         logger.warning("Failed to decode fragment", fragment=fragment.value)
-        return {}
+        return None
 
 
 def _proto_interrupts_to_dict(
@@ -157,7 +157,7 @@ def proto_to_thread(proto_thread: pb.Thread) -> Thread:
         "created_at": created_at,
         "updated_at": updated_at,
         "metadata": fragment_to_value(proto_thread.metadata),
-        "config": fragment_to_value(proto_thread.config),
+        "config": fragment_to_value(proto_thread.config) or {},
         "error": fragment_to_value(proto_thread.error),
         "status": status,  # type: ignore[typeddict-item]
         "values": fragment_to_value(proto_thread.values),

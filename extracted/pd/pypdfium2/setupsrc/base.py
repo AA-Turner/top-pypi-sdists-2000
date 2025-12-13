@@ -132,36 +132,36 @@ class PlatNames:
 
 # Map platform names to the package names used by pdfium-binaries/google.
 PdfiumBinariesMap = {
-    PlatNames.darwin_x64:       "mac-x64",
-    PlatNames.darwin_arm64:     "mac-arm64",
-    PlatNames.windows_x64:      "win-x64",
-    PlatNames.windows_x86:      "win-x86",
-    PlatNames.windows_arm64:    "win-arm64",
-    PlatNames.linux_x64:        "linux-x64",
-    PlatNames.linux_x86:        "linux-x86",
-    PlatNames.linux_arm64:      "linux-arm64",
-    PlatNames.linux_arm32:      "linux-arm",
-    PlatNames.linux_musl_x64:   "linux-musl-x64",
-    PlatNames.linux_musl_x86:   "linux-musl-x86",
-    PlatNames.linux_musl_arm64: "linux-musl-arm64",
+    PlatNames.darwin_x64:    "mac-x64",
+    PlatNames.darwin_arm64:  "mac-arm64",
+    PlatNames.windows_x64:   "win-x64",
+    PlatNames.windows_x86:   "win-x86",
+    PlatNames.windows_arm64: "win-arm64",
+    PlatNames.linux_x64:     "linux-x64",
+    PlatNames.linux_x86:     "linux-x86",
+    PlatNames.linux_arm64:   "linux-arm64",
+    PlatNames.linux_arm32:   "linux-arm",
+    PlatNames.android_arm64: "android-arm64",
+    PlatNames.android_arm32: "android-arm",
 }
 
 # Capture the platforms we build wheels for
 WheelPlatforms = list(PdfiumBinariesMap.keys())
 
-# Additional platforms we don't currently build wheels for in craft.py
+# Additional platforms we don't currently build wheels for this way in craft.py
 # To package these manually, you can do e.g. (in bash):
-# export PLATFORMS=(darwin_univ2 android_arm64 android_arm32 android_x64 android_x86 ios_arm64_dev ios_arm64_simu ios_x64_simu)
+# export PLATFORMS=(linux_musl_x64 linux_musl_x86 linux_musl_arm64 darwin_univ2 android_x64 android_x86 ios_arm64_dev ios_arm64_simu ios_x64_simu)
 # for PLAT in ${PLATFORMS[@]}; do echo $PLAT; just emplace $PLAT; PDFIUM_PLATFORM=$PLAT python3 -m build -wxn; done
 PdfiumBinariesMap.update({
-    PlatNames.darwin_univ2:   "mac-univ",
-    PlatNames.android_arm64:  "android-arm64",
-    PlatNames.android_arm32:  "android-arm",
-    PlatNames.android_x64:    "android-x64",
-    PlatNames.android_x86:    "android-x86",
-    PlatNames.ios_arm64_dev:  "ios-device-arm64",
-    PlatNames.ios_arm64_simu: "ios-simulator-arm64",
-    PlatNames.ios_x64_simu:   "ios-simulator-x64",
+    PlatNames.linux_musl_x64:   "linux-musl-x64",
+    PlatNames.linux_musl_x86:   "linux-musl-x86",
+    PlatNames.linux_musl_arm64: "linux-musl-arm64",
+    PlatNames.darwin_univ2:     "mac-univ",
+    PlatNames.android_x64:      "android-x64",
+    PlatNames.android_x86:      "android-x86",
+    PlatNames.ios_arm64_dev:    "ios-device-arm64",
+    PlatNames.ios_arm64_simu:   "ios-simulator-arm64",
+    PlatNames.ios_x64_simu:     "ios-simulator-x64",
 })
 
 
@@ -515,7 +515,7 @@ class _host_platform:
         if self._raw_system == "darwin":
             # platform.machine() is the actual architecture. sysconfig.get_platform() may return universal2, but by default we only use the arch-specific binaries.
             self._system = SysNames.darwin
-            log(f"macOS {self._raw_machine} {platform.mac_ver()}")
+            log(f"macOS {self._raw_machine}")  # platform.mac_ver()
             if self._raw_machine == "x86_64":
                 return PlatNames.darwin_x64
             elif self._raw_machine == "arm64":
@@ -523,7 +523,7 @@ class _host_platform:
         
         elif self._raw_system == "windows":
             self._system = SysNames.windows
-            log(f"windows {self._raw_machine} {platform.win32_ver()}")
+            log(f"windows {self._raw_machine}")  # platform.win32_ver()
             if self._raw_machine == "amd64":
                 return PlatNames.windows_x64
             elif self._raw_machine == "x86":
@@ -548,7 +548,7 @@ class _host_platform:
         elif self._raw_system == "android":  # PEP 738
             # The PEP isn't too explicit about the machine names, but based on related CPython PRs, it looks like platform.machine() retains the raw uname values as on Linux, whereas sysconfig.get_platform() will map to the wheel tags
             self._system = SysNames.android
-            log(f"android {self._raw_machine} {sys.getandroidapilevel()} {platform.android_ver()}")
+            log(f"android {self._raw_machine}")  # sys.getandroidapilevel() platform.android_ver()
             if self._raw_machine == "aarch64":
                 return PlatNames.android_arm64
             elif self._raw_machine == "armv7l":
@@ -619,7 +619,6 @@ def get_wheel_tag(pl_name):
         return "musllinux_1_1_aarch64"
     
     # Android - see PEP 738 # Packaging
-    # We don't currently publish wheels for Android, but handle it in case we want to in the future (or if callers want to build their own wheels)
     # AOTW, pdfium-binaries/steps/05-configure.sh defines default_min_sdk_version = 23
     elif pl_name == PlatNames.android_arm64:
         return "android_23_arm64_v8a"
@@ -993,8 +992,10 @@ def pack_sourcebuild(
 
 def bootstrap_ninja(skip_if_present=True):
     if skip_if_present and shutil.which("ninja"):
+        log("+ ninja found.")
         return
     # https://github.com/scikit-build/ninja-python-distributions
+    log("- ninja not found, installing...")
     run_cmd([sys.executable, "-m", "pip", "install", "ninja"], cwd=None)
 
 def make_executable(path):
@@ -1004,8 +1005,10 @@ def make_executable(path):
 
 def bootstrap_gn(target_dir=None, skip_if_present=True):
     if skip_if_present and shutil.which("gn"):
+        log("+ gn found.")
         return
     
+    log("- gn not found, attempt to build from scratch...")
     if target_dir is None:
         target_dir = Host.local_bin
     
@@ -1025,5 +1028,6 @@ def bootstrap_gn(target_dir=None, skip_if_present=True):
     make_executable(target_dir/"gn")
 
 def bootstrap_buildtools():
+    log("Bootstrapping build tools...")
     bootstrap_ninja()
     bootstrap_gn()

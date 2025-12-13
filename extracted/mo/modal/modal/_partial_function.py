@@ -46,6 +46,7 @@ class _PartialFunctionFlags(enum.IntFlag):
     BATCHED = 64
     CONCURRENT = 128
     CLUSTERED = 256  # Experimental: Clustered functions
+    HTTP_WEB_INTERFACE = 512  # Experimental: HTTP server
 
     @staticmethod
     def all() -> int:
@@ -76,6 +77,7 @@ class _PartialFunctionParams:
     target_concurrent_inputs: Optional[int] = None
     build_timeout: Optional[int] = None
     rdma: Optional[bool] = None
+    http_config: Optional[api_pb2.HTTPConfig] = None
 
     def update(self, other: "_PartialFunctionParams") -> None:
         """Update self with params set in other."""

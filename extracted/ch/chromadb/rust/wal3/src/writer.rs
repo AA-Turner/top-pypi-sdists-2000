@@ -1138,16 +1138,26 @@ pub async fn upload_parquet(
             Ok(_) => {
                 return Ok((unprefixed_path, setsum, buffer.len()));
             }
+            // NOTE(sicheng): Permission denied requests should continue to fail if retried
+            Err(err @ StorageError::PermissionDenied { .. }) => {
+                return Err(Error::StorageError(Arc::new(err)));
+            }
             Err(StorageError::Precondition { path: _, source: _ }) => {
                 return Err(Error::LogContentionFailure);
             }
             Err(err) => {
-                if start.elapsed() > Duration::from_secs(60) {
+                tracing::error!(
+                    error.message = err.to_string(),
+                    "failed to upload parquet, backing off"
+                );
+                // NOTE(sicheng): The frontend will fail the request on its end if we retry for too long here
+                // TODO(sicheng): Organize the magic numbers in the code at one place
+                if start.elapsed() > Duration::from_secs(20) {
                     return Err(Error::StorageError(Arc::new(err)));
                 }
                 let mut backoff = exp_backoff.next();
-                if backoff > Duration::from_secs(60) {
-                    backoff = Duration::from_secs(60);
+                if backoff > Duration::from_secs(10) {
+                    backoff = Duration::from_secs(10);
                 }
                 tokio::time::sleep(backoff).await;
             }

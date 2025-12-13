@@ -148,8 +148,9 @@ from distributed.shuffle._worker_plugin import ShuffleWorkerPlugin
 from distributed.sizeof import sizeof
 
 if TYPE_CHECKING:
+    from typing import TypeAlias
+
     import numpy as np
-    from typing_extensions import TypeAlias
 
     import dask.array as da
 
@@ -664,7 +665,7 @@ def _split_partials_per_axis(old_to_new: list[Any]) -> tuple[tuple[_Partial, ...
 
 
 def _slice_new_chunks_into_partials(
-    old_to_new: list[list[list[tuple[int, slice]]]]
+    old_to_new: list[list[list[tuple[int, slice]]]],
 ) -> SlicedAxes:
     """Slice the new chunks into partials that can be computed separately"""
     sliced_axes = []

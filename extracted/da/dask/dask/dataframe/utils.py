@@ -17,7 +17,7 @@ from pandas.api.types import is_dtype_equal
 import dask
 from dask.base import is_dask_collection
 from dask.core import get_deps
-from dask.dataframe._compat import PANDAS_GE_300, tm  # noqa: F401
+from dask.dataframe._compat import PANDAS_GE_300, tm
 from dask.dataframe.dispatch import (  # noqa: F401
     is_categorical_dtype_dispatch,
     make_meta,
@@ -126,11 +126,11 @@ def insert_meta_param_description(*args, **kwargs):
             f.__doc__ = f.__doc__.replace("$META", descr)
         else:
             # Put it at the end of the parameters section
-            parameter_header = "Parameters\n%s----------" % indent[4:]
+            parameter_header = f"Parameters\n{indent[4:]}----------"
             first, last = re.split("Parameters\\n[ ]*----------", f.__doc__)
             parameters, rest = last.split("\n\n", 1)
-            f.__doc__ = "{}{}{}\n{}{}\n\n{}".format(
-                first, parameter_header, parameters, indent[4:], descr, rest
+            f.__doc__ = (
+                f"{first}{parameter_header}{parameters}\n{indent[4:]}{descr}\n\n{rest}"
             )
     return f
 
@@ -349,16 +349,13 @@ def check_meta(x, meta, funcname=None, numeric_equal=True):
     ) or is_dask_collection(meta):
         raise TypeError(
             "Expected partition to be DataFrame, Series, or "
-            "Index, got `%s`" % typename(type(meta))
+            f"Index, got `{typename(type(meta))}`"
         )
 
     # Notice, we use .__class__ as opposed to type() in order to support
     # object proxies see <https://github.com/dask/dask/pull/6981>
     if x.__class__ != meta.__class__:
-        errmsg = "Expected partition of type `{}` but got `{}`".format(
-            typename(type(meta)),
-            typename(type(x)),
-        )
+        errmsg = f"Expected partition of type `{typename(type(meta))}` but got `{typename(type(x))}`"
     elif is_dataframe_like(meta):
         dtypes = pd.concat([x.dtypes, meta.dtypes], axis=1, sort=True)
         bad_dtypes = [
@@ -383,8 +380,8 @@ def check_meta(x, meta, funcname=None, numeric_equal=True):
         )
 
     raise ValueError(
-        "Metadata mismatch found%s.\n\n"
-        "%s" % ((" in `%s`" % funcname if funcname else ""), errmsg)
+        "Metadata mismatch found{}.\n\n"
+        "{}".format((f" in `{funcname}`" if funcname else ""), errmsg)
     )
 
 
@@ -484,7 +481,7 @@ def _check_dask(dsk, check_names=True, check_dtypes=True, result=None, scheduler
             ):
                 raise TypeError(
                     "Expected object of type dataframe, series, index, or scalar.\n"
-                    "    Got: " + str(type(result))
+                    f"    Got: {type(result)}"
                 )
             if check_dtypes:
                 assert_dask_dtypes(dsk, result)
@@ -500,7 +497,7 @@ def _maybe_sort(a, check_index: bool):
         if is_dataframe_like(a):
             if set(a.index.names) & set(a.columns):
                 a.index.names = [
-                    "-overlapped-index-name-%d" % i for i in range(len(a.index.names))
+                    f"-overlapped-index-name-{i}" for i in range(len(a.index.names))
                 ]
             a = a.sort_values(by=methods.tolist(a.columns))
         else:

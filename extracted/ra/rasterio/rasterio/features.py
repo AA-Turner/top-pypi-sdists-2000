@@ -72,12 +72,13 @@ def geometry_mask(
         transform=transform,
         all_touched=all_touched,
         fill=fill,
-        default_value=mask_value).astype('bool')
+        default_value=mask_value,
+        dtype='uint8').view('bool')
 
 
 @ensure_env
 def shapes(source, mask=None, connectivity=4, transform=IDENTITY):
-    """Get shapes and values of connected regions in a dataset or array.
+    r"""Get shapes and values of connected regions in a dataset or array.
 
     Parameters
     ----------
@@ -85,7 +86,7 @@ def shapes(source, mask=None, connectivity=4, transform=IDENTITY):
         Data type must be one of rasterio.int8, rasterio.int16, rasterio.int32,
         rasterio.uint8, rasterio.uint16, rasterio.float32, or rasterio.float64.
     mask : numpy.ndarray or rasterio Band object, optional
-        Must evaluate to bool (rasterio.bool_ or rasterio.uint8). Values
+        Must evaluate to bool (rasterio.bool\_ or rasterio.uint8). Values
         of False or 0 will be excluded from feature generation.  Note
         well that this is the inverse sense from Numpy's, where a mask
         value of True indicates invalid data in an array. If `source` is
@@ -130,7 +131,7 @@ def shapes(source, mask=None, connectivity=4, transform=IDENTITY):
 
 @ensure_env
 def sieve(source, size, out=None, mask=None, connectivity=4):
-    """Remove small polygon regions from a raster.
+    r"""Remove small polygon regions from a raster.
 
     Polygons are found for each set of neighboring pixels of the same
     value.
@@ -140,8 +141,7 @@ def sieve(source, size, out=None, mask=None, connectivity=4):
     source : ndarray, dataset, or Band
         The source is a 2 or 3-D ndarray, a dataset opened in "r" mode,
         or a single or a multiple Rasterio Band object. Must be of type
-        rasterio.int16, rasterio.int32, rasterio.uint8, rasterio.uint16,
-        or rasterio.float32
+        rasterio.int16, rasterio.int32, rasterio.uint8 or rasterio.uint16.
     size : int
         minimum polygon size (number of pixels) to retain.
     out : numpy ndarray, optional
@@ -149,7 +149,7 @@ def sieve(source, size, out=None, mask=None, connectivity=4):
         results.
     mask : numpy ndarray or rasterio Band object, optional
         Values of False or 0 will be excluded from feature generation
-        Must evaluate to bool (rasterio.bool_ or rasterio.uint8)
+        Must evaluate to bool (rasterio.bool\_ or rasterio.uint8)
     connectivity : int, optional
         Use 4 or 8 pixel connectivity for grouping pixels into features
 
@@ -347,16 +347,6 @@ def rasterize(
     if not dtype and valid_shapes:
         values_arr = np.array(shape_values)
         dtype = values_arr.dtype.name
-
-        # GDAL 3.5 doesn't support int64 output. We'll try int32.
-        if dtype not in valid_dtypes and dtype.startswith("int"):
-            lo, hi = values_arr.min(), values_arr.max()
-            if -2147483648 <= lo and hi <= 2147483647:
-                dtype = "int32"
-            elif 0 <= lo and hi <= 4294967295:
-                dtype = "uint32"
-            else:
-                raise ValueError("GDAL versions < 3.6 cannot rasterize int64 values.")
 
     with ExitStack() as exit_stack:
         if dst_path is not None:

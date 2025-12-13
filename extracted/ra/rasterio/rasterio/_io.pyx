@@ -1531,8 +1531,15 @@ cdef class DatasetWriterBase(DatasetReaderBase):
                     GDALCreate(drv, fname, width, height, count, gdal_dtype, options)
                 )
 
+            except CPLE_IllegalArgError as exc:
+                if "must be a multiple of 16" in str(exc):  # For GDAL 3.12+.
+                    raise RasterBlockError(
+                        "The height and width of TIFF dataset blocks must be multiples of 16"
+                    )
+                else:
+                    raise RasterioIOError(str(exc))
             except CPLE_AppDefinedError as exc:
-                if "Bad value" in str(exc):
+                if "Bad value" in str(exc):  # For GDAL < 3.12.
                     raise RasterBlockError(
                         "The height and width of TIFF dataset blocks must be multiples of 16"
                     )
@@ -2412,8 +2419,8 @@ cdef class BufferedDatasetWriterBase(DatasetWriterBase):
                 gdal_dtype = _get_gdal_dtype(self._init_dtype)
 
             self._hds = exc_wrap_pointer(
-                GDALCreate(memdrv, "temp", self.width, self.height,
-                           self._count, gdal_dtype, options))
+                GDALCreate(memdrv, "temp", self.width, self.height, self._count, gdal_dtype, options)
+            )
 
             if self._init_nodata is not None:
                 for i in range(self._count):
@@ -2467,6 +2474,10 @@ cdef class BufferedDatasetWriterBase(DatasetWriterBase):
         cdef GDALDriverH drv = NULL
         cdef GDALDatasetH temp = NULL
         cdef const char *fname = NULL
+
+        # Bail out immediately if the GDALDatasetH is NULL.
+        if self._hds == NULL:
+            return
 
         name_b = self.name.encode('utf-8')
         fname = name_b

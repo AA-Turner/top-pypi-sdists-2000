@@ -168,6 +168,7 @@ classifiers = {
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Programming Language :: Python :: 3",
         "Topic :: Text Processing :: Fonts",
         "Topic :: Multimedia :: Graphics",
@@ -495,7 +496,7 @@ if ext_modules:
 
 setup_params = dict(
     name="fonttools",
-    version="4.61.0",
+    version="4.61.1",
     description="Tools to manipulate font files",
     author="Just van Rossum",
     author_email="just@letterror.com",

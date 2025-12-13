@@ -158,8 +158,7 @@ def _sieve(image, size, out, mask, connectivity):
     image : ndarray or Band
         The source is a 2 or 3-D ndarray, or a single or a multiple
         Rasterio Band object.  Must be of type rasterio.int16,
-        rasterio.int32, rasterio.uint8, rasterio.uint16, or
-        rasterio.float32
+        rasterio.int32, rasterio.uint8 or rasterio.uint16.
     size : int
         minimum polygon size (number of pixels) to retain.
     out : numpy ndarray
@@ -506,15 +505,17 @@ cdef class GeomBuilder:
     cdef _buildCoords(self, OGRGeometryH geom):
         # Build a coordinate sequence
         cdef int i
+        cdef list coords = []
         if geom == NULL:
             raise ValueError("Null geom")
         npoints = OGR_G_GetPointCount(geom)
-        coords = []
-        for i in range(npoints):
-            values = [OGR_G_GetX(geom, i), OGR_G_GetY(geom, i)]
-            if self.ndims > 2:
-                values.append(OGR_G_GetZ(geom, i))
-            coords.append(tuple(values))
+
+        if self.ndims == 2:
+            for i in range(npoints):
+                coords.append((OGR_G_GetX(geom, i), OGR_G_GetY(geom, i)))
+        else:
+            for i in range(npoints):
+                coords.append((OGR_G_GetX(geom, i), OGR_G_GetY(geom, i), OGR_G_GetZ(geom, i)))
         return coords
 
     cpdef _buildPoint(self):

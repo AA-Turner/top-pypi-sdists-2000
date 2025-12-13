@@ -68,6 +68,7 @@ dev = [
     "datadog-api-client>=2.0.0",
     "ty==0.0.1-alpha.21",
     "py-spy>=0.4.1",
+    "syrupy>=5.0.0",
 ]
 
 

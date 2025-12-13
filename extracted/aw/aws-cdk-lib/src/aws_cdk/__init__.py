@@ -16685,50 +16685,6 @@ class _ICfnResourceOptionsProxy:
 typing.cast(typing.Any, ICfnResourceOptions).__jsii_proxy_class__ = lambda : _ICfnResourceOptionsProxy
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.IEnvironmentAware")
-class IEnvironmentAware(typing_extensions.Protocol):
-    '''Used to indicate that a particular construct has an resource environment.'''
-
-    @builtins.property
-    @jsii.member(jsii_name="env")
-    def env(self) -> _ResourceEnvironment_603baf00:
-        '''The environment this resource belongs to.
-
-        For resources that are created and managed in a Stack (those created by
-        creating new class instances like ``new Role()``, ``new Bucket()``, etc.), this
-        is always the same as the environment of the stack they belong to.
-
-        For referenced resources (those obtained from referencing methods like
-        ``Role.fromRoleArn()``, ``Bucket.fromBucketName()``, etc.), they might be
-        different than the stack they were imported into.
-        '''
-        ...
-
-
-class _IEnvironmentAwareProxy:
-    '''Used to indicate that a particular construct has an resource environment.'''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.IEnvironmentAware"
-
-    @builtins.property
-    @jsii.member(jsii_name="env")
-    def env(self) -> _ResourceEnvironment_603baf00:
-        '''The environment this resource belongs to.
-
-        For resources that are created and managed in a Stack (those created by
-        creating new class instances like ``new Role()``, ``new Bucket()``, etc.), this
-        is always the same as the environment of the stack they belong to.
-
-        For referenced resources (those obtained from referencing methods like
-        ``Role.fromRoleArn()``, ``Bucket.fromBucketName()``, etc.), they might be
-        different than the stack they were imported into.
-        '''
-        return typing.cast(_ResourceEnvironment_603baf00, jsii.get(self, "env"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IEnvironmentAware).__jsii_proxy_class__ = lambda : _IEnvironmentAwareProxy
-
-
 @jsii.interface(jsii_type="aws-cdk-lib.IFragmentConcatenator")
 class IFragmentConcatenator(typing_extensions.Protocol):
     '''Function used to concatenate symbols in the target document language.
@@ -21339,79 +21295,6 @@ class _ResourceProxy(Resource):
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, Resource).__jsii_proxy_class__ = lambda : _ResourceProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.ResourceEnvironment",
-    jsii_struct_bases=[],
-    name_mapping={"account": "account", "region": "region"},
-)
-class ResourceEnvironment:
-    def __init__(self, *, account: builtins.str, region: builtins.str) -> None:
-        '''Represents the environment a given resource lives in.
-
-        Used as the return value for the ``IEnvironmentAware.env`` property.
-
-        :param account: The AWS Account ID that this resource belongs to. Since this can be a Token (for example, when the account is CloudFormation's ``AWS::AccountId`` intrinsic), make sure to use ``Token.compareStrings()`` instead of comparing the values with direct string equality.
-        :param region: The AWS Region that this resource belongs to. Since this can be a Token (for example, when the region is CloudFormation's ``AWS::Region`` intrinsic), make sure to use ``Token.compareStrings()`` instead of comparing the values with direct string equality.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            import aws_cdk as cdk
-            
-            resource_environment = cdk.interfaces.ResourceEnvironment(
-                account="account",
-                region="region"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__cf7fa86b31dd6c8ec358d9877964c9388a3b3135c168d4af11dbeb917590695d)
-            check_type(argname="argument account", value=account, expected_type=type_hints["account"])
-            check_type(argname="argument region", value=region, expected_type=type_hints["region"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "account": account,
-            "region": region,
-        }
-
-    @builtins.property
-    def account(self) -> builtins.str:
-        '''The AWS Account ID that this resource belongs to.
-
-        Since this can be a Token (for example, when the account is
-        CloudFormation's ``AWS::AccountId`` intrinsic), make sure to use
-        ``Token.compareStrings()`` instead of comparing the values with direct
-        string equality.
-        '''
-        result = self._values.get("account")
-        assert result is not None, "Required property 'account' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def region(self) -> builtins.str:
-        '''The AWS Region that this resource belongs to.
-
-        Since this can be a Token (for example, when the region is CloudFormation's
-        ``AWS::Region`` intrinsic), make sure to use ``Token.compareStrings()`` instead
-        of comparing the values with direct string equality.
-        '''
-        result = self._values.get("region")
-        assert result is not None, "Required property 'region' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ResourceEnvironment(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
 
 
 @jsii.data_type(
@@ -38823,7 +38706,6 @@ __all__ = [
     "ICfnConditionExpression",
     "ICfnResourceOptions",
     "ICfnRuleConditionExpression",
-    "IEnvironmentAware",
     "IFragmentConcatenator",
     "IInspectable",
     "IListProducer",
@@ -38883,7 +38765,6 @@ __all__ = [
     "ResolveChangeContextOptions",
     "ResolveOptions",
     "Resource",
-    "ResourceEnvironment",
     "ResourceProps",
     "ReverseOptions",
     "RoleOptions",
@@ -41989,14 +41870,6 @@ def _typecheckingstub__e152963ad0a4f5f40b2ee753c3fe470e49b2c37b56c79a40576ebacd9
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__cf7fa86b31dd6c8ec358d9877964c9388a3b3135c168d4af11dbeb917590695d(
-    *,
-    account: builtins.str,
-    region: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__addea20f6555c6b1cb134b415dbf6769d4ce77cc07c0cce9135a8d648d78b8a7(
     *,
     account: typing.Optional[builtins.str] = None,
@@ -44525,5 +44398,5 @@ def _typecheckingstub__47e469f0015340593bcbbe8474c853bc170a6dfd3bcb31e6795042408
     """Type checking stubs"""
     pass
 
-for cls in [IAnyProducer, IAspect, IAsset, IBoundStackSynthesizer, ICfnConditionExpression, ICfnResourceOptions, ICfnRuleConditionExpression, IEnvironmentAware, IFragmentConcatenator, IInspectable, IListProducer, ILocalBundling, INumberProducer, IPolicyValidationContextBeta1, IPolicyValidationPluginBeta1, IPostProcessor, IPropertyInjector, IResolvable, IResolveContext, IResource, IReusableStackSynthesizer, IStableAnyProducer, IStableListProducer, IStableNumberProducer, IStableStringProducer, IStackSynthesizer, IStringProducer, ISynthesisSession, ITaggable, ITaggableV2, ITemplateOptions, ITokenMapper, ITokenResolver]:
+for cls in [IAnyProducer, IAspect, IAsset, IBoundStackSynthesizer, ICfnConditionExpression, ICfnResourceOptions, ICfnRuleConditionExpression, IFragmentConcatenator, IInspectable, IListProducer, ILocalBundling, INumberProducer, IPolicyValidationContextBeta1, IPolicyValidationPluginBeta1, IPostProcessor, IPropertyInjector, IResolvable, IResolveContext, IResource, IReusableStackSynthesizer, IStableAnyProducer, IStableListProducer, IStableNumberProducer, IStableStringProducer, IStackSynthesizer, IStringProducer, ISynthesisSession, ITaggable, ITaggableV2, ITemplateOptions, ITokenMapper, ITokenResolver]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

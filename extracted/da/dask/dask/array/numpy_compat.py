@@ -15,6 +15,7 @@ NUMPY_GE_125 = _np_version.release >= (1, 25)
 NUMPY_GE_200 = _np_version.release >= (2, 0)
 NUMPY_GE_210 = _np_version.release >= (2, 1)
 NUMPY_GE_220 = _np_version.release >= (2, 2)
+NUMPY_GE_240 = _np_version.release >= (2, 4)
 
 
 if NUMPY_GE_200:
@@ -25,8 +26,10 @@ else:
         AxisError,
         ComplexWarning,
     )
-    from numpy.core.numeric import normalize_axis_index  # type: ignore[no-redef]
-    from numpy.core.numeric import normalize_axis_tuple  # type: ignore[no-redef]
+    from numpy.core.numeric import (  # type: ignore[no-redef]
+        normalize_axis_index,
+        normalize_axis_tuple,
+    )
 
 
 # Taken from scikit-learn:
@@ -50,7 +53,7 @@ try:
 
 except TypeError:
     # Divide with dtype doesn't work on Python 3
-    def divide(x1, x2, out=None, dtype=None):  # type: ignore
+    def divide(x1, x2, out=None, dtype=None):  # type: ignore[misc]
         """Implementation of numpy.divide that works with dtype kwarg.
 
         Temporary compatibility fix for a bug in numpy's version. See
@@ -61,7 +64,7 @@ except TypeError:
         return x
 
     ma_divide = np.ma.core._DomainedBinaryOperation(
-        divide, np.ma.core._DomainSafeDivide(), 0, 1  # type: ignore
+        divide, np.ma.core._DomainSafeDivide(), 0, 1  # type: ignore[attr-defined]
     )
 
 

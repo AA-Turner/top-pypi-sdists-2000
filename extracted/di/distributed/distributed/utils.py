@@ -46,9 +46,8 @@ from importlib.util import cache_from_source
 from pickle import PickleBuffer
 from time import sleep
 from types import ModuleType
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar, TypeVar, overload
 from typing import Any as AnyType
-from typing import ClassVar, TypeVar, overload
 
 import psutil
 import tblib.pickling_support
@@ -67,9 +66,9 @@ from tornado import gen
 from tornado.ioloop import IOLoop
 
 import dask
-from dask.utils import _deprecated
+from dask.core import flatten
+from dask.utils import _deprecated, key_split
 from dask.utils import ensure_bytes as _ensure_bytes
-from dask.utils import key_split
 from dask.utils import parse_timedelta as _parse_timedelta
 from dask.widgets import get_template
 
@@ -246,8 +245,7 @@ def get_ip_interface(ifname):
     if ifname not in net_if_addrs:
         allowed_ifnames = list(net_if_addrs.keys())
         raise ValueError(
-            "{!r} is not a valid network interface. "
-            "Valid network interfaces are: {}".format(ifname, allowed_ifnames)
+            f"{ifname!r} is not a valid network interface. Valid network interfaces are: {allowed_ifnames}"
         )
 
     for info in net_if_addrs[ifname]:
@@ -468,7 +466,7 @@ class _CollectErrorThread:
         def wrapper() -> None:
             try:
                 target()
-            except BaseException as e:  # noqa: B036
+            except BaseException as e:
                 self._exception = e
 
         self._thread = thread = threading.Thread(
@@ -496,7 +494,7 @@ class LoopRunner:
     Parameters
     ----------
     loop: IOLoop (optional)
-        If given, this loop will be re-used, otherwise an appropriate one
+        If given, this loop will be reused, otherwise an appropriate one
         will be looked up or created.
     asynchronous: boolean (optional, default False)
         If false (the default), the loop is meant to run in a separate
@@ -1476,8 +1474,8 @@ def cli_keywords(
             out = '"' + out + '"'
         return out
 
-    return sum(
-        (["--" + k.replace("_", "-"), convert_value(v)] for k, v in d.items()), []
+    return list(
+        flatten(["--" + k.replace("_", "-"), convert_value(v)] for k, v in d.items())
     )
 
 
