@@ -1,6 +1,6 @@
 [project]
 name = "prek"
-version = "0.2.21"
+version = "0.2.22"
 description = "Better `pre-commit`, re-engineered in Rust"
 authors = [{ name = "j178", email = "hi@j178.dev" }]
 requires-python = ">=3.8"
@@ -29,6 +29,8 @@ build-backend = "maturin"
 
 [tool.maturin]
 bindings = "bin"
+manifest-path = "crates/prek/Cargo.toml"
+strip = true
 include = [
     { path = "licenses/*", format = ["wheel", "sdist"] }
 ]

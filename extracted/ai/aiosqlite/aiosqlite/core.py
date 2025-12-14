@@ -21,6 +21,8 @@ from .cursor import Cursor
 
 __all__ = ["connect", "Connection", "Cursor"]
 
+AuthorizerCallback = Callable[[int, str, str, str, str], int]
+
 LOG = logging.getLogger("aiosqlite")
 
 
@@ -42,19 +44,49 @@ def set_exception(fut: asyncio.Future, e: BaseException) -> None:
 _STOP_RUNNING_SENTINEL = object()
 
 
-class Connection(Thread):
+def _connection_worker_thread(
+    tx: SimpleQueue[tuple[asyncio.Future, Callable[[], Any]]],
+):
+    """
+    Execute function calls on a separate thread.
+
+    :meta private:
+    """
+    while True:
+        # Continues running until all queue items are processed,
+        # even after connection is closed (so we can finalize all
+        # futures)
+
+        tx_item = tx.get()
+        future, function = tx_item
+
+        try:
+            LOG.debug("executing %s", function)
+            result = function()
+            LOG.debug("operation %s completed", function)
+            future.get_loop().call_soon_threadsafe(set_result, future, result)
+
+            if result is _STOP_RUNNING_SENTINEL:
+                break
+
+        except BaseException as e:  # noqa B036
+            LOG.debug("returning exception %s", e)
+            future.get_loop().call_soon_threadsafe(set_exception, future, e)
+
+
+class Connection:
     def __init__(
         self,
         connector: Callable[[], sqlite3.Connection],
         iter_chunk_size: int,
         loop: Optional[asyncio.AbstractEventLoop] = None,
     ) -> None:
-        super().__init__()
         self._running = True
         self._connection: Optional[sqlite3.Connection] = None
         self._connector = connector
         self._tx: SimpleQueue[tuple[asyncio.Future, Callable[[], Any]]] = SimpleQueue()
         self._iter_chunk_size = iter_chunk_size
+        self._thread = Thread(target=_connection_worker_thread, args=(self._tx,))
 
         if loop is not None:
             warn(
@@ -62,10 +94,15 @@ class Connection(Thread):
                 DeprecationWarning,
             )
 
-    def _stop_running(self):
+    def _stop_running(self) -> asyncio.Future:
         self._running = False
-        # PEP 661 is not accepted yet, so we cannot type a sentinel
-        self._tx.put_nowait(_STOP_RUNNING_SENTINEL)  # type: ignore[arg-type]
+
+        function = partial(lambda: _STOP_RUNNING_SENTINEL)
+        future = asyncio.get_event_loop().create_future()
+
+        self._tx.put_nowait((future, function))
+
+        return future
 
     @property
     def _conn(self) -> sqlite3.Connection:
@@ -82,32 +119,6 @@ class Connection(Thread):
     def _execute_fetchall(self, sql: str, parameters: Any) -> Iterable[sqlite3.Row]:
         cursor = self._conn.execute(sql, parameters)
         return cursor.fetchall()
-
-    def run(self) -> None:
-        """
-        Execute function calls on a separate thread.
-
-        :meta private:
-        """
-        while True:
-            # Continues running until all queue items are processed,
-            # even after connection is closed (so we can finalize all
-            # futures)
-
-            tx_item = self._tx.get()
-            if tx_item is _STOP_RUNNING_SENTINEL:
-                break
-
-            future, function = tx_item
-
-            try:
-                LOG.debug("executing %s", function)
-                result = function()
-                LOG.debug("operation %s completed", function)
-                future.get_loop().call_soon_threadsafe(set_result, future, result)
-            except BaseException as e:  # noqa B036
-                LOG.debug("returning exception %s", e)
-                future.get_loop().call_soon_threadsafe(set_exception, future, e)
 
     async def _execute(self, fn, *args, **kwargs):
         """Queue a function with the given arguments for execution."""
@@ -129,14 +140,14 @@ class Connection(Thread):
                 self._tx.put_nowait((future, self._connector))
                 self._connection = await future
             except BaseException:
-                self._stop_running()
+                await self._stop_running()
                 self._connection = None
                 raise
 
         return self
 
     def __await__(self) -> Generator[Any, None, "Connection"]:
-        self.start()
+        self._thread.start()
         return self._connect().__await__()
 
     async def __aenter__(self) -> "Connection":
@@ -170,7 +181,7 @@ class Connection(Thread):
             LOG.info("exception occurred while closing connection")
             raise
         finally:
-            self._stop_running()
+            await self._stop_running()
             self._connection = None
 
     @contextmanager
@@ -287,6 +298,50 @@ class Connection(Thread):
     async def set_trace_callback(self, handler: Callable) -> None:
         await self._execute(self._conn.set_trace_callback, handler)
 
+    async def set_authorizer(
+        self, authorizer_callback: Optional[AuthorizerCallback]
+    ) -> None:
+        """
+        Set an authorizer callback to control database access.
+
+        The authorizer callback is invoked for each SQL statement that is prepared,
+        and controls whether specific operations are permitted.
+
+        Example::
+
+            import sqlite3
+
+            def restrict_drops(action_code, arg1, arg2, db_name, trigger_name):
+                # Deny all DROP operations
+                if action_code == sqlite3.SQLITE_DROP_TABLE:
+                    return sqlite3.SQLITE_DENY
+                # Allow everything else
+                return sqlite3.SQLITE_OK
+
+            await conn.set_authorizer(restrict_drops)
+
+        See ``sqlite3`` documentation for details:
+        https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.set_authorizer
+
+        :param authorizer_callback: An optional callable that receives five arguments:
+
+            - ``action_code`` (int): The action to be authorized (e.g., ``SQLITE_READ``)
+            - ``arg1`` (str): First argument, meaning depends on ``action_code``
+            - ``arg2`` (str): Second argument, meaning depends on ``action_code``
+            - ``db_name`` (str): Database name (e.g., ``"main"``, ``"temp"``)
+            - ``trigger_name`` (str): Name of trigger or view that is doing the access,
+              or ``None``
+
+            The callback should return:
+
+            - ``SQLITE_OK`` (0): Allow the operation
+            - ``SQLITE_DENY`` (1): Deny the operation, raise ``sqlite3.DatabaseError``
+            - ``SQLITE_IGNORE`` (2): Treat operation as no-op
+
+            Pass ``None`` to remove the authorizer.
+        """
+        await self._execute(self._conn.set_authorizer, authorizer_callback)
+
     async def iterdump(self) -> AsyncIterator[str]:
         """
         Return an async iterator to dump the database in SQL text format.
@@ -354,6 +409,24 @@ class Connection(Thread):
             name=name,
             sleep=sleep,
         )
+
+    def __del__(self):
+        if self._connection is None:
+            return
+
+        warn(
+            (
+                f"{self!r} was deleted before being closed. "
+                "Please use 'async with' or '.close()' to close the connection properly."
+            ),
+            ResourceWarning,
+            stacklevel=1,
+        )
+
+        # Don't try to be creative here, the event loop may have already been closed.
+        # Simply stop the worker thread, and let the underlying sqlite3 connection
+        # be finalized by its own __del__.
+        self._stop_running()
 
 
 def connect(

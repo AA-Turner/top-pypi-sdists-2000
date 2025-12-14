@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pyzstd
-Version: 0.19.0
+Version: 0.19.1
 Summary: Support for Zstandard (zstd) compression
 Project-URL: Homepage, https://github.com/Rogdham/pyzstd
 Project-URL: Documentation, https://pyzstd.readthedocs.io/

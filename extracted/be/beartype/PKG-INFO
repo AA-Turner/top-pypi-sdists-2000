@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: beartype
-Version: 0.22.8
+Version: 0.22.9
 Summary: Unbearably fast near-real-time pure-Python runtime-static type-checker.
 Project-URL: Docs, https://beartype.readthedocs.io
 Project-URL: GitHub, https://github.com/beartype/beartype
@@ -63,6 +63,7 @@ Requires-Dist: poetry; extra == 'dev'
 Requires-Dist: polars; (python_version < '3.14.0') and extra == 'dev'
 Requires-Dist: pydata-sphinx-theme<=0.7.2; extra == 'dev'
 Requires-Dist: pygments; extra == 'dev'
+Requires-Dist: pyinstaller; extra == 'dev'
 Requires-Dist: pyright>=1.1.370; extra == 'dev'
 Requires-Dist: pytest>=6.2.0; extra == 'dev'
 Requires-Dist: redis; extra == 'dev'
@@ -105,6 +106,7 @@ Requires-Dist: pandera>=0.26.0; (python_version < '3.14.0') and extra == 'test'
 Requires-Dist: poetry; extra == 'test'
 Requires-Dist: polars; (python_version < '3.14.0') and extra == 'test'
 Requires-Dist: pygments; extra == 'test'
+Requires-Dist: pyinstaller; extra == 'test'
 Requires-Dist: pyright>=1.1.370; extra == 'test'
 Requires-Dist: pytest>=6.2.0; extra == 'test'
 Requires-Dist: redis; extra == 'test'
@@ -133,6 +135,7 @@ Requires-Dist: pandera>=0.26.0; (python_version < '3.14.0') and extra == 'test-t
 Requires-Dist: poetry; extra == 'test-tox'
 Requires-Dist: polars; (python_version < '3.14.0') and extra == 'test-tox'
 Requires-Dist: pygments; extra == 'test-tox'
+Requires-Dist: pyinstaller; extra == 'test-tox'
 Requires-Dist: pyright>=1.1.370; extra == 'test-tox'
 Requires-Dist: pytest>=6.2.0; extra == 'test-tox'
 Requires-Dist: redis; extra == 'test-tox'
