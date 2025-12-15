@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: Cython
-Version: 3.2.2
+Version: 3.2.3
 Summary: The Cython compiler for writing C extensions in the Python language.
 Home-page: https://cython.org/
 Author: Robert Bradshaw, Stefan Behnel, David Woods, Greg Ewing, et al.
@@ -65,39 +65,32 @@ to install an uncompiled (slower) version of Cython with::
 
 .. _Pyrex: https://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/
 
-3.2.2 (2025-11-30)
+3.2.3 (2025-12-14)
 ==================
 
 Features added
 --------------
 
-* The C-API declarations were updated to include the new ``PyDict_*Ref()`` functions.
+* The C-API declarations were updated to include the new ``PyList_*()`` functions.
   (Github issue https://github.com/cython/cython/issues/7291)
+
+* The ``Py_mod_gil`` module setting can now be changed with a C macro, overriding
+  the ``freethreading_compatible`` directive setting.
+  (Github issue https://github.com/cython/cython/issues/7404)
 
 Bugs fixed
 ----------
 
-* Iteration over literal sequences and strings in generators generated invalid C code since 3.2.0.
-  This was a regression due to the C array iteration optimisation in https://github.com/cython/cython/issues/6926, which is now
-  disabled inside of generators.
-  (Github issue https://github.com/cython/cython/issues/7342)
+* t-strings lost the last element when compiled for the Limited API.
+  (Github issue https://github.com/cython/cython/issues/7381)
 
-* Calling special methods of known exception types failed with an ``AttributeError``.
-  (Github issue https://github.com/cython/cython/issues/7342)
+* The ``array.data`` property of the ``cpython.array`` declarations generated a
+  useless exception check that degraded its use in ``nogil`` code.
+  (Github issue https://github.com/cython/cython/issues/7408)
 
-* Calling the unbound ``__mul__`` special method of builtin collections with subtypes failed.
-  (Github issue https://github.com/cython/cython/issues/7340)
+* Parallel builds with the ``cythonize`` command could request more processes
+  than allowed by the platform, thus failing the build.
+  (Github issue https://github.com/cython/cython/issues/7384)
 
-* C string literals could generate invalid "const to non-const" casts in the C code.
-  (Github issue https://github.com/cython/cython/issues/7346)
-
-* ``yield`` is no longer allowed inside of a ``cython.critical_section``,
-  but *is* now allowed while holding a ``cython.pymutex``.
-  (Github issue https://github.com/cython/cython/issues/7317)
-
-* Under lock congestion, acquiring the GIL could crash in Python 3.11, part 2.
-  This bug was introduced in Cython 3.2.0.
-  (Github issue https://github.com/cython/cython/issues/7312)
-
-* The new ``py_safe_*`` functions in ``libc.threads`` triggered C compiler warnings.
-  (Github issue https://github.com/cython/cython/issues/7356)
+* A minor thread sanitizer issue was resolved.
+  (Github issue https://github.com/cython/cython/issues/7383)
