@@ -73,10 +73,18 @@ GET_PROJECT_RESPONSE = {
 GET_DOMAIN_RESPONSE_EXPRESS = {
     "id": "dzd_1234",
     "name": "test-domain",
-    "preferences": {"DOMAIN_MODE": "EXPRESS"},
+    "iamSignIns": ["IAM_ROLE", "IAM_USER"],
+    "domainVersion": "V2",
 }
 
 GET_DOMAIN_RESPONSE_STANDARD = {"id": "dzd_1234", "name": "test-domain"}
+
+GET_DOMAIN_RESPONSE_MISSING_VERSION = {
+    "id": "dzd_1234",
+    "name": "test-domain",
+    "iamSignIns": ["IAM_ROLE", "IAM_USER"],
+    # domainVersion is missing - should be treated as non-express
+}
 
 DEFAULT_TOOLING_ENV = {
     "awsAccountId": "1234567890",
@@ -784,3 +792,22 @@ class TestProject(TestCase):
         with self.assertRaises(ValueError) as context:
             project.connection(name="test_connection", id="12345")
         self.assertIn("Cannot specify both 'name' and 'id' parameters", str(context.exception))
+
+    @patch("sagemaker_studio.sagemaker_studio_api.SageMakerStudioAPI._get_aws_client")
+    @patch("sagemaker_studio.utils._internal.InternalUtils._get_domain_id")
+    @patch("sagemaker_studio.connections.ConnectionService.get_connection_by_name")
+    def test_connection_missing_domain_version_uses_project_iam(
+        self, get_connection_by_name_mock: Mock, get_domain_id_mock: Mock, get_aws_client_mock: Mock
+    ):
+        """Test that domain with iamSignIns but missing domainVersion is treated as non-express"""
+        get_domain_id_mock.return_value = "dzd_1234"
+        get_aws_client_mock.side_effect = lambda x, y: self.mock_datazone_api
+        # Set domain with iamSignIns but missing domainVersion - should be treated as non-express
+        self.mock_datazone_api.get_domain.return_value = GET_DOMAIN_RESPONSE_MISSING_VERSION
+        mock_connection = Mock()
+        get_connection_by_name_mock.return_value = mock_connection
+        project = Project(id="aa76bmnbd042v")
+
+        result = project.connection()
+        get_connection_by_name_mock.assert_called_once_with(name="project.iam")
+        self.assertEqual(result, mock_connection)

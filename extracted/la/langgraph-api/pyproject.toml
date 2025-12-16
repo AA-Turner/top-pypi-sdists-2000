@@ -29,8 +29,8 @@ dependencies = [
     "jsonschema-rs>=0.20.0,<0.30",
     "structlog>=24.1.0,<26",
     "pyjwt>=2.9.0",
-    "cryptography>=42.0.0,<45.0",
-    "langgraph-sdk>=0.2.15",
+    "cryptography>=42.0.0,<47.0",
+    "langgraph-sdk>=0.3.0",
     "cloudpickle>=3.0.0",
     "langgraph-runtime-inmem>=0.20.0,<0.21.0",
     "truststore>=0.1",
@@ -124,7 +124,8 @@ path = "langgraph_api/__init__.py"
 # https://docs.pytest.org/en/7.1.x/reference/reference.html
 # --strict-config       any warnings encountered while parsing the `pytest`
 #                       section of the configuration file raise errors.
-addopts = "--strict-markers --strict-config --durations=5 -vv"
+# --snapshot-warn-unused   by default pytest will fail if any snapshots are unused, but we have a bunch of branching
+addopts = "--strict-markers --strict-config --durations=5 -vv --snapshot-warn-unused"
 markers = ["grpc: include test in gRPC persistence test suite"]
 
 [tool.ruff]

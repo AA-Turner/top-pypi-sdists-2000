@@ -215,6 +215,7 @@ InventoryOptionalFieldType = Literal[
     "IntelligentTieringAccessTier",
     "IsMultipartUploaded",
     "LastModifiedDate",
+    "LifecycleExpirationDate",
     "ObjectAccessControlList",
     "ObjectLockLegalHoldStatus",
     "ObjectLockMode",

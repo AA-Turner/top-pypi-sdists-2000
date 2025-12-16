@@ -154,7 +154,7 @@ class AddressServiceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/ospgateway/get_address.py.html>`__ to see an example of how to use get_address API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/ospgateway/get_address.py.html>`__ to see an example of how to use get_address API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['addressId', 'ospHomeRegion', 'compartmentId']
@@ -280,7 +280,7 @@ class AddressServiceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/ospgateway/verify_address.py.html>`__ to see an example of how to use verify_address API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/ospgateway/verify_address.py.html>`__ to see an example of how to use verify_address API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ospHomeRegion', 'compartmentId']

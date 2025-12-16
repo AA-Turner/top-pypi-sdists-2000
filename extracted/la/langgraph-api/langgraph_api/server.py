@@ -297,6 +297,6 @@ if config.MOUNT_PREFIX:
             Mount(prefix, app=app),
         ],
         lifespan=app.router.lifespan_context,
-        middleware=[Middleware(ASGIBypassMiddleware), *app.user_middleware],
+        middleware=[Middleware(ASGIBypassMiddleware)],
         exception_handlers=app.exception_handlers,
     )

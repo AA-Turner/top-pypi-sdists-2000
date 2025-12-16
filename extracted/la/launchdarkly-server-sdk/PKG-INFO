@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: launchdarkly-server-sdk
-Version: 9.14.0
+Version: 9.14.1
 Summary: LaunchDarkly SDK for Python
 License: Apache-2.0
 License-File: LICENSE.txt

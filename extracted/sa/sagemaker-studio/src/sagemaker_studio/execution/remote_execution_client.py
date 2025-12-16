@@ -30,7 +30,7 @@ from sagemaker_studio.projects import ProjectService
 from sagemaker_studio.utils._internal import InternalUtils
 
 DEFAULT_INSTANCE_TYPE = "ml.m6i.xlarge"  # consistent with the default instance in the toolkit
-DEFAULT_IMAGE_VERSION = "2.8"  # consistent with default image version in Space
+DEFAULT_IMAGE_VERSION = "latest"  # default to latest image version
 
 
 class RemoteExecutionClient(ExecutionClient):
@@ -944,8 +944,9 @@ class RemoteExecutionClient(ExecutionClient):
     def validate_image_version(sem_ver: str):
         from packaging.version import InvalidVersion, Version
 
-        if sem_ver in ("latest"):
-            raise ValidationError(f"Invalid image version {sem_ver}")
+        # Allow "latest" as a valid version
+        if sem_ver == "latest":
+            return True
 
         try:
             # Parse the version using the packaging library
@@ -955,12 +956,9 @@ class RemoteExecutionClient(ExecutionClient):
             if parsed_version.major == 3:
                 return True
 
-            # Since 2025 June, switching to public smd images, valid versions are 2.6.x, 2.7.x, 2.8.x, 2.9.x
+            # Since 2025 June, SMD switched to public images, valid versions are 2.6.x and above
             if parsed_version.major == 2 and (
-                parsed_version.minor == 6
-                or parsed_version.minor == 7
-                or parsed_version.minor == 8
-                or parsed_version.base_version == "2"
+                parsed_version.base_version == "2" or parsed_version.minor >= 6
             ):
                 return True
             return False

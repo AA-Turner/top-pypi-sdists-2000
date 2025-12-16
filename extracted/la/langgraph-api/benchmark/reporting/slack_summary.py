@@ -142,16 +142,21 @@ def generate_mixed_workload_summary(results: list[dict]) -> str:
 
 
 def generate_capacity_summary(results: list[dict]) -> str:
-    """Generate a summary for capacity benchmarks."""
+    """Generate a summary for capacity benchmarks.
+
+    Only includes results from the highest ramp level (target) for each deployment size
+    """
     if not results:
         return "*Capacity Benchmarks*: No results collected\n"
 
     # Group by deployment and config (expand x steps)
+    # For each deployment+config, only keep the result with the highest target
     by_deployment = defaultdict(lambda: defaultdict(dict))
 
     for r in results:
         settings = r.get("settings", {})
         deployment = get_deployment_short_name(settings.get("baseUrlName"))
+        target = settings.get("target", 0)
 
         config = r.get("config", {})
         expand = config.get("expand", "?")
@@ -160,14 +165,23 @@ def generate_capacity_summary(results: list[dict]) -> str:
         config_key = f"e{expand}s{steps}d{data_size}"
 
         metrics = r.get("metrics", {})
-        by_deployment[deployment][config_key] = {
-            "success_rate": metrics.get("successRate"),
-            "p50": metrics.get("runDuration", {}).get("p50"),
-            "p95": metrics.get("runDuration", {}).get("p95"),
-            "total_runs": metrics.get("totalRuns"),
-        }
 
-    lines = ["*Capacity Benchmark Results*\n"]
+        existing = by_deployment[deployment].get(config_key)
+        if existing is None or target > existing.get("target", 0):
+            by_deployment[deployment][config_key] = {
+                "target": target,
+                "success_rate": metrics.get("successRate"),
+                "p50": metrics.get("runDuration", {}).get("p50"),
+                "p95": metrics.get("runDuration", {}).get("p95"),
+                "total_runs": metrics.get("totalRuns"),
+            }
+
+    max_target = 0
+    for dep_data in by_deployment.values():
+        for config_data in dep_data.values():
+            max_target = max(max_target, config_data.get("target", 0))
+
+    lines = [f"*Capacity Benchmark Results* (at {max_target} concurrent runs)\n"]
 
     # Sort deployments
     standard = ["s", "m", "l"]
@@ -190,21 +204,21 @@ def generate_capacity_summary(results: list[dict]) -> str:
         lines.append(f"\n`{config_key}`:")
         lines.append("```")
         lines.append(
-            f"{'Dep':<6} | {'Success':>8} | {'P50':>7} | {'P95':>7} | {'Runs':>6}"
+            f"{'Dep':<6} | {'Success':>8} | {'P50':>7} | {'P95':>7} | {'Target':>6}"
         )
-        lines.append("-" * 45)
+        lines.append("-" * 47)
 
         for dep in all_deployments:
             if config_key in by_deployment[dep]:
                 data = by_deployment[dep][config_key]
-                total = data.get("total_runs")
-                total_str = str(total) if total is not None else "N/A"
+                target = data.get("target")
+                target_str = str(target) if target is not None else "N/A"
                 lines.append(
                     f"{dep:<6} | "
                     f"{format_pct(data['success_rate']):>8} | "
                     f"{format_duration(data['p50']):>7} | "
                     f"{format_duration(data['p95']):>7} | "
-                    f"{total_str:>6}"
+                    f"{target_str:>6}"
                 )
         lines.append("```")
 

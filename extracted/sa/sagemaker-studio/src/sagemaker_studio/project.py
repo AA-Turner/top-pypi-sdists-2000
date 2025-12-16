@@ -71,13 +71,17 @@ class Project:
                 raise ValueError("Domain ID not found in environment. Please specify a domain ID.")
             self.domain_id = domain_from_env
 
-        # Fetch domain info to identify the domain preferences property
+        # Fetch domain info to identify express domain using iamSignIns and domainVersion
         domain_response = self._sagemaker_studio_api.datazone_api.get_domain(
             identifier=self.domain_id
         )
-        preferences = domain_response.get("preferences", {})
-        domain_mode = preferences.get("DOMAIN_MODE")
-        self._is_express_mode = domain_mode == "EXPRESS"
+        iam_sign_ins = domain_response.get("iamSignIns", [])
+        domain_version = domain_response.get("domainVersion")
+        # Express domains have both IAM_ROLE and IAM_USER in iamSignIns and domainVersion is V2
+        # If domainVersion is missing, treat as non-express
+        self._is_express_mode = (
+            "IAM_ROLE" in iam_sign_ins and "IAM_USER" in iam_sign_ins and domain_version == "V2"
+        )
 
         if not self.id:
             self.id = self._utils._get_project_id(

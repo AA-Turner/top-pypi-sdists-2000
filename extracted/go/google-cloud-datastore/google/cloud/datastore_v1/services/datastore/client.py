@@ -45,6 +45,7 @@ from google.auth.transport import mtls  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.auth.exceptions import MutualTLSChannelError  # type: ignore
 from google.oauth2 import service_account  # type: ignore
+import google.protobuf
 
 try:
     OptionalRetry = Union[retries.Retry, gapic_v1.method._MethodDefault, None]
@@ -1200,10 +1201,10 @@ class DatastoreClient(metaclass=DatastoreClientMeta):
                 sequences of mutations affecting a single entity are not
                 permitted in a single ``Commit`` request:
 
-                -  ``insert`` followed by ``insert``
-                -  ``update`` followed by ``insert``
-                -  ``upsert`` followed by ``insert``
-                -  ``delete`` followed by ``update``
+                - ``insert`` followed by ``insert``
+                - ``update`` followed by ``insert``
+                - ``upsert`` followed by ``insert``
+                - ``delete`` followed by ``update``
 
                 When mode is ``NON_TRANSACTIONAL``, no two mutations may
                 affect a single entity.
@@ -1914,5 +1915,7 @@ DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
     gapic_version=package_version.__version__
 )
 
+if hasattr(DEFAULT_CLIENT_INFO, "protobuf_runtime_version"):  # pragma: NO COVER
+    DEFAULT_CLIENT_INFO.protobuf_runtime_version = google.protobuf.__version__
 
 __all__ = ("DatastoreClient",)

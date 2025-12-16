@@ -525,20 +525,22 @@ class ResponseMetadata(_message.Message):
     def __init__(self, data: _Optional[_Mapping[str, bytes]] = ...) -> None: ...
 
 class AIFields(_message.Message):
-    __slots__ = ("usage_metadata", "response_metadata", "tool_calls", "tool_call_chunks", "invalid_tool_calls", "reasoning_content")
+    __slots__ = ("usage_metadata", "response_metadata", "tool_calls", "tool_call_chunks", "invalid_tool_calls", "chunk_position", "reasoning_content")
     USAGE_METADATA_FIELD_NUMBER: _ClassVar[int]
     RESPONSE_METADATA_FIELD_NUMBER: _ClassVar[int]
     TOOL_CALLS_FIELD_NUMBER: _ClassVar[int]
     TOOL_CALL_CHUNKS_FIELD_NUMBER: _ClassVar[int]
     INVALID_TOOL_CALLS_FIELD_NUMBER: _ClassVar[int]
+    CHUNK_POSITION_FIELD_NUMBER: _ClassVar[int]
     REASONING_CONTENT_FIELD_NUMBER: _ClassVar[int]
     usage_metadata: UsageMetadata
     response_metadata: ResponseMetadata
     tool_calls: _containers.RepeatedCompositeFieldContainer[ToolCall]
     tool_call_chunks: _containers.RepeatedCompositeFieldContainer[ToolCallChunk]
     invalid_tool_calls: _containers.RepeatedCompositeFieldContainer[InvalidToolCall]
+    chunk_position: str
     reasoning_content: _wrappers_pb2.StringValue
-    def __init__(self, usage_metadata: _Optional[_Union[UsageMetadata, _Mapping]] = ..., response_metadata: _Optional[_Union[ResponseMetadata, _Mapping]] = ..., tool_calls: _Optional[_Iterable[_Union[ToolCall, _Mapping]]] = ..., tool_call_chunks: _Optional[_Iterable[_Union[ToolCallChunk, _Mapping]]] = ..., invalid_tool_calls: _Optional[_Iterable[_Union[InvalidToolCall, _Mapping]]] = ..., reasoning_content: _Optional[_Union[_wrappers_pb2.StringValue, _Mapping]] = ...) -> None: ...
+    def __init__(self, usage_metadata: _Optional[_Union[UsageMetadata, _Mapping]] = ..., response_metadata: _Optional[_Union[ResponseMetadata, _Mapping]] = ..., tool_calls: _Optional[_Iterable[_Union[ToolCall, _Mapping]]] = ..., tool_call_chunks: _Optional[_Iterable[_Union[ToolCallChunk, _Mapping]]] = ..., invalid_tool_calls: _Optional[_Iterable[_Union[InvalidToolCall, _Mapping]]] = ..., chunk_position: _Optional[str] = ..., reasoning_content: _Optional[_Union[_wrappers_pb2.StringValue, _Mapping]] = ...) -> None: ...
 
 class ToolFields(_message.Message):
     __slots__ = ("tool_call_id", "status", "artifact")

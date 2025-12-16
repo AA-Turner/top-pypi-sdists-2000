@@ -8928,15 +8928,15 @@ def percent_rank(_emit_ast: bool = True) -> Column:
         ...     ],
         ...     schema=["x", "y", "z"]
         ... )
-        >>> df.select(percent_rank().over(Window.partition_by("x").order_by(col("y"))).alias("result")).show()
+        >>> df.select(percent_rank().over(Window.partition_by("x").order_by(col("y"), col("z"))).alias("result")).sort("result").show()
         ------------
         |"RESULT"  |
         ------------
         |0.0       |
-        |0.5       |
-        |0.5       |
         |0.0       |
-        |0.0       |
+        |0.5       |
+        |1.0       |
+        |1.0       |
         ------------
         <BLANKLINE>
     """
@@ -8980,16 +8980,16 @@ def row_number(_emit_ast: bool = True) -> Column:
         ...     ],
         ...     schema=["x", "y", "z"]
         ... )
-        >>> df.select(row_number().over(Window.partition_by(col("X")).order_by(col("Y"))).alias("result")).show()
-        ------------
-        |"RESULT"  |
-        ------------
-        |1         |
-        |2         |
-        |3         |
-        |1         |
-        |2         |
-        ------------
+        >>> df.select(col("X"), row_number().over(Window.partition_by(col("X")).order_by(col("Y"))).alias("result")).sort("X", "result").show()
+        ------------------
+        |"X"  |"RESULT"  |
+        ------------------
+        |1    |1         |
+        |1    |2         |
+        |2    |1         |
+        |2    |2         |
+        |2    |3         |
+        ------------------
         <BLANKLINE>
     """
     return _call_function("row_number", _emit_ast=_emit_ast)
@@ -9065,8 +9065,8 @@ def lead(
         ...     ],
         ...     schema=["x", "y", "z"]
         ... )
-        >>> df.select(lead("Z").over(Window.partition_by(col("X")).order_by(col("Y"))).alias("result")).collect()
-        [Row(RESULT=1), Row(RESULT=3), Row(RESULT=None), Row(RESULT=3), Row(RESULT=None)]
+        >>> df.select(lead("Z").over(Window.partition_by(col("X")).order_by(col("Y"))).alias("result")).sort("result").collect()
+        [Row(RESULT=None), Row(RESULT=None), Row(RESULT=1), Row(RESULT=3), Row(RESULT=3)]
     """
     # AST.
     ast = (
@@ -11501,7 +11501,7 @@ def bitmap_construct_agg(
     Example::
 
         >>> df = session.create_dataframe([1, 32769], schema=["a"])
-        >>> df.select(bitmap_bucket_number(df["a"]).alias("bitmap_id"),bitmap_bit_position(df["a"]).alias("bit_position")).group_by("bitmap_id").agg(bitmap_construct_agg(col("bit_position")).alias("bitmap")).collect()
+        >>> df.select(bitmap_bucket_number(df["a"]).alias("bitmap_id"),bitmap_bit_position(df["a"]).alias("bit_position")).group_by("bitmap_id").agg(bitmap_construct_agg(col("bit_position")).alias("bitmap")).order_by("bitmap_id").collect()
         [Row(BITMAP_ID=1, BITMAP=bytearray(b'\\x00\\x01\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00')), Row(BITMAP_ID=2, BITMAP=bytearray(b'\\x00\\x01\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00'))]
     """
     c = _to_col_if_str(relative_position, "bitmap_construct_agg")
@@ -11749,7 +11749,7 @@ def regr_avgy(y: ColumnOrName, x: ColumnOrName, _emit_ast: bool = True) -> Colum
     Example::
 
         >>> df = session.create_dataframe([[10, 11], [20, 22], [25, None], [30, 35]], schema=["v", "v2"])
-        >>> df = df.group_by("v").agg(regr_avgy(df["v"], df["v2"]).alias("regr_avgy"))
+        >>> df = df.group_by("v").agg(regr_avgy(df["v"], df["v2"]).alias("regr_avgy")).sort("v")
         >>> df.collect()
         [Row(V=10, REGR_AVGY=10.0), Row(V=20, REGR_AVGY=20.0), Row(V=25, REGR_AVGY=None), Row(V=30, REGR_AVGY=30.0)]
     """
@@ -11838,7 +11838,7 @@ def regr_sxx(y: ColumnOrName, x: ColumnOrName, _emit_ast: bool = True) -> Column
     Example::
 
         >>> df = session.create_dataframe([[10, 11], [20, 22], [25, None], [30, 35]], schema=["v", "v2"])
-        >>> df.group_by("v").agg(regr_sxx(col("v"), col("v2")).alias("regr_sxx")).collect()
+        >>> df.group_by("v").agg(regr_sxx(col("v"), col("v2")).alias("regr_sxx")).sort("v").collect()
         [Row(V=10, REGR_SXX=0.0), Row(V=20, REGR_SXX=0.0), Row(V=25, REGR_SXX=None), Row(V=30, REGR_SXX=0.0)]
     """
     y_col = _to_col_if_str(y, "regr_sxx")

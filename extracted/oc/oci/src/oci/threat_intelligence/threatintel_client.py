@@ -148,7 +148,7 @@ class ThreatintelClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/threatintelligence/get_indicator.py.html>`__ to see an example of how to use get_indicator API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/threatintelligence/get_indicator.py.html>`__ to see an example of how to use get_indicator API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['indicatorId', 'compartmentId']
@@ -258,7 +258,7 @@ class ThreatintelClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/threatintelligence/list_indicator_counts.py.html>`__ to see an example of how to use list_indicator_counts API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/threatintelligence/list_indicator_counts.py.html>`__ to see an example of how to use list_indicator_counts API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -408,7 +408,7 @@ class ThreatintelClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/threatintelligence/list_indicators.py.html>`__ to see an example of how to use list_indicators API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/threatintelligence/list_indicators.py.html>`__ to see an example of how to use list_indicators API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -562,7 +562,7 @@ class ThreatintelClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/threatintelligence/list_threat_types.py.html>`__ to see an example of how to use list_threat_types API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/threatintelligence/list_threat_types.py.html>`__ to see an example of how to use list_threat_types API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -677,7 +677,7 @@ class ThreatintelClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/threatintelligence/summarize_indicators.py.html>`__ to see an example of how to use summarize_indicators API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/threatintelligence/summarize_indicators.py.html>`__ to see an example of how to use summarize_indicators API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']

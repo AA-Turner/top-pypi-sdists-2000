@@ -166,7 +166,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/approve_delegated_resource_access_request.py.html>`__ to see an example of how to use approve_delegated_resource_access_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/approve_delegated_resource_access_request.py.html>`__ to see an example of how to use approve_delegated_resource_access_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegatedResourceAccessRequestId']
@@ -286,7 +286,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/change_delegation_control_compartment.py.html>`__ to see an example of how to use change_delegation_control_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/change_delegation_control_compartment.py.html>`__ to see an example of how to use change_delegation_control_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegationControlId']
@@ -406,7 +406,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/change_delegation_subscription_compartment.py.html>`__ to see an example of how to use change_delegation_subscription_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/change_delegation_subscription_compartment.py.html>`__ to see an example of how to use change_delegation_subscription_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegationSubscriptionId']
@@ -516,7 +516,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/create_delegation_control.py.html>`__ to see an example of how to use create_delegation_control API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/create_delegation_control.py.html>`__ to see an example of how to use create_delegation_control API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -614,7 +614,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/create_delegation_subscription.py.html>`__ to see an example of how to use create_delegation_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/create_delegation_subscription.py.html>`__ to see an example of how to use create_delegation_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -719,7 +719,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/delete_delegation_control.py.html>`__ to see an example of how to use delete_delegation_control API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/delete_delegation_control.py.html>`__ to see an example of how to use delete_delegation_control API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegationControlId']
@@ -832,7 +832,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/delete_delegation_subscription.py.html>`__ to see an example of how to use delete_delegation_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/delete_delegation_subscription.py.html>`__ to see an example of how to use delete_delegation_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegationSubscriptionId']
@@ -930,7 +930,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/get_delegated_resource_access_request.py.html>`__ to see an example of how to use get_delegated_resource_access_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/get_delegated_resource_access_request.py.html>`__ to see an example of how to use get_delegated_resource_access_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegatedResourceAccessRequestId']
@@ -1031,7 +1031,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/get_delegated_resource_access_request_audit_log_report.py.html>`__ to see an example of how to use get_delegated_resource_access_request_audit_log_report API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/get_delegated_resource_access_request_audit_log_report.py.html>`__ to see an example of how to use get_delegated_resource_access_request_audit_log_report API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegatedResourceAccessRequestId']
@@ -1137,7 +1137,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/get_delegation_control.py.html>`__ to see an example of how to use get_delegation_control API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/get_delegation_control.py.html>`__ to see an example of how to use get_delegation_control API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegationControlId']
@@ -1235,7 +1235,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/get_delegation_subscription.py.html>`__ to see an example of how to use get_delegation_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/get_delegation_subscription.py.html>`__ to see an example of how to use get_delegation_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegationSubscriptionId']
@@ -1333,7 +1333,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/get_service_provider.py.html>`__ to see an example of how to use get_service_provider API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/get_service_provider.py.html>`__ to see an example of how to use get_service_provider API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceProviderId']
@@ -1431,7 +1431,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/get_service_provider_action.py.html>`__ to see an example of how to use get_service_provider_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/get_service_provider_action.py.html>`__ to see an example of how to use get_service_provider_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceProviderActionId']
@@ -1545,7 +1545,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/list_delegated_resource_access_request_histories.py.html>`__ to see an example of how to use list_delegated_resource_access_request_histories API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/list_delegated_resource_access_request_histories.py.html>`__ to see an example of how to use list_delegated_resource_access_request_histories API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegatedResourceAccessRequestId']
@@ -1715,7 +1715,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/list_delegated_resource_access_requests.py.html>`__ to see an example of how to use list_delegated_resource_access_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/list_delegated_resource_access_requests.py.html>`__ to see an example of how to use list_delegated_resource_access_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1862,7 +1862,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/list_delegation_control_resources.py.html>`__ to see an example of how to use list_delegation_control_resources API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/list_delegation_control_resources.py.html>`__ to see an example of how to use list_delegation_control_resources API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegationControlId']
@@ -2004,7 +2004,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/list_delegation_controls.py.html>`__ to see an example of how to use list_delegation_controls API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/list_delegation_controls.py.html>`__ to see an example of how to use list_delegation_controls API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2167,7 +2167,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/list_delegation_subscriptions.py.html>`__ to see an example of how to use list_delegation_subscriptions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/list_delegation_subscriptions.py.html>`__ to see an example of how to use list_delegation_subscriptions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2329,7 +2329,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/list_service_provider_actions.py.html>`__ to see an example of how to use list_service_provider_actions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/list_service_provider_actions.py.html>`__ to see an example of how to use list_service_provider_actions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2480,7 +2480,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/list_service_provider_interactions.py.html>`__ to see an example of how to use list_service_provider_interactions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/list_service_provider_interactions.py.html>`__ to see an example of how to use list_service_provider_interactions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegatedResourceAccessRequestId']
@@ -2624,7 +2624,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/list_service_providers.py.html>`__ to see an example of how to use list_service_providers API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/list_service_providers.py.html>`__ to see an example of how to use list_service_providers API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2785,7 +2785,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/reject_delegated_resource_access_request.py.html>`__ to see an example of how to use reject_delegated_resource_access_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/reject_delegated_resource_access_request.py.html>`__ to see an example of how to use reject_delegated_resource_access_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegatedResourceAccessRequestId']
@@ -2905,7 +2905,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/revoke_delegated_resource_access_request.py.html>`__ to see an example of how to use revoke_delegated_resource_access_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/revoke_delegated_resource_access_request.py.html>`__ to see an example of how to use revoke_delegated_resource_access_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegatedResourceAccessRequestId']
@@ -3025,7 +3025,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/service_provider_interaction_request.py.html>`__ to see an example of how to use service_provider_interaction_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/service_provider_interaction_request.py.html>`__ to see an example of how to use service_provider_interaction_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegatedResourceAccessRequestId']
@@ -3138,7 +3138,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/update_delegation_control.py.html>`__ to see an example of how to use update_delegation_control API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/update_delegation_control.py.html>`__ to see an example of how to use update_delegation_control API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegationControlId']
@@ -3250,7 +3250,7 @@ class DelegateAccessControlClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.1/delegateaccesscontrol/update_delegation_subscription.py.html>`__ to see an example of how to use update_delegation_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.2/delegateaccesscontrol/update_delegation_subscription.py.html>`__ to see an example of how to use update_delegation_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['delegationSubscriptionId']
