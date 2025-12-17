@@ -612,6 +612,34 @@ class TestOptimizer(unittest.TestCase):
                     )
                     optimizer.qualify_columns.validate_qualify_columns(expression)
 
+        # this makes sure the fallback scenario in get_table in resolver is covered
+        # and the error message is column cannot be resolved instead of unknown table
+        sql = """
+            SELECT
+            INLINE_VIEW.a AS ACCOUNT
+            FROM (
+            (
+                SELECT
+                a
+                FROM table1
+            ) inline_view
+            LEFT JOIN table2
+                ON a = table2.id
+            )
+            LEFT JOIN table3
+            ON inline_view.a = table3.a
+        """
+
+        with self.assertRaises(OptimizeError) as ctx:
+            schema = MappingSchema()
+            schema.add_table("table3", ["a"])
+
+            expression = optimizer.qualify_columns.qualify_columns(parse_one(sql), schema=schema)
+            optimizer.qualify_columns.validate_qualify_columns(expression)
+
+        error_msg = str(ctx.exception)
+        self.assertIn("Column 'a' could not be resolved", error_msg)
+
     def test_optimize_error_highlighting(self):
         # highlighting works with sql parameter
         sql = "SELECT nonexistent FROM x"
@@ -1045,6 +1073,7 @@ SELECT :with_,WITH :expressions,CTE :this,UNION :this,SELECT :expressions,1,:exp
                 "timestamp_col": "TIMESTAMP",
                 "double_col": "DOUBLE",
                 "bigint_col": "BIGINT",
+                "obj_col": "OBJECT",
                 "int_col": "INT",
                 "bool_col": "BOOLEAN",
                 "bytes_col": "BYTES",
@@ -1529,6 +1558,43 @@ SELECT :with_,WITH :expressions,CTE :this,UNION :this,SELECT :expressions,1,:exp
             .type,
             exp.DataType.build("timestamp"),
         )
+
+    def test_unnest_struct_field_annotation(self):
+        """Test that UNNEST of struct array without column aliases exposes struct fields with proper types"""
+        expression = annotate_types(
+            optimizer.qualify.qualify(
+                parse_one(
+                    """
+                    WITH data AS (
+                      SELECT [STRUCT('Bob' AS first_name, 'Smith' AS last_name)] AS users
+                    )
+                    SELECT first_name, last_name
+                    FROM data, UNNEST(users)
+                    """,
+                    read="bigquery",
+                )
+            )
+        )
+        self.assertEqual(expression.selects[0].type, exp.DataType.build("VARCHAR"))
+        self.assertEqual(expression.selects[1].type, exp.DataType.build("VARCHAR"))
+
+        expression = annotate_types(
+            optimizer.qualify.qualify(
+                parse_one(
+                    """
+                    SELECT person
+                    FROM UNNEST([STRUCT('Charlie' AS name, 40 AS age)]) AS person
+                    """,
+                    read="bigquery",
+                )
+            )
+        )
+        select_type = expression.selects[0].type
+        self.assertTrue(select_type.is_type(exp.DataType.Type.STRUCT))
+        self.assertEqual(len(select_type.expressions), 2)
+        fields = {col_def.name: col_def.kind for col_def in select_type.expressions}
+        self.assertEqual(fields.get("name"), exp.DataType.build("VARCHAR"))
+        self.assertEqual(fields.get("age"), exp.DataType.build("INT"))
 
     def test_map_annotation(self):
         # ToMap annotation

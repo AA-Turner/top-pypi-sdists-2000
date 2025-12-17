@@ -11,6 +11,7 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse, JSONResponse, Response
 from starlette.routing import BaseRoute, Route
 
+from langgraph_api import timing
 from langgraph_api.api.a2a import a2a_routes
 from langgraph_api.api.assistants import assistants_routes
 from langgraph_api.api.mcp import mcp_routes
@@ -111,9 +112,23 @@ else:
     protected_routes.extend(a2a_routes)
 
 
+def _metadata_fn(app_import: str) -> dict[str, str]:
+    return {"app": app_import}
+
+
+@timing.timer(
+    message="Loaded custom app from {app}",
+    metadata_fn=_metadata_fn,
+    warn_threshold_secs=3,
+    warn_message=(
+        "Import for custom app {app} exceeded the expected startup time. "
+        "Slow initialization (often due to work executed at import time) can delay readiness, "
+        "reduce scale-out capacity, and may cause deployments to be marked unhealthy."
+    ),
+    error_threshold_secs=30,
+)
 def load_custom_app(app_import: str) -> Starlette | None:
     # Expect a string in either "path/to/file.py:my_variable" or "some.module.in:my_variable"
-    logger.info(f"Loading custom app from {app_import}")
     path, name = app_import.rsplit(":", 1)
 
     # skip loading custom app if it's a js path
@@ -162,6 +177,10 @@ if HTTP_CONFIG:
 
     if router_import := HTTP_CONFIG.get("app"):
         user_router = load_custom_app(router_import)
+        if user_router:
+            user_router.router.lifespan_context = timing.wrap_lifespan_context_aenter(
+                user_router.router.lifespan_context,
+            )
 
 
 if "inmem" in MIGRATIONS_PATH:

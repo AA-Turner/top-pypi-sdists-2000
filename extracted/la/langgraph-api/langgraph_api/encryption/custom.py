@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING, Literal, get_args
 
 import structlog
 
+from langgraph_api import timing
 from langgraph_api.config import LANGGRAPH_ENCRYPTION
 
 if TYPE_CHECKING:
@@ -60,6 +61,13 @@ def _get_encryption_instance(path: str) -> Encryption:
     return encryption_instance
 
 
+@timing.timer(
+    message="Loading custom encryption {encryption_path}",
+    metadata_fn=lambda encryption_path: {"encryption_path": encryption_path},
+    warn_threshold_secs=5,
+    warn_message="Loading custom encryption '{encryption_path}' took longer than expected",
+    error_threshold_secs=10,
+)
 def _load_encryption_obj(path: str) -> Encryption:
     """Load an Encryption object from a path string.
 

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: google-cloud-datastore
-Version: 2.22.0
+Version: 2.23.0
 Summary: Google Cloud Datastore API client library
 Home-page: https://github.com/googleapis/python-datastore
 Author: Google LLC

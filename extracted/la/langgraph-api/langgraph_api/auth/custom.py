@@ -23,6 +23,7 @@ from starlette.exceptions import HTTPException
 from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
 
+from langgraph_api import timing
 from langgraph_api.auth.langsmith.backend import LangsmithAuthBackend
 from langgraph_api.auth.studio_user import StudioUser
 from langgraph_api.config import LANGGRAPH_AUTH, LANGGRAPH_AUTH_TYPE
@@ -585,6 +586,13 @@ def normalize_user(user: Any) -> BaseUser:
     )
 
 
+@timing.timer(
+    message="Loading custom auth {auth_path}",
+    metadata_fn=lambda auth_path: {"auth_path": auth_path},
+    warn_threshold_secs=5,
+    warn_message="Loading custom auth '{auth_path}' took longer than expected",
+    error_threshold_secs=10,
+)
 def _load_auth_obj(path: str) -> Auth | Literal["js"]:
     """Load an object from a path string."""
     if ":" not in path:

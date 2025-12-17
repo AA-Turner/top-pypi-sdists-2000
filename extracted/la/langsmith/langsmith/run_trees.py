@@ -263,7 +263,9 @@ class RunTree(ls_schemas.RunBase):
             if "start_time" in values and values["start_time"] is not None:
                 values["id"] = uuid7_from_datetime(values["start_time"])
             else:
-                values["id"] = uuid7()
+                now = datetime.now(timezone.utc)
+                values["start_time"] = now
+                values["id"] = uuid7_from_datetime(now)
         if "trace_id" not in values:
             if parent_run is not None:
                 values["trace_id"] = parent_run.trace_id
@@ -519,7 +521,16 @@ class RunTree(ls_schemas.RunBase):
         )
         if self.inputs is not None:
             # shallow copy. deep copying will occur in the client
-            self_dict["inputs"] = self.inputs.copy()
+            inputs_ = {}
+            attachments = self_dict.get("attachments", {})
+            for k, v in self.inputs.items():
+                if isinstance(v, ls_schemas.Attachment):
+                    attachments[k] = v
+                else:
+                    inputs_[k] = v
+            self_dict["inputs"] = inputs_
+            if attachments:
+                self_dict["attachments"] = attachments
         if self.outputs is not None:
             # shallow copy; deep copying will occur in the client
             self_dict["outputs"] = self.outputs.copy()

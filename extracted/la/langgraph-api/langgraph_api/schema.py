@@ -332,3 +332,40 @@ CronSelectField = Literal[
     "now",
 ]
 CRON_FIELDS: set[str] = set(CronSelectField.__args__)  # type: ignore[attr-defined]
+
+# Encryption field constants
+# These define which fields are encrypted for each model type.
+#
+# Note: Checkpoint encryption (checkpoint, metadata columns in checkpoints table, plus
+# blob data in checkpoint_blobs and checkpoint_writes) is handled directly by the
+# Checkpointer class in storage_postgres/langgraph_runtime_postgres/checkpoint.py.
+# The checkpointer uses encrypt_json_if_needed/decrypt_json_if_needed directly rather
+# than the field list pattern used by the API middleware. This is because checkpoints
+# are only accessed via the checkpointer's internal methods (aget_tuple, aput, etc.),
+# not through generic API CRUD operations.
+
+THREAD_ENCRYPTION_FIELDS = ["metadata", "config", "values", "interrupts", "error"]
+
+# kwargs is a nested blob - its subfields are decrypted automatically by the middleware
+RUN_ENCRYPTION_FIELDS = ["metadata", "kwargs"]
+
+ASSISTANT_ENCRYPTION_FIELDS = ["metadata", "config", "context"]
+
+# payload is a nested blob - its subfields are decrypted automatically by the middleware
+CRON_ENCRYPTION_FIELDS = ["metadata", "payload"]
+
+# The middleware automatically decrypts these subfields when decrypting the parent field.
+NESTED_ENCRYPTED_SUBFIELDS: dict[tuple[str, str], list[str]] = {
+    ("run", "kwargs"): ["input", "config", "context", "command"],
+    ("cron", "payload"): ["metadata", "context", "input", "config"],
+}
+
+# Convenience alias for cron payload subfields.
+#
+# This is a reflection of an unfortunate asymmetry in cron's data model.
+#
+# The cron API requests have payload fields (metadata, input, config, context) at the
+# top level, but at rest they're nested inside the `payload` JSONB column (with
+# metadata also duplicated as a top-level column). This alias is used to encrypt
+# those fields in the flat request before storage.
+CRON_PAYLOAD_ENCRYPTION_SUBFIELDS = NESTED_ENCRYPTED_SUBFIELDS[("cron", "payload")]

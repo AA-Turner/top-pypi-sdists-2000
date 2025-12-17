@@ -25,9 +25,12 @@ from langgraph_api.encryption.custom import (
     ModelType,
     get_encryption_instance,
 )
+from langgraph_api.schema import NESTED_ENCRYPTED_SUBFIELDS
 from langgraph_api.serde import Fragment, json_loads
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping, Sequence
+
     from langgraph_sdk import Encryption
 
 # Only import EncryptionContext at module load if encryption is configured
@@ -226,9 +229,8 @@ async def _decrypt_field(
     (synced from context by the ops layer) and config['metadata'] (merged from
     assistant/thread/run metadata).
 
-    Special handling for 'kwargs' field: also decrypts kwargs['input'],
-    kwargs['config'], and kwargs['context'] since these are encrypted
-    separately during run creation.
+    JSONB fields (defined in NESTED_ENCRYPTED_SUBFIELDS) have their
+    subfields decrypted automatically.
 
     Returns (field_name, None) if field doesn't exist or is falsy.
     """
@@ -269,14 +271,31 @@ async def _decrypt_field(
                 metadata, encryption_instance, model_type, field="metadata"
             )
 
-    # Special case: kwargs contains encrypted subfields (input, config, context, command)
-    # that were encrypted separately during run creation.
-    if field_name == "kwargs" and isinstance(decrypted, dict):
-        for subfield in ["input", "config", "context", "command"]:
-            if subfield in decrypted:
-                _, decrypted[subfield] = await _decrypt_field(
-                    decrypted, subfield, encryption_instance, model_type
-                )
+    # Handle JSONB fields (run.kwargs, cron.payload) that contain their own encrypted subfields.
+    #
+    # This special-casing is unfortunate but necessary: the ops layer performs JSONB merge
+    # operations in Postgres SQL (e.g., `kwargs || jsonb_build_object('config', ...)` and
+    # `coalesce(kwargs -> 'context', '{}')` in Runs.put). These SQL operations need to
+    # access kwargs.config and kwargs.context as structured JSON, so we can't encrypt kwargs
+    # as a single blob. Instead, we encrypt the sensitive subfields individually, preserving
+    # the outer structure for Postgres to merge.
+    # See: storage_postgres/langgraph_runtime_postgres/ops.py Runs.put/next
+    #
+    # This lives in the middleware (rather than API layer) because decrypt_response is the
+    # centralized path for all reads. Handling subfield decryption here means API endpoints
+    # don't need to know about this complexity - they just call decrypt_response with the
+    # top-level fields and subfields are handled automatically.
+    nested_key = (model_type, field_name)
+    if nested_key in NESTED_ENCRYPTED_SUBFIELDS and decrypted is not None:
+        results = await asyncio.gather(
+            *[
+                _decrypt_field(decrypted, sf, encryption_instance, model_type)
+                for sf in NESTED_ENCRYPTED_SUBFIELDS[nested_key]
+                if sf in decrypted
+            ]
+        )
+        for sf_name, sf_value in results:
+            decrypted[sf_name] = sf_value
 
     return (field_name, decrypted)
 
@@ -303,7 +322,7 @@ async def _decrypt_object(
 
 
 async def decrypt_response(
-    obj: dict[str, Any],
+    obj: Mapping[str, Any],
     model_type: ModelType,
     fields: list[str],
     encryption_instance: Encryption | None = None,
@@ -323,26 +342,30 @@ async def decrypt_response(
     Special handling: When 'config' is in fields, also decrypts config['configurable']
     since the ops layer syncs context into config['configurable'].
 
+    Note: This function returns a shallow copy of the input with decrypted fields.
+    The original object is not mutated.
+
     Args:
-        obj: Single dict from database (fields may be bytes or already-parsed dicts)
+        obj: Single mapping from database (fields may be bytes or already-parsed dicts, not mutated)
         model_type: Type identifier passed to EncryptionContext.model (e.g., "run", "cron", "thread")
         fields: List of field names to decrypt (e.g., ["metadata", "kwargs"])
         encryption_instance: Optional encryption instance (auto-fetched if None)
 
     Returns:
-        The same dict, with fields decrypted (and parsed) only if encryption is enabled
+        New dict with fields decrypted (and parsed) only if encryption is enabled (original unchanged)
     """
     if encryption_instance is None:
         encryption_instance = get_encryption_instance()
         if encryption_instance is None:
-            return obj
+            return dict(obj)
 
-    await _decrypt_object(obj, model_type, fields, encryption_instance)
-    return obj
+    result = dict(obj)
+    await _decrypt_object(result, model_type, fields, encryption_instance)
+    return result
 
 
 async def decrypt_responses(
-    objects: list[dict[str, Any]],
+    objects: Sequence[Mapping[str, Any]],
     model_type: ModelType,
     fields: list[str],
     encryption_instance: Encryption | None = None,
@@ -362,31 +385,35 @@ async def decrypt_responses(
     Special handling: When 'config' is in fields, also decrypts config['configurable']
     since the ops layer syncs context into config['configurable'].
 
+    Note: This function returns a new list of shallow copies with decrypted fields.
+    The original objects are not mutated.
+
     Args:
-        objects: List of dicts from database (fields may be bytes or already-parsed dicts)
+        objects: Sequence of mappings from database (fields may be bytes or already-parsed dicts, not mutated)
         model_type: Type identifier passed to EncryptionContext.model (e.g., "run", "cron", "thread")
         fields: List of field names to decrypt (e.g., ["metadata", "kwargs"])
         encryption_instance: Optional encryption instance (auto-fetched if None)
 
     Returns:
-        The same list, with fields decrypted (and parsed) only if encryption is enabled
+        New list of dicts with fields decrypted (and parsed) only if encryption is enabled (originals unchanged)
     """
     if encryption_instance is None:
         encryption_instance = get_encryption_instance()
         if encryption_instance is None:
-            return objects
+            return [dict(obj) for obj in objects]
 
+    results = [dict(obj) for obj in objects]
     await asyncio.gather(
         *[
-            _decrypt_object(obj, model_type, fields, encryption_instance)
-            for obj in objects
+            _decrypt_object(result, model_type, fields, encryption_instance)
+            for result in results
         ]
     )
-    return objects
+    return results
 
 
 async def _encrypt_field(
-    data: dict[str, Any],
+    data: Mapping[str, Any],
     field_name: str,
     encryption_instance: Encryption,
     model_type: ModelType,
@@ -421,7 +448,7 @@ async def _encrypt_field(
 
 
 async def encrypt_request(
-    data: dict[str, Any],
+    data: Mapping[str, Any],
     model_type: ModelType,
     fields: list[str],
     encryption_instance: Encryption | None = None,
@@ -436,17 +463,20 @@ async def encrypt_request(
 
     Only processes fields that exist in the data to avoid adding new fields.
 
+    Note: This function returns a shallow copy of the input with encrypted fields.
+    The original data is not mutated.
+
     Args:
-        data: Request data dict to encrypt
+        data: Request data mapping to encrypt (not mutated)
         model_type: Type identifier passed to EncryptionContext.model (e.g., "run", "cron", "thread")
         fields: List of field names to encrypt (e.g., ["metadata", "kwargs"])
         encryption_instance: Optional encryption instance (auto-fetched if None)
 
     Returns:
-        Data dict with encrypted fields
+        New dict with encrypted fields (original unchanged)
 
     Example:
-        payload = await encrypt_request(
+        encrypted = await encrypt_request(
             payload,
             "run",
             ["metadata"]
@@ -455,16 +485,17 @@ async def encrypt_request(
     if encryption_instance is None:
         encryption_instance = get_encryption_instance()
         if encryption_instance is None:
-            return data
+            return dict(data)
 
-    results = await asyncio.gather(
+    result = dict(data)
+    encrypted_fields = await asyncio.gather(
         *[
             _encrypt_field(data, f, encryption_instance, model_type)
             for f in fields
             if f in data
         ]
     )
-    for field_name, value in results:
-        data[field_name] = value
+    for field_name, value in encrypted_fields:
+        result[field_name] = value
 
-    return data
+    return result

@@ -24,7 +24,7 @@ from langgraph_api.graph import get_assistant_id, get_graph
 from langgraph_api.grpc.ops import Assistants as GrpcAssistants
 from langgraph_api.js.base import BaseRemotePregel
 from langgraph_api.route import ApiRequest, ApiResponse, ApiRoute
-from langgraph_api.schema import ASSISTANT_FIELDS
+from langgraph_api.schema import ASSISTANT_ENCRYPTION_FIELDS, ASSISTANT_FIELDS
 from langgraph_api.serde import json_loads
 from langgraph_api.utils import (
     fetchone,
@@ -185,7 +185,7 @@ async def create_assistant(request: ApiRequest) -> ApiResponse:
     encrypted_payload = await encrypt_request(
         payload,
         "assistant",
-        ["metadata", "config", "context"],
+        ASSISTANT_ENCRYPTION_FIELDS,
     )
 
     async with connect() as conn:
@@ -206,7 +206,7 @@ async def create_assistant(request: ApiRequest) -> ApiResponse:
     assistant_data = await decrypt_response(
         assistant_data,
         "assistant",
-        ["metadata", "config", "context"],
+        ASSISTANT_ENCRYPTION_FIELDS,
     )
     return ApiResponse(assistant_data)
 
@@ -245,7 +245,7 @@ async def search_assistants(
     decrypted_assistants = await decrypt_responses(
         assistants,
         "assistant",
-        ["metadata", "config", "context"],
+        ASSISTANT_ENCRYPTION_FIELDS,
     )
 
     return ApiResponse(decrypted_assistants, headers=response_headers)
@@ -282,7 +282,7 @@ async def get_assistant(
     assistant_data = await decrypt_response(
         assistant_data,
         "assistant",
-        ["metadata", "config", "context"],
+        ASSISTANT_ENCRYPTION_FIELDS,
     )
     return ApiResponse(assistant_data)
 
@@ -453,7 +453,7 @@ async def patch_assistant(
     encrypted_fields = await encrypt_request(
         payload,
         "assistant",
-        ["metadata", "config", "context"],
+        ASSISTANT_ENCRYPTION_FIELDS,
     )
 
     async with connect() as conn:
@@ -473,7 +473,7 @@ async def patch_assistant(
     assistant_data = await decrypt_response(
         assistant_data,
         "assistant",
-        ["metadata", "config", "context"],
+        ASSISTANT_ENCRYPTION_FIELDS,
     )
     return ApiResponse(assistant_data)
 
@@ -513,7 +513,7 @@ async def get_assistant_versions(request: ApiRequest) -> ApiResponse:
     decrypted_assistants = await decrypt_responses(
         assistants,
         "assistant",
-        ["metadata", "config", "context"],
+        ASSISTANT_ENCRYPTION_FIELDS,
     )
 
     return ApiResponse(decrypted_assistants)
@@ -535,7 +535,7 @@ async def set_latest_assistant_version(request: ApiRequest) -> ApiResponse:
     assistant_data = await decrypt_response(
         assistant_data,
         "assistant",
-        ["metadata", "config", "context"],
+        ASSISTANT_ENCRYPTION_FIELDS,
     )
     return ApiResponse(assistant_data)
 

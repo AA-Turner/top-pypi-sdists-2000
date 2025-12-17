@@ -22,6 +22,7 @@ from langgraph.store.base import BaseStore
 from starlette.exceptions import HTTPException
 
 from langgraph_api import config as lg_api_config
+from langgraph_api import timing
 from langgraph_api.feature_flags import FF_USE_CORE_API, USE_RUNTIME_CONTEXT_API
 from langgraph_api.js.base import BaseRemotePregel, is_js_path
 from langgraph_api.schema import Config
@@ -57,7 +58,6 @@ async def register_graph(
 
     Assistants = AssistantsGrpc if FF_USE_CORE_API else AssistantsRuntime
 
-    await logger.ainfo(f"Registering graph with id '{graph_id}'", graph_id=graph_id)
     GRAPHS[graph_id] = graph
     if callable(graph):
         FACTORY_ACCEPTS_CONFIG[graph_id] = len(inspect.signature(graph).parameters) > 0
@@ -448,6 +448,21 @@ def verify_graphs() -> None:
     asyncio.run(collect_graphs_from_env())
 
 
+def _metadata_fn(spec: GraphSpec) -> dict[str, Any]:
+    return {"graph_id": spec.id, "module": spec.module, "path": spec.path}
+
+
+@timing.timer(
+    message="Importing graph with id {graph_id}",
+    metadata_fn=_metadata_fn,
+    warn_threshold_secs=3,
+    warn_message=(
+        "Import for graph {graph_id} exceeded the expected startup time. "
+        "Slow initialization (often due to work executed at import time) can delay readiness, "
+        "reduce scale-out capacity, and may cause deployments to be marked unhealthy."
+    ),
+    error_threshold_secs=30,
+)
 def _graph_from_spec(spec: GraphSpec) -> GraphValue:
     """Return a graph from a spec."""
     # import the graph module
@@ -589,6 +604,13 @@ def _get_init_embeddings() -> Callable[[str, ...], "Embeddings"] | None:
         return None
 
 
+@timing.timer(
+    message="Loading embeddings {embeddings_path}",
+    metadata_fn=lambda index_config: {"embeddings_path": index_config.get("embed")},
+    warn_threshold_secs=5,
+    warn_message="Loading embeddings '{embeddings_path}' took longer than expected",
+    error_threshold_secs=10,
+)
 def resolve_embeddings(index_config: dict) -> "Embeddings":
     """Return embeddings from config.
 

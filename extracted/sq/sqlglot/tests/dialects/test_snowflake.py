@@ -19,6 +19,7 @@ class TestSnowflake(Validator):
         ast.set("unit", exp.Literal.string("MONTH"))
         self.assertEqual(ast.sql("snowflake"), "DATEADD(MONTH, n, d)")
 
+        self.validate_identity("SELECT DATE_PART(EPOCH_MILLISECOND, CURRENT_TIMESTAMP()) AS a")
         self.validate_identity("SELECT GET(a, b)")
         self.validate_identity("SELECT HASH_AGG(a, b, c, d)")
         self.validate_identity("SELECT GREATEST_IGNORE_NULLS(1, 2, 3, NULL)")
@@ -48,9 +49,12 @@ class TestSnowflake(Validator):
             """SELECT PARSE_JSON('{"x: 1}')""",
         )
 
-        expr = parse_one("SELECT APPROX_TOP_K(C4, 3, 5) FROM t")
-        expr.selects[0].assert_is(exp.AggFunc)
-        self.assertEqual(expr.sql(dialect="snowflake"), "SELECT APPROX_TOP_K(C4, 3, 5) FROM t")
+        self.validate_identity(
+            "SELECT APPROX_TOP_K(col) FROM t",
+            "SELECT APPROX_TOP_K(col, 1) FROM t",
+        )
+        self.validate_identity("SELECT APPROX_TOP_K(category, 3) FROM t")
+        self.validate_identity("APPROX_TOP_K(C4, 3, 5)").assert_is(exp.AggFunc)
 
         self.validate_identity("SELECT MINHASH(5, col)")
         self.validate_identity("SELECT MINHASH(5, col1, col2)")
@@ -74,7 +78,13 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT FACTORIAL(5)")
         self.validate_identity("SELECT BIT_LENGTH('abc')")
         self.validate_identity("SELECT BIT_LENGTH(x'A1B2')")
-        self.validate_identity("SELECT BITMAP_BIT_POSITION(10)")
+        self.validate_all(
+            "SELECT BITMAP_BIT_POSITION(10)",
+            write={
+                "duckdb": "SELECT (CASE WHEN 10 > 0 THEN 10 - 1 ELSE ABS(10) END) % 32768",
+                "snowflake": "SELECT BITMAP_BIT_POSITION(10)",
+            },
+        )
         self.validate_identity("SELECT BITMAP_BUCKET_NUMBER(32769)")
         self.validate_identity("SELECT BITMAP_CONSTRUCT_AGG(value)")
         self.validate_identity(
@@ -137,8 +147,20 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT DEGREES(PI() / 3)")
         self.validate_identity("SELECT DEGREES(1)")
         self.validate_identity("SELECT RADIANS(180)")
-        self.validate_identity("SELECT REGR_VALX(y, x)")
-        self.validate_identity("SELECT REGR_VALY(y, x)")
+        self.validate_all(
+            "SELECT REGR_VALX(y, x)",
+            write={
+                "snowflake": "SELECT REGR_VALX(y, x)",
+                "duckdb": "SELECT CASE WHEN y IS NULL THEN CAST(NULL AS DOUBLE) ELSE x END",
+            },
+        )
+        self.validate_all(
+            "SELECT REGR_VALY(y, x)",
+            write={
+                "snowflake": "SELECT REGR_VALY(y, x)",
+                "duckdb": "SELECT CASE WHEN x IS NULL THEN CAST(NULL AS DOUBLE) ELSE y END",
+            },
+        )
         self.validate_identity("SELECT REGR_AVGX(y, x)")
         self.validate_identity("SELECT REGR_AVGY(y, x)")
         self.validate_identity("SELECT REGR_COUNT(y, x)")
@@ -148,6 +170,20 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT REGR_SXY(y, x)")
         self.validate_identity("SELECT REGR_SYY(y, x)")
         self.validate_identity("SELECT REGR_SLOPE(y, x)")
+        self.validate_all(
+            "SELECT IFF(x > 5, 10, 20)",
+            write={
+                "snowflake": "SELECT IFF(x > 5, 10, 20)",
+                "duckdb": "SELECT CASE WHEN x > 5 THEN 10 ELSE 20 END",
+            },
+        )
+        self.validate_all(
+            "SELECT IFF(col IS NULL, 0, col)",
+            write={
+                "snowflake": "SELECT IFF(col IS NULL, 0, col)",
+                "duckdb": "SELECT CASE WHEN col IS NULL THEN 0 ELSE col END",
+            },
+        )
         self.validate_all(
             "SELECT VAR_SAMP(x)",
             write={
@@ -246,11 +282,75 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT TO_TIMESTAMP_NTZ(x) FROM t")
         self.validate_identity("SELECT TO_TIMESTAMP_LTZ(x) FROM t")
         self.validate_identity("SELECT TO_TIMESTAMP_TZ(x) FROM t")
-        self.validate_identity("TO_DECIMAL(expr, fmt, precision, scale)")
+        self.validate_identity("TO_DECIMAL(expr)", "TO_NUMBER(expr)")
+        self.validate_identity("TO_DECIMAL(expr, fmt)", "TO_NUMBER(expr, fmt)")
+        self.validate_identity(
+            "TO_DECIMAL(expr, fmt, precision, scale)", "TO_NUMBER(expr, fmt, precision, scale)"
+        )
+        self.validate_identity("TO_NUMBER(expr)")
+        self.validate_identity("TO_NUMBER(expr, fmt)")
+        self.validate_identity("TO_NUMBER(expr, fmt, precision, scale)")
         self.validate_identity("TO_DECFLOAT('123.456')")
         self.validate_identity("TO_DECFLOAT('1,234.56', '999,999.99')")
         self.validate_identity("TRY_TO_DECFLOAT('123.456')")
         self.validate_identity("TRY_TO_DECFLOAT('1,234.56', '999,999.99')")
+        self.validate_identity("TRY_TO_BINARY('48656C6C6F')")
+        self.validate_identity("TRY_TO_BINARY('48656C6C6F', 'HEX')")
+        self.validate_identity("TRY_TO_BOOLEAN('true')")
+        self.validate_all(
+            "TRY_TO_DATE('2024-01-31')",
+            write={
+                "snowflake": "TRY_CAST('2024-01-31' AS DATE)",
+                "duckdb": "TRY_CAST('2024-01-31' AS DATE)",
+            },
+        )
+        self.validate_identity("TRY_TO_DATE('2024-01-31', 'AUTO')")
+        self.validate_identity("TRY_TO_DECIMAL('123.45')", "TRY_TO_NUMBER('123.45')")
+        self.validate_identity(
+            "TRY_TO_DECIMAL('123.45', '999.99')", "TRY_TO_NUMBER('123.45', '999.99')"
+        )
+        self.validate_identity(
+            "TRY_TO_DECIMAL('123.45', '999.99', 10, 2)", "TRY_TO_NUMBER('123.45', '999.99', 10, 2)"
+        )
+        self.validate_identity("TRY_TO_DOUBLE('123.456')")
+        self.validate_identity("TRY_TO_DOUBLE('123.456', '999.99')")
+        self.validate_identity("TO_FILE(object_col)")
+        self.validate_identity("TO_FILE('file.csv')")
+        self.validate_identity("TO_FILE('file.csv', 'relativepath/')")
+        self.validate_identity("TRY_TO_FILE(object_col)")
+        self.validate_identity("TRY_TO_FILE('file.csv')")
+        self.validate_identity("TRY_TO_FILE('file.csv', 'relativepath/')")
+        self.validate_identity("TRY_TO_NUMBER('123.45')")
+        self.validate_identity("TRY_TO_NUMBER('123.45', '999.99')")
+        self.validate_identity("TRY_TO_NUMBER('123.45', '999.99', 10, 2)")
+        self.validate_identity("TO_NUMERIC('123.45')", "TO_NUMBER('123.45')")
+        self.validate_identity("TO_NUMERIC('123.45', '999.99')", "TO_NUMBER('123.45', '999.99')")
+        self.validate_identity(
+            "TO_NUMERIC('123.45', '999.99', 10, 2)", "TO_NUMBER('123.45', '999.99', 10, 2)"
+        )
+        self.validate_identity("TRY_TO_NUMERIC('123.45')", "TRY_TO_NUMBER('123.45')")
+        self.validate_identity(
+            "TRY_TO_NUMERIC('123.45', '999.99')", "TRY_TO_NUMBER('123.45', '999.99')"
+        )
+        self.validate_identity(
+            "TRY_TO_NUMERIC('123.45', '999.99', 10, 2)", "TRY_TO_NUMBER('123.45', '999.99', 10, 2)"
+        )
+        self.validate_all(
+            "TRY_TO_TIME('12:30:00')",
+            write={
+                "snowflake": "TRY_CAST('12:30:00' AS TIME)",
+                "duckdb": "TRY_CAST('12:30:00' AS TIME)",
+            },
+        )
+        self.validate_identity("TRY_TO_TIME('12:30:00', 'AUTO')")
+        self.validate_all(
+            "TRY_TO_TIMESTAMP('2024-01-15 12:30:00')",
+            write={
+                "snowflake": "TRY_CAST('2024-01-15 12:30:00' AS TIMESTAMP)",
+                "duckdb": "TRY_CAST('2024-01-15 12:30:00' AS TIMESTAMP)",
+            },
+        )
+        self.validate_identity("TRY_TO_TIMESTAMP('2024-01-15 12:30:00', 'AUTO')")
         self.validate_identity("ALTER TABLE authors ADD CONSTRAINT c1 UNIQUE (id, email)")
         self.validate_identity("RM @parquet_stage", check_command_warning=True)
         self.validate_identity("REMOVE @parquet_stage", check_command_warning=True)
@@ -324,7 +424,7 @@ class TestSnowflake(Validator):
         self.validate_identity("$x")  # parameter
         self.validate_identity("a$b")  # valid snowflake identifier
         self.validate_identity("SELECT REGEXP_LIKE(a, b, c)")
-        self.validate_identity("CREATE TABLE foo (bar FLOAT AUTOINCREMENT START 0 INCREMENT 1)")
+        self.validate_identity("CREATE TABLE foo (bar DOUBLE AUTOINCREMENT START 0 INCREMENT 1)")
         self.validate_identity("COMMENT IF EXISTS ON TABLE foo IS 'bar'")
         self.validate_identity("SELECT CONVERT_TIMEZONE('UTC', 'America/Los_Angeles', col)")
         self.validate_identity("SELECT CURRENT_ORGANIZATION_NAME()")
@@ -860,6 +960,13 @@ class TestSnowflake(Validator):
             write={
                 "bigquery": "SELECT COLLATE('B', 'und:ci')",
                 "snowflake": "SELECT COLLATE('B', 'und:ci')",
+            },
+        )
+
+        self.validate_all(
+            "SELECT To_BOOLEAN('T')",
+            write={
+                "duckdb": "SELECT CASE WHEN ISNAN(TRY_CAST('T' AS REAL)) OR ISINF(TRY_CAST('T' AS REAL)) THEN ERROR('TO_BOOLEAN: Non-numeric values NaN and INF are not supported') WHEN UPPER(CAST('T' AS TEXT)) = 'ON' THEN TRUE WHEN UPPER(CAST('T' AS TEXT)) = 'OFF' THEN FALSE ELSE CAST('T' AS BOOLEAN) END",
             },
         )
         self.validate_all(
@@ -1797,6 +1904,39 @@ class TestSnowflake(Validator):
                 "duckdb": "SET VARIABLE a = 1",
             },
         )
+        self.validate_all(
+            "CAST(6.43 AS FLOAT)",
+            write={
+                "snowflake": "CAST(6.43 AS DOUBLE)",
+                "duckdb": "CAST(6.43 AS DOUBLE)",
+            },
+        )
+        self.validate_all(
+            "UNIFORM(1, 10, RANDOM(5))",
+            write={
+                "snowflake": "UNIFORM(1, 10, RANDOM(5))",
+                "databricks": "UNIFORM(1, 10, 5)",
+            },
+        )
+        (
+            self.validate_all(
+                "UNIFORM(1, 10, RANDOM())",
+                write={
+                    "snowflake": "UNIFORM(1, 10, RANDOM())",
+                    "databricks": "UNIFORM(1, 10)",
+                },
+            ),
+        )
+        self.validate_all(
+            "UNIFORM(1, 10, 5)",
+            write={
+                "snowflake": "UNIFORM(1, 10, 5)",
+                "databricks": "UNIFORM(1, 10, 5)",
+            },
+        )
+        self.validate_identity("SYSDATE()")
+        self.validate_identity("SYSTIMESTAMP()", "CURRENT_TIMESTAMP()")
+        self.validate_identity("GETDATE()", "CURRENT_TIMESTAMP()")
 
     def test_null_treatment(self):
         self.validate_all(
@@ -2047,14 +2187,14 @@ class TestSnowflake(Validator):
         self.validate_all(
             "SELECT DATE_PART(epoch_second, foo) as ddate from table_name",
             write={
-                "snowflake": "SELECT EXTRACT(epoch_second FROM CAST(foo AS TIMESTAMP)) AS ddate FROM table_name",
+                "snowflake": "SELECT DATE_PART(EPOCH, foo) AS ddate FROM table_name",
                 "presto": "SELECT TO_UNIXTIME(CAST(foo AS TIMESTAMP)) AS ddate FROM table_name",
             },
         )
         self.validate_all(
             "SELECT DATE_PART(epoch_milliseconds, foo) as ddate from table_name",
             write={
-                "snowflake": "SELECT EXTRACT(epoch_second FROM CAST(foo AS TIMESTAMP)) * 1000 AS ddate FROM table_name",
+                "snowflake": "SELECT DATE_PART(EPOCH_MILLISECOND, foo) AS ddate FROM table_name",
                 "presto": "SELECT TO_UNIXTIME(CAST(foo AS TIMESTAMP)) * 1000 AS ddate FROM table_name",
             },
         )
@@ -3895,4 +4035,24 @@ FROM SEMANTIC_VIEW(
                 dialect="snowflake", identify="safe"
             ),
             'SELECT a, "B" FROM DUAL',
+        )
+
+    def test_floor(self):
+        self.validate_all(
+            "SELECT FLOOR(1.753, 2)",
+            write={"duckdb": "SELECT ROUND(FLOOR(1.753 * POWER(10, 2)) / POWER(10, 2), 2)"},
+        )
+        self.validate_all(
+            "SELECT FLOOR(123.45, -1)",
+            write={"duckdb": "SELECT ROUND(FLOOR(123.45 * POWER(10, -1)) / POWER(10, -1), -1)"},
+        )
+        self.validate_all(
+            "SELECT FLOOR(a + b, 2)",
+            write={"duckdb": "SELECT ROUND(FLOOR((a + b) * POWER(10, 2)) / POWER(10, 2), 2)"},
+        )
+        self.validate_all(
+            "SELECT FLOOR(1.234, 1.5)",
+            write={
+                "duckdb": "SELECT ROUND(FLOOR(1.234 * POWER(10, CAST(1.5 AS INT))) / POWER(10, CAST(1.5 AS INT)), CAST(1.5 AS INT))"
+            },
         )

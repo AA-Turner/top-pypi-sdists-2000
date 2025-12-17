@@ -11,13 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import warnings
 from copy import deepcopy
 from typing import List, Optional
 
+import torch
 from compressed_tensors.config import CompressionFormat
 from compressed_tensors.quantization.quant_args import (
+    FP8_E4M3_DATA,
     DynamicType,
     QuantizationArgs,
     QuantizationStrategy,
@@ -65,6 +66,7 @@ class QuantizationScheme(BaseModel):
                 QuantizationStrategy.TENSOR,
                 QuantizationStrategy.GROUP,
                 QuantizationStrategy.TENSOR_GROUP,
+                QuantizationStrategy.ATTN_HEAD,
             ):
                 if (
                     inputs.strategy == QuantizationStrategy.GROUP
@@ -159,6 +161,8 @@ NVFP4A16 = dict(
         symmetric=True,
         dynamic=False,
         group_size=16,
+        scale_dtype=FP8_E4M3_DATA.dtype,
+        zp_dtype=FP8_E4M3_DATA.dtype,
     )
 )
 
@@ -171,6 +175,9 @@ NVFP4 = dict(
         symmetric=True,
         dynamic=False,
         group_size=16,
+        observer="static_minmax",
+        scale_dtype=FP8_E4M3_DATA.dtype,
+        zp_dtype=FP8_E4M3_DATA.dtype,
     ),
     input_activations=QuantizationArgs(
         num_bits=4,
@@ -179,8 +186,48 @@ NVFP4 = dict(
         symmetric=True,
         dynamic=DynamicType.LOCAL,
         group_size=16,
+        observer="static_minmax",
+        scale_dtype=FP8_E4M3_DATA.dtype,
+        zp_dtype=FP8_E4M3_DATA.dtype,
     ),
 )
+
+MXFP4A16 = dict(
+    weights=QuantizationArgs(
+        num_bits=4,
+        type=QuantizationType.FLOAT,
+        strategy=QuantizationStrategy.GROUP,
+        symmetric=True,
+        dynamic=False,
+        group_size=32,
+        scale_dtype=torch.uint8,
+        zp_dtype=torch.uint8,
+    )
+)
+
+MXFP4 = dict(
+    weights=QuantizationArgs(
+        num_bits=4,
+        type=QuantizationType.FLOAT,
+        strategy=QuantizationStrategy.GROUP,
+        symmetric=True,
+        dynamic=False,
+        group_size=32,
+        scale_dtype=torch.uint8,
+        zp_dtype=torch.uint8,
+    ),
+    input_activations=QuantizationArgs(
+        num_bits=4,
+        type=QuantizationType.FLOAT,
+        strategy=QuantizationStrategy.GROUP,
+        dynamic=True,
+        symmetric=True,
+        group_size=32,
+        scale_dtype=torch.uint8,
+        zp_dtype=torch.uint8,
+    ),
+)
+
 
 # 8 bit integer weights and 8 bit activations quantization
 INT8_W8A8 = dict(
@@ -333,4 +380,6 @@ PRESET_SCHEMES = {
     "FP8_BLOCK": FP8_BLOCK,
     "NVFP4A16": NVFP4A16,
     "NVFP4": NVFP4,
+    "MXFP4A16": MXFP4A16,
+    "MXFP4": MXFP4,
 }

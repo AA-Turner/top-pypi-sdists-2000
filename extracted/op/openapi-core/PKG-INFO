@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: openapi-core
-Version: 0.20.0
+Version: 0.21.0
 Summary: client-side and server-side support for the OpenAPI Specification v3
 License: BSD-3-Clause
 License-File: LICENSE
@@ -42,7 +42,6 @@ Requires-Dist: more-itertools
 Requires-Dist: multidict (>=6.0.4,<7.0.0) ; extra == "aiohttp"
 Requires-Dist: openapi-schema-validator (>=0.6.0,<0.7.0)
 Requires-Dist: openapi-spec-validator (>=0.7.1,<0.8.0)
-Requires-Dist: parse
 Requires-Dist: requests ; extra == "requests"
 Requires-Dist: starlette (>=0.26.1,<0.50.0) ; extra == "starlette"
 Requires-Dist: typing-extensions (>=4.8.0,<5.0.0)

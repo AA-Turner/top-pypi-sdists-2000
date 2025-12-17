@@ -331,3 +331,54 @@ class TaskExecWaitResponse(google.protobuf.message.Message):
     def WhichOneof(self, oneof_group: typing_extensions.Literal["exit_status", b"exit_status"]) -> typing_extensions.Literal["code", "signal"] | None: ...
 
 global___TaskExecWaitResponse = TaskExecWaitResponse
+
+class TaskMountDirectoryRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    TASK_ID_FIELD_NUMBER: builtins.int
+    PATH_FIELD_NUMBER: builtins.int
+    IMAGE_ID_FIELD_NUMBER: builtins.int
+    task_id: builtins.str
+    path: builtins.bytes
+    image_id: builtins.str
+    def __init__(
+        self,
+        *,
+        task_id: builtins.str = ...,
+        path: builtins.bytes = ...,
+        image_id: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["image_id", b"image_id", "path", b"path", "task_id", b"task_id"]) -> None: ...
+
+global___TaskMountDirectoryRequest = TaskMountDirectoryRequest
+
+class TaskSnapshotDirectoryRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    TASK_ID_FIELD_NUMBER: builtins.int
+    PATH_FIELD_NUMBER: builtins.int
+    task_id: builtins.str
+    path: builtins.bytes
+    def __init__(
+        self,
+        *,
+        task_id: builtins.str = ...,
+        path: builtins.bytes = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["path", b"path", "task_id", b"task_id"]) -> None: ...
+
+global___TaskSnapshotDirectoryRequest = TaskSnapshotDirectoryRequest
+
+class TaskSnapshotDirectoryResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    IMAGE_ID_FIELD_NUMBER: builtins.int
+    image_id: builtins.str
+    def __init__(
+        self,
+        *,
+        image_id: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["image_id", b"image_id"]) -> None: ...
+
+global___TaskSnapshotDirectoryResponse = TaskSnapshotDirectoryResponse

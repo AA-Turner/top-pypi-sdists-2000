@@ -27,6 +27,8 @@ def _collect_trace_requests(mock_session: mock.MagicMock):
 @pytest.mark.asyncio
 async def test_openai_agents_tracing_processor():
     """Test that OpenAIAgentsTracingProcessor correctly traces agent runs."""
+    import openai
+
     mock_session = mock.MagicMock()
     client = langsmith.Client(session=mock_session)
 
@@ -43,8 +45,10 @@ async def test_openai_agents_tracing_processor():
         "Why is my code failing when I try to divide by zero?"
         " I keep getting this error message."
     )
-
-    result = await Runner.run(agent, question)
+    try:
+        result = await Runner.run(agent, question)
+    except openai.APIConnectionError as e:
+        pytest.skip(reason="Openai is having issues" + str(e))
 
     # Verify we got a result
     assert result is not None
@@ -257,6 +261,17 @@ async def test_wrap_openai_nests_under_agent_trace():
     assert len(trace_ids) <= 2, (
         f"Expected at most 2 trace_ids (one for the trace, possibly one for root), "
         f"but found {len(trace_ids)}: {trace_ids}"
+    )
+
+    # Verify invocation_params with tools are present in trace events
+    events_with_tools = [
+        event
+        for event in all_events
+        if event.get("extra", {}).get("invocation_params", {}).get("tools")
+    ]
+    assert len(events_with_tools) > 0, (
+        "No trace events found with invocation_params.tools - "
+        "tools should be captured in invocation_params"
     )
 
 

@@ -43,6 +43,8 @@ class TestBigQuery(Validator):
         self.assertEqual(table.name, "_y")
 
         self.validate_identity("SAFE.SUBSTR('foo', 0, -2)").assert_is(exp.Dot)
+        self.validate_identity("SAFE.TIMESTAMP(foo, zone)").assert_is(exp.Timestamp)
+        self.validate_identity("TIMESTAMP(foo, zone)").assert_is(exp.Timestamp)
         self.validate_identity("SELECT * FROM x-0.y")
         self.assertEqual(exp.to_table("`a.b`.`c.d`", dialect="bigquery").sql(), '"a"."b"."c"."d"')
         self.assertEqual(exp.to_table("`x`.`y.z`", dialect="bigquery").sql(), '"x"."y"."z"')
@@ -3512,6 +3514,12 @@ OPTIONS (
             qualified.sql(dialect="bigquery"),
             "SELECT `t`.`col` AS `col` FROM `t` AS `t` WHERE `_partitiontime` BETWEEN `t`.`a` AND `t`.`b`",
         )
+
+        ast = self.validate_identity("SELECT _DBT_MAX_PARTITION FROM t")
+        self.assertIsNone(ast.find(exp.Pseudocolumn))
+
+        qualified = qualify(ast, schema=schema, dialect="bigquery")
+        self.assertIsNotNone(qualified.find(exp.Pseudocolumn))
 
     def test_round(self):
         self.validate_all(

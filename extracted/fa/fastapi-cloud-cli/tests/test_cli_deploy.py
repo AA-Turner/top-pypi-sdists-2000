@@ -15,6 +15,7 @@ from typer.testing import CliRunner
 
 from fastapi_cloud_cli.cli import app
 from fastapi_cloud_cli.config import Settings
+from fastapi_cloud_cli.utils.api import BuildLogError, TooManyRetriesError
 from tests.conftest import ConfiguredApp
 from tests.utils import Keys, build_logs_response, changing_dir
 
@@ -771,11 +772,14 @@ def test_shows_no_apps_found_message_when_team_has_no_apps(
         )
 
 
+@pytest.mark.parametrize(
+    "error",
+    [BuildLogError, TooManyRetriesError, TimeoutError],
+)
 @pytest.mark.respx(base_url=settings.base_api_url)
-def test_handles_build_log_streaming_error(
-    logged_in_cli: None, tmp_path: Path, respx_mock: respx.MockRouter
+def test_shows_error_message_on_build_exception(
+    logged_in_cli: None, tmp_path: Path, respx_mock: respx.MockRouter, error: Exception
 ) -> None:
-    """Test that BuildLogError is caught and shows dashboard link (lines 384, 387-392)."""
     app_data = _get_random_app()
     team_data = _get_random_team()
     app_id = app_data["id"]
@@ -802,11 +806,10 @@ def test_handles_build_log_streaming_error(
         return_value=Response(200)
     )
 
-    respx_mock.get(f"/deployments/{deployment_data['id']}/build-logs").mock(
-        return_value=Response(422, text="Error")
-    )
-
-    with changing_dir(tmp_path):
+    with changing_dir(tmp_path), patch(
+        "fastapi_cloud_cli.utils.api.APIClient.stream_build_logs",
+        side_effect=error,
+    ):
         result = runner.invoke(app, ["deploy"])
 
         assert result.exit_code == 1
@@ -815,10 +818,8 @@ def test_handles_build_log_streaming_error(
 
 
 @pytest.mark.respx(base_url=settings.base_api_url)
-def test_shows_error_message_when_build_log_streaming_fails(
-    logged_in_cli: None,
-    tmp_path: Path,
-    respx_mock: respx.MockRouter,
+def test_shows_error_message_on_build_log_http_error(
+    logged_in_cli: None, tmp_path: Path, respx_mock: respx.MockRouter
 ) -> None:
     app_data = _get_random_app()
     team_data = _get_random_team()
@@ -853,6 +854,7 @@ def test_shows_error_message_when_build_log_streaming_fails(
     with changing_dir(tmp_path), patch("time.sleep"):
         result = runner.invoke(app, ["deploy"])
 
+        assert result.exit_code == 1
         assert "Unable to stream build logs" in result.output
         assert deployment_data["dashboard_url"] in result.output
 
@@ -990,3 +992,68 @@ def test_long_wait_messages(
         result = runner.invoke(app, ["deploy"])
 
         assert "long wait message" in result.output
+
+
+@pytest.mark.respx(base_url=settings.base_api_url)
+def test_calls_upload_cancelled_when_user_interrupts(
+    logged_in_cli: None, tmp_path: Path, respx_mock: respx.MockRouter
+) -> None:
+    app_data = _get_random_app()
+    team_data = _get_random_team()
+    app_id = app_data["id"]
+    team_id = team_data["id"]
+    deployment_data = _get_random_deployment(app_id=app_id)
+
+    config_path = tmp_path / ".fastapicloud" / "cloud.json"
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    config_path.write_text(f'{{"app_id": "{app_id}", "team_id": "{team_id}"}}')
+
+    respx_mock.get(f"/apps/{app_id}").mock(return_value=Response(200, json=app_data))
+    respx_mock.post(f"/apps/{app_id}/deployments/").mock(
+        return_value=Response(201, json=deployment_data)
+    )
+
+    upload_cancelled_route = respx_mock.post(
+        f"/deployments/{deployment_data['id']}/upload-cancelled"
+    ).mock(return_value=Response(200))
+
+    with changing_dir(tmp_path), patch(
+        "fastapi_cloud_cli.commands.deploy._upload_deployment",
+        side_effect=KeyboardInterrupt(),
+    ):
+        runner.invoke(app, ["deploy"])
+
+        assert upload_cancelled_route.called
+
+
+@pytest.mark.respx(base_url=settings.base_api_url)
+def test_cancel_upload_swallows_exceptions(
+    logged_in_cli: None, tmp_path: Path, respx_mock: respx.MockRouter
+) -> None:
+    app_data = _get_random_app()
+    team_data = _get_random_team()
+    app_id = app_data["id"]
+    team_id = team_data["id"]
+    deployment_data = _get_random_deployment(app_id=app_id)
+
+    config_path = tmp_path / ".fastapicloud" / "cloud.json"
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    config_path.write_text(f'{{"app_id": "{app_id}", "team_id": "{team_id}"}}')
+
+    respx_mock.get(f"/apps/{app_id}").mock(return_value=Response(200, json=app_data))
+    respx_mock.post(f"/apps/{app_id}/deployments/").mock(
+        return_value=Response(201, json=deployment_data)
+    )
+
+    upload_cancelled_route = respx_mock.post(
+        f"/deployments/{deployment_data['id']}/upload-cancelled"
+    ).mock(return_value=Response(500))
+
+    with changing_dir(tmp_path), patch(
+        "fastapi_cloud_cli.commands.deploy._upload_deployment",
+        side_effect=KeyboardInterrupt(),
+    ):
+        result = runner.invoke(app, ["deploy"])
+
+        assert upload_cancelled_route.called
+        assert "HTTPStatusError" not in result.output

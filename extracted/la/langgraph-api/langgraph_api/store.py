@@ -12,7 +12,7 @@ from langgraph.graph import StateGraph
 from langgraph.pregel import Pregel
 from langgraph.store.base import BaseStore
 
-from langgraph_api import config
+from langgraph_api import config, timing
 from langgraph_api.utils.config import run_in_executor
 
 logger = structlog.stdlib.get_logger(__name__)
@@ -83,6 +83,13 @@ async def collect_store_from_env() -> None:
     CUSTOM_STORE = value
 
 
+@timing.timer(
+    message="Loading store {store_path}",
+    metadata_fn=lambda store_path: {"store_path": store_path},
+    warn_threshold_secs=5,
+    warn_message="Loading store '{store_path}' took longer than expected",
+    error_threshold_secs=10,
+)
 def _load_store(store_path: str) -> Any:
     if "/" in store_path or ".py:" in store_path:
         modname = "".join(choice("abcdefghijklmnopqrstuvwxyz") for _ in range(24))

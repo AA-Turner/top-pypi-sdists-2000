@@ -14,7 +14,7 @@ import logging.config
 import pathlib
 import signal
 import socket
-from contextlib import asynccontextmanager
+from contextlib import AsyncExitStack
 
 import structlog
 
@@ -171,26 +171,20 @@ async def entrypoint(
 
     original_lifespan = user_router.router.lifespan_context if user_router else None
 
-    @asynccontextmanager
-    async def combined_lifespan(
-        app, with_cron_scheduler=False, grpc_port=None, taskset=None
-    ):
-        async with lifespan.lifespan(
-            app,
-            with_cron_scheduler=with_cron_scheduler,
-            grpc_port=grpc_port,
-            taskset=taskset,
-            cancel_event=cancel_event,
-        ):
-            if original_lifespan:
-                async with original_lifespan(app):
-                    yield
-            else:
-                yield
+    async with AsyncExitStack() as stack:
+        await stack.enter_async_context(
+            lifespan.lifespan(
+                None,
+                with_cron_scheduler=False,
+                grpc_port=grpc_port,
+                taskset=tasks,
+                cancel_event=cancel_event,
+            )
+        )
 
-    async with combined_lifespan(
-        None, with_cron_scheduler=False, grpc_port=grpc_port, taskset=tasks
-    ):
+        if original_lifespan:
+            await stack.enter_async_context(original_lifespan(user_router))
+
         tasks.add(asyncio.create_task(health_and_metrics_server()))
         await asyncio.gather(*tasks)
 

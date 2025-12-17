@@ -13,7 +13,11 @@ from langgraph_api.api.encryption_middleware import (
 from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.grpc.ops import Threads as GrpcThreads
 from langgraph_api.route import ApiRequest, ApiResponse, ApiRoute
-from langgraph_api.schema import THREAD_FIELDS, ThreadStreamMode
+from langgraph_api.schema import (
+    THREAD_ENCRYPTION_FIELDS,
+    THREAD_FIELDS,
+    ThreadStreamMode,
+)
 from langgraph_api.sse import EventSourceResponse
 from langgraph_api.state import state_snapshot_to_thread_state
 from langgraph_api.utils import (
@@ -82,12 +86,12 @@ async def create_thread(
                 detail = f"Thread {thread_id} was created, but there were problems updating the state: {e.detail}"
                 raise HTTPException(status_code=201, detail=detail) from e
 
-    # Decrypt metadata, values, interrupts, and error in response
+    # Decrypt thread fields in response
     thread = await fetchone(iter, not_found_code=409)
     thread = await decrypt_response(
         thread,
         "thread",
-        ["metadata", "values", "interrupts", "error"],
+        THREAD_ENCRYPTION_FIELDS,
     )
     return ApiResponse(thread)
 
@@ -123,7 +127,7 @@ async def search_threads(
     decrypted_threads = await decrypt_responses(
         threads,
         "thread",
-        ["metadata", "values", "interrupts", "error"],
+        THREAD_ENCRYPTION_FIELDS,
     )
 
     return ApiResponse(decrypted_threads, headers=response_headers)
@@ -317,7 +321,7 @@ async def get_thread(
     thread_data = await decrypt_response(
         thread_data,
         "thread",
-        ["metadata", "values", "interrupts", "error"],
+        THREAD_ENCRYPTION_FIELDS,
     )
     return ApiResponse(thread_data)
 
@@ -350,7 +354,7 @@ async def patch_thread(
     thread_data = await decrypt_response(
         thread_data,
         "thread",
-        ["metadata", "values", "interrupts", "error"],
+        THREAD_ENCRYPTION_FIELDS,
     )
     return ApiResponse(thread_data)
 
@@ -376,7 +380,7 @@ async def copy_thread(request: ApiRequest):
     thread_data = await decrypt_response(
         thread_data,
         "thread",
-        ["metadata", "values", "interrupts", "error"],
+        THREAD_ENCRYPTION_FIELDS,
     )
     return ApiResponse(thread_data)
 

@@ -2,6 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 from modal_proto import task_command_router_pb2 as modal__proto_dot_task__command__router__pb2
 
 
@@ -38,6 +39,16 @@ class TaskCommandRouterStub(object):
                 '/modal.task_command_router.TaskCommandRouter/TaskExecWait',
                 request_serializer=modal__proto_dot_task__command__router__pb2.TaskExecWaitRequest.SerializeToString,
                 response_deserializer=modal__proto_dot_task__command__router__pb2.TaskExecWaitResponse.FromString,
+                )
+        self.TaskMountDirectory = channel.unary_unary(
+                '/modal.task_command_router.TaskCommandRouter/TaskMountDirectory',
+                request_serializer=modal__proto_dot_task__command__router__pb2.TaskMountDirectoryRequest.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                )
+        self.TaskSnapshotDirectory = channel.unary_unary(
+                '/modal.task_command_router.TaskCommandRouter/TaskSnapshotDirectory',
+                request_serializer=modal__proto_dot_task__command__router__pb2.TaskSnapshotDirectoryRequest.SerializeToString,
+                response_deserializer=modal__proto_dot_task__command__router__pb2.TaskSnapshotDirectoryResponse.FromString,
                 )
 
 
@@ -79,6 +90,20 @@ class TaskCommandRouterServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def TaskMountDirectory(self, request, context):
+        """Mount an image at a directory in the container.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TaskSnapshotDirectory(self, request, context):
+        """Snapshot a directory with a mounted image, including any local changes, into a new image.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_TaskCommandRouterServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -106,6 +131,16 @@ def add_TaskCommandRouterServicer_to_server(servicer, server):
                     servicer.TaskExecWait,
                     request_deserializer=modal__proto_dot_task__command__router__pb2.TaskExecWaitRequest.FromString,
                     response_serializer=modal__proto_dot_task__command__router__pb2.TaskExecWaitResponse.SerializeToString,
+            ),
+            'TaskMountDirectory': grpc.unary_unary_rpc_method_handler(
+                    servicer.TaskMountDirectory,
+                    request_deserializer=modal__proto_dot_task__command__router__pb2.TaskMountDirectoryRequest.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'TaskSnapshotDirectory': grpc.unary_unary_rpc_method_handler(
+                    servicer.TaskSnapshotDirectory,
+                    request_deserializer=modal__proto_dot_task__command__router__pb2.TaskSnapshotDirectoryRequest.FromString,
+                    response_serializer=modal__proto_dot_task__command__router__pb2.TaskSnapshotDirectoryResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -199,5 +234,39 @@ class TaskCommandRouter(object):
         return grpc.experimental.unary_unary(request, target, '/modal.task_command_router.TaskCommandRouter/TaskExecWait',
             modal__proto_dot_task__command__router__pb2.TaskExecWaitRequest.SerializeToString,
             modal__proto_dot_task__command__router__pb2.TaskExecWaitResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TaskMountDirectory(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/modal.task_command_router.TaskCommandRouter/TaskMountDirectory',
+            modal__proto_dot_task__command__router__pb2.TaskMountDirectoryRequest.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TaskSnapshotDirectory(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/modal.task_command_router.TaskCommandRouter/TaskSnapshotDirectory',
+            modal__proto_dot_task__command__router__pb2.TaskSnapshotDirectoryRequest.SerializeToString,
+            modal__proto_dot_task__command__router__pb2.TaskSnapshotDirectoryResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

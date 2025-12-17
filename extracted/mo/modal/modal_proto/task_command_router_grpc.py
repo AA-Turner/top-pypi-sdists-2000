@@ -9,6 +9,7 @@ import grpclib.client
 if typing.TYPE_CHECKING:
     import grpclib.server
 
+import google.protobuf.empty_pb2
 import modal_proto.api_pb2
 import modal_proto.task_command_router_pb2
 
@@ -33,6 +34,14 @@ class TaskCommandRouterBase(abc.ABC):
 
     @abc.abstractmethod
     async def TaskExecWait(self, stream: 'grpclib.server.Stream[modal_proto.task_command_router_pb2.TaskExecWaitRequest, modal_proto.task_command_router_pb2.TaskExecWaitResponse]') -> None:
+        pass
+
+    @abc.abstractmethod
+    async def TaskMountDirectory(self, stream: 'grpclib.server.Stream[modal_proto.task_command_router_pb2.TaskMountDirectoryRequest, google.protobuf.empty_pb2.Empty]') -> None:
+        pass
+
+    @abc.abstractmethod
+    async def TaskSnapshotDirectory(self, stream: 'grpclib.server.Stream[modal_proto.task_command_router_pb2.TaskSnapshotDirectoryRequest, modal_proto.task_command_router_pb2.TaskSnapshotDirectoryResponse]') -> None:
         pass
 
     def __mapping__(self) -> typing.Dict[str, grpclib.const.Handler]:
@@ -66,6 +75,18 @@ class TaskCommandRouterBase(abc.ABC):
                 grpclib.const.Cardinality.UNARY_UNARY,
                 modal_proto.task_command_router_pb2.TaskExecWaitRequest,
                 modal_proto.task_command_router_pb2.TaskExecWaitResponse,
+            ),
+            '/modal.task_command_router.TaskCommandRouter/TaskMountDirectory': grpclib.const.Handler(
+                self.TaskMountDirectory,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                modal_proto.task_command_router_pb2.TaskMountDirectoryRequest,
+                google.protobuf.empty_pb2.Empty,
+            ),
+            '/modal.task_command_router.TaskCommandRouter/TaskSnapshotDirectory': grpclib.const.Handler(
+                self.TaskSnapshotDirectory,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                modal_proto.task_command_router_pb2.TaskSnapshotDirectoryRequest,
+                modal_proto.task_command_router_pb2.TaskSnapshotDirectoryResponse,
             ),
         }
 
@@ -102,4 +123,16 @@ class TaskCommandRouterStub:
             '/modal.task_command_router.TaskCommandRouter/TaskExecWait',
             modal_proto.task_command_router_pb2.TaskExecWaitRequest,
             modal_proto.task_command_router_pb2.TaskExecWaitResponse,
+        )
+        self.TaskMountDirectory = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/modal.task_command_router.TaskCommandRouter/TaskMountDirectory',
+            modal_proto.task_command_router_pb2.TaskMountDirectoryRequest,
+            google.protobuf.empty_pb2.Empty,
+        )
+        self.TaskSnapshotDirectory = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/modal.task_command_router.TaskCommandRouter/TaskSnapshotDirectory',
+            modal_proto.task_command_router_pb2.TaskSnapshotDirectoryRequest,
+            modal_proto.task_command_router_pb2.TaskSnapshotDirectoryResponse,
         )

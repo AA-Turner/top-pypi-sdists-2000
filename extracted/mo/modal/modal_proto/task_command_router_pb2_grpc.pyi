@@ -4,6 +4,7 @@ isort:skip_file
 """
 import abc
 import collections.abc
+import google.protobuf.empty_pb2
 import grpc
 import modal_proto.task_command_router_pb2
 
@@ -34,6 +35,16 @@ class TaskCommandRouterStub:
         modal_proto.task_command_router_pb2.TaskExecWaitResponse,
     ]
     """Wait for an exec'd command to exit and return the exit code."""
+    TaskMountDirectory: grpc.UnaryUnaryMultiCallable[
+        modal_proto.task_command_router_pb2.TaskMountDirectoryRequest,
+        google.protobuf.empty_pb2.Empty,
+    ]
+    """Mount an image at a directory in the container."""
+    TaskSnapshotDirectory: grpc.UnaryUnaryMultiCallable[
+        modal_proto.task_command_router_pb2.TaskSnapshotDirectoryRequest,
+        modal_proto.task_command_router_pb2.TaskSnapshotDirectoryResponse,
+    ]
+    """Snapshot a directory with a mounted image, including any local changes, into a new image."""
 
 class TaskCommandRouterServicer(metaclass=abc.ABCMeta):
     @abc.abstractmethod
@@ -71,5 +82,19 @@ class TaskCommandRouterServicer(metaclass=abc.ABCMeta):
         context: grpc.ServicerContext,
     ) -> modal_proto.task_command_router_pb2.TaskExecWaitResponse:
         """Wait for an exec'd command to exit and return the exit code."""
+    @abc.abstractmethod
+    def TaskMountDirectory(
+        self,
+        request: modal_proto.task_command_router_pb2.TaskMountDirectoryRequest,
+        context: grpc.ServicerContext,
+    ) -> google.protobuf.empty_pb2.Empty:
+        """Mount an image at a directory in the container."""
+    @abc.abstractmethod
+    def TaskSnapshotDirectory(
+        self,
+        request: modal_proto.task_command_router_pb2.TaskSnapshotDirectoryRequest,
+        context: grpc.ServicerContext,
+    ) -> modal_proto.task_command_router_pb2.TaskSnapshotDirectoryResponse:
+        """Snapshot a directory with a mounted image, including any local changes, into a new image."""
 
 def add_TaskCommandRouterServicer_to_server(servicer: TaskCommandRouterServicer, server: grpc.Server) -> None: ...

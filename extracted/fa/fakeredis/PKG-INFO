@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: fakeredis
-Version: 2.32.1
+Version: 2.33.0
 Summary: Python implementation of redis API, can be used for testing purposes.
 Project-URL: Homepage, https://github.com/cunla/fakeredis-py
 Project-URL: Repository, https://github.com/cunla/fakeredis-py
@@ -25,6 +25,7 @@ Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Requires-Python: >=3.7
+Requires-Dist: redis<7.1.0; python_version < '3.10'
 Requires-Dist: redis>=4.3; python_version > '3.8'
 Requires-Dist: redis>=4; python_version < '3.8'
 Requires-Dist: sortedcontainers>=2
@@ -52,8 +53,8 @@ fakeredis: A python implementation of Redis Protocol API
 [![badge](https://img.shields.io/pypi/dm/fakeredis)](https://pypi.org/project/fakeredis/)
 [![badge](https://img.shields.io/pypi/l/fakeredis)](./LICENSE)
 [![Open Source Helpers](https://www.codetriage.com/cunla/fakeredis-py/badges/users.svg)](https://www.codetriage.com/cunla/fakeredis-py)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 --------------------
+
 
 
 Documentation is hosted in https://fakeredis.readthedocs.io/

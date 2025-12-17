@@ -17,7 +17,13 @@ from langgraph_api.api.encryption_middleware import (
 from langgraph_api.asyncio import ValueEvent
 from langgraph_api.models.run import create_valid_run
 from langgraph_api.route import ApiRequest, ApiResponse, ApiRoute
-from langgraph_api.schema import CRON_FIELDS, RUN_FIELDS
+from langgraph_api.schema import (
+    CRON_ENCRYPTION_FIELDS,
+    CRON_FIELDS,
+    CRON_PAYLOAD_ENCRYPTION_SUBFIELDS,
+    RUN_ENCRYPTION_FIELDS,
+    RUN_FIELDS,
+)
 from langgraph_api.serde import json_dumpb, json_loads
 from langgraph_api.sse import EventSourceResponse
 from langgraph_api.utils import (
@@ -443,7 +449,7 @@ async def list_runs(
 
     # Collect and decrypt runs
     runs_list = [run async for run in runs]
-    runs_list = await decrypt_responses(runs_list, "run", ["metadata", "kwargs"])
+    runs_list = await decrypt_responses(runs_list, "run", RUN_ENCRYPTION_FIELDS)
 
     return ApiResponse(runs_list)
 
@@ -469,7 +475,7 @@ async def get_run(request: ApiRequest):
     run_dict = await fetchone(run)
 
     # Decrypt run metadata and kwargs
-    run_dict = await decrypt_response(run_dict, "run", ["metadata", "kwargs"])
+    run_dict = await decrypt_response(run_dict, "run", RUN_ENCRYPTION_FIELDS)
 
     return ApiResponse(run_dict)
 
@@ -658,7 +664,7 @@ async def create_cron(request: ApiRequest):
     encrypted_payload = await encrypt_request(
         payload,
         "cron",
-        ["metadata", "context", "input", "config"],
+        CRON_PAYLOAD_ENCRYPTION_SUBFIELDS,
     )
 
     async with connect() as conn:
@@ -672,15 +678,7 @@ async def create_cron(request: ApiRequest):
             metadata=encrypted_payload.get("metadata"),
         )
     cron_dict = await fetchone(cron)
-    cron_dict = await decrypt_response(cron_dict, "cron", ["metadata"])
-
-    if cron_dict.get("payload"):
-        cron_payload = cron_dict["payload"]
-        if not isinstance(cron_payload, dict):
-            cron_payload = json_loads(cron_payload)
-        cron_dict["payload"] = await decrypt_response(
-            cron_payload, "cron", ["metadata", "context", "input", "config"]
-        )
+    cron_dict = await decrypt_response(cron_dict, "cron", CRON_ENCRYPTION_FIELDS)
 
     return ApiResponse(cron_dict)
 
@@ -698,7 +696,7 @@ async def create_thread_cron(request: ApiRequest):
     encrypted_payload = await encrypt_request(
         payload,
         "cron",
-        ["metadata", "context", "input", "config"],
+        CRON_PAYLOAD_ENCRYPTION_SUBFIELDS,
     )
 
     async with connect() as conn:
@@ -712,15 +710,7 @@ async def create_thread_cron(request: ApiRequest):
             metadata=encrypted_payload.get("metadata"),
         )
     cron_dict = await fetchone(cron)
-    cron_dict = await decrypt_response(cron_dict, "cron", ["metadata"])
-
-    if cron_dict.get("payload"):
-        cron_payload = cron_dict["payload"]
-        if not isinstance(cron_payload, dict):
-            cron_payload = json_loads(cron_payload)
-        cron_dict["payload"] = await decrypt_response(
-            cron_payload, "cron", ["metadata", "context", "input", "config"]
-        )
+    cron_dict = await decrypt_response(cron_dict, "cron", CRON_ENCRYPTION_FIELDS)
 
     return ApiResponse(cron_dict)
 
@@ -768,16 +758,7 @@ async def search_crons(request: ApiRequest):
         crons_iter, next_offset, offset
     )
 
-    crons = await decrypt_responses(crons, "cron", ["metadata"])
-
-    for cron in crons:
-        if cron.get("payload"):
-            cron_payload = cron["payload"]
-            if not isinstance(cron_payload, dict):
-                cron_payload = json_loads(cron_payload)
-            cron["payload"] = await decrypt_response(
-                cron_payload, "cron", ["metadata", "context", "input", "config"]
-            )
+    crons = await decrypt_responses(crons, "cron", CRON_ENCRYPTION_FIELDS)
 
     return ApiResponse(crons, headers=response_headers)
 
