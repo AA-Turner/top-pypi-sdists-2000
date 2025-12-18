@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Dict
 from typing import FrozenSet
 from typing import List
+from typing import Optional
 from typing import Set
 from typing import Tuple
 from typing import Union
@@ -30,6 +31,7 @@ from semdep.subproject_matchers import MATCHERS
 from semdep.subproject_matchers import SubprojectMatcher
 from semgrep.console import console
 from semgrep.resolve_dependency_source import resolve_dependency_source
+from semgrep.rpc import RpcSession
 from semgrep.rule import Rule
 from semgrep.safe_set import intersection
 from semgrep.semgrep_interfaces.semgrep_output_v1 import Ecosystem
@@ -86,6 +88,7 @@ class HashableSubproject:
         )
 
 
+@simple_profiling
 def find_subprojects(
     dependency_source_files: FrozenSet[Target], matchers: List[SubprojectMatcher]
 ) -> List[out.Subproject]:
@@ -208,6 +211,7 @@ def resolve_subprojects(
     target_manager: TargetManager,
     dependency_aware_rules: List[Rule],
     config: DependencyResolutionConfig,
+    rpc_session: Optional[RpcSession] = None,
 ) -> Tuple[
     List[out.UnresolvedSubproject],
     Dict[Ecosystem, List[out.ResolvedSubproject]],
@@ -254,6 +258,9 @@ def resolve_subprojects(
     dependency_source_files = target_manager.get_all_dependency_source_files(
         ignore_baseline_handler=True
     )
+    # To list all the subprojects discovered by the function, use
+    # 'semgrep show subprojects'
+    # TODO: implement 'semgrep show subprojects'
     found_subprojects = find_subprojects(dependency_source_files, MATCHERS)
 
     # A subproject is relevant if one of its dependency source files is a target
@@ -305,6 +312,7 @@ def resolve_subprojects(
                 res = resolve_dependency_source(
                     subproject.dependency_source,
                     config,
+                    rpc_session=rpc_session,
                 )
                 resolved_info = res.deps
                 errors = res.errors

@@ -21,10 +21,23 @@
 
 """Implementation of Git filter drivers (clean/smudge filters)."""
 
+__all__ = [
+    "CompositeFilterDriver",
+    "FilterBlobNormalizer",
+    "FilterContext",
+    "FilterDriver",
+    "FilterError",
+    "FilterRegistry",
+    "ProcessFilterDriver",
+    "get_filter_for_path",
+]
+
 import logging
+import shlex
 import subprocess
 import threading
-from typing import TYPE_CHECKING, Callable, Optional
+from collections.abc import Callable
+from typing import TYPE_CHECKING
 from typing import Protocol as TypingProtocol
 
 from .attrs import GitAttributes
@@ -114,11 +127,11 @@ class ProcessFilterDriver:
 
     def __init__(
         self,
-        clean_cmd: Optional[str] = None,
-        smudge_cmd: Optional[str] = None,
+        clean_cmd: str | None = None,
+        smudge_cmd: str | None = None,
         required: bool = False,
-        cwd: Optional[str] = None,
-        process_cmd: Optional[str] = None,
+        cwd: str | None = None,
+        process_cmd: str | None = None,
     ) -> None:
         """Initialize ProcessFilterDriver.
 
@@ -134,12 +147,12 @@ class ProcessFilterDriver:
         self.required = required
         self.cwd = cwd
         self.process_cmd = process_cmd
-        self._process: Optional[subprocess.Popen[bytes]] = None
-        self._protocol: Optional[Protocol] = None
+        self._process: subprocess.Popen[bytes] | None = None
+        self._protocol: Protocol | None = None
         self._capabilities: set[bytes] = set()
         self._process_lock = threading.Lock()
 
-    def _get_or_start_process(self) -> Optional["Protocol"]:
+    def _get_or_start_process(self) -> "Protocol | None":
         """Get or start the long-running process filter."""
         if self._process is None and self.process_cmd:
             from .errors import GitProtocolError, HangupException
@@ -260,13 +273,16 @@ class ProcessFilterDriver:
                     pkt = self._protocol.read_pkt_line()
                     if pkt is None:  # flush packet ends headers
                         break
-                    key, _, value = pkt.decode().rstrip("\n\r").partition("=")
+                    key, _, value = pkt.rstrip(b"\n\r").partition(b"=")
                     response_headers[key] = value
 
                 # Check status
-                status = response_headers.get("status", "error")
-                if status != "success":
-                    raise FilterError(f"Process filter {operation} failed: {status}")
+                status = response_headers.get(b"status", b"error")
+                if status != b"success":
+                    status_str = status.decode("utf-8", errors="replace")
+                    raise FilterError(
+                        f"Process filter {operation} failed: {status_str}"
+                    )
 
                 # Read result data
                 result_chunks = []
@@ -283,14 +299,15 @@ class ProcessFilterDriver:
                     pkt = self._protocol.read_pkt_line()
                     if pkt is None:  # flush packet ends final headers
                         break
-                    key, _, value = pkt.decode().rstrip("\n\r").partition("=")
+                    key, _, value = pkt.rstrip(b"\n\r").partition(b"=")
                     final_headers[key] = value
 
                 # Check final status (if provided, it overrides the initial status)
-                final_status = final_headers.get("status", status)
-                if final_status != "success":
+                final_status = final_headers.get(b"status", status)
+                if final_status != b"success":
+                    final_status_str = final_status.decode("utf-8", errors="replace")
                     raise FilterError(
-                        f"Process filter {operation} failed with final status: {final_status}"
+                        f"Process filter {operation} failed with final status: {final_status_str}"
                     )
 
                 return b"".join(result_chunks)
@@ -302,6 +319,8 @@ class ProcessFilterDriver:
 
     def clean(self, data: bytes) -> bytes:
         """Apply clean filter using external process."""
+        import os
+
         # Try process filter first (much faster)
         if self.process_cmd:
             try:
@@ -317,10 +336,15 @@ class ProcessFilterDriver:
                 raise FilterError("Clean command is required but not configured")
             return data
 
+        # Parse command into list of arguments
+        # Use shlex.split for proper handling of quoted arguments
+        # On Windows, shlex needs posix=False for correct parsing
+        cmd_args = shlex.split(self.clean_cmd, posix=(os.name != "nt"))
+
         try:
             result = subprocess.run(
-                self.clean_cmd,
-                shell=True,
+                cmd_args,
+                shell=False,
                 input=data,
                 capture_output=True,
                 check=True,
@@ -336,6 +360,8 @@ class ProcessFilterDriver:
 
     def smudge(self, data: bytes, path: bytes = b"") -> bytes:
         """Apply smudge filter using external process."""
+        import os
+
         path_str = path.decode("utf-8", errors="replace")
 
         # Try process filter first (much faster)
@@ -353,13 +379,18 @@ class ProcessFilterDriver:
                 raise FilterError("Smudge command is required but not configured")
             return data
 
-        # Substitute %f placeholder with file path
-        cmd = self.smudge_cmd.replace("%f", path_str)
+        # Parse command into list of arguments and substitute %f placeholder
+        # Use shlex.split for proper handling of quoted arguments
+        # On Windows, shlex needs posix=False for correct parsing
+        cmd_args = shlex.split(self.smudge_cmd, posix=(os.name != "nt"))
+
+        # Replace %f placeholder with actual path
+        cmd_args = [arg.replace("%f", path_str) for arg in cmd_args]
 
         try:
             result = subprocess.run(
-                cmd,
-                shell=True,
+                cmd_args,
+                shell=False,
                 input=data,
                 capture_output=True,
                 check=True,
@@ -368,7 +399,9 @@ class ProcessFilterDriver:
             return result.stdout
         except subprocess.CalledProcessError as e:
             if self.required:
-                raise FilterError(f"Required smudge filter failed: {e}")
+                raise FilterError(
+                    f"Required smudge filter failed: {e} {e.stderr} {e.stdout}"
+                )
             # If not required, log warning and return original data on failure
             logging.warning("Optional smudge filter failed: %s", e)
             return data
@@ -524,7 +557,7 @@ class FilterContext:
         self.filter_registry = filter_registry
         self._active_drivers: dict[str, FilterDriver] = {}
 
-    def get_driver(self, name: str) -> Optional[FilterDriver]:
+    def get_driver(self, name: str) -> FilterDriver | None:
         """Get a filter driver by name, managing stateful instances.
 
         This method handles driver instantiation and caching. Only drivers
@@ -536,7 +569,7 @@ class FilterContext:
         Returns:
             FilterDriver instance or None
         """
-        driver: Optional[FilterDriver] = None
+        driver: FilterDriver | None = None
         # Check if we have a cached instance that should be reused
         if name in self._active_drivers:
             driver = self._active_drivers[name]
@@ -601,8 +634,8 @@ class FilterRegistry:
 
     def __init__(
         self,
-        config: Optional["StackedConfig"] = None,
-        repo: Optional["BaseRepo"] = None,
+        config: "StackedConfig | None" = None,
+        repo: "BaseRepo | None" = None,
     ) -> None:
         """Initialize FilterRegistry.
 
@@ -632,7 +665,7 @@ class FilterRegistry:
         """Register a filter driver instance."""
         self._drivers[name] = driver
 
-    def get_driver(self, name: str) -> Optional[FilterDriver]:
+    def get_driver(self, name: str) -> FilterDriver | None:
         """Get a filter driver by name."""
         # Check if we already have an instance
         if name in self._drivers:
@@ -667,14 +700,14 @@ class FilterRegistry:
             # Don't raise exceptions in __del__
             pass
 
-    def _create_from_config(self, name: str) -> Optional[FilterDriver]:
+    def _create_from_config(self, name: str) -> FilterDriver | None:
         """Create a filter driver from config."""
         if self.config is None:
             return None
 
-        clean_cmd: Optional[str] = None
-        smudge_cmd: Optional[str] = None
-        process_cmd: Optional[str] = None
+        clean_cmd: str | None = None
+        smudge_cmd: str | None = None
+        process_cmd: str | None = None
 
         # Get process command (preferred over clean/smudge for performance)
         try:
@@ -780,9 +813,9 @@ class FilterRegistry:
 def get_filter_for_path(
     path: bytes,
     gitattributes: "GitAttributes",
-    filter_registry: Optional[FilterRegistry] = None,
-    filter_context: Optional[FilterContext] = None,
-) -> Optional[FilterDriver]:
+    filter_registry: FilterRegistry | None = None,
+    filter_context: FilterContext | None = None,
+) -> FilterDriver | None:
     """Get the appropriate filter driver for a given path.
 
     Args:
@@ -878,11 +911,11 @@ class FilterBlobNormalizer:
 
     def __init__(
         self,
-        config_stack: Optional["StackedConfig"],
+        config_stack: "StackedConfig | None",
         gitattributes: GitAttributes,
-        filter_registry: Optional[FilterRegistry] = None,
-        repo: Optional["BaseRepo"] = None,
-        filter_context: Optional[FilterContext] = None,
+        filter_registry: FilterRegistry | None = None,
+        repo: "BaseRepo | None" = None,
+        filter_context: FilterContext | None = None,
     ) -> None:
         """Initialize FilterBlobNormalizer.
 

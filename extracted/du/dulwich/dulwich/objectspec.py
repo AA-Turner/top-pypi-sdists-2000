@@ -21,11 +21,25 @@
 
 """Object specification."""
 
-from collections.abc import Sequence
-from typing import TYPE_CHECKING, Optional, Union
+__all__ = [
+    "AmbiguousShortId",
+    "parse_commit",
+    "parse_commit_range",
+    "parse_object",
+    "parse_ref",
+    "parse_refs",
+    "parse_reftuple",
+    "parse_reftuples",
+    "parse_tree",
+    "scan_for_short_id",
+    "to_bytes",
+]
 
-from .objects import Commit, ShaFile, Tag, Tree
-from .refs import local_branch_name, local_tag_name
+from collections.abc import Sequence
+from typing import TYPE_CHECKING
+
+from .objects import Commit, ObjectID, RawObjectID, ShaFile, Tag, Tree
+from .refs import Ref, local_branch_name, local_tag_name
 from .repo import BaseRepo
 
 if TYPE_CHECKING:
@@ -34,7 +48,7 @@ if TYPE_CHECKING:
     from .repo import Repo
 
 
-def to_bytes(text: Union[str, bytes]) -> bytes:
+def to_bytes(text: str | bytes) -> bytes:
     """Convert text to bytes.
 
     Args:
@@ -48,7 +62,9 @@ def to_bytes(text: Union[str, bytes]) -> bytes:
     return text
 
 
-def _resolve_object(repo: "Repo", ref: bytes) -> "ShaFile":
+def _resolve_object(
+    repo: "Repo", ref: Ref | ObjectID | RawObjectID | bytes
+) -> "ShaFile":
     """Resolve a reference to an object using multiple strategies."""
     try:
         return repo[ref]
@@ -58,7 +74,7 @@ def _resolve_object(repo: "Repo", ref: bytes) -> "ShaFile":
             return repo[ref_sha]
         except KeyError:
             try:
-                return repo.object_store[ref]
+                return repo.object_store[ref]  # type: ignore[index]
             except (KeyError, ValueError):
                 # Re-raise original KeyError for consistency
                 raise KeyError(ref)
@@ -75,7 +91,7 @@ def _parse_number_suffix(suffix: bytes) -> tuple[int, bytes]:
     return int(suffix[:end]), suffix[end:]
 
 
-def parse_object(repo: "Repo", objectish: Union[bytes, str]) -> "ShaFile":
+def parse_object(repo: "Repo", objectish: bytes | str) -> "ShaFile":
     """Parse a string referring to an object.
 
     Args:
@@ -237,9 +253,7 @@ def parse_object(repo: "Repo", objectish: Union[bytes, str]) -> "ShaFile":
     return _resolve_object(repo, objectish)
 
 
-def parse_tree(
-    repo: "BaseRepo", treeish: Union[bytes, str, Tree, Commit, Tag]
-) -> "Tree":
+def parse_tree(repo: "BaseRepo", treeish: bytes | str | Tree | Commit | Tag) -> "Tree":
     """Parse a string referring to a tree.
 
     Args:
@@ -264,12 +278,13 @@ def parse_tree(
         treeish = treeish.id
     else:
         treeish = to_bytes(treeish)
+    treeish_typed: Ref | ObjectID
     try:
-        treeish = parse_ref(repo.refs, treeish)
+        treeish_typed = parse_ref(repo.refs, treeish)
     except KeyError:  # treeish is commit sha
-        pass
+        treeish_typed = ObjectID(treeish)
     try:
-        o = repo[treeish]
+        o = repo[treeish_typed]
     except KeyError:
         # Try parsing as commit (handles short hashes)
         try:
@@ -292,9 +307,7 @@ def parse_tree(
     return o
 
 
-def parse_ref(
-    container: Union["Repo", "RefsContainer"], refspec: Union[str, bytes]
-) -> "Ref":
+def parse_ref(container: "Repo | RefsContainer", refspec: str | bytes) -> "Ref":
     """Parse a string referring to a reference.
 
     Args:
@@ -315,16 +328,16 @@ def parse_ref(
     ]
     for ref in possible_refs:
         if ref in container:
-            return ref
+            return Ref(ref)
     raise KeyError(refspec)
 
 
 def parse_reftuple(
-    lh_container: Union["Repo", "RefsContainer"],
-    rh_container: Union["Repo", "RefsContainer"],
-    refspec: Union[str, bytes],
+    lh_container: "Repo | RefsContainer",
+    rh_container: "Repo | RefsContainer",
+    refspec: str | bytes,
     force: bool = False,
-) -> tuple[Optional["Ref"], Optional["Ref"], bool]:
+) -> tuple["Ref | None", "Ref | None", bool]:
     """Parse a reftuple spec.
 
     Args:
@@ -340,34 +353,40 @@ def parse_reftuple(
     if refspec.startswith(b"+"):
         force = True
         refspec = refspec[1:]
-    lh: Optional[bytes]
-    rh: Optional[bytes]
+    lh_bytes: bytes | None
+    rh_bytes: bytes | None
     if b":" in refspec:
-        (lh, rh) = refspec.split(b":")
+        (lh_bytes, rh_bytes) = refspec.split(b":")
     else:
-        lh = rh = refspec
-    if lh == b"":
+        lh_bytes = rh_bytes = refspec
+
+    lh: Ref | None
+    if lh_bytes == b"":
         lh = None
     else:
-        lh = parse_ref(lh_container, lh)
-    if rh == b"":
+        lh = parse_ref(lh_container, lh_bytes)
+
+    rh: Ref | None
+    if rh_bytes == b"":
         rh = None
     else:
         try:
-            rh = parse_ref(rh_container, rh)
+            rh = parse_ref(rh_container, rh_bytes)
         except KeyError:
             # TODO: check force?
-            if b"/" not in rh:
-                rh = local_branch_name(rh)
+            if b"/" not in rh_bytes:
+                rh = Ref(local_branch_name(rh_bytes))
+            else:
+                rh = Ref(rh_bytes)
     return (lh, rh, force)
 
 
 def parse_reftuples(
-    lh_container: Union["Repo", "RefsContainer"],
-    rh_container: Union["Repo", "RefsContainer"],
-    refspecs: Union[bytes, Sequence[bytes]],
+    lh_container: "Repo | RefsContainer",
+    rh_container: "Repo | RefsContainer",
+    refspecs: bytes | Sequence[bytes],
     force: bool = False,
-) -> list[tuple[Optional["Ref"], Optional["Ref"], bool]]:
+) -> list[tuple["Ref | None", "Ref | None", bool]]:
     """Parse a list of reftuple specs to a list of reftuples.
 
     Args:
@@ -389,8 +408,8 @@ def parse_reftuples(
 
 
 def parse_refs(
-    container: Union["Repo", "RefsContainer"],
-    refspecs: Union[bytes, str, Sequence[Union[bytes, str]]],
+    container: "Repo | RefsContainer",
+    refspecs: bytes | str | Sequence[bytes | str],
 ) -> list["Ref"]:
     """Parse a list of refspecs to a list of refs.
 
@@ -411,8 +430,8 @@ def parse_refs(
 
 
 def parse_commit_range(
-    repo: "Repo", committish: Union[str, bytes]
-) -> Optional[tuple["Commit", "Commit"]]:
+    repo: "Repo", committish: str | bytes
+) -> tuple["Commit", "Commit"] | None:
     """Parse a string referring to a commit range.
 
     Args:
@@ -473,9 +492,7 @@ def scan_for_short_id(
     raise AmbiguousShortId(prefix, ret)
 
 
-def parse_commit(
-    repo: "BaseRepo", committish: Union[str, bytes, Commit, Tag]
-) -> "Commit":
+def parse_commit(repo: "BaseRepo", committish: str | bytes | Commit | Tag) -> "Commit":
     """Parse a string referring to a single commit.
 
     Args:

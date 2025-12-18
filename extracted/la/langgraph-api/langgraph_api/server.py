@@ -1,12 +1,13 @@
 # MONKEY PATCH: Patch Starlette to fix an error in the library
-import langgraph_api.patch  # noqa: F401,I001
-import sys
-import os
-
 # WARNING: Keep the import above before other code runs as it
 # patches an error in the Starlette library.
+import langgraph_api.patch  # noqa: F401,I001
+import langgraph_api.timing as timing
 import logging
+import os
+import sys
 import typing
+
 
 if not (
     (disable_truststore := os.getenv("DISABLE_TRUSTSTORE"))
@@ -16,7 +17,6 @@ if not (
 
     truststore.inject_into_ssl()
 
-from contextlib import asynccontextmanager
 
 import jsonschema_rs
 import structlog
@@ -222,16 +222,7 @@ if user_router:
             f"Cannot merge lifespans with on_startup or on_shutdown: {app.router.on_startup} {app.router.on_shutdown}"
         )
 
-    @asynccontextmanager
-    async def combined_lifespan(app):
-        async with lifespan(app):
-            if user_lifespan:
-                async with user_lifespan(app):
-                    yield
-            else:
-                yield
-
-    app.router.lifespan_context = combined_lifespan
+    app.router.lifespan_context = timing.combine_lifespans(lifespan, user_lifespan)
 
     # Merge exception handlers (base + user)
     for k, v in exception_handlers.items():
@@ -249,7 +240,7 @@ else:
             ),
             protected_mount,
         ],
-        lifespan=lifespan,
+        lifespan=timing.combine_lifespans(lifespan),
         middleware=global_middleware,
         exception_handlers=exception_handlers,
     )

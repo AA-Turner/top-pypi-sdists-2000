@@ -40,7 +40,7 @@ import tempfile
 # If Python itself provides an exception, use that
 import unittest
 from collections.abc import Sequence
-from typing import ClassVar, Optional
+from typing import ClassVar
 from unittest import SkipTest, expectedFailure, skipIf
 from unittest import TestCase as _TestCase
 
@@ -56,7 +56,7 @@ class TestCase(_TestCase):
         self.overrideEnv("HOME", "/nonexistent")
         self.overrideEnv("GIT_CONFIG_NOSYSTEM", "1")
 
-    def overrideEnv(self, name: str, value: Optional[str]) -> None:
+    def overrideEnv(self, name: str, value: str | None) -> None:
         def restore() -> None:
             if oldval is not None:
                 os.environ[name] = oldval
@@ -141,6 +141,7 @@ def self_test_suite() -> unittest.TestSuite:
         "credentials",
         "diff",
         "diff_tree",
+        "diffstat",
         "dumb",
         "fastexport",
         "file",
@@ -149,7 +150,6 @@ def self_test_suite() -> unittest.TestSuite:
         "gc",
         "grafts",
         "graph",
-        "greenthreads",
         "hooks",
         "ignore",
         "index",
@@ -159,9 +159,11 @@ def self_test_suite() -> unittest.TestSuite:
         "log_utils",
         "lru_cache",
         "mailmap",
+        "maintenance",
         "mbox",
         "merge",
         "merge_drivers",
+        "midx",
         "missing_obj_finder",
         "notes",
         "objects",
@@ -169,19 +171,15 @@ def self_test_suite() -> unittest.TestSuite:
         "object_store",
         "pack",
         "patch",
-        "porcelain",
-        "porcelain_cherry_pick",
-        "porcelain_filters",
-        "porcelain_lfs",
-        "porcelain_merge",
-        "porcelain_notes",
         "protocol",
         "rebase",
         "reflog",
         "refs",
         "reftable",
         "repository",
+        "rerere",
         "server",
+        "source",
         "sparse_patterns",
         "stash",
         "stripspace",
@@ -194,6 +192,16 @@ def self_test_suite() -> unittest.TestSuite:
         "worktree",
     ]
     module_names = ["tests.test_" + name for name in names]
+    porcelain_names = [
+        "cherry_pick",
+        "filters",
+        "lfs",
+        "merge",
+        "notes",
+    ]
+    module_names += ["tests.porcelain"] + [
+        "tests.porcelain.test_" + name for name in porcelain_names
+    ]
     loader = unittest.TestLoader()
     return loader.loadTestsFromNames(module_names)
 
@@ -211,7 +219,7 @@ def tutorial_test_suite() -> unittest.TestSuite:
 
     to_restore = []
 
-    def overrideEnv(name: str, value: Optional[str]) -> None:
+    def overrideEnv(name: str, value: str | None) -> None:
         oldval = os.environ.get(name)
         if value is not None:
             os.environ[name] = value

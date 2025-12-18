@@ -21,10 +21,19 @@
 
 """Access to hooks."""
 
+__all__ = [
+    "CommitMsgShellHook",
+    "Hook",
+    "PostCommitShellHook",
+    "PostReceiveShellHook",
+    "PreCommitShellHook",
+    "ShellHook",
+]
+
 import os
 import subprocess
-from collections.abc import Sequence
-from typing import Any, Callable, Optional
+from collections.abc import Callable, Sequence
+from typing import Any
 
 from .errors import HookError
 
@@ -58,9 +67,9 @@ class ShellHook(Hook):
         name: str,
         path: str,
         numparam: int,
-        pre_exec_callback: Optional[Callable[..., Any]] = None,
-        post_exec_callback: Optional[Callable[..., Any]] = None,
-        cwd: Optional[str] = None,
+        pre_exec_callback: Callable[..., Any] | None = None,
+        post_exec_callback: Callable[..., Any] | None = None,
+        cwd: str | None = None,
     ) -> None:
         """Setup shell hook definition.
 
@@ -162,7 +171,7 @@ class CommitMsgShellHook(ShellHook):
 
             return (path,)
 
-        def clean_msg(success: int, *args: str) -> Optional[bytes]:
+        def clean_msg(success: int, *args: str) -> bytes | None:
             if success:
                 with open(args[0], "rb") as f:
                     new_msg = f.read()
@@ -191,7 +200,7 @@ class PostReceiveShellHook(ShellHook):
 
     def execute(
         self, client_refs: Sequence[tuple[bytes, bytes, bytes]]
-    ) -> Optional[bytes]:
+    ) -> bytes | None:
         """Execute the post-receive hook.
 
         Args:
@@ -226,9 +235,12 @@ class PostReceiveShellHook(ShellHook):
             out_data, err_data = p.communicate(in_data)
 
             if (p.returncode != 0) or err_data:
-                err_fmt = b"post-receive exit code: %d\n" + b"stdout:\n%s\nstderr:\n%s"
-                err_msg = err_fmt % (p.returncode, out_data, err_data)
-                raise HookError(err_msg.decode("utf-8", "backslashreplace"))
+                err_msg = (
+                    f"post-receive exit code: {p.returncode}\n"
+                    f"stdout:\n{out_data.decode('utf-8', 'backslashreplace')}\n"
+                    f"stderr:\n{err_data.decode('utf-8', 'backslashreplace')}"
+                )
+                raise HookError(err_msg)
             return out_data
         except OSError as err:
             raise HookError(repr(err)) from err

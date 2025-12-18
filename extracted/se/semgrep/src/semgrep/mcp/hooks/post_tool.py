@@ -25,11 +25,7 @@ from semgrep.mcp.semgrep import run_semgrep_output
 from semgrep.mcp.server import get_semgrep_scan_args
 from semgrep.mcp.utilities.tracing import attach_scan_metrics
 from semgrep.mcp.utilities.tracing import start_tracing
-from semgrep.mcp.utilities.tracing import with_span
-from semgrep.mcp.utilities.utils import get_deployment_id_from_token
-from semgrep.mcp.utilities.utils import get_deployment_name_from_token
-from semgrep.mcp.utilities.utils import get_semgrep_app_token
-from semgrep.state import get_state
+from semgrep.mcp.utilities.tracing import with_hook_span
 
 
 class PostToolHookResponse(BaseModel):
@@ -59,36 +55,44 @@ def load_file_path() -> tuple[CodeFile, Any]:
     )
 
 
+@with_hook_span(
+    span_name="semgrep_scan_cli (hook) (post-tool)",
+    send_metrics=True,
+    is_semgrep_scan=True,
+)
 async def run_cli_scan(top_level_span: trace.Span | None) -> PostToolHookResponse:
-    with with_span(top_level_span, "semgrep_scan_cli (hook)") as span:
-        state = get_state()
-        state.metrics.clear_mcp()
-        state.metrics.add_mcp(
-            deployment_id=get_deployment_id_from_token(get_semgrep_app_token()),
-            deployment_name=get_deployment_name_from_token(get_semgrep_app_token())
-            or "",
-            session_id="hook",  # TODO: No session id for hooks yet, using a placeholder
-            tool_name="semgrep_scan_cli (hook)",
+    code_file, workspace_dir = load_file_path()
+    args = get_semgrep_scan_args(code_file.path, None)
+    output = await run_semgrep_output(top_level_span, args)
+    scan_result: SemgrepScanResult = SemgrepScanResult.model_validate_json(output)
+    hook_response = PostToolHookResponse(decision=None, reason=None)
+    if len(scan_result.results) > 0:
+        hook_response = PostToolHookResponse(
+            decision="block",
+            reason=str(scan_result.results),
         )
-        code_file, workspace_dir = load_file_path()
-        args = get_semgrep_scan_args(code_file.path, None)
-        output = await run_semgrep_output(top_level_span, args)
-        scan_result: SemgrepScanResult = SemgrepScanResult.model_validate_json(output)
+    else:
         hook_response = PostToolHookResponse(decision=None, reason=None)
-        if len(scan_result.results) > 0:
-            hook_response = PostToolHookResponse(
-                decision="block",
-                reason=str(scan_result.results),
-            )
-        else:
-            hook_response = PostToolHookResponse(decision=None, reason=None)
-        attach_scan_metrics(span, scan_result, workspace_dir, [code_file])
-        state.metrics.send()
-        return hook_response
+    attach_scan_metrics(
+        trace.get_current_span(), scan_result, workspace_dir, [code_file]
+    )
+    return hook_response
 
 
-def run_post_tool_scan_cli() -> None:
+def run_post_tool_scan_cli(agent: str) -> None:
     with start_tracing("mcp-hook") as span:
-        response = asyncio.run(run_cli_scan(top_level_span=span))
+        if agent == "cursor":
+            # This hook is not supported for Cursor yet because
+            # Cursor's afterFileEdit hook does not support
+            # any outputs. There is no way to communicate the scan result to Cursor.
+            # See: https://cursor.com/docs/agent/hooks#afterfileedit
+            #
+            # The input format of a Cursor hook is also different
+            # from that of a Claude Code hook. And we are assuming the
+            # Claude Code format here.
+            print("This hook is not supported for Cursor.", file=sys.stderr)
+            sys.exit(2)
+
+        response = asyncio.run(run_cli_scan(span))
         print(response.model_dump_json(exclude_none=True))
         sys.exit(0)

@@ -32,6 +32,20 @@ Key components:
 - Integration with dulwich repositories
 """
 
+__all__ = [
+    "FileLFSClient",
+    "HTTPLFSClient",
+    "LFSAction",
+    "LFSBatchObject",
+    "LFSBatchResponse",
+    "LFSClient",
+    "LFSError",
+    "LFSErrorInfo",
+    "LFSFilterDriver",
+    "LFSPointer",
+    "LFSStore",
+]
+
 import hashlib
 import json
 import logging
@@ -39,7 +53,7 @@ import os
 import tempfile
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, BinaryIO, Optional, Union
+from typing import TYPE_CHECKING, Any, BinaryIO
 from urllib.parse import urljoin, urlparse
 from urllib.request import Request, urlopen
 
@@ -57,8 +71,8 @@ class LFSAction:
     """LFS action structure."""
 
     href: str
-    header: Optional[dict[str, str]] = None
-    expires_at: Optional[str] = None
+    header: dict[str, str] | None = None
+    expires_at: str | None = None
 
 
 @dataclass
@@ -75,9 +89,9 @@ class LFSBatchObject:
 
     oid: str
     size: int
-    authenticated: Optional[bool] = None
-    actions: Optional[dict[str, LFSAction]] = None
-    error: Optional[LFSErrorInfo] = None
+    authenticated: bool | None = None
+    actions: dict[str, LFSAction] | None = None
+    error: LFSErrorInfo | None = None
 
 
 @dataclass
@@ -86,7 +100,7 @@ class LFSBatchResponse:
 
     transfer: str
     objects: list[LFSBatchObject]
-    hash_algo: Optional[str] = None
+    hash_algo: str | None = None
 
 
 class LFSStore:
@@ -182,7 +196,7 @@ class LFSPointer:
         self.size = size
 
     @classmethod
-    def from_bytes(cls, data: bytes) -> Optional["LFSPointer"]:
+    def from_bytes(cls, data: bytes) -> "LFSPointer | None":
         """Parse LFS pointer from bytes.
 
         Returns None if data is not a valid LFS pointer.
@@ -243,9 +257,7 @@ class LFSPointer:
 class LFSFilterDriver:
     """LFS filter driver implementation."""
 
-    def __init__(
-        self, lfs_store: "LFSStore", config: Optional["Config"] = None
-    ) -> None:
+    def __init__(self, lfs_store: "LFSStore", config: "Config | None" = None) -> None:
         """Initialize LFSFilterDriver."""
         self.lfs_store = lfs_store
         self.config = config
@@ -328,13 +340,13 @@ class LFSFilterDriver:
         """Clean up any resources held by this filter driver."""
         # LFSFilterDriver doesn't hold any resources that need cleanup
 
-    def reuse(self, config: Optional["Config"], filter_name: str) -> bool:
+    def reuse(self, config: "Config | None", filter_name: str) -> bool:
         """Check if this filter driver should be reused with the given configuration."""
         # LFSFilterDriver is stateless and lightweight, no need to cache
         return False
 
 
-def _get_lfs_user_agent(config: Optional["Config"]) -> str:
+def _get_lfs_user_agent(config: "Config | None") -> str:
     """Get User-Agent string for LFS requests, respecting git config."""
     try:
         if config:
@@ -385,7 +397,7 @@ def _is_valid_lfs_url(url: str) -> bool:
 class LFSClient:
     """Base class for LFS client operations."""
 
-    def __init__(self, url: str, config: Optional["Config"] = None) -> None:
+    def __init__(self, url: str, config: "Config | None" = None) -> None:
         """Initialize LFS client.
 
         Args:
@@ -400,7 +412,7 @@ class LFSClient:
         """Get the LFS server URL without trailing slash."""
         return self._base_url.rstrip("/")
 
-    def download(self, oid: str, size: int, ref: Optional[str] = None) -> bytes:
+    def download(self, oid: str, size: int, ref: str | None = None) -> bytes:
         """Download an LFS object.
 
         Args:
@@ -414,7 +426,7 @@ class LFSClient:
         raise NotImplementedError
 
     def upload(
-        self, oid: str, size: int, content: bytes, ref: Optional[str] = None
+        self, oid: str, size: int, content: bytes, ref: str | None = None
     ) -> None:
         """Upload an LFS object.
 
@@ -427,7 +439,7 @@ class LFSClient:
         raise NotImplementedError
 
     @classmethod
-    def from_config(cls, config: "Config") -> Optional["LFSClient"]:
+    def from_config(cls, config: "Config") -> "LFSClient | None":
         """Create LFS client from git config.
 
         Returns the appropriate subclass (HTTPLFSClient or FileLFSClient)
@@ -491,7 +503,7 @@ class LFSClient:
 class HTTPLFSClient(LFSClient):
     """LFS client for HTTP/HTTPS operations."""
 
-    def __init__(self, url: str, config: Optional["Config"] = None) -> None:
+    def __init__(self, url: str, config: "Config | None" = None) -> None:
         """Initialize HTTP LFS client.
 
         Args:
@@ -499,7 +511,7 @@ class HTTPLFSClient(LFSClient):
             config: Optional git config for authentication/proxy settings
         """
         super().__init__(url, config)
-        self._pool_manager: Optional[urllib3.PoolManager] = None
+        self._pool_manager: urllib3.PoolManager | None = None
 
     def _get_pool_manager(self) -> "urllib3.PoolManager":
         """Get urllib3 pool manager with git config applied."""
@@ -513,8 +525,8 @@ class HTTPLFSClient(LFSClient):
         self,
         method: str,
         path: str,
-        data: Optional[bytes] = None,
-        headers: Optional[dict[str, str]] = None,
+        data: bytes | None = None,
+        headers: dict[str, str] | None = None,
     ) -> bytes:
         """Make an HTTP request to the LFS server."""
         url = urljoin(self._base_url, path)
@@ -538,8 +550,8 @@ class HTTPLFSClient(LFSClient):
     def batch(
         self,
         operation: str,
-        objects: list[dict[str, Union[str, int]]],
-        ref: Optional[str] = None,
+        objects: list[dict[str, str | int]],
+        ref: str | None = None,
     ) -> LFSBatchResponse:
         """Perform batch operation to get transfer URLs.
 
@@ -552,7 +564,7 @@ class HTTPLFSClient(LFSClient):
             Batch response from server
         """
         data: dict[
-            str, Union[str, list[str], list[dict[str, Union[str, int]]], dict[str, str]]
+            str, str | list[str] | list[dict[str, str | int]] | dict[str, str]
         ] = {
             "operation": operation,
             "transfers": ["basic"],
@@ -604,7 +616,7 @@ class HTTPLFSClient(LFSClient):
             hash_algo=data.get("hash_algo"),
         )
 
-    def download(self, oid: str, size: int, ref: Optional[str] = None) -> bytes:
+    def download(self, oid: str, size: int, ref: str | None = None) -> bytes:
         """Download an LFS object.
 
         Args:
@@ -652,7 +664,7 @@ class HTTPLFSClient(LFSClient):
         return content
 
     def upload(
-        self, oid: str, size: int, content: bytes, ref: Optional[str] = None
+        self, oid: str, size: int, content: bytes, ref: str | None = None
     ) -> None:
         """Upload an LFS object.
 
@@ -711,7 +723,7 @@ class HTTPLFSClient(LFSClient):
 class FileLFSClient(LFSClient):
     """LFS client for file:// URLs that accesses local filesystem."""
 
-    def __init__(self, url: str, config: Optional["Config"] = None) -> None:
+    def __init__(self, url: str, config: "Config | None" = None) -> None:
         """Initialize File LFS client.
 
         Args:
@@ -731,7 +743,7 @@ class FileLFSClient(LFSClient):
         path = url2pathname(parsed.path)
         self._local_store = LFSStore(path)
 
-    def download(self, oid: str, size: int, ref: Optional[str] = None) -> bytes:
+    def download(self, oid: str, size: int, ref: str | None = None) -> bytes:
         """Download an LFS object from local filesystem.
 
         Args:
@@ -763,7 +775,7 @@ class FileLFSClient(LFSClient):
         return content
 
     def upload(
-        self, oid: str, size: int, content: bytes, ref: Optional[str] = None
+        self, oid: str, size: int, content: bytes, ref: str | None = None
     ) -> None:
         """Upload an LFS object to local filesystem.
 

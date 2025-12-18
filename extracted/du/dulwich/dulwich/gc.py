@@ -1,11 +1,45 @@
+# gc.py -- Git garbage collection implementation
+# Copyright (C) 2025 Jelmer Vernooij <jelmer@jelmer.uk>
+#
+# SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+# Dulwich is dual-licensed under the Apache License, Version 2.0 and the GNU
+# General Public License as published by the Free Software Foundation; version 2.0
+# or (at your option) any later version. You can redistribute it and/or
+# modify it under the terms of either of these two licenses.
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# You should have received a copy of the licenses; if not, see
+# <http://www.gnu.org/licenses/> for a copy of the GNU General Public License
+# and <http://www.apache.org/licenses/LICENSE-2.0> for a copy of the Apache
+# License, Version 2.0.
+#
+
 """Git garbage collection implementation."""
 
-import collections
+__all__ = [
+    "DEFAULT_GC_AUTO",
+    "DEFAULT_GC_AUTO_PACK_LIMIT",
+    "GCStats",
+    "find_reachable_objects",
+    "find_unreachable_objects",
+    "garbage_collect",
+    "maybe_auto_gc",
+    "prune_unreachable_objects",
+    "should_run_gc",
+]
+
 import logging
 import os
 import time
+from collections import deque
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Callable, Optional
+from typing import TYPE_CHECKING
 
 from dulwich.object_store import (
     BaseObjectStore,
@@ -27,7 +61,7 @@ DEFAULT_GC_AUTO_PACK_LIMIT = 50
 class GCStats:
     """Statistics from garbage collection."""
 
-    pruned_objects: set[bytes] = field(default_factory=set)
+    pruned_objects: set[ObjectID] = field(default_factory=set)
     bytes_freed: int = 0
     packs_before: int = 0
     packs_after: int = 0
@@ -39,8 +73,8 @@ def find_reachable_objects(
     object_store: BaseObjectStore,
     refs_container: RefsContainer,
     include_reflogs: bool = True,
-    progress: Optional[Callable[[str], None]] = None,
-) -> set[bytes]:
+    progress: Callable[[str], None] | None = None,
+) -> set[ObjectID]:
     """Find all reachable objects in the repository.
 
     Args:
@@ -52,8 +86,8 @@ def find_reachable_objects(
     Returns:
         Set of reachable object SHAs
     """
-    reachable = set()
-    pending: collections.deque[ObjectID] = collections.deque()
+    reachable: set[ObjectID] = set()
+    pending: deque[ObjectID] = deque()
 
     # Start with all refs
     for ref in refs_container.allkeys():
@@ -113,8 +147,8 @@ def find_unreachable_objects(
     object_store: BaseObjectStore,
     refs_container: RefsContainer,
     include_reflogs: bool = True,
-    progress: Optional[Callable[[str], None]] = None,
-) -> set[bytes]:
+    progress: Callable[[str], None] | None = None,
+) -> set[ObjectID]:
     """Find all unreachable objects in the repository.
 
     Args:
@@ -130,7 +164,7 @@ def find_unreachable_objects(
         object_store, refs_container, include_reflogs, progress
     )
 
-    unreachable = set()
+    unreachable: set[ObjectID] = set()
     for sha in object_store:
         if sha not in reachable:
             unreachable.add(sha)
@@ -141,10 +175,10 @@ def find_unreachable_objects(
 def prune_unreachable_objects(
     object_store: DiskObjectStore,
     refs_container: RefsContainer,
-    grace_period: Optional[int] = None,
+    grace_period: int | None = None,
     dry_run: bool = False,
-    progress: Optional[Callable[[str], None]] = None,
-) -> tuple[set[bytes], int]:
+    progress: Callable[[str], None] | None = None,
+) -> tuple[set[ObjectID], int]:
     """Remove unreachable objects from the repository.
 
     Args:
@@ -161,7 +195,7 @@ def prune_unreachable_objects(
         object_store, refs_container, progress=progress
     )
 
-    pruned = set()
+    pruned: set[ObjectID] = set()
     bytes_freed = 0
 
     for sha in unreachable:
@@ -211,9 +245,9 @@ def garbage_collect(
     auto: bool = False,
     aggressive: bool = False,
     prune: bool = True,
-    grace_period: Optional[int] = 1209600,  # 2 weeks default
+    grace_period: int | None = 1209600,  # 2 weeks default
     dry_run: bool = False,
-    progress: Optional[Callable[[str], None]] = None,
+    progress: Callable[[str], None] | None = None,
 ) -> GCStats:
     """Run garbage collection on a repository.
 
@@ -312,7 +346,7 @@ def garbage_collect(
     return stats
 
 
-def should_run_gc(repo: "BaseRepo", config: Optional["Config"] = None) -> bool:
+def should_run_gc(repo: "BaseRepo", config: "Config | None" = None) -> bool:
     """Check if automatic garbage collection should run.
 
     Args:
@@ -371,8 +405,8 @@ def should_run_gc(repo: "BaseRepo", config: Optional["Config"] = None) -> bool:
 
 def maybe_auto_gc(
     repo: "Repo",
-    config: Optional["Config"] = None,
-    progress: Optional[Callable[[str], None]] = None,
+    config: "Config | None" = None,
+    progress: Callable[[str], None] | None = None,
 ) -> bool:
     """Run automatic garbage collection if needed.
 

@@ -20,18 +20,12 @@
 # License, Version 2.0.
 #
 
-
 """Python implementation of the Git file formats and protocols."""
 
-import sys
-from typing import Any, Callable, Optional, TypeVar, Union
+from collections.abc import Callable
+from typing import Any, ParamSpec, TypeVar
 
-if sys.version_info >= (3, 10):
-    from typing import ParamSpec
-else:
-    from typing_extensions import ParamSpec
-
-__version__ = (0, 24, 10)
+__version__ = (0, 25, 0)
 
 __all__ = ["__version__", "replace_me"]
 
@@ -45,8 +39,8 @@ except ImportError:
     # if dissolve is not installed, then just provide a basic implementation
     # of its replace_me decorator
     def replace_me(
-        since: Optional[Union[tuple[int, ...], str]] = None,
-        remove_in: Optional[Union[tuple[int, ...], str]] = None,
+        since: tuple[int, ...] | str | None = None,
+        remove_in: tuple[int, ...] | str | None = None,
     ) -> Callable[[F], F]:
         """Decorator to mark functions as deprecated.
 

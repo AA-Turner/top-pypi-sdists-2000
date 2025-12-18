@@ -28,6 +28,29 @@ no means intended to be a full-blown Git command-line interface but just
 a way to test Dulwich.
 """
 
+__all__ = [
+    "AutoFlushBinaryIOWrapper",
+    "AutoFlushTextIOWrapper",
+    "Command",
+    "CommitMessageError",
+    "Pager",
+    "PagerBuffer",
+    "SuperCommand",
+    "detect_terminal_width",
+    "disable_pager",
+    "enable_pager",
+    "format_bytes",
+    "format_columns",
+    "get_pager",
+    "launch_editor",
+    "main",
+    "parse_time_to_timestamp",
+    "signal_int",
+    "signal_quit",
+    "to_display_str",
+    "write_columns",
+]
+
 # TODO: Add support for GIT_NAMESPACE environment variable by wrapping
 # repository refs with NamespacedRefsContainer when the environment
 # variable is set. See issue #1809 and dulwich.refs.NamespacedRefsContainer.
@@ -42,24 +65,18 @@ import subprocess
 import sys
 import tempfile
 import types
-from collections.abc import Iterable, Iterator, Mapping, Sequence
+from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
 from pathlib import Path
 from types import TracebackType
 from typing import (
     BinaryIO,
-    Callable,
     ClassVar,
-    Optional,
     TextIO,
-    Union,
 )
 
-if sys.version_info >= (3, 12):
-    from collections.abc import Buffer
-else:
-    Buffer = Union[bytes, bytearray, memoryview]
-
 from dulwich import porcelain
+from dulwich._typing import Buffer
+from dulwich.refs import HEADREF, Ref
 
 from .bundle import Bundle, create_bundle_from_repo, read_bundle, write_bundle
 from .client import get_transport_and_path
@@ -72,7 +89,7 @@ from .errors import (
 )
 from .index import Index
 from .log_utils import _configure_logging_from_trace
-from .objects import Commit, sha_to_hex, valid_hexsha
+from .objects import Commit, ObjectID, RawObjectID, sha_to_hex, valid_hexsha
 from .objectspec import parse_commit_range
 from .pack import Pack
 from .patch import DiffAlgorithmNotAvailable
@@ -81,7 +98,7 @@ from .repo import Repo
 logger = logging.getLogger(__name__)
 
 
-def to_display_str(value: Union[bytes, str]) -> str:
+def to_display_str(value: bytes | str) -> str:
     """Convert a bytes or string value to a display string.
 
     Args:
@@ -96,7 +113,7 @@ def to_display_str(value: Union[bytes, str]) -> str:
 
 
 def _should_auto_flush(
-    stream: Union[TextIO, BinaryIO], env: Optional[Mapping[str, str]] = None
+    stream: TextIO | BinaryIO, env: Mapping[str, str] | None = None
 ) -> bool:
     """Determine if output should be auto-flushed based on GIT_FLUSH environment variable.
 
@@ -136,7 +153,7 @@ class AutoFlushTextIOWrapper:
 
     @classmethod
     def env(
-        cls, stream: TextIO, env: Optional[Mapping[str, str]] = None
+        cls, stream: TextIO, env: Mapping[str, str] | None = None
     ) -> "AutoFlushTextIOWrapper | TextIO":
         """Create wrapper respecting the GIT_FLUSH environment variable.
 
@@ -193,9 +210,9 @@ class AutoFlushTextIOWrapper:
 
     def __exit__(
         self,
-        exc_type: Optional[type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         """Support context manager protocol."""
         if hasattr(self._stream, "__exit__"):
@@ -219,7 +236,7 @@ class AutoFlushBinaryIOWrapper:
 
     @classmethod
     def env(
-        cls, stream: BinaryIO, env: Optional[Mapping[str, str]] = None
+        cls, stream: BinaryIO, env: Mapping[str, str] | None = None
     ) -> "AutoFlushBinaryIOWrapper | BinaryIO":
         """Create wrapper respecting the GIT_FLUSH environment variable.
 
@@ -276,9 +293,9 @@ class AutoFlushBinaryIOWrapper:
 
     def __exit__(
         self,
-        exc_type: Optional[type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         """Support context manager protocol."""
         if hasattr(self._stream, "__exit__"):
@@ -289,7 +306,7 @@ class CommitMessageError(Exception):
     """Raised when there's an issue with the commit message."""
 
 
-def signal_int(signal: int, frame: Optional[types.FrameType]) -> None:
+def signal_int(signal: int, frame: types.FrameType | None) -> None:
     """Handle interrupt signal by exiting.
 
     Args:
@@ -299,7 +316,7 @@ def signal_int(signal: int, frame: Optional[types.FrameType]) -> None:
     sys.exit(1)
 
 
-def signal_quit(signal: int, frame: Optional[types.FrameType]) -> None:
+def signal_quit(signal: int, frame: types.FrameType | None) -> None:
     """Handle quit signal by entering debugger.
 
     Args:
@@ -404,9 +421,9 @@ def detect_terminal_width() -> int:
 
 
 def write_columns(
-    items: Union[Iterator[bytes], Sequence[bytes]],
+    items: Iterator[bytes] | Sequence[bytes],
     out: TextIO,
-    width: Optional[int] = None,
+    width: int | None = None,
 ) -> None:
     """Display items in formatted columns based on terminal width.
 
@@ -479,6 +496,148 @@ def write_columns(
             out.write("".join(lines).rstrip() + "\n")
 
 
+def format_columns(
+    items: list[str],
+    width: int | None = None,
+    mode: str = "column",
+    padding: int = 1,
+    indent: str = "",
+    nl: str = "\n",
+) -> str:
+    r"""Format items into columns with various layout modes.
+
+    Args:
+        items: List of strings to format
+        width: Terminal width (auto-detected if None)
+        mode: Layout mode - "column" (fill columns first), "row" (fill rows first),
+              "plain" (one column), or add ",dense" for unequal column widths
+        padding: Number of spaces between columns
+        indent: String to prepend to each line
+        nl: String to append to each line (including newline)
+
+    Returns:
+        Formatted string with items in columns
+
+    Examples:
+        >>> format_columns(["a", "b", "c"], width=20, mode="column")
+        "a  b\\nc\\n"
+        >>> format_columns(["a", "b", "c"], width=20, mode="row")
+        "a  b  c\\n"
+    """
+    if not items:
+        return ""
+
+    if width is None:
+        width = detect_terminal_width()
+
+    # Parse mode
+    mode_parts = mode.split(",")
+    layout_mode = "column"
+    dense = False
+
+    for part in mode_parts:
+        part = part.strip()
+        if part in ("column", "row", "plain"):
+            layout_mode = part
+        elif part == "dense":
+            dense = True
+        elif part == "nodense":
+            dense = False
+
+    # Plain mode - one item per line
+    if layout_mode == "plain":
+        return "".join(indent + item + nl for item in items)
+
+    # Calculate available width for content (excluding indent)
+    available_width = width - len(indent)
+    if available_width <= 0:
+        available_width = width
+
+    # Find optimal number of columns
+    max_item_len = max(len(item) for item in items)
+
+    # Start with maximum possible columns and work down
+    best_num_cols = 1
+    best_col_widths: list[int] = []
+
+    for num_cols in range(min(len(items), 20), 0, -1):
+        if layout_mode == "column":
+            # Column mode: fill columns first (items go down, then across)
+            num_rows = (len(items) + num_cols - 1) // num_cols
+        else:  # row mode
+            # Row mode: fill rows first (items go across, then down)
+            num_rows = (len(items) + num_cols - 1) // num_cols
+
+        col_widths: list[int] = []
+
+        if dense:
+            # Calculate width for each column based on its contents
+            for col in range(num_cols):
+                max_width = 0
+                for row in range(num_rows):
+                    if layout_mode == "column":
+                        idx = row + col * num_rows
+                    else:  # row mode
+                        idx = row * num_cols + col
+
+                    if idx < len(items):
+                        max_width = max(max_width, len(items[idx]))
+
+                if max_width > 0:
+                    col_widths.append(max_width)
+        else:
+            # All columns same width (nodense)
+            max_width = 0
+            for col in range(num_cols):
+                for row in range(num_rows):
+                    if layout_mode == "column":
+                        idx = row + col * num_rows
+                    else:  # row mode
+                        idx = row * num_cols + col
+
+                    if idx < len(items):
+                        max_width = max(max_width, len(items[idx]))
+
+            col_widths = [max_width] * num_cols
+
+        # Calculate total width including padding (but not after last column)
+        total_width = sum(col_widths) + padding * (len(col_widths) - 1)
+
+        if total_width <= available_width:
+            best_num_cols = num_cols
+            best_col_widths = col_widths
+            break
+
+    # If no fit found, use single column
+    if not best_col_widths:
+        best_num_cols = 1
+        best_col_widths = [max_item_len]
+
+    # Format output
+    num_rows = (len(items) + best_num_cols - 1) // best_num_cols
+    lines = []
+
+    for row in range(num_rows):
+        line_parts = []
+        for col in range(best_num_cols):
+            if layout_mode == "column":
+                idx = row + col * num_rows
+            else:  # row mode
+                idx = row * best_num_cols + col
+
+            if idx < len(items):
+                item = items[idx]
+                # Pad item to column width, except for last column in row
+                if col < best_num_cols - 1 and col < len(best_col_widths) - 1:
+                    item = item.ljust(best_col_widths[col] + padding)
+                line_parts.append(item)
+
+        if line_parts:
+            lines.append(indent + "".join(line_parts).rstrip() + nl)
+
+    return "".join(lines)
+
+
 class PagerBuffer(BinaryIO):
     """Binary buffer wrapper for Pager to mimic sys.stdout.buffer."""
 
@@ -490,7 +649,7 @@ class PagerBuffer(BinaryIO):
         """
         self.pager = pager
 
-    def write(self, data: Union[bytes, bytearray, memoryview]) -> int:  # type: ignore[override]
+    def write(self, data: bytes | bytearray | memoryview) -> int:  # type: ignore[override]
         """Write bytes to pager."""
         # Convert to bytes and decode to string for the pager
         text = bytes(data).decode("utf-8", errors="replace")
@@ -500,7 +659,7 @@ class PagerBuffer(BinaryIO):
         """Flush the pager."""
         return self.pager.flush()
 
-    def writelines(self, lines: Iterable[Union[bytes, bytearray, memoryview]]) -> None:  # type: ignore[override]
+    def writelines(self, lines: Iterable[bytes | bytearray | memoryview]) -> None:  # type: ignore[override]
         """Write multiple lines to pager."""
         for line in lines:
             self.write(line)
@@ -576,7 +735,7 @@ class PagerBuffer(BinaryIO):
         """Return the current position (not supported)."""
         raise io.UnsupportedOperation("PagerBuffer does not support tell()")
 
-    def truncate(self, size: Optional[int] = None) -> int:
+    def truncate(self, size: int | None = None) -> int:
         """Truncate the buffer (not supported)."""
         raise io.UnsupportedOperation("PagerBuffer does not support truncation")
 
@@ -594,9 +753,9 @@ class PagerBuffer(BinaryIO):
 
     def __exit__(
         self,
-        exc_type: Optional[type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         """Exit context manager."""
         self.close()
@@ -611,7 +770,7 @@ class Pager(TextIO):
         Args:
             pager_cmd: Command to use for paging (default: "cat")
         """
-        self.pager_process: Optional[subprocess.Popen[str]] = None
+        self.pager_process: subprocess.Popen[str] | None = None
         self._buffer = PagerBuffer(self)
         self._closed = False
         self.pager_cmd = pager_cmd
@@ -696,9 +855,9 @@ class Pager(TextIO):
 
     def __exit__(
         self,
-        exc_type: Optional[type],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[types.TracebackType],
+        exc_type: type | None,
+        exc_val: BaseException | None,
+        exc_tb: types.TracebackType | None,
     ) -> None:
         """Context manager exit."""
         self.close()
@@ -739,7 +898,7 @@ class Pager(TextIO):
         return "utf-8"
 
     @property
-    def errors(self) -> Optional[str]:
+    def errors(self) -> str | None:
         """Return the error handling scheme."""
         return "replace"
 
@@ -767,7 +926,7 @@ class Pager(TextIO):
         return "<pager>"
 
     @property
-    def newlines(self) -> Optional[Union[str, tuple[str, ...]]]:
+    def newlines(self) -> str | tuple[str, ...] | None:
         """Return the newlines mode."""
         return None
 
@@ -791,7 +950,7 @@ class Pager(TextIO):
         """Return the current position (not supported)."""
         raise io.UnsupportedOperation("Pager does not support tell()")
 
-    def truncate(self, size: Optional[int] = None) -> int:
+    def truncate(self, size: int | None = None) -> int:
         """Truncate the pager (not supported)."""
         raise io.UnsupportedOperation("Pager does not support truncation")
 
@@ -807,7 +966,7 @@ class Pager(TextIO):
 class _StreamContextAdapter:
     """Adapter to make streams work with context manager protocol."""
 
-    def __init__(self, stream: Union[TextIO, BinaryIO]) -> None:
+    def __init__(self, stream: TextIO | BinaryIO) -> None:
         self.stream = stream
         # Expose buffer if it exists
         if hasattr(stream, "buffer"):
@@ -821,9 +980,9 @@ class _StreamContextAdapter:
 
     def __exit__(
         self,
-        exc_type: Optional[type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         # For stdout/stderr, we don't close them
         pass
@@ -833,8 +992,8 @@ class _StreamContextAdapter:
 
 
 def get_pager(
-    config: Optional[Config] = None, cmd_name: Optional[str] = None
-) -> Union[_StreamContextAdapter, "Pager"]:
+    config: Config | None = None, cmd_name: str | None = None
+) -> "_StreamContextAdapter | Pager":
     """Get a pager instance if paging should be used, otherwise return sys.stdout.
 
     Args:
@@ -930,7 +1089,7 @@ def enable_pager() -> None:
 class Command:
     """A Dulwich subcommand."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Run the command."""
         raise NotImplementedError(self.run)
 
@@ -1102,9 +1261,13 @@ class cmd_fetch_pack(Command):
         else:
 
             def determine_wants(
-                refs: Mapping[bytes, bytes], depth: Optional[int] = None
-            ) -> list[bytes]:
-                return [y.encode("utf-8") for y in args.refs if y not in r.object_store]
+                refs: Mapping[Ref, ObjectID], depth: int | None = None
+            ) -> list[ObjectID]:
+                return [
+                    ObjectID(y.encode("utf-8"))
+                    for y in args.refs
+                    if y not in r.object_store
+                ]
 
         client.fetch(path.encode("utf-8"), r, determine_wants)
 
@@ -1306,6 +1469,11 @@ class cmd_diff(Command):
             help="Choose a diff algorithm",
         )
         parser.add_argument(
+            "--stat",
+            action="store_true",
+            help="Show diffstat instead of full diff",
+        )
+        parser.add_argument(
             "--", dest="separator", action="store_true", help=argparse.SUPPRESS
         )
         parser.add_argument("paths", nargs="*", default=[], help="Paths to limit diff")
@@ -1355,7 +1523,17 @@ class cmd_diff(Command):
         with Repo(".") as repo:
             config = repo.get_config_stack()
             with get_pager(config=config, cmd_name="diff") as outstream:
-                output_stream = _create_output_stream(outstream)
+                # For --stat mode, capture the diff in a BytesIO buffer
+                if parsed_args.stat:
+                    import io
+
+                    from .diffstat import diffstat
+
+                    diff_buffer: BinaryIO = io.BytesIO()
+                    output_stream: BinaryIO = diff_buffer
+                else:
+                    output_stream = _create_output_stream(outstream)
+
                 try:
                     if len(parsed_args.committish) == 0:
                         # Show diff for working tree or staged changes
@@ -1396,9 +1574,17 @@ class cmd_diff(Command):
                     sys.stderr.write(f"fatal: {e}\n")
                     sys.exit(1)
 
-                # Flush any remaining output
-                if hasattr(output_stream, "flush"):
-                    output_stream.flush()
+                if parsed_args.stat:
+                    # Generate and output diffstat from captured diff
+                    assert isinstance(diff_buffer, io.BytesIO)
+                    diff_data = diff_buffer.getvalue()
+                    lines = diff_data.split(b"\n")
+                    stat_output = diffstat(lines)
+                    outstream.buffer.write(stat_output + b"\n")
+                else:
+                    # Flush any remaining output
+                    if hasattr(output_stream, "flush"):
+                        output_stream.flush()
 
 
 class cmd_dump_pack(Command):
@@ -1412,12 +1598,21 @@ class cmd_dump_pack(Command):
         """
         parser = argparse.ArgumentParser()
         parser.add_argument("filename", help="Pack file to dump")
+        parser.add_argument(
+            "--object-format",
+            choices=["sha1", "sha256"],
+            default="sha1",
+            help="Object format (hash algorithm) used in the pack file",
+        )
         parsed_args = parser.parse_args(args)
 
+        from .object_format import OBJECT_FORMATS
+
+        object_format = OBJECT_FORMATS[parsed_args.object_format]
         basename, _ = os.path.splitext(parsed_args.filename)
-        x = Pack(basename)
+        x = Pack(basename, object_format=object_format)
         logger.info("Object names checksum: %s", x.name().decode("ascii", "replace"))
-        logger.info("Checksum: %r", sha_to_hex(x.get_stored_checksum()))
+        logger.info("Checksum: %r", sha_to_hex(RawObjectID(x.get_stored_checksum())))
         x.check()
         logger.info("Length: %d", len(x))
         for name in x:
@@ -1619,6 +1814,69 @@ class cmd_stripspace(Command):
         sys.stdout.buffer.write(result)
 
 
+class cmd_column(Command):
+    """Display data in columns."""
+
+    def run(self, args: Sequence[str]) -> None:
+        """Execute the column command.
+
+        Args:
+            args: Command line arguments
+        """
+        parser = argparse.ArgumentParser(
+            description="Format input data into columns for better readability"
+        )
+        parser.add_argument(
+            "--mode",
+            default="column",
+            help=(
+                "Layout mode: 'column' (fill columns first), 'row' (fill rows first), "
+                "'plain' (one column). Add ',dense' for unequal column widths, "
+                "',nodense' for equal widths (default: column)"
+            ),
+        )
+        parser.add_argument(
+            "--width",
+            type=int,
+            help="Terminal width (default: auto-detect)",
+        )
+        parser.add_argument(
+            "--indent",
+            default="",
+            help="String to prepend to each line (default: empty)",
+        )
+        parser.add_argument(
+            "--nl",
+            default="\n",
+            help="String to append to each line, including newline (default: \\n)",
+        )
+        parser.add_argument(
+            "--padding",
+            type=int,
+            default=1,
+            help="Number of spaces between columns (default: 1)",
+        )
+        parsed_args = parser.parse_args(args)
+
+        # Read lines from stdin
+        lines = []
+        for line in sys.stdin:
+            # Strip the newline but keep the content
+            lines.append(line.rstrip("\n\r"))
+
+        # Format and output
+        result = format_columns(
+            lines,
+            width=parsed_args.width,
+            mode=parsed_args.mode,
+            padding=parsed_args.padding,
+            indent=parsed_args.indent,
+            nl=parsed_args.nl,
+        )
+
+        sys.stdout.write(result)
+
+
 class cmd_init(Command):
     """Create an empty Git repository or reinitialize an existing one."""
 
@@ -1633,11 +1891,21 @@ class cmd_init(Command):
             "--bare", action="store_true", help="Create a bare repository"
         )
         parser.add_argument(
+            "--objectformat",
+            type=str,
+            choices=["sha1", "sha256"],
+            help="Object format to use (sha1 or sha256)",
+        )
+        parser.add_argument(
             "path", nargs="?", default=os.getcwd(), help="Repository path"
         )
         parsed_args = parser.parse_args(args)
 
-        porcelain.init(parsed_args.path, bare=parsed_args.bare)
+        porcelain.init(
+            parsed_args.path,
+            bare=parsed_args.bare,
+            object_format=parsed_args.objectformat,
+        )
 
 
 class cmd_clone(Command):
@@ -1705,9 +1973,9 @@ class cmd_clone(Command):
 
 
 def _get_commit_message_with_template(
-    initial_message: Optional[bytes],
-    repo: Optional[Repo] = None,
-    commit: Optional[Commit] = None,
+    initial_message: bytes | None,
+    repo: Repo | None = None,
+    commit: Commit | None = None,
 ) -> bytes:
     """Get commit message with an initial message template."""
     # Start with the initial message
@@ -1723,7 +1991,7 @@ def _get_commit_message_with_template(
     # Add branch info if repo is provided
     if repo:
         try:
-            ref_names, _ref_sha = repo.refs.follow(b"HEAD")
+            ref_names, _ref_sha = repo.refs.follow(HEADREF)
             ref_path = ref_names[-1]  # Get the final reference
             if ref_path.startswith(b"refs/heads/"):
                 branch = ref_path[11:]  # Remove 'refs/heads/' prefix
@@ -1753,7 +2021,7 @@ def _get_commit_message_with_template(
 class cmd_config(Command):
     """Get and set repository or global options."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the config command.
 
         Args:
@@ -1969,7 +2237,7 @@ class cmd_config(Command):
 class cmd_commit(Command):
     """Record changes to the repository."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the commit command.
 
         Args:
@@ -1990,15 +2258,13 @@ class cmd_commit(Command):
         )
         parsed_args = parser.parse_args(args)
 
-        message: Union[bytes, str, Callable[[Optional[Repo], Optional[Commit]], bytes]]
+        message: bytes | str | Callable[[Repo | None, Commit | None], bytes]
 
         if parsed_args.message:
             message = parsed_args.message
         elif parsed_args.amend:
             # For amend, create a callable that opens editor with original message pre-populated
-            def get_amend_message(
-                repo: Optional[Repo], commit: Optional[Commit]
-            ) -> bytes:
+            def get_amend_message(repo: Repo | None, commit: Commit | None) -> bytes:
                 # Get the original commit message from current HEAD
                 assert repo is not None
                 try:
@@ -2014,9 +2280,7 @@ class cmd_commit(Command):
             message = get_amend_message
         else:
             # For regular commits, use empty template
-            def get_regular_message(
-                repo: Optional[Repo], commit: Optional[Commit]
-            ) -> bytes:
+            def get_regular_message(repo: Repo | None, commit: Commit | None) -> bytes:
                 return _get_commit_message_with_template(b"", repo, commit)
 
             message = get_regular_message
@@ -2062,7 +2326,7 @@ class cmd_update_server_info(Command):
 class cmd_symbolic_ref(Command):
     """Read, modify and delete symbolic refs."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the symbolic-ref command.
 
         Args:
@@ -2130,7 +2394,7 @@ class cmd_pack_refs(Command):
 class cmd_var(Command):
     """Display Git logical variables."""
 
-    def run(self, argv: Sequence[str]) -> Optional[int]:
+    def run(self, argv: Sequence[str]) -> int | None:
         """Execute the var command.
 
         Args:
@@ -2234,7 +2498,7 @@ class cmd_show(Command):
 class cmd_show_ref(Command):
     """List references in a local repository."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the show-ref command.
 
         Args:
@@ -2268,7 +2532,7 @@ class cmd_show_ref(Command):
             "-s",
             "--hash",
             nargs="?",
-            const=40,
+            const=40,  # TODO: Support SHA256
             type=int,
             metavar="n",
             help="Only show the OID, not the reference name",
@@ -2345,6 +2609,7 @@ class cmd_show_ref(Command):
 
         # Output results
         if not parsed_args.quiet:
+            # TODO: Add support for SHA256
             abbrev_len = parsed_args.abbrev if parsed_args.abbrev else 40
             hash_only = parsed_args.hash is not None
             if hash_only and parsed_args.hash:
@@ -2366,7 +2631,7 @@ class cmd_show_ref(Command):
 class cmd_show_branch(Command):
     """Show branches and their commits."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the show-branch command.
 
         Args:
@@ -2522,7 +2787,7 @@ class cmd_tag(Command):
 class cmd_verify_commit(Command):
     """Check the GPG signature of commits."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the verify-commit command.
 
         Args:
@@ -2578,7 +2843,7 @@ class cmd_verify_commit(Command):
 class cmd_verify_tag(Command):
     """Check the GPG signature of tags."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the verify-tag command.
 
         Args:
@@ -2636,8 +2901,13 @@ class cmd_repack(Command):
             args: Command line arguments
         """
         parser = argparse.ArgumentParser()
-        parser.parse_args(args)
-        porcelain.repack(".")
+        parser.add_argument(
+            "--write-bitmap-index",
+            action="store_true",
+            help="write a bitmap index for packs",
+        )
+        parsed_args = parser.parse_args(args)
+        porcelain.repack(".", write_bitmaps=parsed_args.write_bitmap_index)
 
 
 class cmd_reflog(Command):
@@ -3030,6 +3300,11 @@ class cmd_status(Command):
         """
         parser = argparse.ArgumentParser()
         parser.add_argument("gitdir", nargs="?", default=".", help="Git directory")
+        parser.add_argument(
+            "--column",
+            action="store_true",
+            help="Display untracked files in columns",
+        )
         parsed_args = parser.parse_args(args)
         status = porcelain.status(parsed_args.gitdir)
         if any(names for (kind, names) in status.staged.items()):
@@ -3047,8 +3322,14 @@ class cmd_status(Command):
             sys.stdout.write("\n")
         if status.untracked:
             sys.stdout.write("Untracked files:\n\n")
-            for name in status.untracked:
-                sys.stdout.write(f"\t{name}\n")
+            if parsed_args.column:
+                # Format untracked files in columns
+                untracked_names = [name for name in status.untracked]
+                output = format_columns(untracked_names, mode="column", indent="\t")
+                sys.stdout.write(output)
+            else:
+                for name in status.untracked:
+                    sys.stdout.write(f"\t{name}\n")
             sys.stdout.write("\n")
 
 
@@ -3138,7 +3419,7 @@ class cmd_pack_objects(Command):
         if not parsed_args.stdout and not parsed_args.basename:
             parser.error("basename required when not using --stdout")
 
-        object_ids = [line.strip().encode() for line in sys.stdin.readlines()]
+        object_ids = [ObjectID(line.strip().encode()) for line in sys.stdin.readlines()]
         deltify = parsed_args.deltify
         reuse_deltas = not parsed_args.no_reuse_deltas
 
@@ -3179,7 +3460,7 @@ class cmd_unpack_objects(Command):
 class cmd_prune(Command):
     """Prune all unreachable objects from the object database."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the prune command.
 
         Args:
@@ -3274,7 +3555,7 @@ class cmd_pull(Command):
 class cmd_push(Command):
     """Update remote refs along with associated objects."""
 
-    def run(self, argv: Sequence[str]) -> Optional[int]:
+    def run(self, argv: Sequence[str]) -> int | None:
         """Execute the push command.
 
         Args:
@@ -3316,9 +3597,9 @@ class SuperCommand(Command):
     """Base class for commands that have subcommands."""
 
     subcommands: ClassVar[dict[str, type[Command]]] = {}
-    default_command: ClassVar[Optional[type[Command]]] = None
+    default_command: ClassVar[type[Command] | None] = None
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the subcommand command.
 
         Args:
@@ -3480,7 +3761,7 @@ class cmd_check_mailmap(Command):
 class cmd_branch(Command):
     """List, create, or delete branches."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the branch command.
 
         Args:
@@ -3529,15 +3810,17 @@ class cmd_branch(Command):
         parsed_args = parser.parse_args(args)
 
         def print_branches(
-            branches: Union[Iterator[bytes], Sequence[bytes]], use_columns: bool = False
+            branches: Iterator[bytes] | Sequence[bytes], use_columns: bool = False
         ) -> None:
             if use_columns:
-                write_columns(branches, sys.stdout)
+                branch_names = [branch.decode() for branch in branches]
+                output = format_columns(branch_names, mode="column")
+                sys.stdout.write(output)
             else:
                 for branch in branches:
                     sys.stdout.write(f"{branch.decode()}\n")
 
-        branches: Union[Iterator[bytes], list[bytes], None] = None
+        branches: Iterator[bytes] | list[bytes] | None = None
 
         try:
             if parsed_args.all:
@@ -3592,7 +3875,7 @@ class cmd_branch(Command):
 class cmd_checkout(Command):
     """Switch branches or restore working tree files."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the checkout command.
 
         Args:
@@ -3627,6 +3910,117 @@ class cmd_checkout(Command):
                 target=parsed_args.target,
                 force=parsed_args.force,
                 new_branch=parsed_args.new_branch,
+            )
+        except porcelain.CheckoutError as e:
+            sys.stderr.write(f"{e}\n")
+            return 1
+        return 0
+
+
+class cmd_restore(Command):
+    """Restore working tree files."""
+
+    def run(self, args: Sequence[str]) -> int | None:
+        """Execute the restore command.
+
+        Args:
+            args: Command line arguments
+        """
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            "paths",
+            nargs="+",
+            type=str,
+            help="Paths to restore",
+        )
+        parser.add_argument(
+            "-s",
+            "--source",
+            type=str,
+            help="Restore from a specific commit (default: HEAD for --staged, index for worktree)",
+        )
+        parser.add_argument(
+            "--staged",
+            action="store_true",
+            help="Restore files in the index",
+        )
+        parser.add_argument(
+            "--worktree",
+            action="store_true",
+            help="Restore files in the working tree",
+        )
+        parsed_args = parser.parse_args(args)
+
+        # If neither --staged nor --worktree is specified, default to --worktree
+        if not parsed_args.staged and not parsed_args.worktree:
+            worktree = True
+            staged = False
+        else:
+            worktree = parsed_args.worktree
+            staged = parsed_args.staged
+
+        try:
+            porcelain.restore(
+                ".",
+                paths=parsed_args.paths,
+                source=parsed_args.source,
+                staged=staged,
+                worktree=worktree,
+            )
+        except porcelain.CheckoutError as e:
+            sys.stderr.write(f"{e}\n")
+            return 1
+        return 0
+
+
+class cmd_switch(Command):
+    """Switch branches."""
+
+    def run(self, args: Sequence[str]) -> int | None:
+        """Execute the switch command.
+
+        Args:
+            args: Command line arguments
+        """
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            "target",
+            type=str,
+            help="Branch or commit to switch to",
+        )
+        parser.add_argument(
+            "-c",
+            "--create",
+            type=str,
+            help="Create a new branch at the target and switch to it",
+        )
+        parser.add_argument(
+            "-f",
+            "--force",
+            action="store_true",
+            help="Force switch even if there are local changes",
+        )
+        parser.add_argument(
+            "-d",
+            "--detach",
+            action="store_true",
+            help="Switch to a commit in detached HEAD state",
+        )
+        parsed_args = parser.parse_args(args)
+
+        if not parsed_args.target:
+            logger.error(
+                "Usage: dulwich switch TARGET [-c NEW_BRANCH] [--force] [--detach]"
+            )
+            return 1
+
+        try:
+            porcelain.switch(
+                ".",
+                target=parsed_args.target,
+                create=parsed_args.create,
+                force=parsed_args.force,
+                detach=parsed_args.detach,
             )
         except porcelain.CheckoutError as e:
             sys.stderr.write(f"{e}\n")
@@ -3693,7 +4087,7 @@ class cmd_bisect(SuperCommand):
 
     subcommands: ClassVar[dict[str, type[Command]]] = {}
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the bisect command.
 
         Args:
@@ -3779,7 +4173,7 @@ class cmd_bisect(SuperCommand):
                     with porcelain.open_repo_closing(".") as r:
                         bad_ref = os.path.join(r.controldir(), "refs", "bisect", "bad")
                         with open(bad_ref, "rb") as f:
-                            bad_sha = f.read().strip()
+                            bad_sha = ObjectID(f.read().strip())
                         commit = r.object_store[bad_sha]
                         assert isinstance(commit, Commit)
                         message = commit.message.decode(
@@ -3871,10 +4265,76 @@ class cmd_describe(Command):
         logger.info(porcelain.describe("."))
 
 
+class cmd_diagnose(Command):
+    """Display diagnostic information about the Python environment."""
+
+    def run(self, args: Sequence[str]) -> None:
+        """Execute the diagnose command.
+
+        Args:
+            args: Command line arguments
+        """
+        # TODO: Support creating zip files with diagnostic information
+        parser = argparse.ArgumentParser()
+        parser.parse_args(args)
+
+        # Python version and executable
+        logger.info("Python version: %s", sys.version)
+        logger.info("Python executable: %s", sys.executable)
+
+        # PYTHONPATH
+        pythonpath = os.environ.get("PYTHONPATH", "")
+        if pythonpath:
+            logger.info("PYTHONPATH: %s", pythonpath)
+        else:
+            logger.info("PYTHONPATH: (not set)")
+
+        # sys.path
+        logger.info("sys.path:")
+        for path_entry in sys.path:
+            logger.info("  %s", path_entry)
+
+        # Dulwich version
+        try:
+            import dulwich
+
+            logger.info("Dulwich version: %s", dulwich.__version__)
+        except AttributeError:
+            logger.info("Dulwich version: (unknown)")
+
+        # List installed dependencies and their versions
+        logger.info("Installed dependencies:")
+
+        # Core dependencies
+        dependencies = [
+            ("urllib3", "core"),
+            ("typing_extensions", "core (Python < 3.12)"),
+        ]
+
+        # Optional dependencies
+        optional_dependencies = [
+            ("fastimport", "fastimport"),
+            ("gpg", "pgp"),
+            ("paramiko", "paramiko"),
+            ("rich", "colordiff"),
+            ("merge3", "merge"),
+            ("patiencediff", "patiencediff"),
+            ("atheris", "fuzzing"),
+        ]
+
+        for dep, dep_type in dependencies + optional_dependencies:
+            try:
+                module = __import__(dep)
+                version = getattr(module, "__version__", "(unknown)")
+                logger.info("  %s: %s [%s]", dep, version, dep_type)
+            except ImportError:
+                logger.info("  %s: (not installed) [%s]", dep, dep_type)
+
+
 class cmd_merge(Command):
     """Join two or more development histories together."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the merge command.
 
         Args:
@@ -3945,7 +4405,7 @@ class cmd_merge(Command):
 class cmd_merge_base(Command):
     """Find the best common ancestor between commits."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the merge-base command.
 
         Args:
@@ -4131,7 +4591,7 @@ class cmd_replace_list(Command):
 class cmd_replace_delete(Command):
     """Delete a replacement ref."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the replace-delete command.
 
         Args:
@@ -4163,7 +4623,7 @@ class cmd_replace(SuperCommand):
 
     default_command = cmd_replace_list
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the replace command.
 
         Args:
@@ -4195,7 +4655,7 @@ class cmd_replace(SuperCommand):
 class cmd_cherry(Command):
     """Find commits not merged upstream."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the cherry command.
 
         Args:
@@ -4260,7 +4720,7 @@ class cmd_cherry(Command):
 class cmd_cherry_pick(Command):
     """Apply the changes introduced by some existing commits."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the cherry-pick command.
 
         Args:
@@ -4335,7 +4795,7 @@ class cmd_cherry_pick(Command):
 class cmd_merge_tree(Command):
     """Show three-way merge without touching index."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the merge-tree command.
 
         Args:
@@ -4404,7 +4864,7 @@ class cmd_merge_tree(Command):
 class cmd_gc(Command):
     """Cleanup unnecessary files and optimize the local repository."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the gc command.
 
         Args:
@@ -4516,7 +4976,7 @@ class cmd_gc(Command):
 class cmd_maintenance(Command):
     """Run tasks to optimize Git repository data."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the maintenance command.
 
         Args:
@@ -4864,7 +5324,7 @@ class cmd_rebase(Command):
 class cmd_filter_branch(Command):
     """Rewrite branches."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the filter-branch command.
 
         Args:
@@ -4921,10 +5381,10 @@ class cmd_filter_branch(Command):
         # Helper function to run shell commands
         def run_filter(
             cmd: str,
-            input_data: Optional[bytes] = None,
-            cwd: Optional[str] = None,
-            extra_env: Optional[dict[str, str]] = None,
-        ) -> Optional[bytes]:
+            input_data: bytes | None = None,
+            cwd: str | None = None,
+            extra_env: dict[str, str] | None = None,
+        ) -> bytes | None:
             nonlocal filter_error
             filter_env = env.copy()
             if extra_env:
@@ -4953,7 +5413,7 @@ class cmd_filter_branch(Command):
         tree_filter = None
         if parsed_args.tree_filter:
 
-            def tree_filter(tree_sha: bytes, tmpdir: str) -> bytes:
+            def tree_filter(tree_sha: ObjectID, tmpdir: str) -> ObjectID:
                 from dulwich.objects import Blob, Tree
 
                 # Export tree to tmpdir
@@ -4975,7 +5435,7 @@ class cmd_filter_branch(Command):
                     run_filter(parsed_args.tree_filter, cwd=tmpdir)
 
                     # Rebuild tree from modified temp directory
-                    def build_tree_from_dir(dir_path: str) -> bytes:
+                    def build_tree_from_dir(dir_path: str) -> ObjectID:
                         tree = Tree()
                         for name in sorted(os.listdir(dir_path)):
                             if name.startswith("."):
@@ -5004,7 +5464,7 @@ class cmd_filter_branch(Command):
         index_filter = None
         if parsed_args.index_filter:
 
-            def index_filter(tree_sha: bytes, index_path: str) -> Optional[bytes]:
+            def index_filter(tree_sha: ObjectID, index_path: str) -> ObjectID | None:
                 run_filter(
                     parsed_args.index_filter, extra_env={"GIT_INDEX_FILE": index_path}
                 )
@@ -5013,7 +5473,7 @@ class cmd_filter_branch(Command):
         parent_filter = None
         if parsed_args.parent_filter:
 
-            def parent_filter(parents: Sequence[bytes]) -> list[bytes]:
+            def parent_filter(parents: Sequence[ObjectID]) -> list[ObjectID]:
                 parent_str = " ".join(p.hex() for p in parents)
                 result = run_filter(
                     parsed_args.parent_filter, input_data=parent_str.encode()
@@ -5028,13 +5488,15 @@ class cmd_filter_branch(Command):
                 for sha in output.split():
                     sha_bytes = sha.encode()
                     if valid_hexsha(sha_bytes):
-                        new_parents.append(sha_bytes)
+                        new_parents.append(ObjectID(sha_bytes))
                 return new_parents
 
         commit_filter = None
         if parsed_args.commit_filter:
 
-            def commit_filter(commit_obj: Commit, tree_sha: bytes) -> Optional[bytes]:
+            def commit_filter(
+                commit_obj: Commit, tree_sha: ObjectID
+            ) -> ObjectID | None:
                 # The filter receives: tree parent1 parent2...
                 cmd_input = tree_sha.hex()
                 for parent in commit_obj.parents:
@@ -5053,7 +5515,7 @@ class cmd_filter_branch(Command):
                     return None  # Skip commit
 
                 if valid_hexsha(output):
-                    return output.encode()
+                    return ObjectID(output.encode())
                 return None
 
         tag_name_filter = None
@@ -5386,7 +5848,7 @@ class cmd_format_patch(Command):
         parsed_args = parser.parse_args(args)
 
         # Parse committish using the new function
-        committish: Optional[Union[bytes, tuple[bytes, bytes]]] = None
+        committish: ObjectID | tuple[ObjectID, ObjectID] | None = None
         if parsed_args.committish:
             with Repo(".") as r:
                 range_result = parse_commit_range(r, parsed_args.committish)
@@ -5394,7 +5856,7 @@ class cmd_format_patch(Command):
                     # Convert Commit objects to their SHAs
                     committish = (range_result[0].id, range_result[1].id)
                 else:
-                    committish = (
+                    committish = ObjectID(
                         parsed_args.committish.encode()
                         if isinstance(parsed_args.committish, str)
                         else parsed_args.committish
@@ -5500,6 +5962,80 @@ class cmd_mailsplit(Command):
         )
 
 
+class cmd_mailinfo(Command):
+    """Extract patch information from an email message."""
+
+    def run(self, args: Sequence[str]) -> None:
+        """Execute the mailinfo command.
+
+        Args:
+            args: Command line arguments
+        """
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            "msg",
+            help="File to write commit message",
+        )
+        parser.add_argument(
+            "patch",
+            help="File to write patch content",
+        )
+        parser.add_argument(
+            "mail",
+            nargs="?",
+            help="Path to email file. If not specified, reads from stdin.",
+        )
+        parser.add_argument(
+            "-k",
+            action="store_true",
+            dest="keep_subject",
+            help="Pass -k flag to git mailinfo (keeps [PATCH] and other subject tags)",
+        )
+        parser.add_argument(
+            "-b",
+            action="store_true",
+            dest="keep_non_patch",
+            help="Pass -b flag to git mailinfo (only strip [PATCH] tags)",
+        )
+        parser.add_argument(
+            "--encoding",
+            dest="encoding",
+            help="Character encoding to use (default: detect from message)",
+        )
+        parser.add_argument(
+            "--scissors",
+            action="store_true",
+            help="Remove everything before scissors line",
+        )
+        parser.add_argument(
+            "-m",
+            "--message-id",
+            action="store_true",
+            dest="message_id",
+            help="Copy Message-ID to the end of the commit message",
+        )
+        parsed_args = parser.parse_args(args)
+
+        # Call porcelain function
+        result = porcelain.mailinfo(
+            input_path=parsed_args.mail,
+            msg_file=parsed_args.msg,
+            patch_file=parsed_args.patch,
+            keep_subject=parsed_args.keep_subject,
+            keep_non_patch=parsed_args.keep_non_patch,
+            encoding=parsed_args.encoding,
+            scissors=parsed_args.scissors,
+            message_id=parsed_args.message_id,
+        )
+
+        # Print author info to stdout (as git mailinfo does)
+        print(f"Author: {result.author_name}")
+        print(f"Email: {result.author_email}")
+        print(f"Subject: {result.subject}")
+        if result.author_date:
+            print(f"Date: {result.author_date}")
+
+
 class cmd_bundle(Command):
     """Create, unpack, and manipulate bundle files."""
 
@@ -5549,7 +6085,7 @@ class cmd_bundle(Command):
         progress = None
         if parsed_args.progress and not parsed_args.quiet:
 
-            def progress(*args: Union[str, int]) -> None:
+            def progress(*args: str | int) -> None:
                 # Handle both progress(msg) and progress(count, msg) signatures
                 if len(args) == 1:
                     msg = args[0]
@@ -5562,7 +6098,7 @@ class cmd_bundle(Command):
                     msg = msg.decode("utf-8", "replace")
                 logger.error("%s", msg)
 
-        refs_to_include = []
+        refs_to_include: list[Ref] = []
         prerequisites = []
 
         if parsed_args.all:
@@ -5571,7 +6107,7 @@ class cmd_bundle(Command):
             for line in sys.stdin:
                 ref = line.strip().encode("utf-8")
                 if ref:
-                    refs_to_include.append(ref)
+                    refs_to_include.append(Ref(ref))
         elif parsed_args.refs:
             for ref_arg in parsed_args.refs:
                 if ".." in ref_arg:
@@ -5583,19 +6119,19 @@ class cmd_bundle(Command):
                         # Split the range to get the end part
                         end_part = ref_arg.split("..")[1]
                         if end_part:  # Not empty (not "A..")
-                            end_ref = end_part.encode("utf-8")
+                            end_ref = Ref(end_part.encode("utf-8"))
                             if end_ref in repo.refs:
                                 refs_to_include.append(end_ref)
                     else:
-                        sha = repo.refs[ref_arg.encode("utf-8")]
-                        refs_to_include.append(ref_arg.encode("utf-8"))
+                        sha = repo.refs[Ref(ref_arg.encode("utf-8"))]
+                        refs_to_include.append(Ref(ref_arg.encode("utf-8")))
                 else:
                     if ref_arg.startswith("^"):
-                        sha = repo.refs[ref_arg[1:].encode("utf-8")]
+                        sha = repo.refs[Ref(ref_arg[1:].encode("utf-8"))]
                         prerequisites.append(sha)
                     else:
-                        sha = repo.refs[ref_arg.encode("utf-8")]
-                        refs_to_include.append(ref_arg.encode("utf-8"))
+                        sha = repo.refs[Ref(ref_arg.encode("utf-8"))]
+                        refs_to_include.append(Ref(ref_arg.encode("utf-8")))
         else:
             logger.error("No refs specified. Use --all, --stdin, or specify refs")
             return 1
@@ -5695,7 +6231,7 @@ class cmd_bundle(Command):
         progress = None
         if parsed_args.progress:
 
-            def progress(*args: Union[str, int, bytes]) -> None:
+            def progress(*args: str | int | bytes) -> None:
                 # Handle both progress(msg) and progress(count, msg) signatures
                 if len(args) == 1:
                     msg = args[0]
@@ -5733,7 +6269,7 @@ class cmd_worktree_add(Command):
 
     """Add a new worktree to the repository."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the worktree-add command.
 
         Args:
@@ -5788,7 +6324,7 @@ class cmd_worktree_list(Command):
 
     """List details of each worktree."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the worktree-list command.
 
         Args:
@@ -5850,7 +6386,7 @@ class cmd_worktree_remove(Command):
 
     """Remove a worktree."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the worktree-remove command.
 
         Args:
@@ -5878,7 +6414,7 @@ class cmd_worktree_prune(Command):
 
     """Prune worktree information."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the worktree-prune command.
 
         Args:
@@ -5923,7 +6459,7 @@ class cmd_worktree_lock(Command):
 
     """Lock a worktree."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the worktree-lock command.
 
         Args:
@@ -5951,7 +6487,7 @@ class cmd_worktree_unlock(Command):
 
     """Unlock a worktree."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the worktree-unlock command.
 
         Args:
@@ -5976,7 +6512,7 @@ class cmd_worktree_move(Command):
 
     """Move a worktree."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the worktree-move command.
 
         Args:
@@ -6006,7 +6542,7 @@ class cmd_worktree_repair(Command):
 
     """Repair worktree administrative files."""
 
-    def run(self, args: Sequence[str]) -> Optional[int]:
+    def run(self, args: Sequence[str]) -> int | None:
         """Execute the worktree-repair command.
 
         Args:
@@ -6056,6 +6592,91 @@ class cmd_worktree(SuperCommand):
     default_command = cmd_worktree_list
 
 
+class cmd_rerere(Command):
+    """Record and reuse recorded conflict resolutions."""
+
+    def run(self, args: Sequence[str]) -> None:
+        """Execute the rerere command.
+
+        Args:
+            args: Command line arguments
+        """
+        parser = argparse.ArgumentParser()
+        parser.add_argument("gitdir", nargs="?", default=".", help="Git directory")
+        parser.add_argument(
+            "subcommand",
+            nargs="?",
+            default=None,
+            choices=["status", "diff", "forget", "clear", "gc"],
+            help="Subcommand to execute (default: record conflicts)",
+        )
+        parser.add_argument(
+            "pathspec", nargs="?", help="Path specification (for forget subcommand)"
+        )
+        parser.add_argument(
+            "--max-age-days",
+            type=int,
+            default=60,
+            help="Maximum age in days for gc (default: 60)",
+        )
+        parsed_args = parser.parse_args(args)
+
+        if parsed_args.subcommand is None:
+            # Record current conflicts
+            recorded, resolved = porcelain.rerere(parsed_args.gitdir)
+            if not recorded:
+                sys.stdout.write("No conflicts to record.\n")
+            else:
+                for path, conflict_id in recorded:
+                    sys.stdout.write(
+                        f"Recorded resolution for {path.decode('utf-8')}: {conflict_id}\n"
+                    )
+                if resolved:
+                    sys.stdout.write("\nAutomatically resolved:\n")
+                    for path in resolved:
+                        sys.stdout.write(f"  {path.decode('utf-8')}\n")
+
+        elif parsed_args.subcommand == "status":
+            status_list = porcelain.rerere_status(parsed_args.gitdir)
+            if not status_list:
+                sys.stdout.write("No recorded resolutions.\n")
+            else:
+                for conflict_id, has_resolution in status_list:
+                    status = "resolved" if has_resolution else "unresolved"
+                    sys.stdout.write(f"{conflict_id}\t{status}\n")
+
+        elif parsed_args.subcommand == "diff":
+            diff_list = porcelain.rerere_diff(parsed_args.gitdir)
+            if not diff_list:
+                sys.stdout.write("No recorded conflicts.\n")
+            else:
+                for conflict_id, preimage, postimage in diff_list:
+                    sys.stdout.write(f"--- {conflict_id} (preimage)\n")
+                    sys.stdout.buffer.write(preimage)
+                    sys.stdout.write("\n")
+                    if postimage:
+                        sys.stdout.write(f"+++ {conflict_id} (postimage)\n")
+                        sys.stdout.buffer.write(postimage)
+                        sys.stdout.write("\n")
+
+        elif parsed_args.subcommand == "forget":
+            porcelain.rerere_forget(parsed_args.gitdir, parsed_args.pathspec)
+            if parsed_args.pathspec:
+                sys.stdout.write(f"Forgot resolution for {parsed_args.pathspec}\n")
+            else:
+                sys.stdout.write("Forgot all resolutions\n")
+
+        elif parsed_args.subcommand == "clear":
+            porcelain.rerere_clear(parsed_args.gitdir)
+            sys.stdout.write("Cleared all rerere resolutions\n")
+
+        elif parsed_args.subcommand == "gc":
+            porcelain.rerere_gc(parsed_args.gitdir, parsed_args.max_age_days)
+            sys.stdout.write(
+                f"Cleaned up resolutions older than {parsed_args.max_age_days} days\n"
+            )
+
+
 commands = {
     "add": cmd_add,
     "annotate": cmd_annotate,
@@ -6070,11 +6691,13 @@ commands = {
     "cherry": cmd_cherry,
     "cherry-pick": cmd_cherry_pick,
     "clone": cmd_clone,
+    "column": cmd_column,
     "commit": cmd_commit,
     "commit-tree": cmd_commit_tree,
     "config": cmd_config,
     "count-objects": cmd_count_objects,
     "describe": cmd_describe,
+    "diagnose": cmd_diagnose,
     "daemon": cmd_daemon,
     "diff": cmd_diff,
     "diff-tree": cmd_diff_tree,
@@ -6097,6 +6720,7 @@ commands = {
     "ls-remote": cmd_ls_remote,
     "ls-tree": cmd_ls_tree,
     "maintenance": cmd_maintenance,
+    "mailinfo": cmd_mailinfo,
     "mailsplit": cmd_mailsplit,
     "merge": cmd_merge,
     "merge-base": cmd_merge_base,
@@ -6110,10 +6734,12 @@ commands = {
     "rebase": cmd_rebase,
     "receive-pack": cmd_receive_pack,
     "reflog": cmd_reflog,
+    "rerere": cmd_rerere,
     "remote": cmd_remote,
     "repack": cmd_repack,
     "replace": cmd_replace,
     "reset": cmd_reset,
+    "restore": cmd_restore,
     "revert": cmd_revert,
     "rev-list": cmd_rev_list,
     "rm": cmd_rm,
@@ -6125,6 +6751,7 @@ commands = {
     "status": cmd_status,
     "stripspace": cmd_stripspace,
     "shortlog": cmd_shortlog,
+    "switch": cmd_switch,
     "symbolic-ref": cmd_symbolic_ref,
     "submodule": cmd_submodule,
     "tag": cmd_tag,
@@ -6140,7 +6767,7 @@ commands = {
 }
 
 
-def main(argv: Optional[Sequence[str]] = None) -> Optional[int]:
+def main(argv: Sequence[str] | None = None) -> int | None:
     """Main entry point for the Dulwich CLI.
 
     Args:

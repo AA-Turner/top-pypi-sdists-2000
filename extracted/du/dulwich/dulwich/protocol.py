@@ -22,15 +22,99 @@
 
 """Generic functions for talking the git smart server protocol."""
 
+__all__ = [
+    "CAPABILITIES_REF",
+    "CAPABILITY_AGENT",
+    "CAPABILITY_ALLOW_REACHABLE_SHA1_IN_WANT",
+    "CAPABILITY_ALLOW_TIP_SHA1_IN_WANT",
+    "CAPABILITY_ATOMIC",
+    "CAPABILITY_DEEPEN_NOT",
+    "CAPABILITY_DEEPEN_RELATIVE",
+    "CAPABILITY_DEEPEN_SINCE",
+    "CAPABILITY_DELETE_REFS",
+    "CAPABILITY_FETCH",
+    "CAPABILITY_FILTER",
+    "CAPABILITY_INCLUDE_TAG",
+    "CAPABILITY_MULTI_ACK",
+    "CAPABILITY_MULTI_ACK_DETAILED",
+    "CAPABILITY_NO_DONE",
+    "CAPABILITY_NO_PROGRESS",
+    "CAPABILITY_OBJECT_FORMAT",
+    "CAPABILITY_OFS_DELTA",
+    "CAPABILITY_QUIET",
+    "CAPABILITY_REPORT_STATUS",
+    "CAPABILITY_SHALLOW",
+    "CAPABILITY_SIDE_BAND",
+    "CAPABILITY_SIDE_BAND_64K",
+    "CAPABILITY_SYMREF",
+    "CAPABILITY_THIN_PACK",
+    "COMMAND_DEEPEN",
+    "COMMAND_DEEPEN_NOT",
+    "COMMAND_DEEPEN_SINCE",
+    "COMMAND_DONE",
+    "COMMAND_HAVE",
+    "COMMAND_SHALLOW",
+    "COMMAND_UNSHALLOW",
+    "COMMAND_WANT",
+    "COMMON_CAPABILITIES",
+    "DEFAULT_GIT_PROTOCOL_VERSION_FETCH",
+    "DEFAULT_GIT_PROTOCOL_VERSION_SEND",
+    "DEPTH_INFINITE",
+    "GIT_PROTOCOL_VERSIONS",
+    "KNOWN_RECEIVE_CAPABILITIES",
+    "KNOWN_UPLOAD_CAPABILITIES",
+    "MULTI_ACK",
+    "MULTI_ACK_DETAILED",
+    "NAK_LINE",
+    "PEELED_TAG_SUFFIX",
+    "SIDE_BAND_CHANNEL_DATA",
+    "SIDE_BAND_CHANNEL_FATAL",
+    "SIDE_BAND_CHANNEL_PROGRESS",
+    "SINGLE_ACK",
+    "TCP_GIT_PORT",
+    "BufferedPktLineWriter",
+    "PktLineParser",
+    "Protocol",
+    "ReceivableProtocol",
+    "ack_type",
+    "agent_string",
+    "capability_agent",
+    "capability_object_format",
+    "capability_symref",
+    "extract_capabilities",
+    "extract_capability_names",
+    "extract_want_line_capabilities",
+    "format_ack_line",
+    "format_capability_line",
+    "format_cmd_pkt",
+    "format_ref_line",
+    "format_shallow_line",
+    "format_unshallow_line",
+    "parse_capability",
+    "parse_cmd_pkt",
+    "pkt_line",
+    "pkt_seq",
+    "serialize_refs",
+    "split_peeled_refs",
+    "strip_peeled_refs",
+    "symref_capabilities",
+    "write_info_refs",
+]
+
 import types
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
 from io import BytesIO
 from os import SEEK_END
-from typing import Callable, Optional
+from typing import TYPE_CHECKING
 
 import dulwich
 
 from .errors import GitProtocolError, HangupException
+from .objects import ObjectID
+
+if TYPE_CHECKING:
+    from .pack import ObjectContainer
+    from .refs import Ref
 
 TCP_GIT_PORT = 9418
 
@@ -50,7 +134,10 @@ GIT_PROTOCOL_VERSIONS = [0, 1, 2]
 DEFAULT_GIT_PROTOCOL_VERSION_FETCH = 2
 DEFAULT_GIT_PROTOCOL_VERSION_SEND = 0
 
-ZERO_SHA = b"0" * 40
+# Suffix used in the Git protocol to indicate peeled tag references
+PEELED_TAG_SUFFIX = b"^{}"
+
+ZERO_SHA: ObjectID = ObjectID(b"0" * 40)
 
 SINGLE_ACK = 0
 MULTI_ACK = 1
@@ -86,6 +173,7 @@ CAPABILITY_ALLOW_TIP_SHA1_IN_WANT = b"allow-tip-sha1-in-want"
 CAPABILITY_ALLOW_REACHABLE_SHA1_IN_WANT = b"allow-reachable-sha1-in-want"
 CAPABILITY_FETCH = b"fetch"
 CAPABILITY_FILTER = b"filter"
+CAPABILITY_OBJECT_FORMAT = b"object-format"
 
 # Magic ref that is used to attach capabilities to when
 # there are no refs. Should always be ste to ZERO_SHA.
@@ -148,6 +236,18 @@ def capability_agent() -> bytes:
     return CAPABILITY_AGENT + b"=" + agent_string()
 
 
+def capability_object_format(fmt: str) -> bytes:
+    """Generate the object-format capability string.
+
+    Args:
+      fmt: Object format name (e.g., "sha1" or "sha256")
+
+    Returns:
+      Object-format capability with format name
+    """
+    return CAPABILITY_OBJECT_FORMAT + b"=" + fmt.encode("ascii")
+
+
 def capability_symref(from_ref: bytes, to_ref: bytes) -> bytes:
     """Generate a symref capability string.
 
@@ -173,7 +273,7 @@ def extract_capability_names(capabilities: Iterable[bytes]) -> set[bytes]:
     return {parse_capability(c)[0] for c in capabilities}
 
 
-def parse_capability(capability: bytes) -> tuple[bytes, Optional[bytes]]:
+def parse_capability(capability: bytes) -> tuple[bytes, bytes | None]:
     """Parse a capability string into name and value.
 
     Args:
@@ -238,7 +338,7 @@ def parse_cmd_pkt(line: bytes) -> tuple[bytes, list[bytes]]:
     return cmd, args[:-1].split(b"\0")
 
 
-def pkt_line(data: Optional[bytes]) -> bytes:
+def pkt_line(data: bytes | None) -> bytes:
     """Wrap data in a pkt-line.
 
     Args:
@@ -248,10 +348,10 @@ def pkt_line(data: Optional[bytes]) -> bytes:
     """
     if data is None:
         return b"0000"
-    return ("%04x" % (len(data) + 4)).encode("ascii") + data
+    return f"{len(data) + 4:04x}".encode("ascii") + data
 
 
-def pkt_seq(*seq: Optional[bytes]) -> bytes:
+def pkt_seq(*seq: bytes | None) -> bytes:
     """Wrap a sequence of data in pkt-lines.
 
     Args:
@@ -275,9 +375,9 @@ class Protocol:
     def __init__(
         self,
         read: Callable[[int], bytes],
-        write: Callable[[bytes], Optional[int]],
-        close: Optional[Callable[[], None]] = None,
-        report_activity: Optional[Callable[[int, str], None]] = None,
+        write: Callable[[bytes], int | None],
+        close: Callable[[], None] | None = None,
+        report_activity: Callable[[int, str], None] | None = None,
     ) -> None:
         """Initialize Protocol.
 
@@ -291,7 +391,7 @@ class Protocol:
         self.write = write
         self._close = close
         self.report_activity = report_activity
-        self._readahead: Optional[BytesIO] = None
+        self._readahead: BytesIO | None = None
 
     def close(self) -> None:
         """Close the underlying transport if a close function was provided."""
@@ -304,14 +404,14 @@ class Protocol:
 
     def __exit__(
         self,
-        exc_type: Optional[type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[types.TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: types.TracebackType | None,
     ) -> None:
         """Exit context manager and close transport."""
         self.close()
 
-    def read_pkt_line(self) -> Optional[bytes]:
+    def read_pkt_line(self) -> bytes | None:
         """Reads a pkt-line from the remote git process.
 
         This method may read from the readahead buffer; see unread_pkt_line.
@@ -363,7 +463,7 @@ class Protocol:
         self.unread_pkt_line(next_line)
         return False
 
-    def unread_pkt_line(self, data: Optional[bytes]) -> None:
+    def unread_pkt_line(self, data: bytes | None) -> None:
         """Unread a single line of data into the readahead buffer.
 
         This method can be used to unread a single pkt-line into a fixed
@@ -390,7 +490,7 @@ class Protocol:
             yield pkt
             pkt = self.read_pkt_line()
 
-    def write_pkt_line(self, line: Optional[bytes]) -> None:
+    def write_pkt_line(self, line: bytes | None) -> None:
         """Sends a pkt-line to the remote git process.
 
         Args:
@@ -461,9 +561,9 @@ class ReceivableProtocol(Protocol):
     def __init__(
         self,
         recv: Callable[[int], bytes],
-        write: Callable[[bytes], Optional[int]],
-        close: Optional[Callable[[], None]] = None,
-        report_activity: Optional[Callable[[int, str], None]] = None,
+        write: Callable[[bytes], int | None],
+        close: Callable[[], None] | None = None,
+        report_activity: Callable[[int, str], None] | None = None,
         rbufsize: int = _RBUFSIZE,
     ) -> None:
         """Initialize ReceivableProtocol.
@@ -630,7 +730,7 @@ class BufferedPktLineWriter:
     """
 
     def __init__(
-        self, write: Callable[[bytes], Optional[int]], bufsize: int = 65515
+        self, write: Callable[[bytes], int | None], bufsize: int = 65515
     ) -> None:
         """Initialize the BufferedPktLineWriter.
 
@@ -670,7 +770,7 @@ class BufferedPktLineWriter:
 class PktLineParser:
     """Packet line parser that hands completed packets off to a callback."""
 
-    def __init__(self, handle_pkt: Callable[[Optional[bytes]], None]) -> None:
+    def __init__(self, handle_pkt: Callable[[bytes | None], None]) -> None:
         """Initialize PktLineParser.
 
         Args:
@@ -716,7 +816,7 @@ def format_capability_line(capabilities: Iterable[bytes]) -> bytes:
 
 
 def format_ref_line(
-    ref: bytes, sha: bytes, capabilities: Optional[Sequence[bytes]] = None
+    ref: bytes, sha: bytes, capabilities: Sequence[bytes] | None = None
 ) -> bytes:
     """Format a ref advertisement line.
 
@@ -771,3 +871,113 @@ def format_ack_line(sha: bytes, ack_type: bytes = b"") -> bytes:
     if ack_type:
         ack_type = b" " + ack_type
     return b"ACK " + sha + ack_type + b"\n"
+
+
+def strip_peeled_refs(
+    refs: "Mapping[Ref, ObjectID | None]",
+) -> "dict[Ref, ObjectID | None]":
+    """Remove all peeled refs from a refs dictionary.
+
+    Args:
+      refs: Dictionary of refs (may include peeled refs with ^{} suffix)
+
+    Returns:
+      Dictionary with peeled refs removed
+    """
+    return {
+        ref: sha for (ref, sha) in refs.items() if not ref.endswith(PEELED_TAG_SUFFIX)
+    }
+
+
+def split_peeled_refs(
+    refs: "Mapping[Ref, ObjectID]",
+) -> "tuple[dict[Ref, ObjectID], dict[Ref, ObjectID]]":
+    """Split peeled refs from regular refs.
+
+    Args:
+      refs: Dictionary of refs (may include peeled refs with ^{} suffix)
+
+    Returns:
+      Tuple of (regular_refs, peeled_refs) where peeled_refs keys have
+      the ^{} suffix removed
+    """
+    from .refs import Ref
+
+    peeled: dict[Ref, ObjectID] = {}
+    regular = {k: v for k, v in refs.items() if not k.endswith(PEELED_TAG_SUFFIX)}
+
+    for ref, sha in refs.items():
+        if ref.endswith(PEELED_TAG_SUFFIX):
+            # Peeled refs are always ObjectID values
+            peeled[Ref(ref[: -len(PEELED_TAG_SUFFIX)])] = sha
+
+    return regular, peeled
+
+
+def write_info_refs(
+    refs: "Mapping[Ref, ObjectID]", store: "ObjectContainer"
+) -> "Iterator[bytes]":
+    """Generate info refs in the format used by the dumb HTTP protocol.
+
+    Args:
+      refs: Dictionary of refs
+      store: Object store to peel tags from
+
+    Yields:
+      Lines in info/refs format (sha + tab + refname)
+    """
+    from .object_store import peel_sha
+    from .refs import HEADREF
+
+    for name, sha in sorted(refs.items()):
+        # get_refs() includes HEAD as a special case, but we don't want to
+        # advertise it
+        if name == HEADREF:
+            continue
+        try:
+            o = store[sha]
+        except KeyError:
+            continue
+        _unpeeled, peeled = peel_sha(store, sha)
+        yield o.id + b"\t" + name + b"\n"
+        if o.id != peeled.id:
+            yield peeled.id + b"\t" + name + PEELED_TAG_SUFFIX + b"\n"
+
+
+def serialize_refs(
+    store: "ObjectContainer", refs: "Mapping[Ref, ObjectID]"
+) -> "dict[bytes, ObjectID]":
+    """Serialize refs with peeled refs for Git protocol v0/v1.
+
+    This function is used to prepare refs for transmission over the Git protocol.
+    For tags, it includes both the tag object and the dereferenced object.
+
+    Args:
+      store: Object store to peel refs from
+      refs: Dictionary of ref names to SHAs
+
+    Returns:
+      Dictionary with refs and peeled refs (marked with ^{})
+    """
+    import warnings
+
+    from .object_store import peel_sha
+    from .objects import Tag
+
+    ret: dict[bytes, ObjectID] = {}
+    for ref, sha in refs.items():
+        try:
+            unpeeled, peeled = peel_sha(store, ObjectID(sha))
+        except KeyError:
+            warnings.warn(
+                "ref {} points at non-present sha {}".format(
+                    ref.decode("utf-8", "replace"), sha.decode("ascii")
+                ),
+                UserWarning,
+            )
+            continue
+        else:
+            if isinstance(unpeeled, Tag):
+                ret[ref + PEELED_TAG_SUFFIX] = peeled.id
+            ret[ref] = unpeeled.id
+    return ret

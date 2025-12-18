@@ -151,12 +151,19 @@ def test__read_environment_variables():
     with mock.patch.dict(
         os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "Unsupported"}
     ):
-        with pytest.raises(ValueError) as excinfo:
-            BigtableClient._read_environment_variables()
-    assert (
-        str(excinfo.value)
-        == "Environment variable `GOOGLE_API_USE_CLIENT_CERTIFICATE` must be either `true` or `false`"
-    )
+        if not hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+            with pytest.raises(ValueError) as excinfo:
+                BigtableClient._read_environment_variables()
+            assert (
+                str(excinfo.value)
+                == "Environment variable `GOOGLE_API_USE_CLIENT_CERTIFICATE` must be either `true` or `false`"
+            )
+        else:
+            assert BigtableClient._read_environment_variables() == (
+                False,
+                "auto",
+                None,
+            )
 
     with mock.patch.dict(os.environ, {"GOOGLE_API_USE_MTLS_ENDPOINT": "never"}):
         assert BigtableClient._read_environment_variables() == (False, "never", None)
@@ -181,6 +188,105 @@ def test__read_environment_variables():
             "auto",
             "foo.com",
         )
+
+
+def test_use_client_cert_effective():
+    # Test case 1: Test when `should_use_client_cert` returns True.
+    # We mock the `should_use_client_cert` function to simulate a scenario where
+    # the google-auth library supports automatic mTLS and determines that a
+    # client certificate should be used.
+    if hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch(
+            "google.auth.transport.mtls.should_use_client_cert", return_value=True
+        ):
+            assert BigtableClient._use_client_cert_effective() is True
+
+    # Test case 2: Test when `should_use_client_cert` returns False.
+    # We mock the `should_use_client_cert` function to simulate a scenario where
+    # the google-auth library supports automatic mTLS and determines that a
+    # client certificate should NOT be used.
+    if hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch(
+            "google.auth.transport.mtls.should_use_client_cert", return_value=False
+        ):
+            assert BigtableClient._use_client_cert_effective() is False
+
+    # Test case 3: Test when `should_use_client_cert` is unavailable and the
+    # `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is set to "true".
+    if not hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch.dict(os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "true"}):
+            assert BigtableClient._use_client_cert_effective() is True
+
+    # Test case 4: Test when `should_use_client_cert` is unavailable and the
+    # `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is set to "false".
+    if not hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch.dict(
+            os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "false"}
+        ):
+            assert BigtableClient._use_client_cert_effective() is False
+
+    # Test case 5: Test when `should_use_client_cert` is unavailable and the
+    # `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is set to "True".
+    if not hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch.dict(os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "True"}):
+            assert BigtableClient._use_client_cert_effective() is True
+
+    # Test case 6: Test when `should_use_client_cert` is unavailable and the
+    # `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is set to "False".
+    if not hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch.dict(
+            os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "False"}
+        ):
+            assert BigtableClient._use_client_cert_effective() is False
+
+    # Test case 7: Test when `should_use_client_cert` is unavailable and the
+    # `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is set to "TRUE".
+    if not hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch.dict(os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "TRUE"}):
+            assert BigtableClient._use_client_cert_effective() is True
+
+    # Test case 8: Test when `should_use_client_cert` is unavailable and the
+    # `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is set to "FALSE".
+    if not hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch.dict(
+            os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "FALSE"}
+        ):
+            assert BigtableClient._use_client_cert_effective() is False
+
+    # Test case 9: Test when `should_use_client_cert` is unavailable and the
+    # `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is not set.
+    # In this case, the method should return False, which is the default value.
+    if not hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch.dict(os.environ, clear=True):
+            assert BigtableClient._use_client_cert_effective() is False
+
+    # Test case 10: Test when `should_use_client_cert` is unavailable and the
+    # `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is set to an invalid value.
+    # The method should raise a ValueError as the environment variable must be either
+    # "true" or "false".
+    if not hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch.dict(
+            os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "unsupported"}
+        ):
+            with pytest.raises(ValueError):
+                BigtableClient._use_client_cert_effective()
+
+    # Test case 11: Test when `should_use_client_cert` is available and the
+    # `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is set to an invalid value.
+    # The method should return False as the environment variable is set to an invalid value.
+    if hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch.dict(
+            os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "unsupported"}
+        ):
+            assert BigtableClient._use_client_cert_effective() is False
+
+    # Test case 12: Test when `should_use_client_cert` is available and the
+    # `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is unset. Also,
+    # the GOOGLE_API_CONFIG environment variable is unset.
+    if hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        with mock.patch.dict(os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": ""}):
+            with mock.patch.dict(os.environ, {"GOOGLE_API_CERTIFICATE_CONFIG": ""}):
+                assert BigtableClient._use_client_cert_effective() is False
 
 
 def test__get_client_cert_source():
@@ -539,17 +645,6 @@ def test_bigtable_client_client_options(client_class, transport_class, transport
         == "Environment variable `GOOGLE_API_USE_MTLS_ENDPOINT` must be `never`, `auto` or `always`"
     )
 
-    # Check the case GOOGLE_API_USE_CLIENT_CERTIFICATE has unsupported value.
-    with mock.patch.dict(
-        os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "Unsupported"}
-    ):
-        with pytest.raises(ValueError) as excinfo:
-            client = client_class(transport=transport_name)
-    assert (
-        str(excinfo.value)
-        == "Environment variable `GOOGLE_API_USE_CLIENT_CERTIFICATE` must be either `true` or `false`"
-    )
-
     # Check the case quota_project_id is provided
     options = client_options.ClientOptions(quota_project_id="octopus")
     with mock.patch.object(transport_class, "__init__") as patched:
@@ -761,6 +856,119 @@ def test_bigtable_client_get_mtls_endpoint_and_cert_source(client_class):
         assert api_endpoint == mock_api_endpoint
         assert cert_source is None
 
+    # Test the case GOOGLE_API_USE_CLIENT_CERTIFICATE is "Unsupported".
+    with mock.patch.dict(
+        os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "Unsupported"}
+    ):
+        if hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+            mock_client_cert_source = mock.Mock()
+            mock_api_endpoint = "foo"
+            options = client_options.ClientOptions(
+                client_cert_source=mock_client_cert_source,
+                api_endpoint=mock_api_endpoint,
+            )
+            api_endpoint, cert_source = client_class.get_mtls_endpoint_and_cert_source(
+                options
+            )
+            assert api_endpoint == mock_api_endpoint
+            assert cert_source is None
+
+    # Test cases for mTLS enablement when GOOGLE_API_USE_CLIENT_CERTIFICATE is unset.
+    test_cases = [
+        (
+            # With workloads present in config, mTLS is enabled.
+            {
+                "version": 1,
+                "cert_configs": {
+                    "workload": {
+                        "cert_path": "path/to/cert/file",
+                        "key_path": "path/to/key/file",
+                    }
+                },
+            },
+            mock_client_cert_source,
+        ),
+        (
+            # With workloads not present in config, mTLS is disabled.
+            {
+                "version": 1,
+                "cert_configs": {},
+            },
+            None,
+        ),
+    ]
+    if hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        for config_data, expected_cert_source in test_cases:
+            env = os.environ.copy()
+            env.pop("GOOGLE_API_USE_CLIENT_CERTIFICATE", None)
+            with mock.patch.dict(os.environ, env, clear=True):
+                config_filename = "mock_certificate_config.json"
+                config_file_content = json.dumps(config_data)
+                m = mock.mock_open(read_data=config_file_content)
+                with mock.patch("builtins.open", m):
+                    with mock.patch.dict(
+                        os.environ, {"GOOGLE_API_CERTIFICATE_CONFIG": config_filename}
+                    ):
+                        mock_api_endpoint = "foo"
+                        options = client_options.ClientOptions(
+                            client_cert_source=mock_client_cert_source,
+                            api_endpoint=mock_api_endpoint,
+                        )
+                        (
+                            api_endpoint,
+                            cert_source,
+                        ) = client_class.get_mtls_endpoint_and_cert_source(options)
+                        assert api_endpoint == mock_api_endpoint
+                        assert cert_source is expected_cert_source
+
+    # Test cases for mTLS enablement when GOOGLE_API_USE_CLIENT_CERTIFICATE is unset(empty).
+    test_cases = [
+        (
+            # With workloads present in config, mTLS is enabled.
+            {
+                "version": 1,
+                "cert_configs": {
+                    "workload": {
+                        "cert_path": "path/to/cert/file",
+                        "key_path": "path/to/key/file",
+                    }
+                },
+            },
+            mock_client_cert_source,
+        ),
+        (
+            # With workloads not present in config, mTLS is disabled.
+            {
+                "version": 1,
+                "cert_configs": {},
+            },
+            None,
+        ),
+    ]
+    if hasattr(google.auth.transport.mtls, "should_use_client_cert"):
+        for config_data, expected_cert_source in test_cases:
+            env = os.environ.copy()
+            env.pop("GOOGLE_API_USE_CLIENT_CERTIFICATE", "")
+            with mock.patch.dict(os.environ, env, clear=True):
+                config_filename = "mock_certificate_config.json"
+                config_file_content = json.dumps(config_data)
+                m = mock.mock_open(read_data=config_file_content)
+                with mock.patch("builtins.open", m):
+                    with mock.patch.dict(
+                        os.environ, {"GOOGLE_API_CERTIFICATE_CONFIG": config_filename}
+                    ):
+                        mock_api_endpoint = "foo"
+                        options = client_options.ClientOptions(
+                            client_cert_source=mock_client_cert_source,
+                            api_endpoint=mock_api_endpoint,
+                        )
+                        (
+                            api_endpoint,
+                            cert_source,
+                        ) = client_class.get_mtls_endpoint_and_cert_source(options)
+                        assert api_endpoint == mock_api_endpoint
+                        assert cert_source is expected_cert_source
+
     # Test the case GOOGLE_API_USE_MTLS_ENDPOINT is "never".
     with mock.patch.dict(os.environ, {"GOOGLE_API_USE_MTLS_ENDPOINT": "never"}):
         api_endpoint, cert_source = client_class.get_mtls_endpoint_and_cert_source()
@@ -809,18 +1017,6 @@ def test_bigtable_client_get_mtls_endpoint_and_cert_source(client_class):
         assert (
             str(excinfo.value)
             == "Environment variable `GOOGLE_API_USE_MTLS_ENDPOINT` must be `never`, `auto` or `always`"
-        )
-
-    # Check the case GOOGLE_API_USE_CLIENT_CERTIFICATE has unsupported value.
-    with mock.patch.dict(
-        os.environ, {"GOOGLE_API_USE_CLIENT_CERTIFICATE": "Unsupported"}
-    ):
-        with pytest.raises(ValueError) as excinfo:
-            client_class.get_mtls_endpoint_and_cert_source()
-
-        assert (
-            str(excinfo.value)
-            == "Environment variable `GOOGLE_API_USE_CLIENT_CERTIFICATE` must be either `true` or `false`"
         )
 
 
@@ -6852,8 +7048,8 @@ def test_read_rows_routing_parameters_request_1_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -6880,7 +7076,6 @@ def test_read_rows_routing_parameters_request_2_grpc():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -6916,8 +7111,43 @@ def test_read_rows_routing_parameters_request_3_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
+        # assert the expected headers are present, in any order
+        routing_string = next(
+            iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
+        )
+        assert all([f"{k}={v}" in routing_string for k, v in expected_headers.items()])
 
+
+def test_read_rows_routing_parameters_request_4_grpc():
+    client = BigtableClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+        transport="grpc",
+    )
+
+    # Mock the actual call, and fake the request.
+    with mock.patch.object(type(client.transport.read_rows), "__call__") as call:
+        call.return_value = iter([bigtable.ReadRowsResponse()])
+        client.read_rows(
+            request={
+                "materialized_view_name": "projects/sample1/instances/sample2/sample3"
+            }
+        )
+
+        # Establish that the underlying stub method was called.
+        call.assert_called()
+        _, args, kw = call.mock_calls[0]
+        request_msg = bigtable.ReadRowsRequest(
+            **{"materialized_view_name": "projects/sample1/instances/sample2/sample3"}
+        )
+
+        assert args[0] == request_msg
+
+        expected_headers = {
+            "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
+        }
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -6949,8 +7179,8 @@ def test_sample_row_keys_routing_parameters_request_1_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -6977,7 +7207,6 @@ def test_sample_row_keys_routing_parameters_request_2_grpc():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7013,8 +7242,43 @@ def test_sample_row_keys_routing_parameters_request_3_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
+        # assert the expected headers are present, in any order
+        routing_string = next(
+            iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
+        )
+        assert all([f"{k}={v}" in routing_string for k, v in expected_headers.items()])
 
+
+def test_sample_row_keys_routing_parameters_request_4_grpc():
+    client = BigtableClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+        transport="grpc",
+    )
+
+    # Mock the actual call, and fake the request.
+    with mock.patch.object(type(client.transport.sample_row_keys), "__call__") as call:
+        call.return_value = iter([bigtable.SampleRowKeysResponse()])
+        client.sample_row_keys(
+            request={
+                "materialized_view_name": "projects/sample1/instances/sample2/sample3"
+            }
+        )
+
+        # Establish that the underlying stub method was called.
+        call.assert_called()
+        _, args, kw = call.mock_calls[0]
+        request_msg = bigtable.SampleRowKeysRequest(
+            **{"materialized_view_name": "projects/sample1/instances/sample2/sample3"}
+        )
+
+        assert args[0] == request_msg
+
+        expected_headers = {
+            "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
+        }
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7046,8 +7310,8 @@ def test_mutate_row_routing_parameters_request_1_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7074,7 +7338,6 @@ def test_mutate_row_routing_parameters_request_2_grpc():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7110,8 +7373,8 @@ def test_mutate_row_routing_parameters_request_3_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7143,8 +7406,8 @@ def test_mutate_rows_routing_parameters_request_1_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7171,7 +7434,6 @@ def test_mutate_rows_routing_parameters_request_2_grpc():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7207,8 +7469,8 @@ def test_mutate_rows_routing_parameters_request_3_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7242,8 +7504,8 @@ def test_check_and_mutate_row_routing_parameters_request_1_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7272,7 +7534,6 @@ def test_check_and_mutate_row_routing_parameters_request_2_grpc():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7310,8 +7571,8 @@ def test_check_and_mutate_row_routing_parameters_request_3_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7341,8 +7602,8 @@ def test_ping_and_warm_routing_parameters_request_1_grpc():
 
         expected_headers = {
             "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7369,7 +7630,6 @@ def test_ping_and_warm_routing_parameters_request_2_grpc():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7403,8 +7663,8 @@ def test_read_modify_write_row_routing_parameters_request_1_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7435,7 +7695,6 @@ def test_read_modify_write_row_routing_parameters_request_2_grpc():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7473,8 +7732,8 @@ def test_read_modify_write_row_routing_parameters_request_3_grpc():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7506,8 +7765,8 @@ def test_prepare_query_routing_parameters_request_1_grpc():
 
         expected_headers = {
             "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7534,7 +7793,6 @@ def test_prepare_query_routing_parameters_request_2_grpc():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7566,8 +7824,8 @@ def test_execute_query_routing_parameters_request_1_grpc():
 
         expected_headers = {
             "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7594,7 +7852,6 @@ def test_execute_query_routing_parameters_request_2_grpc():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7938,8 +8195,8 @@ async def test_read_rows_routing_parameters_request_1_grpc_asyncio():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -7971,7 +8228,6 @@ async def test_read_rows_routing_parameters_request_2_grpc_asyncio():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8012,8 +8268,48 @@ async def test_read_rows_routing_parameters_request_3_grpc_asyncio():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
+        # assert the expected headers are present, in any order
+        routing_string = next(
+            iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
+        )
+        assert all([f"{k}={v}" in routing_string for k, v in expected_headers.items()])
 
+
+@pytest.mark.asyncio
+async def test_read_rows_routing_parameters_request_4_grpc_asyncio():
+    client = BigtableAsyncClient(
+        credentials=async_anonymous_credentials(),
+        transport="grpc_asyncio",
+    )
+
+    # Mock the actual call, and fake the request.
+    with mock.patch.object(type(client.transport.read_rows), "__call__") as call:
+        # Designate an appropriate return value for the call.
+        call.return_value = mock.Mock(aio.UnaryStreamCall, autospec=True)
+        call.return_value.read = mock.AsyncMock(
+            side_effect=[bigtable.ReadRowsResponse()]
+        )
+        await client.read_rows(
+            request={
+                "materialized_view_name": "projects/sample1/instances/sample2/sample3"
+            }
+        )
+
+        # Establish that the underlying stub method was called.
+        call.assert_called()
+        _, args, kw = call.mock_calls[0]
+        request_msg = bigtable.ReadRowsRequest(
+            **{"materialized_view_name": "projects/sample1/instances/sample2/sample3"}
+        )
+
+        assert args[0] == request_msg
+
+        expected_headers = {
+            "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
+        }
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8050,8 +8346,8 @@ async def test_sample_row_keys_routing_parameters_request_1_grpc_asyncio():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8083,7 +8379,6 @@ async def test_sample_row_keys_routing_parameters_request_2_grpc_asyncio():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8124,8 +8419,48 @@ async def test_sample_row_keys_routing_parameters_request_3_grpc_asyncio():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
+        # assert the expected headers are present, in any order
+        routing_string = next(
+            iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
+        )
+        assert all([f"{k}={v}" in routing_string for k, v in expected_headers.items()])
 
+
+@pytest.mark.asyncio
+async def test_sample_row_keys_routing_parameters_request_4_grpc_asyncio():
+    client = BigtableAsyncClient(
+        credentials=async_anonymous_credentials(),
+        transport="grpc_asyncio",
+    )
+
+    # Mock the actual call, and fake the request.
+    with mock.patch.object(type(client.transport.sample_row_keys), "__call__") as call:
+        # Designate an appropriate return value for the call.
+        call.return_value = mock.Mock(aio.UnaryStreamCall, autospec=True)
+        call.return_value.read = mock.AsyncMock(
+            side_effect=[bigtable.SampleRowKeysResponse()]
+        )
+        await client.sample_row_keys(
+            request={
+                "materialized_view_name": "projects/sample1/instances/sample2/sample3"
+            }
+        )
+
+        # Establish that the underlying stub method was called.
+        call.assert_called()
+        _, args, kw = call.mock_calls[0]
+        request_msg = bigtable.SampleRowKeysRequest(
+            **{"materialized_view_name": "projects/sample1/instances/sample2/sample3"}
+        )
+
+        assert args[0] == request_msg
+
+        expected_headers = {
+            "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
+        }
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8161,8 +8496,8 @@ async def test_mutate_row_routing_parameters_request_1_grpc_asyncio():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8193,7 +8528,6 @@ async def test_mutate_row_routing_parameters_request_2_grpc_asyncio():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8233,8 +8567,8 @@ async def test_mutate_row_routing_parameters_request_3_grpc_asyncio():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8271,8 +8605,8 @@ async def test_mutate_rows_routing_parameters_request_1_grpc_asyncio():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8304,7 +8638,6 @@ async def test_mutate_rows_routing_parameters_request_2_grpc_asyncio():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8345,8 +8678,8 @@ async def test_mutate_rows_routing_parameters_request_3_grpc_asyncio():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8386,8 +8719,8 @@ async def test_check_and_mutate_row_routing_parameters_request_1_grpc_asyncio():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8422,7 +8755,6 @@ async def test_check_and_mutate_row_routing_parameters_request_2_grpc_asyncio():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8466,8 +8798,8 @@ async def test_check_and_mutate_row_routing_parameters_request_3_grpc_asyncio():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8503,8 +8835,8 @@ async def test_ping_and_warm_routing_parameters_request_1_grpc_asyncio():
 
         expected_headers = {
             "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8535,7 +8867,6 @@ async def test_ping_and_warm_routing_parameters_request_2_grpc_asyncio():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8573,8 +8904,8 @@ async def test_read_modify_write_row_routing_parameters_request_1_grpc_asyncio()
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8609,7 +8940,6 @@ async def test_read_modify_write_row_routing_parameters_request_2_grpc_asyncio()
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8651,8 +8981,8 @@ async def test_read_modify_write_row_routing_parameters_request_3_grpc_asyncio()
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8690,8 +9020,8 @@ async def test_prepare_query_routing_parameters_request_1_grpc_asyncio():
 
         expected_headers = {
             "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8724,7 +9054,6 @@ async def test_prepare_query_routing_parameters_request_2_grpc_asyncio():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8761,8 +9090,8 @@ async def test_execute_query_routing_parameters_request_1_grpc_asyncio():
 
         expected_headers = {
             "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -8794,7 +9123,6 @@ async def test_execute_query_routing_parameters_request_2_grpc_asyncio():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10448,8 +10776,8 @@ def test_read_rows_routing_parameters_request_1_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10475,7 +10803,6 @@ def test_read_rows_routing_parameters_request_2_rest():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10510,8 +10837,42 @@ def test_read_rows_routing_parameters_request_3_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
+        # assert the expected headers are present, in any order
+        routing_string = next(
+            iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
+        )
+        assert all([f"{k}={v}" in routing_string for k, v in expected_headers.items()])
 
+
+def test_read_rows_routing_parameters_request_4_rest():
+    client = BigtableClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+        transport="rest",
+    )
+
+    # Mock the actual call, and fake the request.
+    with mock.patch.object(type(client.transport.read_rows), "__call__") as call:
+        client.read_rows(
+            request={
+                "materialized_view_name": "projects/sample1/instances/sample2/sample3"
+            }
+        )
+
+        # Establish that the underlying stub method was called.
+        call.assert_called()
+        _, args, kw = call.mock_calls[0]
+        request_msg = bigtable.ReadRowsRequest(
+            **{"materialized_view_name": "projects/sample1/instances/sample2/sample3"}
+        )
+
+        assert args[0] == request_msg
+
+        expected_headers = {
+            "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
+        }
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10542,8 +10903,8 @@ def test_sample_row_keys_routing_parameters_request_1_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10569,7 +10930,6 @@ def test_sample_row_keys_routing_parameters_request_2_rest():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10604,8 +10964,42 @@ def test_sample_row_keys_routing_parameters_request_3_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
+        # assert the expected headers are present, in any order
+        routing_string = next(
+            iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
+        )
+        assert all([f"{k}={v}" in routing_string for k, v in expected_headers.items()])
 
+
+def test_sample_row_keys_routing_parameters_request_4_rest():
+    client = BigtableClient(
+        credentials=ga_credentials.AnonymousCredentials(),
+        transport="rest",
+    )
+
+    # Mock the actual call, and fake the request.
+    with mock.patch.object(type(client.transport.sample_row_keys), "__call__") as call:
+        client.sample_row_keys(
+            request={
+                "materialized_view_name": "projects/sample1/instances/sample2/sample3"
+            }
+        )
+
+        # Establish that the underlying stub method was called.
+        call.assert_called()
+        _, args, kw = call.mock_calls[0]
+        request_msg = bigtable.SampleRowKeysRequest(
+            **{"materialized_view_name": "projects/sample1/instances/sample2/sample3"}
+        )
+
+        assert args[0] == request_msg
+
+        expected_headers = {
+            "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
+        }
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10636,8 +11030,8 @@ def test_mutate_row_routing_parameters_request_1_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10663,7 +11057,6 @@ def test_mutate_row_routing_parameters_request_2_rest():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10698,8 +11091,8 @@ def test_mutate_row_routing_parameters_request_3_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10730,8 +11123,8 @@ def test_mutate_rows_routing_parameters_request_1_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10757,7 +11150,6 @@ def test_mutate_rows_routing_parameters_request_2_rest():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10792,8 +11184,8 @@ def test_mutate_rows_routing_parameters_request_3_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10826,8 +11218,8 @@ def test_check_and_mutate_row_routing_parameters_request_1_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10855,7 +11247,6 @@ def test_check_and_mutate_row_routing_parameters_request_2_rest():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10892,8 +11283,8 @@ def test_check_and_mutate_row_routing_parameters_request_3_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10922,8 +11313,8 @@ def test_ping_and_warm_routing_parameters_request_1_rest():
 
         expected_headers = {
             "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10949,7 +11340,6 @@ def test_ping_and_warm_routing_parameters_request_2_rest():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -10982,8 +11372,8 @@ def test_read_modify_write_row_routing_parameters_request_1_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -11013,7 +11403,6 @@ def test_read_modify_write_row_routing_parameters_request_2_rest():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -11050,8 +11439,8 @@ def test_read_modify_write_row_routing_parameters_request_3_rest():
 
         expected_headers = {
             "table_name": "projects/sample1/instances/sample2/tables/sample3",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -11082,8 +11471,8 @@ def test_prepare_query_routing_parameters_request_1_rest():
 
         expected_headers = {
             "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -11109,7 +11498,6 @@ def test_prepare_query_routing_parameters_request_2_rest():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -11140,8 +11528,8 @@ def test_execute_query_routing_parameters_request_1_rest():
 
         expected_headers = {
             "name": "projects/sample1/instances/sample2",
+            "app_profile_id": "",
         }
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -11167,7 +11555,6 @@ def test_execute_query_routing_parameters_request_2_rest():
         assert args[0] == request_msg
 
         expected_headers = {"app_profile_id": "sample1"}
-
         # assert the expected headers are present, in any order
         routing_string = next(
             iter([m[1] for m in kw["metadata"] if m[0] == "x-goog-request-params"])
@@ -11565,6 +11952,7 @@ def test_bigtable_grpc_asyncio_transport_channel():
 
 # Remove this test when deprecated arguments (api_mtls_endpoint, client_cert_source) are
 # removed from grpc/grpc_asyncio transport constructor.
+@pytest.mark.filterwarnings("ignore::FutureWarning")
 @pytest.mark.parametrize(
     "transport_class",
     [transports.BigtableGrpcTransport, transports.BigtableGrpcAsyncIOTransport],

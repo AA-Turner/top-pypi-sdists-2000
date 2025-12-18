@@ -1,6 +1,7 @@
 # notes.py -- Git notes handling
 # Copyright (C) 2024 Jelmer Vernooij <jelmer@jelmer.uk>
 #
+# SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 # Dulwich is dual-licensed under the Apache License, Version 2.0 and the GNU
 # General Public License as published by the Free Software Foundation; version 2.0
 # or (at your option) any later version. You can redistribute it and/or
@@ -20,11 +21,23 @@
 
 """Git notes handling."""
 
+__all__ = [
+    "DEFAULT_NOTES_REF",
+    "NOTES_REF_PREFIX",
+    "Notes",
+    "NotesTree",
+    "create_notes_tree",
+    "get_note_fanout_level",
+    "get_note_path",
+    "split_path_for_fanout",
+]
+
 import stat
 from collections.abc import Iterator, Sequence
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
-from .objects import Blob, Tree
+from .objects import Blob, ObjectID, Tree
+from .refs import Ref
 
 if TYPE_CHECKING:
     from .config import StackedConfig
@@ -161,11 +174,12 @@ class NotesTree:
 
         # If we have files at the root level, check if they're full SHA names
         if has_files and not has_dirs:
-            # Check if any file names are full 40-char hex strings
+            # Check if any file names are full hex strings (40 for SHA-1, 64 for SHA-256)
+            hex_length = self._object_store.object_format.hex_length
             for name, mode, sha in self._tree.items():
                 assert name is not None
                 assert mode is not None
-                if stat.S_ISREG(mode) and len(name) == 40:
+                if stat.S_ISREG(mode) and len(name) == hex_length:
                     try:
                         int(name, 16)  # Verify it's a valid hex string
                         return 0  # No fanout
@@ -240,7 +254,7 @@ class NotesTree:
 
             # Build new tree structure
             def update_tree(
-                tree: Tree, components: Sequence[bytes], blob_sha: bytes
+                tree: Tree, components: Sequence[bytes], blob_sha: ObjectID
             ) -> Tree:
                 """Update tree with new note entry.
 
@@ -302,7 +316,7 @@ class NotesTree:
             self._object_store.add_object(self._tree)
 
     def _update_tree_entry(
-        self, tree: Tree, name: bytes, mode: int, sha: bytes
+        self, tree: Tree, name: bytes, mode: int, sha: ObjectID
     ) -> Tree:
         """Update a tree entry and return the updated tree.
 
@@ -333,7 +347,7 @@ class NotesTree:
 
         return new_tree
 
-    def _get_note_sha(self, object_sha: bytes) -> Optional[bytes]:
+    def _get_note_sha(self, object_sha: bytes) -> ObjectID | None:
         """Get the SHA of the note blob for an object.
 
         Args:
@@ -365,7 +379,7 @@ class NotesTree:
         except KeyError:
             return None
 
-    def get_note(self, object_sha: bytes) -> Optional[bytes]:
+    def get_note(self, object_sha: bytes) -> bytes | None:
         """Get the note content for an object.
 
         Args:
@@ -412,7 +426,7 @@ class NotesTree:
 
         # Build new tree structure
         def update_tree(
-            tree: Tree, components: Sequence[bytes], blob_sha: bytes
+            tree: Tree, components: Sequence[bytes], blob_sha: ObjectID
         ) -> Tree:
             """Update tree with new note entry.
 
@@ -470,7 +484,7 @@ class NotesTree:
         self._fanout_level = self._detect_fanout_level()
         return new_tree
 
-    def remove_note(self, object_sha: bytes) -> Optional[Tree]:
+    def remove_note(self, object_sha: bytes) -> Tree | None:
         """Remove a note for an object.
 
         Args:
@@ -487,7 +501,7 @@ class NotesTree:
         components = path.split(b"/")
 
         # Build new tree structure without the note
-        def remove_from_tree(tree: Tree, components: Sequence[bytes]) -> Optional[Tree]:
+        def remove_from_tree(tree: Tree, components: Sequence[bytes]) -> Tree | None:
             """Remove note entry from tree.
 
             Args:
@@ -546,14 +560,16 @@ class NotesTree:
         self._fanout_level = self._detect_fanout_level()
         return new_tree
 
-    def list_notes(self) -> Iterator[tuple[bytes, bytes]]:
+    def list_notes(self) -> Iterator[tuple[ObjectID, ObjectID]]:
         """List all notes in this tree.
 
         Yields:
             Tuples of (object_sha, note_sha)
         """
 
-        def walk_tree(tree: Tree, prefix: bytes = b"") -> Iterator[tuple[bytes, bytes]]:
+        def walk_tree(
+            tree: Tree, prefix: bytes = b""
+        ) -> Iterator[tuple[ObjectID, ObjectID]]:
             """Walk the notes tree recursively.
 
             Args:
@@ -572,7 +588,7 @@ class NotesTree:
                 elif stat.S_ISREG(mode):  # File
                     # Reconstruct the full hex SHA from the path
                     full_hex = prefix + name
-                    yield (full_hex, sha)
+                    yield (ObjectID(full_hex), sha)
 
         yield from walk_tree(self._tree)
 
@@ -608,9 +624,9 @@ class Notes:
 
     def get_notes_ref(
         self,
-        notes_ref: Optional[bytes] = None,
-        config: Optional["StackedConfig"] = None,
-    ) -> bytes:
+        notes_ref: bytes | None = None,
+        config: "StackedConfig | None" = None,
+    ) -> Ref:
         """Get the notes reference to use.
 
         Args:
@@ -625,14 +641,14 @@ class Notes:
                 notes_ref = config.get((b"notes",), b"displayRef")
             if notes_ref is None:
                 notes_ref = DEFAULT_NOTES_REF
-        return notes_ref
+        return Ref(notes_ref)
 
     def get_note(
         self,
         object_sha: bytes,
-        notes_ref: Optional[bytes] = None,
-        config: Optional["StackedConfig"] = None,
-    ) -> Optional[bytes]:
+        notes_ref: bytes | None = None,
+        config: "StackedConfig | None" = None,
+    ) -> bytes | None:
         """Get the note for an object.
 
         Args:
@@ -671,11 +687,11 @@ class Notes:
         self,
         object_sha: bytes,
         note_content: bytes,
-        notes_ref: Optional[bytes] = None,
-        author: Optional[bytes] = None,
-        committer: Optional[bytes] = None,
-        message: Optional[bytes] = None,
-        config: Optional["StackedConfig"] = None,
+        notes_ref: bytes | None = None,
+        author: bytes | None = None,
+        committer: bytes | None = None,
+        message: bytes | None = None,
+        config: "StackedConfig | None" = None,
     ) -> bytes:
         """Set or update a note for an object.
 
@@ -755,12 +771,12 @@ class Notes:
     def remove_note(
         self,
         object_sha: bytes,
-        notes_ref: Optional[bytes] = None,
-        author: Optional[bytes] = None,
-        committer: Optional[bytes] = None,
-        message: Optional[bytes] = None,
-        config: Optional["StackedConfig"] = None,
-    ) -> Optional[bytes]:
+        notes_ref: bytes | None = None,
+        author: bytes | None = None,
+        committer: bytes | None = None,
+        message: bytes | None = None,
+        config: "StackedConfig | None" = None,
+    ) -> bytes | None:
         """Remove a note for an object.
 
         Args:
@@ -836,9 +852,9 @@ class Notes:
 
     def list_notes(
         self,
-        notes_ref: Optional[bytes] = None,
-        config: Optional["StackedConfig"] = None,
-    ) -> list[tuple[bytes, bytes]]:
+        notes_ref: bytes | None = None,
+        config: "StackedConfig | None" = None,
+    ) -> list[tuple[ObjectID, bytes]]:
         """List all notes in a notes ref.
 
         Args:
@@ -870,7 +886,7 @@ class Notes:
             return []
 
         notes_tree_obj = NotesTree(notes_tree, self._object_store)
-        result = []
+        result: list[tuple[ObjectID, bytes]] = []
         for object_sha, note_sha in notes_tree_obj.list_notes():
             note_obj = self._object_store[note_sha]
             if isinstance(note_obj, Blob):

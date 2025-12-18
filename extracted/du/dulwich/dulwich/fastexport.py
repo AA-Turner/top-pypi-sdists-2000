@@ -22,9 +22,15 @@
 
 """Fast export/import functionality."""
 
+__all__ = [
+    "GitFastExporter",
+    "GitImportProcessor",
+    "split_email",
+]
+
 import stat
 from collections.abc import Generator
-from typing import TYPE_CHECKING, Any, BinaryIO, Optional
+from typing import TYPE_CHECKING, Any, BinaryIO
 
 from fastimport import commands, parser, processor
 from fastimport import errors as fastimport_errors
@@ -66,7 +72,7 @@ class GitFastExporter:
         """
         self.outf = outf
         self.store = store
-        self.markers: dict[bytes, bytes] = {}
+        self.markers: dict[bytes, ObjectID] = {}
         self._marker_idx = 0
 
     def print_cmd(self, cmd: object) -> None:
@@ -117,7 +123,7 @@ class GitFastExporter:
         return marker
 
     def _iter_files(
-        self, base_tree: Optional[bytes], new_tree: Optional[bytes]
+        self, base_tree: ObjectID | None, new_tree: ObjectID | None
     ) -> Generator[Any, None, None]:
         for (
             (old_path, new_path),
@@ -146,7 +152,7 @@ class GitFastExporter:
                 )
 
     def _export_commit(
-        self, commit: Commit, ref: Ref, base_tree: Optional[ObjectID] = None
+        self, commit: Commit, ref: Ref, base_tree: ObjectID | None = None
     ) -> tuple[Any, bytes]:
         file_cmds = list(self._iter_files(base_tree, commit.tree))
         marker = self._allocate_marker()
@@ -176,7 +182,7 @@ class GitFastExporter:
         return (cmd, marker)
 
     def emit_commit(
-        self, commit: Commit, ref: Ref, base_tree: Optional[ObjectID] = None
+        self, commit: Commit, ref: Ref, base_tree: ObjectID | None = None
     ) -> bytes:
         """Emit a commit in fast-export format.
 
@@ -201,9 +207,9 @@ class GitImportProcessor(processor.ImportProcessor):  # type: ignore[misc,unused
     def __init__(
         self,
         repo: "BaseRepo",
-        params: Optional[Any] = None,  # noqa: ANN401
+        params: Any | None = None,  # noqa: ANN401
         verbose: bool = False,
-        outf: Optional[BinaryIO] = None,
+        outf: BinaryIO | None = None,
     ) -> None:
         """Initialize GitImportProcessor.
 
@@ -216,7 +222,7 @@ class GitImportProcessor(processor.ImportProcessor):  # type: ignore[misc,unused
         processor.ImportProcessor.__init__(self, params, verbose)  # type: ignore[no-untyped-call,unused-ignore]
         self.repo = repo
         self.last_commit = ZERO_SHA
-        self.markers: dict[bytes, bytes] = {}
+        self.markers: dict[bytes, ObjectID] = {}
         self._contents: dict[bytes, tuple[int, bytes]] = {}
 
     def lookup_object(self, objectish: bytes) -> ObjectID:
@@ -230,9 +236,9 @@ class GitImportProcessor(processor.ImportProcessor):  # type: ignore[misc,unused
         """
         if objectish.startswith(b":"):
             return self.markers[objectish[1:]]
-        return objectish
+        return ObjectID(objectish)
 
-    def import_stream(self, stream: BinaryIO) -> dict[bytes, bytes]:
+    def import_stream(self, stream: BinaryIO) -> dict[bytes, ObjectID]:
         """Import from a fast-import stream.
 
         Args:
@@ -314,9 +320,14 @@ class GitImportProcessor(processor.ImportProcessor):  # type: ignore[misc,unused
                 self._contents = {}
             else:
                 raise Exception(f"Command {filecmd.name!r} not supported")
+        from dulwich.objects import ObjectID
+
         commit.tree = commit_tree(
             self.repo.object_store,
-            ((path, hexsha, mode) for (path, (mode, hexsha)) in self._contents.items()),
+            (
+                (path, ObjectID(hexsha), mode)
+                for (path, (mode, hexsha)) in self._contents.items()
+            ),
         )
         if self.last_commit != ZERO_SHA:
             commit.parents.append(self.last_commit)
@@ -358,12 +369,13 @@ class GitImportProcessor(processor.ImportProcessor):  # type: ignore[misc,unused
 
     def reset_handler(self, cmd: commands.ResetCommand) -> None:
         """Process a ResetCommand."""
+        from_: ObjectID
         if cmd.from_ is None:
             from_ = ZERO_SHA
         else:
             from_ = self.lookup_object(cmd.from_)
         self._reset_base(from_)
-        self.repo.refs[cmd.ref] = from_
+        self.repo.refs[Ref(cmd.ref)] = from_
 
     def tag_handler(self, cmd: commands.TagCommand) -> None:
         """Process a TagCommand."""

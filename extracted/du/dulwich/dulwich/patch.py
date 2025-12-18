@@ -25,25 +25,48 @@ These patches are basically unified diffs with some extra metadata tacked
 on.
 """
 
+__all__ = [
+    "DEFAULT_DIFF_ALGORITHM",
+    "FIRST_FEW_BYTES",
+    "DiffAlgorithmNotAvailable",
+    "MailinfoResult",
+    "commit_patch_id",
+    "gen_diff_header",
+    "get_summary",
+    "git_am_patch_split",
+    "is_binary",
+    "mailinfo",
+    "parse_patch_message",
+    "patch_filename",
+    "patch_id",
+    "shortid",
+    "unified_diff",
+    "unified_diff_with_algorithm",
+    "write_blob_diff",
+    "write_commit_patch",
+    "write_object_diff",
+    "write_tree_diff",
+]
+
+import email.message
 import email.parser
+import email.utils
+import re
 import time
 from collections.abc import Generator, Sequence
+from dataclasses import dataclass
 from difflib import SequenceMatcher
 from typing import (
     IO,
     TYPE_CHECKING,
     BinaryIO,
-    Optional,
     TextIO,
-    Union,
 )
 
 if TYPE_CHECKING:
-    import email.message
-
     from .object_store import BaseObjectStore
 
-from .objects import S_ISGITLINK, Blob, Commit
+from .objects import S_ISGITLINK, Blob, Commit, ObjectID, RawObjectID
 
 FIRST_FEW_BYTES = 8000
 
@@ -75,10 +98,10 @@ class DiffAlgorithmNotAvailable(Exception):
 def write_commit_patch(
     f: IO[bytes],
     commit: "Commit",
-    contents: Union[str, bytes],
+    contents: str | bytes,
     progress: tuple[int, int],
-    version: Optional[str] = None,
-    encoding: Optional[str] = None,
+    version: str | None = None,
+    encoding: str | None = None,
 ) -> None:
     """Write a individual file patch.
 
@@ -255,7 +278,7 @@ def unified_diff_with_algorithm(
     lineterm: str = "\n",
     tree_encoding: str = "utf-8",
     output_encoding: str = "utf-8",
-    algorithm: Optional[str] = None,
+    algorithm: str | None = None,
 ) -> Generator[bytes, None, None]:
     """Generate unified diff with specified algorithm.
 
@@ -327,7 +350,7 @@ def is_binary(content: bytes) -> bool:
     return b"\0" in content[:FIRST_FEW_BYTES]
 
 
-def shortid(hexsha: Optional[bytes]) -> bytes:
+def shortid(hexsha: bytes | None) -> bytes:
     """Get short object ID.
 
     Args:
@@ -342,7 +365,7 @@ def shortid(hexsha: Optional[bytes]) -> bytes:
         return hexsha[:7]
 
 
-def patch_filename(p: Optional[bytes], root: bytes) -> bytes:
+def patch_filename(p: bytes | None, root: bytes) -> bytes:
     """Generate patch filename.
 
     Args:
@@ -361,10 +384,10 @@ def patch_filename(p: Optional[bytes], root: bytes) -> bytes:
 def write_object_diff(
     f: IO[bytes],
     store: "BaseObjectStore",
-    old_file: tuple[Optional[bytes], Optional[int], Optional[bytes]],
-    new_file: tuple[Optional[bytes], Optional[int], Optional[bytes]],
+    old_file: tuple[bytes | None, int | None, ObjectID | None],
+    new_file: tuple[bytes | None, int | None, ObjectID | None],
     diff_binary: bool = False,
-    diff_algorithm: Optional[str] = None,
+    diff_algorithm: str | None = None,
 ) -> None:
     """Write the diff for an object.
 
@@ -384,7 +407,7 @@ def write_object_diff(
     patched_old_path = patch_filename(old_path, b"a")
     patched_new_path = patch_filename(new_path, b"b")
 
-    def content(mode: Optional[int], hexsha: Optional[bytes]) -> Blob:
+    def content(mode: int | None, hexsha: ObjectID | None) -> Blob:
         """Get blob content for a file.
 
         Args:
@@ -448,9 +471,9 @@ def write_object_diff(
 
 # TODO(jelmer): Support writing unicode, rather than bytes.
 def gen_diff_header(
-    paths: tuple[Optional[bytes], Optional[bytes]],
-    modes: tuple[Optional[int], Optional[int]],
-    shas: tuple[Optional[bytes], Optional[bytes]],
+    paths: tuple[bytes | None, bytes | None],
+    modes: tuple[int | None, int | None],
+    shas: tuple[bytes | None, bytes | None],
 ) -> Generator[bytes, None, None]:
     """Write a blob diff header.
 
@@ -486,9 +509,9 @@ def gen_diff_header(
 # TODO(jelmer): Support writing unicode, rather than bytes.
 def write_blob_diff(
     f: IO[bytes],
-    old_file: tuple[Optional[bytes], Optional[int], Optional["Blob"]],
-    new_file: tuple[Optional[bytes], Optional[int], Optional["Blob"]],
-    diff_algorithm: Optional[str] = None,
+    old_file: tuple[bytes | None, int | None, "Blob | None"],
+    new_file: tuple[bytes | None, int | None, "Blob | None"],
+    diff_algorithm: str | None = None,
 ) -> None:
     """Write blob diff.
 
@@ -505,7 +528,7 @@ def write_blob_diff(
     patched_old_path = patch_filename(old_path, b"a")
     patched_new_path = patch_filename(new_path, b"b")
 
-    def lines(blob: Optional["Blob"]) -> list[bytes]:
+    def lines(blob: "Blob | None") -> list[bytes]:
         """Split blob content into lines.
 
         Args:
@@ -542,10 +565,10 @@ def write_blob_diff(
 def write_tree_diff(
     f: IO[bytes],
     store: "BaseObjectStore",
-    old_tree: Optional[bytes],
-    new_tree: Optional[bytes],
+    old_tree: ObjectID | None,
+    new_tree: ObjectID | None,
     diff_binary: bool = False,
-    diff_algorithm: Optional[str] = None,
+    diff_algorithm: str | None = None,
 ) -> None:
     """Write tree diff.
 
@@ -571,8 +594,8 @@ def write_tree_diff(
 
 
 def git_am_patch_split(
-    f: Union[TextIO, BinaryIO], encoding: Optional[str] = None
-) -> tuple["Commit", bytes, Optional[bytes]]:
+    f: TextIO | BinaryIO, encoding: str | None = None
+) -> tuple["Commit", bytes, bytes | None]:
     """Parse a git-am-style patch and split it up into bits.
 
     Args:
@@ -593,8 +616,8 @@ def git_am_patch_split(
 
 
 def parse_patch_message(
-    msg: "email.message.Message", encoding: Optional[str] = None
-) -> tuple["Commit", bytes, Optional[bytes]]:
+    msg: email.message.Message, encoding: str | None = None
+) -> tuple["Commit", bytes, bytes | None]:
     """Extract a Commit object and patch from an e-mail message.
 
     Args:
@@ -731,7 +754,9 @@ def patch_id(diff_data: bytes) -> bytes:
     return hashlib.sha1(normalized).hexdigest().encode("ascii")
 
 
-def commit_patch_id(store: "BaseObjectStore", commit_id: bytes) -> bytes:
+def commit_patch_id(
+    store: "BaseObjectStore", commit_id: ObjectID | RawObjectID
+) -> bytes:
     """Compute patch ID for a commit.
 
     Args:
@@ -760,3 +785,245 @@ def commit_patch_id(store: "BaseObjectStore", commit_id: bytes) -> bytes:
     write_tree_diff(diff_output, store, parent_tree, commit.tree)
 
     return patch_id(diff_output.getvalue())
+
+
+@dataclass
+class MailinfoResult:
+    """Result of mailinfo parsing.
+
+    Attributes:
+        author_name: Author's name
+        author_email: Author's email address
+        author_date: Author's date (if present in the email)
+        subject: Processed subject line
+        message: Commit message body
+        patch: Patch content
+        message_id: Message-ID header (if -m/--message-id was used)
+    """
+
+    author_name: str
+    author_email: str
+    author_date: str | None
+    subject: str
+    message: str
+    patch: str
+    message_id: str | None = None
+
+
+def _munge_subject(subject: str, keep_subject: bool, keep_non_patch: bool) -> str:
+    """Munge email subject line for commit message.
+
+    Args:
+        subject: Original subject line
+        keep_subject: If True, keep subject intact (-k option)
+        keep_non_patch: If True, only strip [PATCH] (-b option)
+
+    Returns:
+        Processed subject line
+    """
+    if keep_subject:
+        return subject
+
+    result = subject
+
+    # First remove Re: prefixes (they can appear before brackets)
+    while True:
+        new_result = re.sub(r"^\s*(?:re|RE|Re):\s*", "", result, flags=re.IGNORECASE)
+        if new_result == result:
+            break
+        result = new_result
+
+    # Remove bracketed strings
+    if keep_non_patch:
+        # Only remove brackets containing "PATCH"
+        # Match each bracket individually anywhere in the string
+        while True:
+            # Remove PATCH bracket, but be careful with whitespace
+            new_result = re.sub(
+                r"\[[^\]]*?PATCH[^\]]*?\](\s+)?", r"\1", result, flags=re.IGNORECASE
+            )
+            if new_result == result:
+                break
+            result = new_result
+    else:
+        # Remove all bracketed strings
+        while True:
+            new_result = re.sub(r"^\s*\[.*?\]\s*", "", result)
+            if new_result == result:
+                break
+            result = new_result
+
+    # Remove leading/trailing whitespace
+    result = result.strip()
+
+    # Normalize multiple whitespace to single space
+    result = re.sub(r"\s+", " ", result)
+
+    return result
+
+
+def _find_scissors_line(lines: list[bytes]) -> int | None:
+    """Find the scissors line in message body.
+
+    Args:
+        lines: List of lines in the message body
+
+    Returns:
+        Index of scissors line, or None if not found
+    """
+    scissors_pattern = re.compile(
+        rb"^(?:>?\s*-+\s*)?(?:8<|>8)?\s*-+\s*$|^(?:>?\s*-+\s*)(?:cut here|scissors)(?:\s*-+)?$",
+        re.IGNORECASE,
+    )
+
+    for i, line in enumerate(lines):
+        if scissors_pattern.match(line.strip()):
+            return i
+
+    return None
+
+
+def mailinfo(
+    msg: email.message.Message | BinaryIO | TextIO,
+    keep_subject: bool = False,
+    keep_non_patch: bool = False,
+    encoding: str | None = None,
+    scissors: bool = False,
+    message_id: bool = False,
+) -> MailinfoResult:
+    """Extract patch information from an email message.
+
+    This function parses an email message and extracts commit metadata
+    (author, email, subject) and separates the commit message from the
+    patch content, similar to git mailinfo.
+
+    Args:
+        msg: Email message (email.message.Message object) or file handle to read from
+        keep_subject: If True, keep subject intact without munging (-k)
+        keep_non_patch: If True, only strip [PATCH] from brackets (-b)
+        encoding: Character encoding to use (default: detect from message)
+        scissors: If True, remove everything before scissors line
+        message_id: If True, include Message-ID in commit message (-m)
+
+    Returns:
+        MailinfoResult with parsed information
+
+    Raises:
+        ValueError: If message is malformed or missing required fields
+    """
+    # Parse message if given a file handle
+    parsed_msg: email.message.Message
+    if not isinstance(msg, email.message.Message):
+        if hasattr(msg, "read"):
+            content = msg.read()
+            if isinstance(content, bytes):
+                bparser = email.parser.BytesParser()
+                parsed_msg = bparser.parsebytes(content)
+            else:
+                sparser = email.parser.Parser()
+                parsed_msg = sparser.parsestr(content)
+        else:
+            raise ValueError("msg must be an email.message.Message or file-like object")
+    else:
+        parsed_msg = msg
+
+    # Detect encoding from message if not specified
+    if encoding is None:
+        encoding = parsed_msg.get_content_charset() or "utf-8"
+
+    # Extract author information
+    from_header = parsed_msg.get("From", "")
+    if not from_header:
+        raise ValueError("Email message missing 'From' header")
+
+    # Parse "Name <email>" format
+    author_name, author_email = email.utils.parseaddr(from_header)
+    if not author_email:
+        raise ValueError(
+            f"Could not parse email address from 'From' header: {from_header}"
+        )
+
+    # Extract date
+    date_header = parsed_msg.get("Date")
+    author_date = date_header if date_header else None
+
+    # Extract and process subject
+    subject = parsed_msg.get("Subject", "")
+    if not subject:
+        subject = "(no subject)"
+
+    # Convert Header object to string if needed
+    subject = str(subject)
+
+    # Remove newlines from subject
+    subject = subject.replace("\n", " ").replace("\r", " ")
+    subject = _munge_subject(subject, keep_subject, keep_non_patch)
+
+    # Extract Message-ID if requested
+    msg_id = None
+    if message_id:
+        msg_id = parsed_msg.get("Message-ID")
+
+    # Get message body
+    body = parsed_msg.get_payload(decode=True)
+    if body is None:
+        body = b""
+    elif isinstance(body, str):
+        body = body.encode(encoding)
+    elif not isinstance(body, bytes):
+        # Handle multipart or other types
+        body = str(body).encode(encoding)
+
+    # Split into lines
+    lines = body.splitlines(keepends=True)
+
+    # Handle scissors
+    scissors_idx = None
+    if scissors:
+        scissors_idx = _find_scissors_line(lines)
+        if scissors_idx is not None:
+            # Remove everything up to and including scissors line
+            lines = lines[scissors_idx + 1 :]
+
+    # Separate commit message from patch
+    # Look for the "---" separator that indicates start of diffstat/patch
+    message_lines: list[bytes] = []
+    patch_lines: list[bytes] = []
+    in_patch = False
+
+    for line in lines:
+        if not in_patch and line == b"---\n":
+            in_patch = True
+            patch_lines.append(line)
+        elif in_patch:
+            # Stop at signature marker "-- "
+            if line == b"-- \n":
+                break
+            patch_lines.append(line)
+        else:
+            message_lines.append(line)
+
+    # Build commit message
+    commit_message = b"".join(message_lines).decode(encoding, errors="replace")
+
+    # Clean up commit message
+    commit_message = commit_message.strip()
+
+    # Append Message-ID if requested
+    if message_id and msg_id:
+        if commit_message:
+            commit_message += "\n\n"
+        commit_message += f"Message-ID: {msg_id}"
+
+    # Build patch content
+    patch_content = b"".join(patch_lines).decode(encoding, errors="replace")
+
+    return MailinfoResult(
+        author_name=author_name,
+        author_email=author_email,
+        author_date=author_date,
+        subject=subject,
+        message=commit_message,
+        patch=patch_content,
+        message_id=msg_id,
+    )

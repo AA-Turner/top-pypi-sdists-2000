@@ -21,19 +21,37 @@
 
 """Git rebase implementation."""
 
+__all__ = [
+    "DiskRebaseStateManager",
+    "MemoryRebaseStateManager",
+    "RebaseAbort",
+    "RebaseConflict",
+    "RebaseError",
+    "RebaseState",
+    "RebaseStateManager",
+    "RebaseTodo",
+    "RebaseTodoCommand",
+    "RebaseTodoEntry",
+    "Rebaser",
+    "edit_todo",
+    "process_interactive_rebase",
+    "rebase",
+    "start_interactive",
+]
+
 import os
 import shutil
 import subprocess
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from enum import Enum
-from typing import Callable, Optional, Protocol, TypedDict
+from typing import Protocol, TypedDict
 
 from dulwich.graph import find_merge_base
 from dulwich.merge import three_way_merge
-from dulwich.objects import Commit
+from dulwich.objects import Commit, ObjectID
 from dulwich.objectspec import parse_commit
-from dulwich.refs import local_branch_name
+from dulwich.refs import HEADREF, Ref, local_branch_name, set_ref_from_raw
 from dulwich.repo import BaseRepo, Repo
 
 
@@ -119,9 +137,9 @@ class RebaseTodoEntry:
     """Represents a single entry in a rebase todo list."""
 
     command: RebaseTodoCommand
-    commit_sha: Optional[bytes] = None  # Store as hex string encoded as bytes
-    short_message: Optional[str] = None
-    arguments: Optional[str] = None
+    commit_sha: ObjectID | None = None  # Store as hex string encoded as bytes
+    short_message: str | None = None
+    arguments: str | None = None
 
     def to_string(self, abbreviate: bool = False) -> str:
         """Convert to git-rebase-todo format string.
@@ -164,7 +182,7 @@ class RebaseTodoEntry:
         return " ".join(parts)
 
     @classmethod
-    def from_string(cls, line: str) -> Optional["RebaseTodoEntry"]:
+    def from_string(cls, line: str) -> "RebaseTodoEntry | None":
         """Parse a todo entry from a line.
 
         Args:
@@ -209,7 +227,7 @@ class RebaseTodoEntry:
             # Commands that operate on commits
             if len(parts) > 1:
                 # Store SHA as hex string encoded as bytes
-                commit_sha = parts[1].encode()
+                commit_sha = ObjectID(parts[1].encode())
 
                 # Parse commit message if present
                 if len(parts) > 2:
@@ -226,7 +244,7 @@ class RebaseTodoEntry:
 class RebaseTodo:
     """Manages the git-rebase-todo file for interactive rebase."""
 
-    def __init__(self, entries: Optional[list[RebaseTodoEntry]] = None):
+    def __init__(self, entries: list[RebaseTodoEntry] | None = None):
         """Initialize RebaseTodo.
 
         Args:
@@ -239,7 +257,7 @@ class RebaseTodo:
         """Add an entry to the todo list."""
         self.entries.append(entry)
 
-    def get_current(self) -> Optional[RebaseTodoEntry]:
+    def get_current(self) -> RebaseTodoEntry | None:
         """Get the current todo entry."""
         if self.current_index < len(self.entries):
             return self.entries[self.current_index]
@@ -373,9 +391,9 @@ class RebaseStateManager(Protocol):
 
     def save(
         self,
-        original_head: Optional[bytes],
-        rebasing_branch: Optional[bytes],
-        onto: Optional[bytes],
+        original_head: bytes | None,
+        rebasing_branch: Ref | None,
+        onto: ObjectID | None,
         todo: list[Commit],
         done: list[Commit],
     ) -> None:
@@ -385,9 +403,9 @@ class RebaseStateManager(Protocol):
     def load(
         self,
     ) -> tuple[
-        Optional[bytes],  # original_head
-        Optional[bytes],  # rebasing_branch
-        Optional[bytes],  # onto
+        bytes | None,  # original_head
+        Ref | None,  # rebasing_branch
+        ObjectID | None,  # onto
         list[Commit],  # todo
         list[Commit],  # done
     ]:
@@ -406,7 +424,7 @@ class RebaseStateManager(Protocol):
         """Save interactive rebase todo list."""
         ...
 
-    def load_todo(self) -> Optional[RebaseTodo]:
+    def load_todo(self) -> RebaseTodo | None:
         """Load interactive rebase todo list."""
         ...
 
@@ -424,9 +442,9 @@ class DiskRebaseStateManager:
 
     def save(
         self,
-        original_head: Optional[bytes],
-        rebasing_branch: Optional[bytes],
-        onto: Optional[bytes],
+        original_head: bytes | None,
+        rebasing_branch: Ref | None,
+        onto: ObjectID | None,
         todo: list[Commit],
         done: list[Commit],
     ) -> None:
@@ -466,27 +484,31 @@ class DiskRebaseStateManager:
     def load(
         self,
     ) -> tuple[
-        Optional[bytes],
-        Optional[bytes],
-        Optional[bytes],
+        bytes | None,
+        Ref | None,
+        ObjectID | None,
         list[Commit],
         list[Commit],
     ]:
         """Load rebase state from disk."""
         original_head = None
-        rebasing_branch = None
-        onto = None
+        rebasing_branch_bytes = None
+        onto_bytes = None
         todo: list[Commit] = []
         done: list[Commit] = []
 
         # Load rebase state files
         original_head = self._read_file("orig-head")
-        rebasing_branch = self._read_file("head-name")
-        onto = self._read_file("onto")
+        rebasing_branch_bytes = self._read_file("head-name")
+        rebasing_branch = (
+            Ref(rebasing_branch_bytes) if rebasing_branch_bytes is not None else None
+        )
+        onto_bytes = self._read_file("onto")
+        onto = ObjectID(onto_bytes) if onto_bytes is not None else None
 
         return original_head, rebasing_branch, onto, todo, done
 
-    def _read_file(self, name: str) -> Optional[bytes]:
+    def _read_file(self, name: str) -> bytes | None:
         """Read content from a file in the rebase directory."""
         try:
             with open(os.path.join(self.path, name), "rb") as f:
@@ -515,7 +537,7 @@ class DiskRebaseStateManager:
         todo_content = todo.to_string()
         self._write_file("git-rebase-todo", todo_content.encode("utf-8"))
 
-    def load_todo(self) -> Optional[RebaseTodo]:
+    def load_todo(self) -> RebaseTodo | None:
         """Load the interactive rebase todo list.
 
         Returns:
@@ -531,9 +553,9 @@ class DiskRebaseStateManager:
 class RebaseState(TypedDict):
     """Type definition for rebase state."""
 
-    original_head: Optional[bytes]
-    rebasing_branch: Optional[bytes]
-    onto: Optional[bytes]
+    original_head: bytes | None
+    rebasing_branch: Ref | None
+    onto: ObjectID | None
     todo: list[Commit]
     done: list[Commit]
 
@@ -548,14 +570,14 @@ class MemoryRebaseStateManager:
           repo: Repository instance
         """
         self.repo = repo
-        self._state: Optional[RebaseState] = None
-        self._todo: Optional[RebaseTodo] = None
+        self._state: RebaseState | None = None
+        self._todo: RebaseTodo | None = None
 
     def save(
         self,
-        original_head: Optional[bytes],
-        rebasing_branch: Optional[bytes],
-        onto: Optional[bytes],
+        original_head: bytes | None,
+        rebasing_branch: Ref | None,
+        onto: ObjectID | None,
         todo: list[Commit],
         done: list[Commit],
     ) -> None:
@@ -571,9 +593,9 @@ class MemoryRebaseStateManager:
     def load(
         self,
     ) -> tuple[
-        Optional[bytes],
-        Optional[bytes],
-        Optional[bytes],
+        bytes | None,
+        Ref | None,
+        ObjectID | None,
         list[Commit],
         list[Commit],
     ]:
@@ -606,7 +628,7 @@ class MemoryRebaseStateManager:
         """
         self._todo = todo
 
-    def load_todo(self) -> Optional[RebaseTodo]:
+    def load_todo(self) -> RebaseTodo | None:
         """Load the interactive rebase todo list.
 
         Returns:
@@ -629,17 +651,17 @@ class Rebaser:
         self._state_manager = repo.get_rebase_state_manager()
 
         # Initialize state
-        self._original_head: Optional[bytes] = None
-        self._onto: Optional[bytes] = None
+        self._original_head: bytes | None = None
+        self._onto: ObjectID | None = None
         self._todo: list[Commit] = []
         self._done: list[Commit] = []
-        self._rebasing_branch: Optional[bytes] = None
+        self._rebasing_branch: Ref | None = None
 
         # Load any existing rebase state
         self._load_rebase_state()
 
     def _get_commits_to_rebase(
-        self, upstream: bytes, branch: Optional[bytes] = None
+        self, upstream: bytes, branch: bytes | None = None
     ) -> list[Commit]:
         """Get list of commits to rebase.
 
@@ -653,7 +675,7 @@ class Rebaser:
         # Get the branch commit
         if branch is None:
             # Use current HEAD
-            _head_ref, head_sha = self.repo.refs.follow(b"HEAD")
+            _head_ref, head_sha = self.repo.refs.follow(HEADREF)
             if head_sha is None:
                 raise ValueError("HEAD does not point to a valid commit")
             branch_commit = self.repo[head_sha]
@@ -688,8 +710,8 @@ class Rebaser:
         return list(reversed(commits))
 
     def _cherry_pick(
-        self, commit: Commit, onto: bytes
-    ) -> tuple[Optional[bytes], list[bytes]]:
+        self, commit: Commit, onto: ObjectID
+    ) -> tuple[ObjectID | None, list[bytes]]:
         """Cherry-pick a commit onto another commit.
 
         Args:
@@ -740,8 +762,8 @@ class Rebaser:
     def start(
         self,
         upstream: bytes,
-        onto: Optional[bytes] = None,
-        branch: Optional[bytes] = None,
+        onto: bytes | None = None,
+        branch: bytes | None = None,
     ) -> list[Commit]:
         """Start a rebase.
 
@@ -754,22 +776,22 @@ class Rebaser:
             List of commits that will be rebased
         """
         # Save original HEAD
-        self._original_head = self.repo.refs.read_ref(b"HEAD")
+        self._original_head = self.repo.refs.read_ref(HEADREF)
 
         # Save which branch we're rebasing (for later update)
         if branch is not None:
             # Parse the branch ref
             if branch.startswith(b"refs/heads/"):
-                self._rebasing_branch = branch
+                self._rebasing_branch = Ref(branch)
             else:
                 # Assume it's a branch name
-                self._rebasing_branch = local_branch_name(branch)
+                self._rebasing_branch = Ref(local_branch_name(branch))
         else:
             # Use current branch
             if self._original_head is not None and self._original_head.startswith(
                 b"ref: "
             ):
-                self._rebasing_branch = self._original_head[5:]
+                self._rebasing_branch = Ref(self._original_head[5:])
             else:
                 self._rebasing_branch = None
 
@@ -790,7 +812,7 @@ class Rebaser:
 
         return commits
 
-    def continue_(self) -> Optional[tuple[bytes, list[bytes]]]:
+    def continue_(self) -> tuple[bytes, list[bytes]] | None:
         """Continue an in-progress rebase.
 
         Returns:
@@ -844,7 +866,7 @@ class Rebaser:
         # Restore original HEAD
         if self._original_head is None:
             raise RebaseError("No original HEAD to restore")
-        self.repo.refs[b"HEAD"] = self._original_head
+        set_ref_from_raw(self.repo.refs, HEADREF, self._original_head)
 
         # Clean up rebase state
         self._clean_rebase_state()
@@ -870,13 +892,13 @@ class Rebaser:
             # If HEAD was pointing to this branch, it will follow automatically
         else:
             # If we don't know which branch, check current HEAD
-            head_ref = self.repo.refs[b"HEAD"]
+            head_ref = self.repo.refs[HEADREF]
             if head_ref.startswith(b"ref: "):
-                branch_ref = head_ref[5:]
+                branch_ref = Ref(head_ref[5:])
                 self.repo.refs[branch_ref] = last_commit.id
             else:
                 # Detached HEAD
-                self.repo.refs[b"HEAD"] = last_commit.id
+                self.repo.refs[HEADREF] = last_commit.id
 
         # Clean up rebase state
         self._clean_rebase_state()
@@ -914,8 +936,8 @@ class Rebaser:
 def rebase(
     repo: Repo,
     upstream: bytes,
-    onto: Optional[bytes] = None,
-    branch: Optional[bytes] = None,
+    onto: bytes | None = None,
+    branch: bytes | None = None,
 ) -> list[bytes]:
     """Perform a git rebase operation.
 
@@ -950,9 +972,9 @@ def rebase(
 def start_interactive(
     repo: Repo,
     upstream: bytes,
-    onto: Optional[bytes] = None,
-    branch: Optional[bytes] = None,
-    editor_callback: Optional[Callable[[bytes], bytes]] = None,
+    onto: bytes | None = None,
+    branch: bytes | None = None,
+    editor_callback: Callable[[bytes], bytes] | None = None,
 ) -> RebaseTodo:
     """Start an interactive rebase.
 
@@ -1052,9 +1074,9 @@ def edit_todo(repo: Repo, editor_callback: Callable[[bytes], bytes]) -> RebaseTo
 
 def process_interactive_rebase(
     repo: Repo,
-    todo: Optional[RebaseTodo] = None,
-    editor_callback: Optional[Callable[[bytes], bytes]] = None,
-) -> tuple[bool, Optional[str]]:
+    todo: RebaseTodo | None = None,
+    editor_callback: Callable[[bytes], bytes] | None = None,
+) -> tuple[bool, str | None]:
     """Process an interactive rebase.
 
     This function executes the commands in the todo list sequentially.
@@ -1065,7 +1087,7 @@ def process_interactive_rebase(
         editor_callback: Optional callback for reword operations
 
     Returns:
-        Tuple of (``is_complete``, ``pause_reason``):
+        tuple of (``is_complete``, ``pause_reason``):
 
         * ``is_complete``: True if rebase is complete, False if paused
         * ``pause_reason``: Reason for pause (e.g., "edit", "conflict", "break") or None
@@ -1201,8 +1223,8 @@ def _squash_commits(
     rebaser: Rebaser,
     entry: RebaseTodoEntry,
     keep_message: bool,
-    editor_callback: Optional[Callable[[bytes], bytes]] = None,
-) -> Optional[str]:
+    editor_callback: Callable[[bytes], bytes] | None = None,
+) -> str | None:
     """Helper to squash/fixup commits.
 
     Args:

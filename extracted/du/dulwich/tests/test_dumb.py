@@ -22,14 +22,13 @@
 """Tests for dumb HTTP git repositories."""
 
 import zlib
-from collections.abc import Mapping
-from typing import Callable, Optional, Union
+from collections.abc import Callable, Mapping
 from unittest import TestCase
 from unittest.mock import Mock
 
 from dulwich.dumb import DumbHTTPObjectStore, DumbRemoteHTTPRepo
 from dulwich.errors import NotGitRepository
-from dulwich.objects import Blob, Commit, ShaFile, Tag, Tree, sha_to_hex
+from dulwich.objects import ZERO_SHA, Blob, Commit, ShaFile, Tag, Tree, sha_to_hex
 
 
 class MockResponse:
@@ -37,7 +36,7 @@ class MockResponse:
         self,
         status: int = 200,
         content: bytes = b"",
-        headers: Optional[dict[str, str]] = None,
+        headers: dict[str, str] | None = None,
     ) -> None:
         self.status = status
         self.content = content
@@ -53,12 +52,12 @@ class DumbHTTPObjectStoreTests(TestCase):
 
     def setUp(self) -> None:
         self.base_url = "https://example.com/repo.git/"
-        self.responses: dict[str, dict[str, Union[int, bytes]]] = {}
+        self.responses: dict[str, dict[str, int | bytes]] = {}
         self.store = DumbHTTPObjectStore(self.base_url, self._mock_http_request)
 
     def _mock_http_request(
         self, url: str, headers: dict[str, str]
-    ) -> tuple[MockResponse, Callable[[Optional[int]], bytes]]:
+    ) -> tuple[MockResponse, Callable[[int | None], bytes]]:
         """Mock HTTP request function."""
         if url in self.responses:
             resp_data = self.responses[url]
@@ -69,7 +68,7 @@ class DumbHTTPObjectStoreTests(TestCase):
             content = resp.content
             offset = [0]  # Use list to make it mutable in closure
 
-            def read_func(size: Optional[int] = None) -> bytes:
+            def read_func(size: int | None = None) -> bytes:
                 if offset[0] >= len(content):
                     return b""
                 if size is None:
@@ -172,7 +171,7 @@ P pack-abcdef1234567890abcdef1234567890abcdef12.pack
         self._add_response(path, self._make_object(blob))
 
         self.assertTrue(self.store.contains_loose(hex_sha))
-        self.assertFalse(self.store.contains_loose(b"0" * 40))
+        self.assertFalse(self.store.contains_loose(ZERO_SHA))
 
     def test_add_object_not_implemented(self) -> None:
         blob = Blob()
@@ -188,12 +187,12 @@ class DumbRemoteHTTPRepoTests(TestCase):
 
     def setUp(self) -> None:
         self.base_url = "https://example.com/repo.git/"
-        self.responses: dict[str, dict[str, Union[int, bytes]]] = {}
+        self.responses: dict[str, dict[str, int | bytes]] = {}
         self.repo = DumbRemoteHTTPRepo(self.base_url, self._mock_http_request)
 
     def _mock_http_request(
         self, url: str, headers: dict[str, str]
-    ) -> tuple[MockResponse, Callable[[Optional[int]], bytes]]:
+    ) -> tuple[MockResponse, Callable[[int | None], bytes]]:
         """Mock HTTP request function."""
         if url in self.responses:
             resp_data = self.responses[url]
@@ -204,7 +203,7 @@ class DumbRemoteHTTPRepoTests(TestCase):
             content = resp.content
             offset = [0]  # Use list to make it mutable in closure
 
-            def read_func(size: Optional[int] = None) -> bytes:
+            def read_func(size: int | None = None) -> bytes:
                 if offset[0] >= len(content):
                     return b""
                 if size is None:
@@ -265,7 +264,7 @@ fedcba9876543210fedcba9876543210fedcba98\trefs/tags/v1.0
         graph_walker = Mock()
 
         def determine_wants(
-            refs: Mapping[bytes, bytes], depth: Optional[int] = None
+            refs: Mapping[bytes, bytes], depth: int | None = None
         ) -> list[bytes]:
             return []
 
@@ -292,7 +291,7 @@ fedcba9876543210fedcba9876543210fedcba98\trefs/tags/v1.0
         graph_walker.ack.return_value = []  # No existing objects
 
         def determine_wants(
-            refs: Mapping[bytes, bytes], depth: Optional[int] = None
+            refs: Mapping[bytes, bytes], depth: int | None = None
         ) -> list[bytes]:
             return [blob_sha]
 
@@ -309,3 +308,9 @@ fedcba9876543210fedcba9876543210fedcba98\trefs/tags/v1.0
     def test_object_store_property(self) -> None:
         self.assertIsInstance(self.repo.object_store, DumbHTTPObjectStore)
         self.assertEqual(self.base_url, self.repo.object_store.base_url)
+
+    def test_fetch_pack_data_missing_head(self) -> None:
+        refs_content = b"0123456789abcdef0123456789abcdef01234567\trefs/heads/master\n"
+        self._add_response("info/refs", refs_content)
+        self._add_response("HEAD", b"", status=404)
+        assert self.repo.get_head() is None

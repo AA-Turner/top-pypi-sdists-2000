@@ -155,6 +155,7 @@ from datadog_api_client.v1.model.formula_and_function_metric_data_source import 
 from datadog_api_client.v1.model.formula_and_function_metric_query_definition import (
     FormulaAndFunctionMetricQueryDefinition,
 )
+from datadog_api_client.v1.model.formula_and_function_metric_semantic_mode import FormulaAndFunctionMetricSemanticMode
 from datadog_api_client.v1.model.formula_and_function_process_query_data_source import (
     FormulaAndFunctionProcessQueryDataSource,
 )
@@ -187,6 +188,7 @@ from datadog_api_client.v1.model.geomap_widget_definition_style import GeomapWid
 from datadog_api_client.v1.model.geomap_widget_definition_type import GeomapWidgetDefinitionType
 from datadog_api_client.v1.model.geomap_widget_definition_view import GeomapWidgetDefinitionView
 from datadog_api_client.v1.model.geomap_widget_request import GeomapWidgetRequest
+from datadog_api_client.v1.model.geomap_widget_request_style import GeomapWidgetRequestStyle
 from datadog_api_client.v1.model.graph_snapshot import GraphSnapshot
 from datadog_api_client.v1.model.group_type import GroupType
 from datadog_api_client.v1.model.group_widget_definition import GroupWidgetDefinition
@@ -1248,6 +1250,7 @@ __all__ = [
     "FormulaAndFunctionMetricAggregation",
     "FormulaAndFunctionMetricDataSource",
     "FormulaAndFunctionMetricQueryDefinition",
+    "FormulaAndFunctionMetricSemanticMode",
     "FormulaAndFunctionProcessQueryDataSource",
     "FormulaAndFunctionProcessQueryDefinition",
     "FormulaAndFunctionQueryDefinition",
@@ -1276,6 +1279,7 @@ __all__ = [
     "GeomapWidgetDefinitionType",
     "GeomapWidgetDefinitionView",
     "GeomapWidgetRequest",
+    "GeomapWidgetRequestStyle",
     "GraphSnapshot",
     "GroupType",
     "GroupWidgetDefinition",

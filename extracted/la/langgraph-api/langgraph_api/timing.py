@@ -1,9 +1,15 @@
 from __future__ import annotations
 
+# ruff: noqa: E402
+import time
+
+# Capture the time when this module is first imported (early in server startup)
+_PROCESS_START_TIME = time.monotonic()
+
+import contextlib
 import functools
 import inspect
 import logging
-import time
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Generic, ParamSpec, TypeVar, overload
 
@@ -13,36 +19,13 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from contextlib import AbstractAsyncContextManager
 
+    from starlette.applications import Starlette
+
 logger = structlog.stdlib.get_logger(__name__)
 
 P = ParamSpec("P")
 R = TypeVar("R")
 T = TypeVar("T", covariant=True)
-
-
-def _pick_level_and_message(
-    *,
-    elapsed: float,
-    message: str,
-    warn_threshold_secs: float | None,
-    warn_message: str | None,
-    error_threshold_secs: float | None,
-    error_message: str | None,
-) -> tuple[int, str]:
-    level = logging.INFO
-    msg = message
-
-    if warn_threshold_secs is not None and elapsed > warn_threshold_secs:
-        level = logging.WARNING
-        if warn_message is not None:
-            msg = warn_message
-
-    if error_threshold_secs is not None and elapsed > error_threshold_secs:
-        level = logging.ERROR
-        if error_message is not None:
-            msg = error_message
-
-    return level, msg
 
 
 @dataclass(frozen=True)
@@ -53,52 +36,6 @@ class TimerConfig(Generic[P]):
     warn_message: str | None = None
     error_threshold_secs: float | None = None
     error_message: str | None = None
-
-
-def _log_timing(
-    *,
-    name: str,
-    elapsed: float,
-    cfg: TimerConfig[Any],
-    args: tuple[Any, ...] = (),
-    kwargs: dict[str, Any] | None = None,
-    exc: BaseException | None = None,
-    extra: dict[str, Any] | None = None,
-) -> None:
-    kwargs = kwargs or {}
-
-    log_data: dict[str, Any] = {
-        "name": name,
-        "elapsed_seconds": elapsed,
-    }
-
-    if extra:
-        log_data.update(extra)
-
-    if cfg.metadata_fn is not None:
-        try:
-            md = cfg.metadata_fn(*args, **kwargs)  # type: ignore[misc]
-            if not isinstance(md, dict):
-                raise TypeError("metadata_fn must return a dict")
-            log_data.update(md)
-        except Exception as meta_exc:
-            log_data["metadata_error"] = repr(meta_exc)
-
-    if exc is not None:
-        log_data["exception"] = repr(exc)
-
-    level, msg = _pick_level_and_message(
-        elapsed=elapsed,
-        message=cfg.message,
-        warn_threshold_secs=cfg.warn_threshold_secs,
-        warn_message=cfg.warn_message,
-        error_threshold_secs=cfg.error_threshold_secs,
-        error_message=cfg.error_message,
-    )
-
-    # Allow {graph_id} etc.
-    msg = msg.format(**log_data)
-    logger.log(level, msg, **log_data)
 
 
 @overload
@@ -274,3 +211,98 @@ def wrap_lifespan_context_aenter(
         )
 
     return wrapped
+
+
+LP = ParamSpec("LP")
+
+
+def combine_lifespans(
+    *lifespans: Callable[[Starlette], AbstractAsyncContextManager] | None,
+) -> Callable[[Starlette], AbstractAsyncContextManager]:
+    @contextlib.asynccontextmanager
+    async def combined_lifespan(app):
+        async with contextlib.AsyncExitStack() as stack:
+            for ls in lifespans:
+                if ls is not None:
+                    await stack.enter_async_context(ls(app))
+            elapsed = get_startup_elapsed()
+            logger.info(f"Application started up in {elapsed:2.3f}s", elapsed=elapsed)
+            yield
+
+    return combined_lifespan
+
+
+def get_startup_elapsed() -> float:
+    """Return elapsed seconds since the process started (module import time)."""
+    return time.monotonic() - _PROCESS_START_TIME
+
+
+def _log_timing(
+    *,
+    name: str,
+    elapsed: float,
+    cfg: TimerConfig[Any],
+    args: tuple[Any, ...] = (),
+    kwargs: dict[str, Any] | None = None,
+    exc: BaseException | None = None,
+    extra: dict[str, Any] | None = None,
+) -> None:
+    kwargs = kwargs or {}
+
+    log_data: dict[str, Any] = {
+        "name": name,
+        "elapsed_seconds": elapsed,
+    }
+
+    if extra:
+        log_data.update(extra)
+
+    if cfg.metadata_fn is not None:
+        try:
+            md = cfg.metadata_fn(*args, **kwargs)  # type: ignore[misc]
+            if not isinstance(md, dict):
+                raise TypeError("metadata_fn must return a dict")
+            log_data.update(md)
+        except Exception as meta_exc:
+            log_data["metadata_error"] = repr(meta_exc)
+
+    if exc is not None:
+        log_data["exception"] = repr(exc)
+
+    level, msg = _pick_level_and_message(
+        elapsed=elapsed,
+        message=cfg.message,
+        warn_threshold_secs=cfg.warn_threshold_secs,
+        warn_message=cfg.warn_message,
+        error_threshold_secs=cfg.error_threshold_secs,
+        error_message=cfg.error_message,
+    )
+
+    # Allow {graph_id} etc.
+    msg = msg.format(**log_data)
+    logger.log(level, msg, **log_data)
+
+
+def _pick_level_and_message(
+    *,
+    elapsed: float,
+    message: str,
+    warn_threshold_secs: float | None,
+    warn_message: str | None,
+    error_threshold_secs: float | None,
+    error_message: str | None,
+) -> tuple[int, str]:
+    level = logging.INFO
+    msg = message
+
+    if warn_threshold_secs is not None and elapsed > warn_threshold_secs:
+        level = logging.WARNING
+        if warn_message is not None:
+            msg = warn_message
+
+    if error_threshold_secs is not None and elapsed > error_threshold_secs:
+        level = logging.ERROR
+        if error_message is not None:
+            msg = error_message
+
+    return level, msg

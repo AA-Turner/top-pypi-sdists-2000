@@ -17,12 +17,21 @@
 # <http://www.gnu.org/licenses/> for a copy of the GNU General Public License
 # and <http://www.apache.org/licenses/LICENSE-2.0> for a copy of the Apache
 # License, Version 2.0.
+#
 
 """Implementation of merge-base following the approach of git."""
 
-from collections.abc import Iterator, Mapping, Sequence
+__all__ = [
+    "WorkList",
+    "can_fast_forward",
+    "find_merge_base",
+    "find_octopus_base",
+    "independent",
+]
+
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from heapq import heappop, heappush
-from typing import TYPE_CHECKING, Callable, Generic, Optional, TypeVar
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 if TYPE_CHECKING:
     from .repo import BaseRepo
@@ -52,7 +61,7 @@ class WorkList(Generic[T]):
         dt, cmt = item
         heappush(self.pq, (-dt, cmt))
 
-    def get(self) -> Optional[tuple[int, T]]:
+    def get(self) -> tuple[int, T] | None:
         """Get the highest priority item from the work list.
 
         Returns:
@@ -80,7 +89,7 @@ def _find_lcas(
     c2s: Sequence[ObjectID],
     lookup_stamp: Callable[[ObjectID], int],
     min_stamp: int = 0,
-    shallows: Optional[set[ObjectID]] = None,
+    shallows: set[ObjectID] | None = None,
 ) -> list[ObjectID]:
     """Find lowest common ancestors between commits.
 
@@ -96,7 +105,7 @@ def _find_lcas(
         List of lowest common ancestor commit IDs
     """
     cands = []
-    cstates = {}
+    cstates: dict[ObjectID, int] = {}
 
     # Flags to Record State
     _ANC_OF_1 = 1  # ancestor of commit 1
@@ -124,7 +133,7 @@ def _find_lcas(
 
     # initialize the working list states with ancestry info
     # note possibility of c1 being one of c2s should be handled
-    wlst: WorkList[bytes] = WorkList()
+    wlst: WorkList[ObjectID] = WorkList()
     cstates[c1] = _ANC_OF_1
     try:
         wlst.add((lookup_stamp(c1), c1))
@@ -298,7 +307,7 @@ def find_octopus_base(
     return lcas
 
 
-def can_fast_forward(repo: "BaseRepo", c1: bytes, c2: bytes) -> bool:
+def can_fast_forward(repo: "BaseRepo", c1: ObjectID, c2: ObjectID) -> bool:
     """Is it possible to fast-forward from c1 to c2?
 
     Args:

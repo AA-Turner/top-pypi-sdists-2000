@@ -3777,8 +3777,6 @@ class Faker:
         Set to ``"naf-2025"`` to return a valid NAF 2025 APE code.
         Set to ``None`` to return a truly random and possibly invalid number
         Defaults to ``"naf-2003"``
-        :param letter: Force letter
-        :param siren: Force SIREN
 
         :sample:
         :sample: version="naf-2003"
@@ -3816,6 +3814,22 @@ class Faker:
         """
         Generates a IDE number (9 digits).
         http://www.bfs.admin.ch/bfs/portal/fr/index/themen/00/05/blank/03/02.html
+        """
+        ...
+
+    def rcs_number(self, city: str = ..., letter: str = ..., siren: str = ...) -> str:
+        """
+        Generate a RCS number for french companies.
+        It is a concatenation of "RCS", a city name, a letter A (if sole proprietorships, or B other companies)
+        and the company SIREN
+
+        :param city: Force city name
+        :param letter: Force letter
+        :param siren: Force SIREN
+
+        :sample:
+        :sample: siren="123 456 789"
+        :sample: city="Lyon" letter="B" siren="123 456 789"
         """
         ...
 

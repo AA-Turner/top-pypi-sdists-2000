@@ -1,8 +1,9 @@
 # trailers.py -- Git trailers parsing and manipulation
 # Copyright (C) 2025 Jelmer Vernooij <jelmer@jelmer.uk>
 #
+# SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 # Dulwich is dual-licensed under the Apache License, Version 2.0 and the GNU
-# General Public License as public by the Free Software Foundation; version 2.0
+# General Public License as published by the Free Software Foundation; version 2.0
 # or (at your option) any later version. You can redistribute it and/or
 # modify it under the terms of either of these two licenses.
 #
@@ -31,7 +32,12 @@ They are similar to RFC 822 email headers and appear at the end of commit
 messages after free-form content.
 """
 
-from typing import Optional
+__all__ = [
+    "Trailer",
+    "add_trailer_to_message",
+    "format_trailers",
+    "parse_trailers",
+]
 
 
 class Trailer:
@@ -260,7 +266,7 @@ def _parse_trailer_lines(lines: list[str], separators: str) -> list[Trailer]:
         List of parsed Trailer objects
     """
     trailers: list[Trailer] = []
-    current_trailer: Optional[Trailer] = None
+    current_trailer: Trailer | None = None
 
     for line in lines:
         stripped = line.rstrip()

@@ -26,11 +26,22 @@ Important: When checking if directories are ignored, include a trailing slash in
 For example, use "dir/" instead of "dir" to check if a directory is ignored.
 """
 
+__all__ = [
+    "IgnoreFilter",
+    "IgnoreFilterManager",
+    "IgnoreFilterStack",
+    "Pattern",
+    "default_user_ignore_filter_path",
+    "match_pattern",
+    "read_ignore_patterns",
+    "translate",
+]
+
 import os.path
 import re
 from collections.abc import Iterable, Sequence
 from contextlib import suppress
-from typing import TYPE_CHECKING, BinaryIO, Optional, Union
+from typing import TYPE_CHECKING, BinaryIO
 
 if TYPE_CHECKING:
     from .repo import Repo
@@ -38,10 +49,10 @@ if TYPE_CHECKING:
 from .config import Config, get_xdg_config_home_path
 
 
-def _pattern_to_str(pattern: Union["Pattern", bytes, str]) -> str:
+def _pattern_to_str(pattern: "Pattern | bytes | str") -> str:
     """Convert a pattern to string, handling both Pattern objects and raw patterns."""
     if isinstance(pattern, Pattern):
-        pattern_data: Union[bytes, str] = pattern.pattern
+        pattern_data: bytes | str = pattern.pattern
     else:
         pattern_data = pattern
     return pattern_data.decode() if isinstance(pattern_data, bytes) else pattern_data
@@ -416,7 +427,7 @@ class IgnoreFilter:
         self,
         patterns: Iterable[bytes],
         ignorecase: bool = False,
-        path: Optional[str] = None,
+        path: str | None = None,
     ) -> None:
         """Initialize an IgnoreFilter with a set of patterns.
 
@@ -435,7 +446,7 @@ class IgnoreFilter:
         """Add a pattern to the set."""
         self._patterns.append(Pattern(pattern, self._ignorecase))
 
-    def find_matching(self, path: Union[bytes, str]) -> Iterable[Pattern]:
+    def find_matching(self, path: bytes | str) -> Iterable[Pattern]:
         """Yield all matching patterns for path.
 
         Args:
@@ -449,7 +460,7 @@ class IgnoreFilter:
             if pattern.match(path):
                 yield pattern
 
-    def is_ignored(self, path: Union[bytes, str]) -> Optional[bool]:
+    def is_ignored(self, path: bytes | str) -> bool | None:
         """Check whether a path is ignored using Git-compliant logic.
 
         For directories, include a trailing slash.
@@ -484,7 +495,7 @@ class IgnoreFilter:
 
     @classmethod
     def from_path(
-        cls, path: Union[str, os.PathLike[str]], ignorecase: bool = False
+        cls, path: str | os.PathLike[str], ignorecase: bool = False
     ) -> "IgnoreFilter":
         """Create an IgnoreFilter from a file path.
 
@@ -518,7 +529,7 @@ class IgnoreFilterStack:
         """
         self._filters = filters
 
-    def is_ignored(self, path: str) -> Optional[bool]:
+    def is_ignored(self, path: str) -> bool | None:
         """Check whether a path is explicitly included or excluded in ignores.
 
         Args:
@@ -580,7 +591,7 @@ class IgnoreFilterManager:
             global_filters: List of global ignore filters to apply.
             ignorecase: Whether to perform case-insensitive matching.
         """
-        self._path_filters: dict[str, Optional[IgnoreFilter]] = {}
+        self._path_filters: dict[str, IgnoreFilter | None] = {}
         self._top_path = top_path
         self._global_filters = global_filters
         self._ignorecase = ignorecase
@@ -589,7 +600,7 @@ class IgnoreFilterManager:
         """Return string representation of IgnoreFilterManager."""
         return f"{type(self).__name__}({self._top_path}, {self._global_filters!r}, {self._ignorecase!r})"
 
-    def _load_path(self, path: str) -> Optional[IgnoreFilter]:
+    def _load_path(self, path: str) -> IgnoreFilter | None:
         try:
             return self._path_filters[path]
         except KeyError:
@@ -638,7 +649,7 @@ class IgnoreFilterManager:
                 filters.insert(0, (i, ignore_filter))
         return iter(matches)
 
-    def is_ignored(self, path: str) -> Optional[bool]:
+    def is_ignored(self, path: str) -> bool | None:
         """Check whether a path is explicitly included or excluded in ignores.
 
         Args:

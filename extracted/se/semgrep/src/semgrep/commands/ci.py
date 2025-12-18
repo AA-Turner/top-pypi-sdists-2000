@@ -50,6 +50,7 @@ from semgrep.engine import EngineType
 from semgrep.error import FATAL_EXIT_CODE
 from semgrep.error import INVALID_API_KEY_EXIT_CODE
 from semgrep.error import MISSING_CONFIG_EXIT_CODE
+from semgrep.error import SemgrepCoreError
 from semgrep.error import SemgrepError
 from semgrep.git import git_check_output
 from semgrep.git import is_git_repo_empty
@@ -280,7 +281,7 @@ def ci(
     verbose: bool,
     x_eio: bool,
     x_parmap: bool,
-    x_tr: bool,
+    enable_transitive_reachability: Optional[bool],
     x_pro_naming: bool,
     x_semgrepignore_filename: Optional[str],
     x_no_python_schema_validation: bool,
@@ -404,6 +405,7 @@ def ci(
                 dry_run = True
 
             scan_handler = ScanHandler(
+                enable_transitive_reachability=enable_transitive_reachability,
                 dry_run=dry_run,
                 partial_output=partial_output,
                 dump_scan_id_path=dump_scan_id_path,
@@ -445,6 +447,7 @@ def ci(
                         matches_by_rule=FilteredMatches(kept={}, removed={}),
                         rules=[],
                         targets=set(),
+                        skipped_paths=set(),
                         renamed_targets=set(),
                         ignored_targets=frozenset(),
                         cli_suggested_exit_code=0,  # Inform app that we are exiting with code 0
@@ -736,8 +739,10 @@ def ci(
             "capture_core_stderr": capture_core_stderr,
             "allow_local_builds": allow_local_builds,
             "x_parmap": x_parmap,
-            "x_tr": (
-                scan_handler.transitive_reachability_enabled if scan_handler else x_tr
+            "enable_transitive_reachability": (
+                scan_handler.transitive_reachability_enabled
+                if scan_handler
+                else enable_transitive_reachability
             ),
             "x_pro_naming": x_pro_naming,
             "dump_rule_partitions_params": dump_rule_partitions_params,
@@ -956,6 +961,15 @@ def ci(
 
             logger.info("CI scan completed successfully.")
 
+        # Collect paths that failed to scan (timeout, OOM, etc.)
+        skipped_paths: set[Path] = set()
+        for err in semgrep_errors:
+            if isinstance(err, SemgrepCoreError) and err.is_scan_failure():
+                if err.core.location and err.core.location.path:
+                    fpath = Path(err.core.location.path.value)
+                    logger.info(f"Skipping {fpath} due to scan failures. Error: {err}")
+                    skipped_paths.add(fpath)
+
         complete_result: out.CiScanCompleteResponse | None = None
         contributions = semgrep.rpc_call.contributions()
         if scan_handler:
@@ -985,6 +999,7 @@ def ci(
                     matches_by_rule=filtered_matches_by_rule,
                     rules=filtered_rules,
                     targets=output_extra.all_targets.targets,
+                    skipped_paths=skipped_paths,
                     renamed_targets=renamed_targets,
                     ignored_targets=ignore_log.unsupported_lang_paths(
                         product=SAST_PRODUCT

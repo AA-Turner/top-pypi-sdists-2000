@@ -69,7 +69,7 @@ from dulwich.index import (
     write_index_dict,
 )
 from dulwich.object_store import MemoryObjectStore
-from dulwich.objects import S_IFGITLINK, Blob, Tree, TreeEntry
+from dulwich.objects import S_IFGITLINK, ZERO_SHA, Blob, Tree, TreeEntry
 from dulwich.repo import Repo
 from dulwich.tests.utils import make_commit
 
@@ -908,6 +908,51 @@ class GetUnstagedChangesTests(TestCase):
             self.assertEqual(changes_serial, changes_parallel)
             self.assertEqual(changes_serial, sorted(modified_files))
 
+    def test_get_unstaged_changes_nanosecond_precision(self) -> None:
+        """Test that nanosecond precision mtime is used for change detection."""
+        repo_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, repo_dir)
+        with Repo.init(repo_dir) as repo:
+            # Commit a file
+            foo_fullpath = os.path.join(repo_dir, "foo")
+            with open(foo_fullpath, "wb") as f:
+                f.write(b"original content")
+
+            repo.get_worktree().stage(["foo"])
+            repo.get_worktree().commit(
+                message=b"initial commit",
+                committer=b"committer <email>",
+                author=b"author <email>",
+            )
+
+            # Get the current index entry
+            index = repo.open_index()
+            entry = index[b"foo"]
+
+            # Modify the file with the same size but different content
+            # This simulates a very fast change within the same second
+            with open(foo_fullpath, "wb") as f:
+                f.write(b"modified content")
+
+            # Set mtime to match the index entry exactly (same second)
+            # but with different nanoseconds if the filesystem supports it
+            st = os.stat(foo_fullpath)
+            if isinstance(entry.mtime, tuple) and hasattr(st, "st_mtime_ns"):
+                # Set the mtime to the same second as the index entry
+                # but with a slightly different nanosecond value
+                entry_sec = entry.mtime[0]
+                entry_nsec = entry.mtime[1]
+                new_mtime_ns = entry_sec * 1_000_000_000 + entry_nsec + 1000
+                new_mtime = new_mtime_ns / 1_000_000_000
+                os.utime(foo_fullpath, (st.st_atime, new_mtime))
+
+                # The file should be detected as changed due to nanosecond difference
+                changes = list(get_unstaged_changes(repo.open_index(), repo_dir))
+                self.assertEqual(changes, [b"foo"])
+            else:
+                # If nanosecond precision is not available, skip this test
+                self.skipTest("Nanosecond precision not available on this system")
+
     def test_get_unstaged_deleted_changes(self) -> None:
         """Unit test for get_unstaged_changes."""
         repo_dir = tempfile.mkdtemp()
@@ -1443,9 +1488,11 @@ class TestIndexEntryFromPath(TestCase):
         self.assertEqual(sorted(changes), [b"conflict", b"file1", b"file3", b"file4"])
 
         # Create a custom blob filter function
-        def filter_blob_callback(data, path):
+        def filter_blob_callback(blob, path):
             # Modify blob data to make it look changed
-            return b"modified " + data
+            result_blob = Blob()
+            result_blob.data = b"modified " + blob.data
+            return result_blob
 
         # Get unstaged changes with blob filter
         changes = list(get_unstaged_changes(index, repo_dir, filter_blob_callback))
@@ -1454,6 +1501,57 @@ class TestIndexEntryFromPath(TestCase):
         self.assertEqual(
             sorted(changes), [b"conflict", b"file1", b"file2", b"file3", b"file4"]
         )
+
+    def test_get_unstaged_changes_with_blob_filter(self) -> None:
+        """Test get_unstaged_changes with filter that expects Blob objects.
+
+        This reproduces issue #2010 where passing blob.data instead of blob
+        to the filter callback causes AttributeError when the callback expects
+        a Blob object (like checkin_normalize does).
+        """
+        repo_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, repo_dir)
+        with Repo.init(repo_dir) as repo:
+            # Create and commit a test file
+            test_file = os.path.join(repo_dir, "test.txt")
+            with open(test_file, "wb") as f:
+                f.write(b"original content")
+
+            repo.get_worktree().stage(["test.txt"])
+            repo.get_worktree().commit(
+                message=b"Initial commit",
+                committer=b"Test <test@example.com>",
+                author=b"Test <test@example.com>",
+            )
+
+            # Create a .gitattributes file
+            gitattributes_file = os.path.join(repo_dir, ".gitattributes")
+            with open(gitattributes_file, "wb") as f:
+                f.write(b"*.txt text\n")
+
+            # Modify the test file
+            with open(test_file, "wb") as f:
+                f.write(b"modified content")
+
+            # Force mtime change to ensure stat doesn't match
+            os.utime(test_file, (0, 0))
+
+            # Create a filter callback that expects Blob objects (like checkin_normalize)
+            def blob_filter_callback(blob: Blob, path: bytes) -> Blob:
+                """Filter that expects a Blob object, not bytes."""
+                # This should receive a Blob object with a .data attribute
+                self.assertIsInstance(blob, Blob)
+                self.assertTrue(hasattr(blob, "data"))
+                # Return the blob unchanged for this test
+                return blob
+
+            # This should not raise AttributeError: 'bytes' object has no attribute 'data'
+            changes = list(
+                get_unstaged_changes(repo.open_index(), repo_dir, blob_filter_callback)
+            )
+
+            # Should detect the change in test.txt
+            self.assertIn(b"test.txt", changes)
 
 
 class TestManyFilesFeature(TestCase):
@@ -1480,7 +1578,7 @@ class TestManyFilesFeature(TestCase):
             uid=1000,
             gid=1000,
             size=5,
-            sha=b"0" * 40,
+            sha=ZERO_SHA,
         )
         index[b"test.txt"] = entry
 
@@ -1509,7 +1607,7 @@ class TestManyFilesFeature(TestCase):
             uid=1000,
             gid=1000,
             size=5,
-            sha=b"0" * 40,
+            sha=ZERO_SHA,
         )
         index[b"test.txt"] = entry
 
@@ -1540,7 +1638,7 @@ class TestManyFilesFeature(TestCase):
                 uid=1000,
                 gid=1000,
                 size=5,
-                sha=b"0" * 40,
+                sha=ZERO_SHA,
                 flags=0,
                 extended_flags=0,
             ),
@@ -1768,7 +1866,7 @@ class TestPathPrefixCompression(TestCase):
                 uid=1000,
                 gid=1000,
                 size=10,
-                sha=b"0" * 40,
+                sha=ZERO_SHA,
             )
             index_v2[path] = entry
         index_v2.write()

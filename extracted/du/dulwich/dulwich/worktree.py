@@ -23,6 +23,22 @@
 
 from __future__ import annotations
 
+__all__ = [
+    "WorkTree",
+    "WorkTreeContainer",
+    "WorkTreeInfo",
+    "add_worktree",
+    "list_worktrees",
+    "lock_worktree",
+    "move_worktree",
+    "prune_worktrees",
+    "read_worktree_lock_reason",
+    "remove_worktree",
+    "repair_worktree",
+    "temporary_worktree",
+    "unlock_worktree",
+]
+
 import builtins
 import os
 import shutil
@@ -31,10 +47,10 @@ import sys
 import tempfile
 import time
 import warnings
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Callable, Union
+from typing import Any
 
 from .errors import CommitError, HookError
 from .objects import Blob, Commit, ObjectID, Tag, Tree
@@ -67,7 +83,7 @@ class WorkTreeInfo:
         self,
         path: str,
         head: bytes | None = None,
-        branch: bytes | None = None,
+        branch: Ref | None = None,
         bare: bool = False,
         detached: bool = False,
         locked: bool = False,
@@ -154,8 +170,8 @@ class WorkTreeContainer:
 
     def add(
         self,
-        path: Union[str, bytes, os.PathLike[str]],
-        branch: Union[str, bytes, None] = None,
+        path: str | bytes | os.PathLike[str],
+        branch: str | bytes | None = None,
         commit: ObjectID | None = None,
         force: bool = False,
         detach: bool = False,
@@ -184,9 +200,7 @@ class WorkTreeContainer:
             exist_ok=exist_ok,
         )
 
-    def remove(
-        self, path: Union[str, bytes, os.PathLike[str]], force: bool = False
-    ) -> None:
+    def remove(self, path: str | bytes | os.PathLike[str], force: bool = False) -> None:
         """Remove a worktree.
 
         Args:
@@ -211,8 +225,8 @@ class WorkTreeContainer:
 
     def move(
         self,
-        old_path: Union[str, bytes, os.PathLike[str]],
-        new_path: Union[str, bytes, os.PathLike[str]],
+        old_path: str | bytes | os.PathLike[str],
+        new_path: str | bytes | os.PathLike[str],
     ) -> None:
         """Move a worktree to a new location.
 
@@ -223,7 +237,7 @@ class WorkTreeContainer:
         move_worktree(self._repo, old_path, new_path)
 
     def lock(
-        self, path: Union[str, bytes, os.PathLike[str]], reason: str | None = None
+        self, path: str | bytes | os.PathLike[str], reason: str | None = None
     ) -> None:
         """Lock a worktree to prevent it from being pruned.
 
@@ -233,7 +247,7 @@ class WorkTreeContainer:
         """
         lock_worktree(self._repo, path, reason=reason)
 
-    def unlock(self, path: Union[str, bytes, os.PathLike[str]]) -> None:
+    def unlock(self, path: str | bytes | os.PathLike[str]) -> None:
         """Unlock a worktree.
 
         Args:
@@ -242,7 +256,7 @@ class WorkTreeContainer:
         unlock_worktree(self._repo, path)
 
     def repair(
-        self, paths: Sequence[Union[str, bytes, os.PathLike[str]]] | None = None
+        self, paths: Sequence[str | bytes | os.PathLike[str]] | None = None
     ) -> builtins.list[str]:
         """Repair worktree administrative files.
 
@@ -267,7 +281,7 @@ class WorkTree:
     such as staging files, committing changes, and resetting the index.
     """
 
-    def __init__(self, repo: Repo, path: Union[str, bytes, os.PathLike[str]]) -> None:
+    def __init__(self, repo: Repo, path: str | bytes | os.PathLike[str]) -> None:
         """Initialize a WorkTree for the given repository.
 
         Args:
@@ -284,12 +298,10 @@ class WorkTree:
 
     def stage(
         self,
-        fs_paths: Union[
-            str,
-            bytes,
-            os.PathLike[str],
-            Iterable[Union[str, bytes, os.PathLike[str]]],
-        ],
+        fs_paths: str
+        | bytes
+        | os.PathLike[str]
+        | Iterable[str | bytes | os.PathLike[str]],
     ) -> None:
         """Stage a set of paths.
 
@@ -362,7 +374,7 @@ class WorkTree:
 
         index = self._repo.open_index()
         try:
-            commit = self._repo[b"HEAD"]
+            commit = self._repo[Ref(b"HEAD")]
         except KeyError:
             # no head mean no commit in the repo
             for fs_path in fs_paths:
@@ -420,7 +432,7 @@ class WorkTree:
 
     def commit(
         self,
-        message: Union[str, bytes, Callable[[Any, Commit], bytes], None] = None,
+        message: str | bytes | Callable[[Any, Commit], bytes] | None = None,
         committer: bytes | None = None,
         author: bytes | None = None,
         commit_timestamp: float | None = None,
@@ -429,7 +441,7 @@ class WorkTree:
         author_timezone: int | None = None,
         tree: ObjectID | None = None,
         encoding: bytes | None = None,
-        ref: Ref | None = b"HEAD",
+        ref: Ref | None = Ref(b"HEAD"),
         merge_heads: Sequence[ObjectID] | None = None,
         no_verify: bool = False,
         sign: bool | None = None,
@@ -674,7 +686,7 @@ class WorkTree:
 
         return c.id
 
-    def reset_index(self, tree: bytes | None = None) -> None:
+    def reset_index(self, tree: ObjectID | None = None) -> None:
         """Reset the index back to a specific tree.
 
         Args:
@@ -689,7 +701,7 @@ class WorkTree:
         )
 
         if tree is None:
-            head = self._repo[b"HEAD"]
+            head = self._repo[Ref(b"HEAD")]
             if isinstance(head, Tag):
                 _cls, obj = head.object
                 head = self._repo.get_object(obj)
@@ -710,8 +722,8 @@ class WorkTree:
         else:
 
             def symlink_fn(  # type: ignore[misc,unused-ignore]
-                src: Union[str, bytes],
-                dst: Union[str, bytes],
+                src: str | bytes,
+                dst: str | bytes,
                 target_is_directory: bool = False,
                 *,
                 dir_fd: int | None = None,
@@ -844,7 +856,7 @@ def list_worktrees(repo: Repo) -> list[WorkTreeInfo]:
         with open(os.path.join(repo.controldir(), "HEAD"), "rb") as f:
             head_contents = f.read().strip()
             if head_contents.startswith(SYMREF):
-                ref_name = head_contents[len(SYMREF) :].strip()
+                ref_name = Ref(head_contents[len(SYMREF) :].strip())
                 main_wt_info.branch = ref_name
             else:
                 main_wt_info.detached = True
@@ -896,7 +908,7 @@ def list_worktrees(repo: Repo) -> list[WorkTreeInfo]:
                 with open(head_path, "rb") as f:
                     head_contents = f.read().strip()
                     if head_contents.startswith(SYMREF):
-                        ref_name = head_contents[len(SYMREF) :].strip()
+                        ref_name = Ref(head_contents[len(SYMREF) :].strip())
                         wt_info.branch = ref_name
                         # Resolve ref to get commit sha
                         try:
@@ -924,8 +936,8 @@ def list_worktrees(repo: Repo) -> list[WorkTreeInfo]:
 
 def add_worktree(
     repo: Repo,
-    path: Union[str, bytes, os.PathLike[str]],
-    branch: Union[str, bytes, None] = None,
+    path: str | bytes | os.PathLike[str],
+    branch: str | bytes | None = None,
     commit: ObjectID | None = None,
     force: bool = False,
     detach: bool = False,
@@ -1009,7 +1021,9 @@ def add_worktree(
     else:
         # Point to branch
         assert branch is not None  # Should be guaranteed by logic above
-        wt_repo.refs.set_symbolic_ref(b"HEAD", branch)
+        from dulwich.refs import HEADREF
+
+        wt_repo.refs.set_symbolic_ref(HEADREF, branch)
 
     # Reset index to match HEAD
     wt_repo.get_worktree().reset_index()
@@ -1018,7 +1032,7 @@ def add_worktree(
 
 
 def remove_worktree(
-    repo: Repo, path: Union[str, bytes, os.PathLike[str]], force: bool = False
+    repo: Repo, path: str | bytes | os.PathLike[str], force: bool = False
 ) -> None:
     """Remove a worktree.
 
@@ -1150,7 +1164,7 @@ def prune_worktrees(
 
 
 def lock_worktree(
-    repo: Repo, path: Union[str, bytes, os.PathLike[str]], reason: str | None = None
+    repo: Repo, path: str | bytes | os.PathLike[str], reason: str | None = None
 ) -> None:
     """Lock a worktree to prevent it from being pruned.
 
@@ -1168,7 +1182,7 @@ def lock_worktree(
             f.write(reason)
 
 
-def unlock_worktree(repo: Repo, path: Union[str, bytes, os.PathLike[str]]) -> None:
+def unlock_worktree(repo: Repo, path: str | bytes | os.PathLike[str]) -> None:
     """Unlock a worktree.
 
     Args:
@@ -1183,7 +1197,7 @@ def unlock_worktree(repo: Repo, path: Union[str, bytes, os.PathLike[str]]) -> No
         os.remove(lock_path)
 
 
-def _find_worktree_id(repo: Repo, path: Union[str, bytes, os.PathLike[str]]) -> str:
+def _find_worktree_id(repo: Repo, path: str | bytes | os.PathLike[str]) -> str:
     """Find the worktree identifier for the given path.
 
     Args:
@@ -1225,8 +1239,8 @@ def _find_worktree_id(repo: Repo, path: Union[str, bytes, os.PathLike[str]]) -> 
 
 def move_worktree(
     repo: Repo,
-    old_path: Union[str, bytes, os.PathLike[str]],
-    new_path: Union[str, bytes, os.PathLike[str]],
+    old_path: str | bytes | os.PathLike[str],
+    new_path: str | bytes | os.PathLike[str],
 ) -> None:
     """Move a worktree to a new location.
 
@@ -1269,7 +1283,7 @@ def move_worktree(
 
 
 def repair_worktree(
-    repo: Repo, paths: Sequence[Union[str, bytes, os.PathLike[str]]] | None = None
+    repo: Repo, paths: Sequence[str | bytes | os.PathLike[str]] | None = None
 ) -> list[str]:
     """Repair worktree administrative files.
 

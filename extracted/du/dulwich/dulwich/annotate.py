@@ -1,20 +1,23 @@
 # annotate.py -- Annotate files with last changed revision
 # Copyright (C) 2015 Jelmer Vernooij <jelmer@jelmer.uk>
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# or (at your option) a later version of the License.
+# SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+# Dulwich is dual-licensed under the Apache License, Version 2.0 and the GNU
+# General Public License as published by the Free Software Foundation; version 2.0
+# or (at your option) any later version. You can redistribute it and/or
+# modify it under the terms of either of these two licenses.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-# MA  02110-1301, USA.
+# You should have received a copy of the licenses; if not, see
+# <http://www.gnu.org/licenses/> for a copy of the GNU General Public License
+# and <http://www.apache.org/licenses/LICENSE-2.0> for a copy of the Apache
+# License, Version 2.0.
+#
 
 """Annotate file contents indicating when they were last changed.
 
@@ -26,9 +29,11 @@ but its speed could be improved - in particular because it uses
 Python's difflib.
 """
 
+__all__ = ["annotate_lines", "update_lines"]
+
 import difflib
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from dulwich.objects import Blob
 from dulwich.walk import (
@@ -39,7 +44,7 @@ from dulwich.walk import (
 if TYPE_CHECKING:
     from dulwich.diff_tree import TreeChange
     from dulwich.object_store import BaseObjectStore
-    from dulwich.objects import Commit, TreeEntry
+    from dulwich.objects import Commit, ObjectID, TreeEntry
 
 # Walk over ancestry graph breadth-first
 # When checking each revision, find lines that according to difflib.Differ()
@@ -74,10 +79,10 @@ def update_lines(
 
 def annotate_lines(
     store: "BaseObjectStore",
-    commit_id: bytes,
+    commit_id: "ObjectID",
     path: bytes,
     order: str = ORDER_DATE,
-    lines: Optional[Sequence[tuple[tuple["Commit", "TreeEntry"], bytes]]] = None,
+    lines: Sequence[tuple[tuple["Commit", "TreeEntry"], bytes]] | None = None,
     follow: bool = True,
 ) -> list[tuple[tuple["Commit", "TreeEntry"], bytes]]:
     """Annotate the lines of a blob.

@@ -21,9 +21,15 @@
 
 """Stash handling."""
 
+__all__ = [
+    "DEFAULT_STASH_REF",
+    "CommitKwargs",
+    "Stash",
+]
+
 import os
 import sys
-from typing import TYPE_CHECKING, Optional, TypedDict, Union
+from typing import TYPE_CHECKING, TypedDict
 
 from .diff_tree import tree_changes
 from .file import GitFile
@@ -58,7 +64,7 @@ class CommitKwargs(TypedDict, total=False):
     author: bytes
 
 
-DEFAULT_STASH_REF = b"refs/stash"
+DEFAULT_STASH_REF = Ref(b"refs/stash")
 
 
 class Stash:
@@ -135,7 +141,9 @@ class Stash:
 
         # Get current HEAD to determine if we can apply cleanly
         try:
-            current_head = self._repo.refs[b"HEAD"]
+            from dulwich.refs import HEADREF
+
+            current_head = self._repo.refs[HEADREF]
         except KeyError:
             raise ValueError("Cannot pop stash: no HEAD")
 
@@ -163,11 +171,11 @@ class Stash:
         else:
 
             def symlink_fn(  # type: ignore[misc,unused-ignore]
-                src: Union[str, bytes],
-                dst: Union[str, bytes],
+                src: str | bytes,
+                dst: str | bytes,
                 target_is_directory: bool = False,
                 *,
-                dir_fd: Optional[int] = None,
+                dir_fd: int | None = None,
             ) -> None:
                 mode = "w" + ("b" if isinstance(src, bytes) else "")
                 with open(dst, mode) as f:
@@ -280,9 +288,9 @@ class Stash:
 
     def push(
         self,
-        committer: Optional[bytes] = None,
-        author: Optional[bytes] = None,
-        message: Optional[bytes] = None,
+        committer: bytes | None = None,
+        author: bytes | None = None,
+        message: bytes | None = None,
     ) -> ObjectID:
         """Create a new stash.
 
@@ -308,6 +316,7 @@ class Stash:
             message=b"Index stash",
             merge_heads=[self._repo.head()],
             no_verify=True,
+            sign=False,
             ref=None,  # Don't update any ref
             **commit_kwargs,
         )
@@ -340,6 +349,7 @@ class Stash:
             message=message,
             merge_heads=[index_commit_id],
             no_verify=True,
+            sign=False,
             **commit_kwargs,
         )
 

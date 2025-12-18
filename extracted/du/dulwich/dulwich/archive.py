@@ -22,6 +22,8 @@
 
 """Generates tarballs for Git trees."""
 
+__all__ = ["ChunkedBytesIO", "tar_stream"]
+
 import posixpath
 import stat
 import struct
@@ -30,7 +32,7 @@ from collections.abc import Generator
 from contextlib import closing
 from io import BytesIO
 from os import SEEK_END
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .object_store import BaseObjectStore
@@ -59,7 +61,7 @@ class ChunkedBytesIO:
         self.contents = contents
         self.pos = (0, 0)
 
-    def read(self, maxbytes: Optional[int] = None) -> bytes:
+    def read(self, maxbytes: int | None = None) -> bytes:
         """Read bytes from the chunked stream.
 
         Args:

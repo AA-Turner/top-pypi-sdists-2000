@@ -64,6 +64,8 @@ from keras.src.ops.math import stft as stft
 from keras.src.ops.math import top_k as top_k
 from keras.src.ops.math import view_as_complex as view_as_complex
 from keras.src.ops.math import view_as_real as view_as_real
+from keras.src.ops.nn import adaptive_average_pool as adaptive_average_pool
+from keras.src.ops.nn import adaptive_max_pool as adaptive_max_pool
 from keras.src.ops.nn import average_pool as average_pool
 from keras.src.ops.nn import batch_normalization as batch_normalization
 from keras.src.ops.nn import binary_crossentropy as binary_crossentropy
@@ -140,6 +142,7 @@ from keras.src.ops.numpy import argmin as argmin
 from keras.src.ops.numpy import argpartition as argpartition
 from keras.src.ops.numpy import argsort as argsort
 from keras.src.ops.numpy import array as array
+from keras.src.ops.numpy import array_split as array_split
 from keras.src.ops.numpy import average as average
 from keras.src.ops.numpy import bartlett as bartlett
 from keras.src.ops.numpy import bincount as bincount
@@ -178,6 +181,7 @@ from keras.src.ops.numpy import divide_no_nan as divide_no_nan
 from keras.src.ops.numpy import dot as dot
 from keras.src.ops.numpy import einsum as einsum
 from keras.src.ops.numpy import empty as empty
+from keras.src.ops.numpy import empty_like as empty_like
 from keras.src.ops.numpy import equal as equal
 from keras.src.ops.numpy import exp as exp
 from keras.src.ops.numpy import exp2 as exp2
@@ -213,6 +217,7 @@ from keras.src.ops.numpy import isreal as isreal
 from keras.src.ops.numpy import kaiser as kaiser
 from keras.src.ops.numpy import kron as kron
 from keras.src.ops.numpy import lcm as lcm
+from keras.src.ops.numpy import ldexp as ldexp
 from keras.src.ops.numpy import left_shift as left_shift
 from keras.src.ops.numpy import less as less
 from keras.src.ops.numpy import less_equal as less_equal
@@ -293,6 +298,7 @@ from keras.src.ops.numpy import triu as triu
 from keras.src.ops.numpy import true_divide as true_divide
 from keras.src.ops.numpy import trunc as trunc
 from keras.src.ops.numpy import unravel_index as unravel_index
+from keras.src.ops.numpy import vander as vander
 from keras.src.ops.numpy import var as var
 from keras.src.ops.numpy import vdot as vdot
 from keras.src.ops.numpy import vectorize as vectorize

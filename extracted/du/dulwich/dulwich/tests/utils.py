@@ -30,12 +30,14 @@ import tempfile
 import time
 import types
 import warnings
-from typing import Any, BinaryIO, Callable, Optional, TypeVar, Union
+from collections.abc import Callable
+from typing import Any, BinaryIO, TypeVar
 from unittest import SkipTest
 
 from dulwich.index import commit_tree
+from dulwich.object_format import DEFAULT_OBJECT_FORMAT
 from dulwich.object_store import BaseObjectStore
-from dulwich.objects import Commit, FixedSha, ShaFile, Tag, object_class
+from dulwich.objects import ZERO_SHA, Commit, FixedSha, ShaFile, Tag, object_class
 from dulwich.pack import (
     DELTA_TYPES,
     OFS_DELTA,
@@ -54,7 +56,7 @@ F = 0o100644  # Shorthand mode for Files.
 T = TypeVar("T", bound=ShaFile)
 
 
-def open_repo(name: str, temp_dir: Optional[str] = None) -> Repo:
+def open_repo(name: str, temp_dir: str | None = None) -> Repo:
     """Open a copy of a repo in a temporary directory.
 
     Use this function for accessing repos in dulwich/tests/data/repos to avoid
@@ -113,7 +115,7 @@ def make_object(cls: type[T], **attrs: Any) -> T:
         if name == "id":
             # id property is read-only, so we overwrite sha instead.
             sha = FixedSha(value)
-            obj.sha = lambda: sha
+            obj.sha = lambda hash_algorithm=None: sha
         else:
             setattr(obj, name, value)
     return obj
@@ -136,7 +138,7 @@ def make_commit(**attrs: Any) -> Commit:
         "commit_timezone": 0,
         "message": b"Test message.",
         "parents": [],
-        "tree": b"0" * 40,
+        "tree": ZERO_SHA,
     }
     all_attrs.update(attrs)
     return make_object(Commit, **all_attrs)
@@ -211,7 +213,7 @@ def ext_functest_builder(
 def build_pack(
     f: BinaryIO,
     objects_spec: list[tuple[int, Any]],
-    store: Optional[BaseObjectStore] = None,
+    store: BaseObjectStore | None = None,
 ) -> list[tuple[int, int, bytes, bytes, int]]:
     """Write test pack data from a concise spec.
 
@@ -275,7 +277,9 @@ def build_pack(
                 base = obj_sha(base_type_num, base_data)
             obj = (base, list(create_delta(base_data, data)))
 
-        crc32 = write_pack_object(sf.write, type_num, obj)
+        crc32 = write_pack_object(
+            sf.write, type_num, obj, object_format=DEFAULT_OBJECT_FORMAT
+        )
         offsets[i] = offset
         crc32s[i] = crc32
 
@@ -293,10 +297,9 @@ def build_pack(
 def build_commit_graph(
     object_store: BaseObjectStore,
     commit_spec: list[list[int]],
-    trees: Optional[
-        dict[int, list[Union[tuple[bytes, ShaFile], tuple[bytes, ShaFile, int]]]]
-    ] = None,
-    attrs: Optional[dict[int, dict[str, Any]]] = None,
+    trees: dict[int, list[tuple[bytes, ShaFile] | tuple[bytes, ShaFile, int]]]
+    | None = None,
+    attrs: dict[int, dict[str, Any]] | None = None,
 ) -> list[Commit]:
     """Build a commit graph from a concise specification.
 

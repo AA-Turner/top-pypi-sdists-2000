@@ -80,6 +80,7 @@ from datadog_api_client.v2.model.cloud_configuration_rule_create_payload import 
 from datadog_api_client.v2.model.security_monitoring_suppression_update_request import (
     SecurityMonitoringSuppressionUpdateRequest,
 )
+from datadog_api_client.v2.model.get_suppression_version_history_response import GetSuppressionVersionHistoryResponse
 from datadog_api_client.v2.model.security_monitoring_list_rules_response import SecurityMonitoringListRulesResponse
 from datadog_api_client.v2.model.security_monitoring_rule_response import SecurityMonitoringRuleResponse
 from datadog_api_client.v2.model.security_monitoring_rule_convert_response import SecurityMonitoringRuleConvertResponse
@@ -1119,6 +1120,39 @@ class SecurityMonitoringApi:
             api_client=api_client,
         )
 
+        self._get_suppression_version_history_endpoint = _Endpoint(
+            settings={
+                "response_type": (GetSuppressionVersionHistoryResponse,),
+                "auth": ["apiKeyAuth", "appKeyAuth", "AuthZ"],
+                "endpoint_path": "/api/v2/security_monitoring/configuration/suppressions/{suppression_id}/version_history",
+                "operation_id": "get_suppression_version_history",
+                "http_method": "GET",
+                "version": "v2",
+            },
+            params_map={
+                "suppression_id": {
+                    "required": True,
+                    "openapi_types": (str,),
+                    "attribute": "suppression_id",
+                    "location": "path",
+                },
+                "page_size": {
+                    "openapi_types": (int,),
+                    "attribute": "page[size]",
+                    "location": "query",
+                },
+                "page_number": {
+                    "openapi_types": (int,),
+                    "attribute": "page[number]",
+                    "location": "query",
+                },
+            },
+            headers_map={
+                "accept": ["application/json"],
+            },
+            api_client=api_client,
+        )
+
         self._get_threat_hunting_job_endpoint = _Endpoint(
             settings={
                 "response_type": (ThreatHuntingJobResponse,),
@@ -1773,6 +1807,11 @@ class SecurityMonitoringApi:
                     "attribute": "filter[origin]",
                     "location": "query",
                 },
+                "filter_running_kernel": {
+                    "openapi_types": (bool,),
+                    "attribute": "filter[running_kernel]",
+                    "location": "query",
+                },
                 "filter_asset_name": {
                     "openapi_types": (str,),
                     "attribute": "filter[asset.name]",
@@ -2313,9 +2352,10 @@ class SecurityMonitoringApi:
     ) -> FindingCaseResponse:
         """Attach security findings to a case.
 
-        Attach security findings to a case. You can attach up to 50 security findings per case. Security findings that are already attached to another case will be detached from their previous case and attached to the specified case.
+        Attach security findings to a case.
+        You can attach up to 50 security findings per case. Security findings that are already attached to another case will be detached from their previous case and attached to the specified case.
 
-        :param case_id: The unique identifier of the case to attach security findings to
+        :param case_id: Unique identifier of the case to attach security findings to
         :type case_id: str
         :type body: AttachCaseRequest
         :rtype: FindingCaseResponse
@@ -2333,7 +2373,8 @@ class SecurityMonitoringApi:
     ) -> FindingCaseResponse:
         """Attach security findings to a Jira issue.
 
-        Attach security findings to a Jira issue by providing the Jira issue URL. You can attach up to 50 security findings per Jira issue. If the Jira issue is not linked to any case, this operation will create a case for the security findings and link the Jira issue to the newly created case. Security findings that are already attached to another Jira issue will be detached from their previous Jira issue and attached to the specified Jira issue.
+        Attach security findings to a Jira issue by providing the Jira issue URL.
+        You can attach up to 50 security findings per Jira issue. If the Jira issue is not linked to any case, this operation will create a case for the security findings and link the Jira issue to the newly created case. To configure the Jira integration, see `Bidirectional ticket syncing with Jira <https://docs.datadoghq.com/security/ticketing_integrations/#bidirectional-ticket-syncing-with-jira>`_. Security findings that are already attached to another Jira issue will be detached from their previous Jira issue and attached to the specified Jira issue.
 
         :type body: AttachJiraIssueRequest
         :rtype: FindingCaseResponse
@@ -2433,7 +2474,8 @@ class SecurityMonitoringApi:
     ) -> FindingCaseResponseArray:
         """Create cases for security findings.
 
-        Create cases for security findings. You can create up to 50 cases per request and associate up to 50 security findings per case. Security findings that are already attached to another case will be detached from their previous case and attached to the newly created case.
+        Create cases for security findings.
+        You can create up to 50 cases per request and associate up to 50 security findings per case. Security findings that are already attached to another case will be detached from their previous case and attached to the newly created case.
 
         :type body: CreateCaseRequestArray
         :rtype: FindingCaseResponseArray
@@ -2465,7 +2507,8 @@ class SecurityMonitoringApi:
     ) -> FindingCaseResponseArray:
         """Create Jira issues for security findings.
 
-        Create Jira issues for security findings. This operation creates a case in Datadog and a Jira issue linked to that case for bidirectional sync between Datadog and Jira. You can create up to 50 Jira issues per request and associate up to 50 security findings per Jira issue. Security findings that are already attached to another Jira issue will be detached from their previous Jira issue and attached to the newly created Jira issue.
+        Create Jira issues for security findings.
+        This operation creates a case in Datadog and a Jira issue linked to that case for bidirectional sync between Datadog and Jira. To configure the Jira integration, see `Bidirectional ticket syncing with Jira <https://docs.datadoghq.com/security/ticketing_integrations/#bidirectional-ticket-syncing-with-jira>`_. You can create up to 50 Jira issues per request and associate up to 50 security findings per Jira issue. Security findings that are already attached to another Jira issue will be detached from their previous Jira issue and attached to the newly created Jira issue.
 
         :type body: CreateJiraIssueRequestArray
         :rtype: FindingCaseResponseArray
@@ -2699,7 +2742,8 @@ class SecurityMonitoringApi:
     ) -> None:
         """Detach security findings from their case.
 
-        Detach security findings from their case. This operation dissociates security findings from their associated cases without deleting the cases themselves. You can detach security findings from multiple different cases in a single request, with a limit of 50 security findings per request. Security findings that are not currently attached to any case will be ignored.
+        Detach security findings from their case.
+        This operation dissociates security findings from their associated cases without deleting the cases themselves. You can detach security findings from multiple different cases in a single request, with a limit of 50 security findings per request. Security findings that are not currently attached to any case will be ignored.
 
         :type body: DetachCaseRequest
         :rtype: None
@@ -2920,9 +2964,9 @@ class SecurityMonitoringApi:
     def get_secrets_rules(
         self,
     ) -> SecretRuleArray:
-        """Returns list of Secrets rules.
+        """Returns a list of Secrets rules.
 
-        Returns list of Secrets rules with ID, Pattern, Description, Priority, and SDS ID
+        Returns a list of Secrets rules with ID, Pattern, Description, Priority, and SDS ID.
 
         :rtype: SecretRuleArray
         """
@@ -3137,6 +3181,36 @@ class SecurityMonitoringApi:
         kwargs["rule_id"] = rule_id
 
         return self._get_suppressions_affecting_rule_endpoint.call_with_http_info(**kwargs)
+
+    def get_suppression_version_history(
+        self,
+        suppression_id: str,
+        *,
+        page_size: Union[int, UnsetType] = unset,
+        page_number: Union[int, UnsetType] = unset,
+    ) -> GetSuppressionVersionHistoryResponse:
+        """Get a suppression's version history.
+
+        Get a suppression's version history.
+
+        :param suppression_id: The ID of the suppression rule
+        :type suppression_id: str
+        :param page_size: Size for a given page. The maximum allowed value is 100.
+        :type page_size: int, optional
+        :param page_number: Specific page number to return.
+        :type page_number: int, optional
+        :rtype: GetSuppressionVersionHistoryResponse
+        """
+        kwargs: Dict[str, Any] = {}
+        kwargs["suppression_id"] = suppression_id
+
+        if page_size is not unset:
+            kwargs["page_size"] = page_size
+
+        if page_number is not unset:
+            kwargs["page_number"] = page_number
+
+        return self._get_suppression_version_history_endpoint.call_with_http_info(**kwargs)
 
     def get_threat_hunting_job(
         self,
@@ -3938,6 +4012,7 @@ class SecurityMonitoringApi:
         filter_fix_available: Union[bool, UnsetType] = unset,
         filter_repo_digests: Union[str, UnsetType] = unset,
         filter_origin: Union[str, UnsetType] = unset,
+        filter_running_kernel: Union[bool, UnsetType] = unset,
         filter_asset_name: Union[str, UnsetType] = unset,
         filter_asset_type: Union[AssetType, UnsetType] = unset,
         filter_asset_version_first: Union[str, UnsetType] = unset,
@@ -4100,6 +4175,8 @@ class SecurityMonitoringApi:
         :type filter_repo_digests: str, optional
         :param filter_origin: Filter by origin.
         :type filter_origin: str, optional
+        :param filter_running_kernel: Filter for whether the vulnerability affects a running kernel (for vulnerabilities related to a ``Host`` asset).
+        :type filter_running_kernel: bool, optional
         :param filter_asset_name: Filter by asset name. This field supports the usage of wildcards (*).
         :type filter_asset_name: str, optional
         :param filter_asset_type: Filter by asset type.
@@ -4213,6 +4290,9 @@ class SecurityMonitoringApi:
 
         if filter_origin is not unset:
             kwargs["filter_origin"] = filter_origin
+
+        if filter_running_kernel is not unset:
+            kwargs["filter_running_kernel"] = filter_running_kernel
 
         if filter_asset_name is not unset:
             kwargs["filter_asset_name"] = filter_asset_name

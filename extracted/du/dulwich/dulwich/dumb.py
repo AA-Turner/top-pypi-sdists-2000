@@ -21,13 +21,21 @@
 
 """Support for dumb HTTP(S) git repositories."""
 
+__all__ = [
+    "DumbHTTPObjectStore",
+    "DumbRemoteHTTPRepo",
+]
+
 import os
 import tempfile
 import zlib
-from collections.abc import Iterator, Mapping, Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from io import BytesIO
-from typing import Any, Callable, Optional
+from typing import TYPE_CHECKING, Any
 from urllib.parse import urljoin
+
+if TYPE_CHECKING:
+    from .object_format import ObjectFormat
 
 from .errors import NotGitRepository, ObjectFormatException
 from .object_store import BaseObjectStore
@@ -36,6 +44,7 @@ from .objects import (
     Blob,
     Commit,
     ObjectID,
+    RawObjectID,
     ShaFile,
     Tag,
     Tree,
@@ -43,7 +52,8 @@ from .objects import (
     sha_to_hex,
 )
 from .pack import Pack, PackData, PackIndex, UnpackedObject, load_pack_index_file
-from .refs import Ref, read_info_refs, split_peeled_refs
+from .protocol import split_peeled_refs
+from .refs import Ref, read_info_refs
 
 
 class DumbHTTPObjectStore(BaseObjectStore):
@@ -55,6 +65,7 @@ class DumbHTTPObjectStore(BaseObjectStore):
         http_request_func: Callable[
             [str, dict[str, str]], tuple[Any, Callable[..., bytes]]
         ],
+        object_format: "ObjectFormat | None" = None,
     ) -> None:
         """Initialize a DumbHTTPObjectStore.
 
@@ -62,12 +73,14 @@ class DumbHTTPObjectStore(BaseObjectStore):
           base_url: Base URL of the remote repository (e.g. "https://example.com/repo.git/")
           http_request_func: Function to make HTTP requests, should accept (url, headers)
                            and return (response, read_func).
+          object_format: Object format to use (defaults to DEFAULT_OBJECT_FORMAT)
         """
+        super().__init__(object_format=object_format)
         self.base_url = base_url.rstrip("/") + "/"
         self._http_request = http_request_func
-        self._packs: Optional[list[tuple[str, Optional[PackIndex]]]] = None
+        self._packs: list[tuple[str, PackIndex | None]] | None = None
         self._cached_objects: dict[bytes, tuple[int, bytes]] = {}
-        self._temp_pack_dir: Optional[str] = None
+        self._temp_pack_dir: str | None = None
 
     def _ensure_temp_pack_dir(self) -> None:
         """Ensure we have a temporary directory for storing pack files."""
@@ -195,13 +208,15 @@ class DumbHTTPObjectStore(BaseObjectStore):
                     # Fetch and cache the index
                     idx_data = self._fetch_url(f"objects/pack/{pack_name}.idx")
 
-                    idx = load_pack_index_file("<http>", BytesIO(idx_data))
+                    idx = load_pack_index_file(
+                        "<http>", BytesIO(idx_data), self.object_format
+                    )
                     if self._packs is not None:
                         self._packs[i] = (name, idx)
                 return idx
         raise KeyError(f"Pack not found: {pack_name}")
 
-    def _fetch_from_pack(self, sha: bytes) -> tuple[int, bytes]:
+    def _fetch_from_pack(self, sha: RawObjectID | ObjectID) -> tuple[int, bytes]:
         """Try to fetch an object from pack files.
 
         Args:
@@ -215,7 +230,10 @@ class DumbHTTPObjectStore(BaseObjectStore):
         """
         self._load_packs()
         # Convert hex to binary for pack operations
-        binsha = hex_to_sha(sha)
+        if len(sha) == 20:
+            binsha = RawObjectID(sha)  # Already binary
+        else:
+            binsha = hex_to_sha(ObjectID(sha))  # Convert hex to binary
 
         for pack_name, pack_idx in self._packs or []:
             if pack_idx is None:
@@ -242,7 +260,7 @@ class DumbHTTPObjectStore(BaseObjectStore):
                     f.write(data)
 
             # Open the pack and get the object
-            pack_data = PackData(pack_path)
+            pack_data = PackData(pack_path, object_format=self.object_format)
             pack = Pack.from_objects(pack_data, pack_idx)
             try:
                 return pack.get_raw(binsha)
@@ -251,7 +269,7 @@ class DumbHTTPObjectStore(BaseObjectStore):
 
         raise KeyError(sha)
 
-    def get_raw(self, sha: bytes) -> tuple[int, bytes]:
+    def get_raw(self, sha: RawObjectID | ObjectID) -> tuple[int, bytes]:
         """Obtain the raw text for an object.
 
         Args:
@@ -276,7 +294,7 @@ class DumbHTTPObjectStore(BaseObjectStore):
         self._cached_objects[sha] = result
         return result
 
-    def contains_loose(self, sha: bytes) -> bool:
+    def contains_loose(self, sha: RawObjectID | ObjectID) -> bool:
         """Check if a particular object is present by SHA1 and is loose."""
         try:
             self._fetch_loose_object(sha)
@@ -284,7 +302,7 @@ class DumbHTTPObjectStore(BaseObjectStore):
         except KeyError:
             return False
 
-    def __contains__(self, sha: bytes) -> bool:
+    def __contains__(self, sha: RawObjectID | ObjectID) -> bool:
         """Check if a particular object is present by SHA1."""
         if sha in self._cached_objects:
             return True
@@ -303,7 +321,7 @@ class DumbHTTPObjectStore(BaseObjectStore):
         except KeyError:
             return False
 
-    def __iter__(self) -> Iterator[bytes]:
+    def __iter__(self) -> Iterator[ObjectID]:
         """Iterate over all SHAs in the store.
 
         Note: This is inefficient for dumb HTTP as it requires
@@ -322,7 +340,7 @@ class DumbHTTPObjectStore(BaseObjectStore):
             for sha in idx:
                 if sha not in seen:
                     seen.add(sha)
-                    yield sha_to_hex(sha)
+                    yield sha_to_hex(RawObjectID(sha))
 
     @property
     def packs(self) -> list[Any]:
@@ -338,9 +356,9 @@ class DumbHTTPObjectStore(BaseObjectStore):
 
     def add_objects(
         self,
-        objects: Sequence[tuple[ShaFile, Optional[str]]],
-        progress: Optional[Callable[[str], None]] = None,
-    ) -> Optional["Pack"]:
+        objects: Sequence[tuple[ShaFile, str | None]],
+        progress: Callable[[str], None] | None = None,
+    ) -> "Pack | None":
         """Add a set of objects to this object store."""
         raise NotImplementedError("Cannot add objects to dumb HTTP repository")
 
@@ -370,8 +388,8 @@ class DumbRemoteHTTPRepo:
         """
         self.base_url = base_url.rstrip("/") + "/"
         self._http_request = http_request_func
-        self._refs: Optional[dict[Ref, ObjectID]] = None
-        self._peeled: Optional[dict[Ref, ObjectID]] = None
+        self._refs: dict[Ref, ObjectID] | None = None
+        self._peeled: dict[Ref, ObjectID] | None = None
         self.object_store = DumbHTTPObjectStore(base_url, http_request_func)
 
     def _fetch_url(self, path: str) -> bytes:
@@ -405,43 +423,51 @@ class DumbRemoteHTTPRepo:
 
             refs_hex = read_info_refs(BytesIO(refs_data))
             # Keep SHAs as hex
-            self._refs, self._peeled = split_peeled_refs(refs_hex)
+            refs_raw, peeled_raw = split_peeled_refs(refs_hex)
+            # Convert to typed dicts
+            self._refs = {Ref(k): ObjectID(v) for k, v in refs_raw.items()}
+            self._peeled = peeled_raw
 
         return dict(self._refs)
 
-    def get_head(self) -> Ref:
+    def get_head(self) -> Ref | None:
         """Get the current HEAD reference.
 
         Returns:
           HEAD reference name or commit ID
         """
-        head_resp_bytes = self._fetch_url("HEAD")
-        head_split = head_resp_bytes.replace(b"\n", b"").split(b" ")
-        head_target = head_split[1] if len(head_split) > 1 else head_split[0]
-        # handle HEAD legacy format containing a commit id instead of a ref name
-        for ref_name, ret_target in self.get_refs().items():
-            if ret_target == head_target:
-                head_target = ref_name
-                break
-        return head_target
+        try:
+            head_resp_bytes = self._fetch_url("HEAD")
+        except OSError as e:
+            if "HTTP error 429" not in str(e):
+                return None
+            else:
+                # rate-limit reached so raise exception
+                raise
+        else:
+            head_split = head_resp_bytes.replace(b"\n", b"").split(b" ")
+            head_target_bytes = head_split[1] if len(head_split) > 1 else head_split[0]
+            # handle HEAD legacy format containing a commit id instead of a ref name
+            for ref_name, ret_target in self.get_refs().items():
+                if ret_target == head_target_bytes:
+                    return ref_name
+        return Ref(head_target_bytes)
 
     def get_peeled(self, ref: Ref) -> ObjectID:
         """Get the peeled value of a ref."""
         # For dumb HTTP, we don't have peeled refs readily available
         # We would need to fetch and parse tag objects
-        sha = self.get_refs().get(ref, None)
+        sha: ObjectID | None = self.get_refs().get(ref, None)
         return sha if sha is not None else ZERO_SHA
 
     def fetch_pack_data(
         self,
-        determine_wants: Callable[
-            [Mapping[Ref, ObjectID], Optional[int]], list[ObjectID]
-        ],
+        determine_wants: Callable[[Mapping[Ref, ObjectID], int | None], list[ObjectID]],
         graph_walker: object,
-        progress: Optional[Callable[[bytes], None]] = None,
+        progress: Callable[[bytes], None] | None = None,
         *,
-        get_tagged: Optional[bool] = None,
-        depth: Optional[int] = None,
+        get_tagged: bool | None = None,
+        depth: int | None = None,
     ) -> Iterator[UnpackedObject]:
         """Fetch pack data from the remote.
 

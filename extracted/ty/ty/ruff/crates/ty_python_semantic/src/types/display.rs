@@ -15,6 +15,7 @@ use rustc_hash::{FxHashMap, FxHashSet};
 
 use crate::Db;
 use crate::place::Place;
+use crate::semantic_index::definition::Definition;
 use crate::types::class::{ClassLiteral, ClassType, GenericAlias};
 use crate::types::function::{FunctionType, OverloadLiteral};
 use crate::types::generics::{GenericContext, Specialization};
@@ -40,6 +41,9 @@ pub struct DisplaySettings<'db> {
     pub qualified: Rc<FxHashMap<&'db str, QualificationLevel>>,
     /// Whether long unions and literals are displayed in full
     pub preserve_full_unions: bool,
+    /// Disallow Signature printing to introduce a name
+    /// (presumably because we rendered one already)
+    pub disallow_signature_name: bool,
 }
 
 impl<'db> DisplaySettings<'db> {
@@ -76,14 +80,23 @@ impl<'db> DisplaySettings<'db> {
     }
 
     #[must_use]
-    pub fn from_possibly_ambiguous_types(
-        db: &'db dyn Db,
-        types: impl IntoIterator<Item = Type<'db>>,
-    ) -> Self {
+    pub fn disallow_signature_name(&self) -> Self {
+        Self {
+            disallow_signature_name: true,
+            ..self.clone()
+        }
+    }
+
+    #[must_use]
+    pub fn from_possibly_ambiguous_types<I, T>(db: &'db dyn Db, types: I) -> Self
+    where
+        I: IntoIterator<Item = T>,
+        T: Into<Type<'db>>,
+    {
         let collector = AmbiguousClassCollector::default();
 
         for ty in types {
-            collector.visit_type(db, ty);
+            collector.visit_type(db, ty.into());
         }
 
         Self {
@@ -422,6 +435,8 @@ impl<'db> super::visitor::TypeVisitor<'db> for AmbiguousClassCollector<'db> {
                 inner: Protocol::FromClass(class),
                 ..
             }) => return self.visit_type(db, Type::from(class)),
+            // no need to recurse into TypeVar bounds/constraints
+            Type::TypeVar(_) => return,
             _ => {}
         }
 
@@ -439,7 +454,7 @@ impl<'db> Type<'db> {
     pub fn display(self, db: &'db dyn Db) -> DisplayType<'db> {
         DisplayType {
             ty: self,
-            settings: DisplaySettings::default(),
+            settings: DisplaySettings::from_possibly_ambiguous_types(db, [self]),
             db,
         }
     }
@@ -742,7 +757,7 @@ impl<'db> FmtDetailed<'db> for DisplayRepresentation<'db> {
                         type_parameters.fmt_detailed(f)?;
                         signature
                             .bind_self(self.db, Some(typing_self_ty))
-                            .display_with(self.db, self.settings.clone())
+                            .display_with(self.db, self.settings.disallow_signature_name())
                             .fmt_detailed(f)
                     }
                     signatures => {
@@ -1158,7 +1173,7 @@ impl<'db> FmtDetailed<'db> for DisplayOverloadLiteral<'db> {
         write!(f, "{}", self.literal.name(self.db))?;
         type_parameters.fmt_detailed(f)?;
         signature
-            .display_with(self.db, self.settings.clone())
+            .display_with(self.db, self.settings.disallow_signature_name())
             .fmt_detailed(f)
     }
 }
@@ -1205,7 +1220,7 @@ impl<'db> FmtDetailed<'db> for DisplayFunctionType<'db> {
                 write!(f, "{}", self.ty.name(self.db))?;
                 type_parameters.fmt_detailed(f)?;
                 signature
-                    .display_with(self.db, self.settings.clone())
+                    .display_with(self.db, self.settings.disallow_signature_name())
                     .fmt_detailed(f)
             }
             signatures => {
@@ -1624,6 +1639,7 @@ impl<'db> Signature<'db> {
         settings: DisplaySettings<'db>,
     ) -> DisplaySignature<'a, 'db> {
         DisplaySignature {
+            definition: self.definition(),
             parameters: self.parameters(),
             return_ty: self.return_ty,
             db,
@@ -1633,6 +1649,7 @@ impl<'db> Signature<'db> {
 }
 
 pub(crate) struct DisplaySignature<'a, 'db> {
+    definition: Option<Definition<'db>>,
     parameters: &'a Parameters<'db>,
     return_ty: Option<Type<'db>>,
     db: &'db dyn Db,
@@ -1659,6 +1676,17 @@ impl<'db> FmtDetailed<'db> for DisplaySignature<'_, 'db> {
         f.set_invalid_syntax();
         // When we exit this function, write a marker signaling we're ending a signature
         let mut f = f.with_detail(TypeDetail::SignatureEnd);
+
+        // If we're multiline printing and a name hasn't been emitted, try to
+        // remember what the name was by checking if we have a definition
+        if self.settings.multiline
+            && !self.settings.disallow_signature_name
+            && let Some(definition) = self.definition
+            && let Some(name) = definition.name(self.db)
+        {
+            f.write_str("def ")?;
+            f.write_str(&name)?;
+        }
 
         // Parameters
         self.parameters

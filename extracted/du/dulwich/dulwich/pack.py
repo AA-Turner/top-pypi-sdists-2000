@@ -33,6 +33,70 @@ match for the object name. You then use the pointer got from this as
 a pointer in to the corresponding packfile.
 """
 
+__all__ = [
+    "DEFAULT_PACK_DELTA_WINDOW_SIZE",
+    "DEFAULT_PACK_INDEX_VERSION",
+    "DELTA_TYPES",
+    "OFS_DELTA",
+    "PACK_SPOOL_FILE_MAX_SIZE",
+    "REF_DELTA",
+    "DeltaChainIterator",
+    "FilePackIndex",
+    "MemoryPackIndex",
+    "ObjectContainer",
+    "Pack",
+    "PackChunkGenerator",
+    "PackData",
+    "PackFileDisappeared",
+    "PackHint",
+    "PackIndex",
+    "PackIndex1",
+    "PackIndex2",
+    "PackIndex3",
+    "PackIndexEntry",
+    "PackIndexer",
+    "PackInflater",
+    "PackStreamCopier",
+    "PackStreamReader",
+    "PackedObjectContainer",
+    "SHA1Reader",
+    "SHA1Writer",
+    "UnpackedObject",
+    "UnpackedObjectIterator",
+    "UnpackedObjectStream",
+    "UnresolvedDeltas",
+    "apply_delta",
+    "bisect_find_sha",
+    "chunks_length",
+    "compute_file_sha",
+    "deltas_from_sorted_objects",
+    "deltify_pack_objects",
+    "extend_pack",
+    "find_reusable_deltas",
+    "full_unpacked_object",
+    "generate_unpacked_objects",
+    "iter_sha1",
+    "load_pack_index",
+    "load_pack_index_file",
+    "obj_sha",
+    "pack_header_chunks",
+    "pack_object_chunks",
+    "pack_object_header",
+    "pack_objects_to_data",
+    "read_pack_header",
+    "read_zlib_chunks",
+    "sort_objects_for_delta",
+    "take_msb_bytes",
+    "unpack_object",
+    "write_pack",
+    "write_pack_data",
+    "write_pack_from_container",
+    "write_pack_header",
+    "write_pack_index",
+    "write_pack_object",
+    "write_pack_objects",
+]
+
 import binascii
 from collections import defaultdict, deque
 from contextlib import suppress
@@ -48,8 +112,8 @@ import struct
 import sys
 import warnings
 import zlib
-from collections.abc import Iterable, Iterator, Sequence, Set
-from hashlib import sha1
+from collections.abc import Callable, Iterable, Iterator, Sequence, Set
+from hashlib import sha1, sha256
 from itertools import chain
 from os import SEEK_CUR, SEEK_END
 from struct import unpack_from
@@ -59,12 +123,9 @@ from typing import (
     TYPE_CHECKING,
     Any,
     BinaryIO,
-    Callable,
     Generic,
-    Optional,
     Protocol,
     TypeVar,
-    Union,
 )
 
 try:
@@ -74,16 +135,13 @@ except ImportError:
 else:
     has_mmap = True
 
-if sys.version_info >= (3, 12):
-    from collections.abc import Buffer
-else:
-    Buffer = Union[bytes, bytearray, memoryview]
-
 if TYPE_CHECKING:
     from _hashlib import HASH as HashObject
 
     from .bitmap import PackBitmap
     from .commit_graph import CommitGraph
+    from .object_store import BaseObjectStore
+    from .ref import Ref
 
 # For some reason the above try, except fails to set has_mmap = False for plan9
 if sys.platform == "Plan9":
@@ -93,7 +151,15 @@ from . import replace_me
 from .errors import ApplyDeltaError, ChecksumMismatch
 from .file import GitFile, _GitFile
 from .lru_cache import LRUSizeCache
-from .objects import ObjectID, ShaFile, hex_to_sha, object_header, sha_to_hex
+from .object_format import OBJECT_FORMAT_TYPE_NUMS, SHA1, ObjectFormat
+from .objects import (
+    ObjectID,
+    RawObjectID,
+    ShaFile,
+    hex_to_sha,
+    object_header,
+    sha_to_hex,
+)
 
 OFS_DELTA = 6
 REF_DELTA = 7
@@ -110,10 +176,10 @@ PACK_SPOOL_FILE_MAX_SIZE = 16 * 1024 * 1024
 DEFAULT_PACK_INDEX_VERSION = 2
 
 
-OldUnpackedObject = Union[tuple[Union[bytes, int], list[bytes]], list[bytes]]
+OldUnpackedObject = tuple[bytes | int, list[bytes]] | list[bytes]
 ResolveExtRefFn = Callable[[bytes], tuple[int, OldUnpackedObject]]
 ProgressFn = Callable[[int, str], None]
-PackHint = tuple[int, Optional[bytes]]
+PackHint = tuple[int, bytes | None]
 
 
 class UnresolvedDeltas(Exception):
@@ -136,9 +202,9 @@ class ObjectContainer(Protocol):
 
     def add_objects(
         self,
-        objects: Sequence[tuple[ShaFile, Optional[str]]],
-        progress: Optional[Callable[..., None]] = None,
-    ) -> Optional["Pack"]:
+        objects: Sequence[tuple[ShaFile, str | None]],
+        progress: Callable[..., None] | None = None,
+    ) -> "Pack | None":
         """Add a set of objects to this object store.
 
         Args:
@@ -147,13 +213,13 @@ class ObjectContainer(Protocol):
         Returns: Optional Pack object of the objects written.
         """
 
-    def __contains__(self, sha1: bytes) -> bool:
+    def __contains__(self, sha1: "ObjectID") -> bool:
         """Check if a hex sha is present."""
 
-    def __getitem__(self, sha1: bytes) -> ShaFile:
+    def __getitem__(self, sha1: "ObjectID | RawObjectID") -> ShaFile:
         """Retrieve an object."""
 
-    def get_commit_graph(self) -> Optional["CommitGraph"]:
+    def get_commit_graph(self) -> "CommitGraph | None":
         """Get the commit graph for this object store.
 
         Returns:
@@ -166,7 +232,7 @@ class PackedObjectContainer(ObjectContainer):
     """Container for objects packed in a pack file."""
 
     def get_unpacked_object(
-        self, sha1: bytes, *, include_comp: bool = False
+        self, sha1: "ObjectID | RawObjectID", *, include_comp: bool = False
     ) -> "UnpackedObject":
         """Get a raw unresolved object.
 
@@ -180,7 +246,7 @@ class PackedObjectContainer(ObjectContainer):
         raise NotImplementedError(self.get_unpacked_object)
 
     def iterobjects_subset(
-        self, shas: Iterable[bytes], *, allow_missing: bool = False
+        self, shas: Iterable["ObjectID"], *, allow_missing: bool = False
     ) -> Iterator[ShaFile]:
         """Iterate over a subset of objects.
 
@@ -195,7 +261,7 @@ class PackedObjectContainer(ObjectContainer):
 
     def iter_unpacked_subset(
         self,
-        shas: Iterable[bytes],
+        shas: Iterable["ObjectID | RawObjectID"],
         *,
         include_comp: bool = False,
         allow_missing: bool = False,
@@ -228,8 +294,8 @@ class UnpackedObjectStream:
 
 
 def take_msb_bytes(
-    read: Callable[[int], bytes], crc32: Optional[int] = None
-) -> tuple[list[int], Optional[int]]:
+    read: Callable[[int], bytes], crc32: int | None = None
+) -> tuple[list[int], int | None]:
     """Read bytes marked with most significant bit.
 
     Args:
@@ -278,22 +344,24 @@ class UnpackedObject:
         "decomp_chunks",  # Decompressed object chunks.
         "decomp_len",  # Decompressed length of this object.
         "delta_base",  # Delta base offset or SHA.
+        "hash_func",  # Hash function to use for computing object IDs.
         "obj_chunks",  # Decompressed and delta-resolved chunks.
         "obj_type_num",  # Type of this object.
         "offset",  # Offset in its pack.
         "pack_type_num",  # Type of this object in the pack (may be a delta).
     ]
 
-    obj_type_num: Optional[int]
-    obj_chunks: Optional[list[bytes]]
-    delta_base: Union[None, bytes, int]
+    obj_type_num: int | None
+    obj_chunks: list[bytes] | None
+    delta_base: None | bytes | int
     decomp_chunks: list[bytes]
-    comp_chunks: Optional[list[bytes]]
-    decomp_len: Optional[int]
-    crc32: Optional[int]
-    offset: Optional[int]
+    comp_chunks: list[bytes] | None
+    decomp_len: int | None
+    crc32: int | None
+    offset: int | None
     pack_type_num: int
-    _sha: Optional[bytes]
+    _sha: bytes | None
+    hash_func: Callable[[], "HashObject"]
 
     # TODO(dborowitz): read_zlib_chunks and unpack_object could very well be
     # methods of this object.
@@ -301,12 +369,13 @@ class UnpackedObject:
         self,
         pack_type_num: int,
         *,
-        delta_base: Union[None, bytes, int] = None,
-        decomp_len: Optional[int] = None,
-        crc32: Optional[int] = None,
-        sha: Optional[bytes] = None,
-        decomp_chunks: Optional[list[bytes]] = None,
-        offset: Optional[int] = None,
+        delta_base: None | bytes | int = None,
+        decomp_len: int | None = None,
+        crc32: int | None = None,
+        sha: bytes | None = None,
+        decomp_chunks: list[bytes] | None = None,
+        offset: int | None = None,
+        hash_func: Callable[[], "HashObject"] = sha1,
     ) -> None:
         """Initialize an UnpackedObject.
 
@@ -315,9 +384,10 @@ class UnpackedObject:
             delta_base: Delta base (offset or SHA) if this is a delta object
             decomp_len: Decompressed length of this object
             crc32: CRC32 checksum
-            sha: SHA-1 hash of the object
+            sha: SHA hash of the object
             decomp_chunks: Decompressed chunks
             offset: Offset in the pack file
+            hash_func: Hash function to use (defaults to sha1)
         """
         self.offset = offset
         self._sha = sha
@@ -330,6 +400,7 @@ class UnpackedObject:
         else:
             self.decomp_len = decomp_len
         self.crc32 = crc32
+        self.hash_func = hash_func
 
         if pack_type_num in DELTA_TYPES:
             self.obj_type_num = None
@@ -339,12 +410,12 @@ class UnpackedObject:
             self.obj_chunks = self.decomp_chunks
             self.delta_base = delta_base
 
-    def sha(self) -> bytes:
+    def sha(self) -> RawObjectID:
         """Return the binary SHA of this object."""
         if self._sha is None:
             assert self.obj_type_num is not None and self.obj_chunks is not None
-            self._sha = obj_sha(self.obj_type_num, self.obj_chunks)
-        return self._sha
+            self._sha = obj_sha(self.obj_type_num, self.obj_chunks, self.hash_func)
+        return RawObjectID(self._sha)
 
     def sha_file(self) -> ShaFile:
         """Return a ShaFile from this object."""
@@ -464,20 +535,23 @@ def iter_sha1(iter: Iterable[bytes]) -> bytes:
     return sha.hexdigest().encode("ascii")
 
 
-def load_pack_index(path: Union[str, os.PathLike[str]]) -> "PackIndex":
+def load_pack_index(
+    path: str | os.PathLike[str], object_format: ObjectFormat
+) -> "PackIndex":
     """Load an index file by path.
 
     Args:
       path: Path to the index file
+      object_format: Hash algorithm used by the repository
     Returns: A PackIndex loaded from the given path
     """
     with GitFile(path, "rb") as f:
-        return load_pack_index_file(path, f)
+        return load_pack_index_file(path, f, object_format)
 
 
 def _load_file_contents(
-    f: Union[IO[bytes], _GitFile], size: Optional[int] = None
-) -> tuple[Union[bytes, Any], int]:
+    f: IO[bytes] | _GitFile, size: int | None = None
+) -> tuple[bytes | Any, int]:
     """Load contents from a file, preferring mmap when possible.
 
     Args:
@@ -507,31 +581,40 @@ def _load_file_contents(
 
 
 def load_pack_index_file(
-    path: Union[str, os.PathLike[str]], f: Union[IO[bytes], _GitFile]
+    path: str | os.PathLike[str],
+    f: IO[bytes] | _GitFile,
+    object_format: ObjectFormat,
 ) -> "PackIndex":
     """Load an index file from a file-like object.
 
     Args:
       path: Path for the index file
       f: File-like object
+      object_format: Hash algorithm used by the repository
     Returns: A PackIndex loaded from the given file
     """
     contents, size = _load_file_contents(f)
     if contents[:4] == b"\377tOc":
         version = struct.unpack(b">L", contents[4:8])[0]
         if version == 2:
-            return PackIndex2(path, file=f, contents=contents, size=size)
+            return PackIndex2(
+                path,
+                object_format,
+                file=f,
+                contents=contents,
+                size=size,
+            )
         elif version == 3:
-            return PackIndex3(path, file=f, contents=contents, size=size)
+            return PackIndex3(path, object_format, file=f, contents=contents, size=size)
         else:
             raise KeyError(f"Unknown pack index format {version}")
     else:
-        return PackIndex1(path, file=f, contents=contents, size=size)
+        return PackIndex1(path, object_format, file=f, contents=contents, size=size)
 
 
 def bisect_find_sha(
     start: int, end: int, sha: bytes, unpack_name: Callable[[int], bytes]
-) -> Optional[int]:
+) -> int | None:
     """Find a SHA in a data blob with sorted SHAs.
 
     Args:
@@ -554,7 +637,7 @@ def bisect_find_sha(
     return None
 
 
-PackIndexEntry = tuple[bytes, int, Optional[int]]
+PackIndexEntry = tuple[RawObjectID, int, int | None]
 
 
 class PackIndex:
@@ -564,9 +647,7 @@ class PackIndex:
     packfile of that object if it has it.
     """
 
-    # Default to SHA-1 for backward compatibility
-    hash_algorithm = 1
-    hash_size = 20
+    object_format: "ObjectFormat"
 
     def __eq__(self, other: object) -> bool:
         """Check equality with another PackIndex."""
@@ -588,9 +669,9 @@ class PackIndex:
         """Return the number of entries in this pack index."""
         raise NotImplementedError(self.__len__)
 
-    def __iter__(self) -> Iterator[bytes]:
+    def __iter__(self) -> Iterator[ObjectID]:
         """Iterate over the SHAs in this pack."""
-        return map(sha_to_hex, self._itersha())
+        return map(lambda sha: sha_to_hex(RawObjectID(sha)), self._itersha())
 
     def iterentries(self) -> Iterator[PackIndexEntry]:
         """Iterate over the entries in this pack index.
@@ -600,7 +681,7 @@ class PackIndex:
         """
         raise NotImplementedError(self.iterentries)
 
-    def get_pack_checksum(self) -> Optional[bytes]:
+    def get_pack_checksum(self) -> bytes | None:
         """Return the SHA1 checksum stored for the corresponding packfile.
 
         Returns: 20-byte binary digest, or None if not available
@@ -608,7 +689,7 @@ class PackIndex:
         raise NotImplementedError(self.get_pack_checksum)
 
     @replace_me(since="0.21.0", remove_in="0.23.0")
-    def object_index(self, sha: bytes) -> int:
+    def object_index(self, sha: ObjectID | RawObjectID) -> int:
         """Return the index for the given SHA.
 
         Args:
@@ -619,7 +700,7 @@ class PackIndex:
         """
         return self.object_offset(sha)
 
-    def object_offset(self, sha: bytes) -> int:
+    def object_offset(self, sha: ObjectID | RawObjectID) -> int:
         """Return the offset in to the corresponding packfile for the object.
 
         Given the name of an object it will return the offset that object
@@ -655,7 +736,7 @@ class PackIndex:
         """Yield all the SHA1's of the objects in the index, sorted."""
         raise NotImplementedError(self._itersha)
 
-    def iter_prefix(self, prefix: bytes) -> Iterator[bytes]:
+    def iter_prefix(self, prefix: bytes) -> Iterator[RawObjectID]:
         """Iterate over all SHA1s with the given prefix.
 
         Args:
@@ -665,7 +746,7 @@ class PackIndex:
         # Default implementation for PackIndex classes that don't override
         for sha, _, _ in self.iterentries():
             if sha.startswith(prefix):
-                yield sha
+                yield RawObjectID(sha)
 
     def close(self) -> None:
         """Close any open files."""
@@ -679,13 +760,15 @@ class MemoryPackIndex(PackIndex):
 
     def __init__(
         self,
-        entries: list[tuple[bytes, int, Optional[int]]],
-        pack_checksum: Optional[bytes] = None,
+        entries: list[PackIndexEntry],
+        object_format: ObjectFormat,
+        pack_checksum: bytes | None = None,
     ) -> None:
         """Create a new MemoryPackIndex.
 
         Args:
           entries: Sequence of name, idx, crc32 (sorted)
+          object_format: Object format used by this index
           pack_checksum: Optional pack checksum
         """
         self._by_sha = {}
@@ -695,8 +778,9 @@ class MemoryPackIndex(PackIndex):
             self._by_offset[offset] = name
         self._entries = entries
         self._pack_checksum = pack_checksum
+        self.object_format = object_format
 
-    def get_pack_checksum(self) -> Optional[bytes]:
+    def get_pack_checksum(self) -> bytes | None:
         """Return the SHA checksum stored for the corresponding packfile."""
         return self._pack_checksum
 
@@ -704,16 +788,19 @@ class MemoryPackIndex(PackIndex):
         """Return the number of entries in this pack index."""
         return len(self._entries)
 
-    def object_offset(self, sha: bytes) -> int:
+    def object_offset(self, sha: ObjectID | RawObjectID) -> int:
         """Return the offset for the given SHA.
 
         Args:
           sha: SHA to look up (binary or hex)
         Returns: Offset in the pack file
         """
-        if len(sha) == 40:
-            sha = hex_to_sha(sha)
-        return self._by_sha[sha]
+        lookup_sha: RawObjectID
+        if len(sha) == self.object_format.hex_length:
+            lookup_sha = hex_to_sha(ObjectID(sha))
+        else:
+            lookup_sha = RawObjectID(sha)
+        return self._by_sha[lookup_sha]
 
     def object_sha1(self, offset: int) -> bytes:
         """Return the SHA1 for the object at the given offset."""
@@ -731,13 +818,19 @@ class MemoryPackIndex(PackIndex):
     def for_pack(cls, pack_data: "PackData") -> "MemoryPackIndex":
         """Create a MemoryPackIndex from a PackData object."""
         return MemoryPackIndex(
-            list(pack_data.sorted_entries()), pack_data.get_stored_checksum()
+            list(pack_data.sorted_entries()),
+            pack_checksum=pack_data.get_stored_checksum(),
+            object_format=pack_data.object_format,
         )
 
     @classmethod
     def clone(cls, other_index: "PackIndex") -> "MemoryPackIndex":
         """Create a copy of another PackIndex in memory."""
-        return cls(list(other_index.iterentries()), other_index.get_pack_checksum())
+        return cls(
+            list(other_index.iterentries()),
+            other_index.object_format,
+            other_index.get_pack_checksum(),
+        )
 
 
 class FilePackIndex(PackIndex):
@@ -753,14 +846,14 @@ class FilePackIndex(PackIndex):
     """
 
     _fan_out_table: list[int]
-    _file: Union[IO[bytes], _GitFile]
+    _file: IO[bytes] | _GitFile
 
     def __init__(
         self,
-        filename: Union[str, os.PathLike[str]],
-        file: Optional[Union[IO[bytes], _GitFile]] = None,
-        contents: Optional[Union[bytes, "mmap.mmap"]] = None,
-        size: Optional[int] = None,
+        filename: str | os.PathLike[str],
+        file: IO[bytes] | _GitFile | None = None,
+        contents: "bytes | mmap.mmap | None" = None,
+        size: int | None = None,
     ) -> None:
         """Create a pack index object.
 
@@ -823,7 +916,7 @@ class FilePackIndex(PackIndex):
         """Unpack the i-th object offset from the index file."""
         raise NotImplementedError(self._unpack_offset)
 
-    def _unpack_crc32_checksum(self, i: int) -> Optional[int]:
+    def _unpack_crc32_checksum(self, i: int) -> int | None:
         """Unpack the crc32 checksum for the ith object from the index file."""
         raise NotImplementedError(self._unpack_crc32_checksum)
 
@@ -887,17 +980,20 @@ class FilePackIndex(PackIndex):
         """
         return bytes(self._contents[-20:])
 
-    def object_offset(self, sha: bytes) -> int:
+    def object_offset(self, sha: ObjectID | RawObjectID) -> int:
         """Return the offset in to the corresponding packfile for the object.
 
         Given the name of an object it will return the offset that object
         lives at within the corresponding pack file. If the pack file doesn't
         have the object then None will be returned.
         """
-        if len(sha) == 40:
-            sha = hex_to_sha(sha)
+        lookup_sha: RawObjectID
+        if len(sha) == self.object_format.hex_length:  # hex string
+            lookup_sha = hex_to_sha(ObjectID(sha))
+        else:
+            lookup_sha = RawObjectID(sha)
         try:
-            return self._object_offset(sha)
+            return self._object_offset(lookup_sha)
         except ValueError as exc:
             closed = getattr(self._contents, "closed", None)
             if closed in (None, True):
@@ -910,7 +1006,8 @@ class FilePackIndex(PackIndex):
         Args:
           sha: A *binary* SHA string. (20 characters long)_
         """
-        assert len(sha) == 20
+        hash_size = getattr(self, "hash_size", 20)  # Default to SHA1 for v1
+        assert len(sha) == hash_size
         idx = ord(sha[:1])
         if idx == 0:
             start = 0
@@ -922,7 +1019,7 @@ class FilePackIndex(PackIndex):
             raise KeyError(sha)
         return self._unpack_offset(i)
 
-    def iter_prefix(self, prefix: bytes) -> Iterator[bytes]:
+    def iter_prefix(self, prefix: bytes) -> Iterator[RawObjectID]:
         """Iterate over all SHA1s with the given prefix."""
         start = ord(prefix[:1])
         if start == 0:
@@ -939,7 +1036,7 @@ class FilePackIndex(PackIndex):
         for i in range(start, end):
             name: bytes = self._unpack_name(i)
             if name.startswith(prefix):
-                yield name
+                yield RawObjectID(name)
                 started = True
             elif started:
                 break
@@ -948,38 +1045,52 @@ class FilePackIndex(PackIndex):
 class PackIndex1(FilePackIndex):
     """Version 1 Pack Index file."""
 
+    object_format = SHA1
+
     def __init__(
         self,
-        filename: Union[str, os.PathLike[str]],
-        file: Optional[Union[IO[bytes], _GitFile]] = None,
-        contents: Optional[bytes] = None,
-        size: Optional[int] = None,
+        filename: str | os.PathLike[str],
+        object_format: ObjectFormat,
+        file: IO[bytes] | _GitFile | None = None,
+        contents: bytes | None = None,
+        size: int | None = None,
     ) -> None:
         """Initialize a version 1 pack index.
 
         Args:
             filename: Path to the index file
+            object_format: Object format used by the repository
             file: Optional file object
             contents: Optional mmap'd contents
             size: Optional size of the index
         """
         super().__init__(filename, file, contents, size)
+
+        # PackIndex1 only supports SHA1
+        if object_format != SHA1:
+            raise AssertionError(
+                f"PackIndex1 only supports SHA1, not {object_format.name}"
+            )
+
+        self.object_format = object_format
         self.version = 1
         self._fan_out_table = self._read_fan_out_table(0)
+        self.hash_size = self.object_format.oid_length
+        self._entry_size = 4 + self.hash_size
 
-    def _unpack_entry(self, i: int) -> tuple[bytes, int, None]:
-        (offset, name) = unpack_from(">L20s", self._contents, (0x100 * 4) + (i * 24))
-        return (name, offset, None)
+    def _unpack_entry(self, i: int) -> tuple[RawObjectID, int, None]:
+        base_offset = (0x100 * 4) + (i * self._entry_size)
+        offset = unpack_from(">L", self._contents, base_offset)[0]
+        name = self._contents[base_offset + 4 : base_offset + 4 + self.hash_size]
+        return (RawObjectID(name), offset, None)
 
     def _unpack_name(self, i: int) -> bytes:
-        offset = (0x100 * 4) + (i * 24) + 4
-        return self._contents[offset : offset + 20]
+        offset = (0x100 * 4) + (i * self._entry_size) + 4
+        return self._contents[offset : offset + self.hash_size]
 
     def _unpack_offset(self, i: int) -> int:
-        offset = (0x100 * 4) + (i * 24)
-        result = unpack_from(">L", self._contents, offset)[0]
-        assert isinstance(result, int)
-        return result
+        offset = (0x100 * 4) + (i * self._entry_size)
+        return int(unpack_from(">L", self._contents, offset)[0])
 
     def _unpack_crc32_checksum(self, i: int) -> None:
         # Not stored in v1 index files
@@ -989,62 +1100,99 @@ class PackIndex1(FilePackIndex):
 class PackIndex2(FilePackIndex):
     """Version 2 Pack Index file."""
 
+    object_format = SHA1
+
     def __init__(
         self,
-        filename: Union[str, os.PathLike[str]],
-        file: Optional[Union[IO[bytes], _GitFile]] = None,
-        contents: Optional[bytes] = None,
-        size: Optional[int] = None,
+        filename: str | os.PathLike[str],
+        object_format: ObjectFormat,
+        file: IO[bytes] | _GitFile | None = None,
+        contents: bytes | None = None,
+        size: int | None = None,
     ) -> None:
         """Initialize a version 2 pack index.
 
         Args:
             filename: Path to the index file
+            object_format: Object format used by the repository
             file: Optional file object
             contents: Optional mmap'd contents
             size: Optional size of the index
         """
         super().__init__(filename, file, contents, size)
+        self.object_format = object_format
         if self._contents[:4] != b"\377tOc":
             raise AssertionError("Not a v2 pack index file")
         (self.version,) = unpack_from(b">L", self._contents, 4)
         if self.version != 2:
             raise AssertionError(f"Version was {self.version}")
         self._fan_out_table = self._read_fan_out_table(8)
+        self.hash_size = self.object_format.oid_length
         self._name_table_offset = 8 + 0x100 * 4
-        self._crc32_table_offset = self._name_table_offset + 20 * len(self)
+        self._crc32_table_offset = self._name_table_offset + self.hash_size * len(self)
         self._pack_offset_table_offset = self._crc32_table_offset + 4 * len(self)
         self._pack_offset_largetable_offset = self._pack_offset_table_offset + 4 * len(
             self
         )
 
-    def _unpack_entry(self, i: int) -> tuple[bytes, int, int]:
+    def _unpack_entry(self, i: int) -> tuple[RawObjectID, int, int]:
         return (
-            self._unpack_name(i),
+            RawObjectID(self._unpack_name(i)),
             self._unpack_offset(i),
             self._unpack_crc32_checksum(i),
         )
 
     def _unpack_name(self, i: int) -> bytes:
-        offset = self._name_table_offset + i * 20
-        return self._contents[offset : offset + 20]
+        offset = self._name_table_offset + i * self.hash_size
+        return self._contents[offset : offset + self.hash_size]
 
     def _unpack_offset(self, i: int) -> int:
-        offset_pos = self._pack_offset_table_offset + i * 4
-        offset = unpack_from(">L", self._contents, offset_pos)[0]
-        assert isinstance(offset, int)
-        if offset & (2**31):
-            large_offset_pos = (
-                self._pack_offset_largetable_offset + (offset & (2**31 - 1)) * 8
+        offset = self._pack_offset_table_offset + i * 4
+        offset_val = int(unpack_from(">L", self._contents, offset)[0])
+        if offset_val & (2**31):
+            offset = (
+                self._pack_offset_largetable_offset + (offset_val & (2**31 - 1)) * 8
             )
-            offset = unpack_from(">Q", self._contents, large_offset_pos)[0]
-            assert isinstance(offset, int)
-        return offset
+            offset_val = int(unpack_from(">Q", self._contents, offset)[0])
+        return offset_val
 
     def _unpack_crc32_checksum(self, i: int) -> int:
-        result = unpack_from(">L", self._contents, self._crc32_table_offset + i * 4)[0]
-        assert isinstance(result, int)
-        return result
+        return int(
+            unpack_from(">L", self._contents, self._crc32_table_offset + i * 4)[0]
+        )
+
+    def get_pack_checksum(self) -> bytes:
+        """Return the checksum stored for the corresponding packfile.
+
+        Returns: binary digest (size depends on hash algorithm)
+        """
+        # Index ends with: pack_checksum + index_checksum
+        # Each checksum is hash_size bytes
+        checksum_size = self.hash_size
+        return bytes(self._contents[-2 * checksum_size : -checksum_size])
+
+    def get_stored_checksum(self) -> bytes:
+        """Return the checksum stored for this index.
+
+        Returns: binary digest (size depends on hash algorithm)
+        """
+        checksum_size = self.hash_size
+        return bytes(self._contents[-checksum_size:])
+
+    def calculate_checksum(self) -> bytes:
+        """Calculate the checksum over this pack index.
+
+        Returns: binary digest (size depends on hash algorithm)
+        """
+        # Determine hash function based on hash_size
+        if self.hash_size == 20:
+            hash_func = sha1
+        elif self.hash_size == 32:
+            hash_func = sha256
+        else:
+            raise ValueError(f"Unsupported hash size: {self.hash_size}")
+
+        return hash_func(self._contents[: -self.hash_size]).digest()
 
 
 class PackIndex3(FilePackIndex):
@@ -1055,15 +1203,17 @@ class PackIndex3(FilePackIndex):
 
     def __init__(
         self,
-        filename: Union[str, os.PathLike[str]],
-        file: Optional[Union[IO[bytes], _GitFile]] = None,
-        contents: Optional[bytes] = None,
-        size: Optional[int] = None,
+        filename: str | os.PathLike[str],
+        object_format: ObjectFormat,
+        file: IO[bytes] | _GitFile | None = None,
+        contents: bytes | None = None,
+        size: int | None = None,
     ) -> None:
         """Initialize a version 3 pack index.
 
         Args:
             filename: Path to the index file
+            object_format: Object format used by the repository
             file: Optional file object
             contents: Optional mmap'd contents
             size: Optional size of the index
@@ -1076,13 +1226,18 @@ class PackIndex3(FilePackIndex):
             raise AssertionError(f"Version was {self.version}")
 
         # Read hash algorithm identifier (1 = SHA-1, 2 = SHA-256)
-        (self.hash_algorithm,) = unpack_from(b">L", self._contents, 8)
-        if self.hash_algorithm == 1:
-            self.hash_size = 20  # SHA-1
-        elif self.hash_algorithm == 2:
-            self.hash_size = 32  # SHA-256
-        else:
-            raise AssertionError(f"Unknown hash algorithm {self.hash_algorithm}")
+        (self.hash_format,) = unpack_from(b">L", self._contents, 8)
+        file_object_format = OBJECT_FORMAT_TYPE_NUMS[self.hash_format]
+
+        # Verify provided object_format matches what's in the file
+        if object_format != file_object_format:
+            raise AssertionError(
+                f"Object format mismatch: provided {object_format.name}, "
+                f"but file contains {file_object_format.name}"
+            )
+
+        self.object_format = object_format
+        self.hash_size = self.object_format.oid_length
 
         # Read length of shortened object names
         (self.shortened_oid_len,) = unpack_from(b">L", self._contents, 12)
@@ -1098,9 +1253,9 @@ class PackIndex3(FilePackIndex):
             self
         )
 
-    def _unpack_entry(self, i: int) -> tuple[bytes, int, int]:
+    def _unpack_entry(self, i: int) -> tuple[RawObjectID, int, int]:
         return (
-            self._unpack_name(i),
+            RawObjectID(self._unpack_name(i)),
             self._unpack_offset(i),
             self._unpack_crc32_checksum(i),
         )
@@ -1147,7 +1302,7 @@ def read_pack_header(read: Callable[[int], bytes]) -> tuple[int, int]:
     return (version, num_objects)
 
 
-def chunks_length(chunks: Union[bytes, Iterable[bytes]]) -> int:
+def chunks_length(chunks: bytes | Iterable[bytes]) -> int:
     """Get the total length of a sequence of chunks.
 
     Args:
@@ -1162,7 +1317,8 @@ def chunks_length(chunks: Union[bytes, Iterable[bytes]]) -> int:
 
 def unpack_object(
     read_all: Callable[[int], bytes],
-    read_some: Optional[Callable[[int], bytes]] = None,
+    hash_func: Callable[[], "HashObject"],
+    read_some: Callable[[int], bytes] | None = None,
     compute_crc32: bool = False,
     include_comp: bool = False,
     zlib_bufsize: int = _ZLIB_BUFSIZE,
@@ -1172,6 +1328,7 @@ def unpack_object(
     Args:
       read_all: Read function that blocks until the number of requested
         bytes are read.
+      hash_func: Hash function to use for computing object IDs.
       read_some: Read function that returns at least one byte, but may not
         return the number of bytes requested.
       compute_crc32: If True, compute the CRC32 of the compressed data. If
@@ -1203,7 +1360,7 @@ def unpack_object(
     for i, byte in enumerate(raw[1:]):
         size += (byte & 0x7F) << ((i * 7) + 4)
 
-    delta_base: Union[int, bytes, None]
+    delta_base: int | bytes | None
     raw_base = len(raw)
     if type_num == OFS_DELTA:
         raw, crc32 = take_msb_bytes(read_all, crc32=crc32)
@@ -1217,16 +1374,22 @@ def unpack_object(
             delta_base_offset += byte & 0x7F
         delta_base = delta_base_offset
     elif type_num == REF_DELTA:
-        delta_base_obj = read_all(20)
+        # Determine hash size from hash_func
+        hash_size = len(hash_func().digest())
+        delta_base_obj = read_all(hash_size)
         if crc32 is not None:
             crc32 = binascii.crc32(delta_base_obj, crc32)
         delta_base = delta_base_obj
-        raw_base += 20
+        raw_base += hash_size
     else:
         delta_base = None
 
     unpacked = UnpackedObject(
-        type_num, delta_base=delta_base, decomp_len=size, crc32=crc32
+        type_num,
+        delta_base=delta_base,
+        decomp_len=size,
+        crc32=crc32,
+        hash_func=hash_func,
     )
     unused = read_zlib_chunks(
         read_some,
@@ -1254,13 +1417,15 @@ class PackStreamReader:
 
     def __init__(
         self,
+        hash_func: Callable[[], "HashObject"],
         read_all: Callable[[int], bytes],
-        read_some: Optional[Callable[[int], bytes]] = None,
+        read_some: Callable[[int], bytes] | None = None,
         zlib_bufsize: int = _ZLIB_BUFSIZE,
     ) -> None:
         """Initialize pack stream reader.
 
         Args:
+            hash_func: Hash function to use for computing object IDs
             read_all: Function to read all requested bytes
             read_some: Function to read some bytes (optional)
             zlib_bufsize: Buffer size for zlib decompression
@@ -1270,7 +1435,9 @@ class PackStreamReader:
             self.read_some = read_all
         else:
             self.read_some = read_some
-        self.sha = sha1()
+        self.hash_func = hash_func
+        self.sha = hash_func()
+        self._hash_size = len(hash_func().digest())
         self._offset = 0
         self._rbuf = BytesIO()
         # trailer is a deque to avoid memory allocation on small reads
@@ -1280,8 +1447,8 @@ class PackStreamReader:
     def _read(self, read: Callable[[int], bytes], size: int) -> bytes:
         """Read up to size bytes using the given callback.
 
-        As a side effect, update the verifier's hash (excluding the last 20
-        bytes read).
+        As a side effect, update the verifier's hash (excluding the last
+        hash_size bytes read, which is the pack checksum).
 
         Args:
           read: The read callback to read from.
@@ -1291,15 +1458,15 @@ class PackStreamReader:
         """
         data = read(size)
 
-        # maintain a trailer of the last 20 bytes we've read
+        # maintain a trailer of the last hash_size bytes we've read
         n = len(data)
         self._offset += n
         tn = len(self._trailer)
-        if n >= 20:
+        if n >= self._hash_size:
             to_pop = tn
-            to_add = 20
+            to_add = self._hash_size
         else:
-            to_pop = max(n + tn - 20, 0)
+            to_pop = max(n + tn - self._hash_size, 0)
             to_add = n
         self.sha.update(
             bytes(bytearray([self._trailer.popleft() for _ in range(to_pop)]))
@@ -1373,6 +1540,7 @@ class PackStreamReader:
             offset = self.offset
             unpacked, unused = unpack_object(
                 self.read,
+                self.hash_func,
                 read_some=self.recv,
                 compute_crc32=compute_crc32,
                 zlib_bufsize=self._zlib_bufsize,
@@ -1388,16 +1556,18 @@ class PackStreamReader:
 
             yield unpacked
 
-        if self._buf_len() < 20:
+        if self._buf_len() < self._hash_size:
             # If the read buffer is full, then the last read() got the whole
             # trailer off the wire. If not, it means there is still some of the
-            # trailer to read. We need to read() all 20 bytes; N come from the
-            # read buffer and (20 - N) come from the wire.
-            self.read(20)
+            # trailer to read. We need to read() all hash_size bytes; N come from the
+            # read buffer and (hash_size - N) come from the wire.
+            self.read(self._hash_size)
 
         pack_sha = bytearray(self._trailer)
         if pack_sha != self.sha.digest():
-            raise ChecksumMismatch(sha_to_hex(bytes(pack_sha)), self.sha.hexdigest())
+            raise ChecksumMismatch(
+                sha_to_hex(RawObjectID(bytes(pack_sha))), self.sha.hexdigest()
+            )
 
 
 class PackStreamCopier(PackStreamReader):
@@ -1409,14 +1579,16 @@ class PackStreamCopier(PackStreamReader):
 
     def __init__(
         self,
+        hash_func: Callable[[], "HashObject"],
         read_all: Callable[[int], bytes],
-        read_some: Optional[Callable[[int], bytes]],
+        read_some: Callable[[int], bytes] | None,
         outfile: IO[bytes],
-        delta_iter: Optional["DeltaChainIterator[UnpackedObject]"] = None,
+        delta_iter: "DeltaChainIterator[UnpackedObject] | None" = None,
     ) -> None:
         """Initialize the copier.
 
         Args:
+          hash_func: Hash function to use for computing object IDs
           read_all: Read function that blocks until the number of
             requested bytes are read.
           read_some: Read function that returns at least one byte, but may
@@ -1425,7 +1597,7 @@ class PackStreamCopier(PackStreamReader):
           delta_iter: Optional DeltaChainIterator to record deltas as we
             read them.
         """
-        super().__init__(read_all, read_some=read_some)
+        super().__init__(hash_func, read_all, read_some=read_some)
         self.outfile = outfile
         self._delta_iter = delta_iter
 
@@ -1435,7 +1607,7 @@ class PackStreamCopier(PackStreamReader):
         self.outfile.write(data)
         return data
 
-    def verify(self, progress: Optional[Callable[..., None]] = None) -> None:
+    def verify(self, progress: Callable[..., None] | None = None) -> None:
         """Verify a pack stream and write it to the output file.
 
         See PackStreamReader.iterobjects for a list of exceptions this may
@@ -1451,9 +1623,22 @@ class PackStreamCopier(PackStreamReader):
             progress(f"copied {i} pack entries\n".encode("ascii"))
 
 
-def obj_sha(type: int, chunks: Union[bytes, Iterable[bytes]]) -> bytes:
-    """Compute the SHA for a numeric type and object chunks."""
-    sha = sha1()
+def obj_sha(
+    type: int,
+    chunks: bytes | Iterable[bytes],
+    hash_func: Callable[[], "HashObject"] = sha1,
+) -> bytes:
+    """Compute the SHA for a numeric type and object chunks.
+
+    Args:
+        type: Object type number
+        chunks: Object data chunks
+        hash_func: Hash function to use (defaults to sha1)
+
+    Returns:
+        Binary hash digest
+    """
+    sha = hash_func()
     sha.update(object_header(type, chunks_length(chunks)))
     if isinstance(chunks, bytes):
         sha.update(chunks)
@@ -1464,21 +1649,28 @@ def obj_sha(type: int, chunks: Union[bytes, Iterable[bytes]]) -> bytes:
 
 
 def compute_file_sha(
-    f: IO[bytes], start_ofs: int = 0, end_ofs: int = 0, buffer_size: int = 1 << 16
+    f: IO[bytes],
+    hash_func: Callable[[], "HashObject"],
+    start_ofs: int = 0,
+    end_ofs: int = 0,
+    buffer_size: int = 1 << 16,
 ) -> "HashObject":
     """Hash a portion of a file into a new SHA.
 
     Args:
       f: A file-like object to read from that supports seek().
+      hash_func: A callable that returns a new HashObject.
       start_ofs: The offset in the file to start reading at.
       end_ofs: The offset in the file to end reading at, relative to the
         end of the file.
       buffer_size: A buffer size for reading.
     Returns: A new SHA object updated with data read from the file.
     """
-    sha = sha1()
+    sha = hash_func()
     f.seek(0, SEEK_END)
     length = f.tell()
+    if start_ofs < 0:
+        raise AssertionError(f"start_ofs cannot be negative: {start_ofs}")
     if (end_ofs < 0 and length + end_ofs < start_ofs) or end_ofs > length:
         raise AssertionError(
             f"Attempt to read beyond file length. start_ofs: {start_ofs}, end_ofs: {end_ofs}, file length: {length}"
@@ -1521,16 +1713,17 @@ class PackData:
 
     def __init__(
         self,
-        filename: Union[str, os.PathLike[str]],
-        file: Optional[IO[bytes]] = None,
-        size: Optional[int] = None,
+        filename: str | os.PathLike[str],
+        object_format: ObjectFormat,
+        file: IO[bytes] | None = None,
+        size: int | None = None,
         *,
-        delta_window_size: Optional[int] = None,
-        window_memory: Optional[int] = None,
-        delta_cache_size: Optional[int] = None,
-        depth: Optional[int] = None,
-        threads: Optional[int] = None,
-        big_file_threshold: Optional[int] = None,
+        delta_window_size: int | None = None,
+        window_memory: int | None = None,
+        delta_cache_size: int | None = None,
+        depth: int | None = None,
+        threads: int | None = None,
+        big_file_threshold: int | None = None,
     ) -> None:
         """Create a PackData object representing the pack in the given filename.
 
@@ -1541,6 +1734,7 @@ class PackData:
         mmap implementation is flawed.
         """
         self._filename = filename
+        self.object_format = object_format
         self._size = size
         self._header_size = 12
         self.delta_window_size = delta_window_size
@@ -1573,7 +1767,7 @@ class PackData:
         return os.path.basename(self._filename)
 
     @property
-    def path(self) -> Union[str, os.PathLike[str]]:
+    def path(self) -> str | os.PathLike[str]:
         """Get the full path of the pack file.
 
         Returns:
@@ -1582,29 +1776,40 @@ class PackData:
         return self._filename
 
     @classmethod
-    def from_file(cls, file: IO[bytes], size: Optional[int] = None) -> "PackData":
+    def from_file(
+        cls,
+        file: IO[bytes],
+        object_format: ObjectFormat,
+        size: int | None = None,
+    ) -> "PackData":
         """Create a PackData object from an open file.
 
         Args:
           file: Open file object
+          object_format: Object format
           size: Optional file size
 
         Returns:
           PackData instance
         """
-        return cls(str(file), file=file, size=size)
+        return cls(str(file), object_format, file=file, size=size)
 
     @classmethod
-    def from_path(cls, path: Union[str, os.PathLike[str]]) -> "PackData":
+    def from_path(
+        cls,
+        path: str | os.PathLike[str],
+        object_format: ObjectFormat,
+    ) -> "PackData":
         """Create a PackData object from a file path.
 
         Args:
           path: Path to the pack file
+          object_format: Object format
 
         Returns:
           PackData instance
         """
-        return cls(filename=path)
+        return cls(filename=path, object_format=object_format)
 
     def close(self) -> None:
         """Close the underlying pack file."""
@@ -1616,9 +1821,9 @@ class PackData:
 
     def __exit__(
         self,
-        exc_type: Optional[type],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: type | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         """Exit context manager."""
         self.close()
@@ -1645,9 +1850,13 @@ class PackData:
     def calculate_checksum(self) -> bytes:
         """Calculate the checksum for this pack.
 
-        Returns: 20-byte binary SHA1 digest
+        Returns: Binary digest (size depends on hash algorithm)
         """
-        return compute_file_sha(self._file, end_ofs=-20).digest()
+        return compute_file_sha(
+            self._file,
+            hash_func=self.object_format.hash_func,
+            end_ofs=-self.object_format.oid_length,
+        ).digest()
 
     def iter_unpacked(self, *, include_comp: bool = False) -> Iterator[UnpackedObject]:
         """Iterate over unpacked objects in the pack."""
@@ -1659,7 +1868,10 @@ class PackData:
         for _ in range(self._num_objects):
             offset = self._file.tell()
             unpacked, unused = unpack_object(
-                self._file.read, compute_crc32=False, include_comp=include_comp
+                self._file.read,
+                self.object_format.hash_func,
+                compute_crc32=False,
+                include_comp=include_comp,
             )
             unpacked.offset = offset
             yield unpacked
@@ -1668,9 +1880,9 @@ class PackData:
 
     def iterentries(
         self,
-        progress: Optional[Callable[[int, int], None]] = None,
-        resolve_ext_ref: Optional[ResolveExtRefFn] = None,
-    ) -> Iterator[tuple[bytes, int, Optional[int]]]:
+        progress: Callable[[int, int], None] | None = None,
+        resolve_ext_ref: ResolveExtRefFn | None = None,
+    ) -> Iterator[PackIndexEntry]:
         """Yield entries summarizing the contents of this pack.
 
         Args:
@@ -1688,9 +1900,9 @@ class PackData:
 
     def sorted_entries(
         self,
-        progress: Optional[ProgressFn] = None,
-        resolve_ext_ref: Optional[ResolveExtRefFn] = None,
-    ) -> list[tuple[bytes, int, int]]:
+        progress: Callable[[int, int], None] | None = None,
+        resolve_ext_ref: ResolveExtRefFn | None = None,
+    ) -> list[tuple[RawObjectID, int, int]]:
         """Return entries in this pack, sorted by SHA.
 
         Args:
@@ -1706,8 +1918,8 @@ class PackData:
     def create_index_v1(
         self,
         filename: str,
-        progress: Optional[Callable[..., None]] = None,
-        resolve_ext_ref: Optional[ResolveExtRefFn] = None,
+        progress: Callable[..., None] | None = None,
+        resolve_ext_ref: ResolveExtRefFn | None = None,
     ) -> bytes:
         """Create a version 1 file for this data file.
 
@@ -1732,8 +1944,8 @@ class PackData:
     def create_index_v2(
         self,
         filename: str,
-        progress: Optional[Callable[..., None]] = None,
-        resolve_ext_ref: Optional[ResolveExtRefFn] = None,
+        progress: Callable[..., None] | None = None,
+        resolve_ext_ref: ResolveExtRefFn | None = None,
     ) -> bytes:
         """Create a version 2 index file for this data file.
 
@@ -1752,9 +1964,9 @@ class PackData:
     def create_index_v3(
         self,
         filename: str,
-        progress: Optional[Callable[..., None]] = None,
-        resolve_ext_ref: Optional[ResolveExtRefFn] = None,
-        hash_algorithm: int = 1,
+        progress: Callable[..., None] | None = None,
+        resolve_ext_ref: ResolveExtRefFn | None = None,
+        hash_format: int | None = None,
     ) -> bytes:
         """Create a version 3 index file for this data file.
 
@@ -1762,24 +1974,26 @@ class PackData:
           filename: Index filename.
           progress: Progress report function
           resolve_ext_ref: Function to resolve external references
-          hash_algorithm: Hash algorithm identifier (1 = SHA-1, 2 = SHA-256)
+          hash_format: Hash algorithm identifier (1 = SHA-1, 2 = SHA-256)
         Returns: Checksum of index file
         """
         entries = self.sorted_entries(
             progress=progress, resolve_ext_ref=resolve_ext_ref
         )
         with GitFile(filename, "wb") as f:
+            if hash_format is None:
+                hash_format = 1  # Default to SHA-1
             return write_pack_index_v3(
-                f, entries, self.calculate_checksum(), hash_algorithm
+                f, entries, self.calculate_checksum(), hash_format=hash_format
             )
 
     def create_index(
         self,
         filename: str,
-        progress: Optional[Callable[..., None]] = None,
+        progress: Callable[..., None] | None = None,
         version: int = 2,
-        resolve_ext_ref: Optional[ResolveExtRefFn] = None,
-        hash_algorithm: int = 1,
+        resolve_ext_ref: ResolveExtRefFn | None = None,
+        hash_format: int | None = None,
     ) -> bytes:
         """Create an  index file for this data file.
 
@@ -1788,7 +2002,7 @@ class PackData:
           progress: Progress report function
           version: Index version (1, 2, or 3)
           resolve_ext_ref: Function to resolve external references
-          hash_algorithm: Hash algorithm identifier for v3 (1 = SHA-1, 2 = SHA-256)
+          hash_format: Hash algorithm identifier for v3 (1 = SHA-1, 2 = SHA-256)
         Returns: Checksum of index file
         """
         if version == 1:
@@ -1804,15 +2018,16 @@ class PackData:
                 filename,
                 progress,
                 resolve_ext_ref=resolve_ext_ref,
-                hash_algorithm=hash_algorithm,
+                hash_format=hash_format,
             )
         else:
             raise ValueError(f"unknown index format {version}")
 
     def get_stored_checksum(self) -> bytes:
         """Return the expected checksum stored in this pack."""
-        self._file.seek(-20, SEEK_END)
-        return self._file.read(20)
+        checksum_size = self.object_format.oid_length
+        self._file.seek(-checksum_size, SEEK_END)
+        return self._file.read(checksum_size)
 
     def check(self) -> None:
         """Check the consistency of this pack."""
@@ -1827,7 +2042,9 @@ class PackData:
         """Given offset in the packfile return a UnpackedObject."""
         assert offset >= self._header_size
         self._file.seek(offset)
-        unpacked, _ = unpack_object(self._file.read, include_comp=include_comp)
+        unpacked, _ = unpack_object(
+            self._file.read, self.object_format.hash_func, include_comp=include_comp
+        )
         unpacked.offset = offset
         return unpacked
 
@@ -1875,26 +2092,29 @@ class DeltaChainIterator(Generic[T]):
 
     def __init__(
         self,
-        file_obj: Optional[IO[bytes]],
+        file_obj: IO[bytes] | None,
+        hash_func: Callable[[], "HashObject"],
         *,
-        resolve_ext_ref: Optional[ResolveExtRefFn] = None,
+        resolve_ext_ref: ResolveExtRefFn | None = None,
     ) -> None:
         """Initialize DeltaChainIterator.
 
         Args:
             file_obj: File object to read pack data from
+            hash_func: Hash function to use for computing object IDs
             resolve_ext_ref: Optional function to resolve external references
         """
         self._file = file_obj
+        self.hash_func = hash_func
         self._resolve_ext_ref = resolve_ext_ref
         self._pending_ofs: dict[int, list[int]] = defaultdict(list)
         self._pending_ref: dict[bytes, list[int]] = defaultdict(list)
         self._full_ofs: list[tuple[int, int]] = []
-        self._ext_refs: list[bytes] = []
+        self._ext_refs: list[RawObjectID] = []
 
     @classmethod
     def for_pack_data(
-        cls, pack_data: PackData, resolve_ext_ref: Optional[ResolveExtRefFn] = None
+        cls, pack_data: PackData, resolve_ext_ref: ResolveExtRefFn | None = None
     ) -> "DeltaChainIterator[T]":
         """Create a DeltaChainIterator from pack data.
 
@@ -1905,7 +2125,9 @@ class DeltaChainIterator(Generic[T]):
         Returns:
           DeltaChainIterator instance
         """
-        walker = cls(None, resolve_ext_ref=resolve_ext_ref)
+        walker = cls(
+            None, pack_data.object_format.hash_func, resolve_ext_ref=resolve_ext_ref
+        )
         walker.set_pack_data(pack_data)
         for unpacked in pack_data.iter_unpacked(include_comp=False):
             walker.record(unpacked)
@@ -1915,10 +2137,10 @@ class DeltaChainIterator(Generic[T]):
     def for_pack_subset(
         cls,
         pack: "Pack",
-        shas: Iterable[bytes],
+        shas: Iterable[ObjectID | RawObjectID],
         *,
         allow_missing: bool = False,
-        resolve_ext_ref: Optional[ResolveExtRefFn] = None,
+        resolve_ext_ref: ResolveExtRefFn | None = None,
     ) -> "DeltaChainIterator[T]":
         """Create a DeltaChainIterator for a subset of objects.
 
@@ -1931,11 +2153,12 @@ class DeltaChainIterator(Generic[T]):
         Returns:
           DeltaChainIterator instance
         """
-        walker = cls(None, resolve_ext_ref=resolve_ext_ref)
+        walker = cls(
+            None, pack.object_format.hash_func, resolve_ext_ref=resolve_ext_ref
+        )
         walker.set_pack_data(pack.data)
         todo = set()
         for sha in shas:
-            assert isinstance(sha, bytes)
             try:
                 off = pack.index.object_offset(sha)
             except KeyError:
@@ -1958,7 +2181,7 @@ class DeltaChainIterator(Generic[T]):
             elif unpacked.pack_type_num == REF_DELTA:
                 with suppress(KeyError):
                     assert isinstance(unpacked.delta_base, bytes)
-                    base_ofs = pack.index.object_index(unpacked.delta_base)
+                    base_ofs = pack.index.object_index(RawObjectID(unpacked.delta_base))
             if base_ofs is not None and base_ofs not in done:
                 todo.add(base_ofs)
         return walker
@@ -1999,7 +2222,9 @@ class DeltaChainIterator(Generic[T]):
 
     def _ensure_no_pending(self) -> None:
         if self._pending_ref:
-            raise UnresolvedDeltas([sha_to_hex(s) for s in self._pending_ref])
+            raise UnresolvedDeltas(
+                [sha_to_hex(RawObjectID(s)) for s in self._pending_ref]
+            )
 
     def _walk_ref_chains(self) -> Iterator[T]:
         if not self._resolve_ext_ref:
@@ -2016,7 +2241,7 @@ class DeltaChainIterator(Generic[T]):
                 # get popped via a _follow_chain call, or we will raise an
                 # error below.
                 continue
-            self._ext_refs.append(base_sha)
+            self._ext_refs.append(RawObjectID(base_sha))
             self._pending_ref.pop(base_sha)
             for new_offset in pending:
                 yield from self._follow_chain(new_offset, type_num, chunks)  # type: ignore[arg-type]
@@ -2027,14 +2252,16 @@ class DeltaChainIterator(Generic[T]):
         raise NotImplementedError
 
     def _resolve_object(
-        self, offset: int, obj_type_num: int, base_chunks: Optional[list[bytes]]
+        self, offset: int, obj_type_num: int, base_chunks: list[bytes] | None
     ) -> UnpackedObject:
         assert self._file is not None
         self._file.seek(offset)
         unpacked, _ = unpack_object(
             self._file.read,
-            include_comp=self._include_comp,
+            self.hash_func,
+            read_some=None,
             compute_crc32=self._compute_crc32,
+            include_comp=self._include_comp,
         )
         unpacked.offset = offset
         if base_chunks is None:
@@ -2046,7 +2273,7 @@ class DeltaChainIterator(Generic[T]):
         return unpacked
 
     def _follow_chain(
-        self, offset: int, obj_type_num: int, base_chunks: Optional[list[bytes]]
+        self, offset: int, obj_type_num: int, base_chunks: list[bytes] | None
     ) -> Iterator[T]:
         # Unlike PackData.get_object_at, there is no need to cache offsets as
         # this approach by design inflates each object exactly once.
@@ -2070,7 +2297,7 @@ class DeltaChainIterator(Generic[T]):
         """Iterate over objects in the pack."""
         return self._walk_all_chains()
 
-    def ext_refs(self) -> list[bytes]:
+    def ext_refs(self) -> list[RawObjectID]:
         """Return external references."""
         return self._ext_refs
 
@@ -2095,7 +2322,7 @@ class PackIndexer(DeltaChainIterator[PackIndexEntry]):
 
     _compute_crc32 = True
 
-    def _result(self, unpacked: UnpackedObject) -> tuple[bytes, int, Optional[int]]:
+    def _result(self, unpacked: UnpackedObject) -> PackIndexEntry:
         """Convert unpacked object to pack index entry.
 
         Args:
@@ -2161,9 +2388,16 @@ class SHA1Reader(BinaryIO):
         # If git option index.skipHash is set the index will be empty
         if stored != self.sha1.digest() and (
             not allow_empty
-            or sha_to_hex(stored) != b"0000000000000000000000000000000000000000"
+            or (
+                len(stored) == 20
+                and sha_to_hex(RawObjectID(stored))
+                != b"0000000000000000000000000000000000000000"
+            )
         ):
-            raise ChecksumMismatch(self.sha1.hexdigest(), sha_to_hex(stored))
+            raise ChecksumMismatch(
+                self.sha1.hexdigest(),
+                sha_to_hex(RawObjectID(stored)) if stored else b"",
+            )
 
     def close(self) -> None:
         """Close the underlying file."""
@@ -2239,9 +2473,9 @@ class SHA1Reader(BinaryIO):
 
     def __exit__(
         self,
-        type: Optional[type],
-        value: Optional[BaseException],
-        traceback: Optional[TracebackType],
+        type: type | None,
+        value: BaseException | None,
+        traceback: TracebackType | None,
     ) -> None:
         """Exit context manager and close file."""
         self.close()
@@ -2272,7 +2506,7 @@ class SHA1Reader(BinaryIO):
         """Check if file is a terminal."""
         return getattr(self.f, "isatty", lambda: False)()
 
-    def truncate(self, size: Optional[int] = None) -> int:
+    def truncate(self, size: int | None = None) -> int:
         """Not supported for read-only file.
 
         Raises:
@@ -2284,7 +2518,7 @@ class SHA1Reader(BinaryIO):
 class SHA1Writer(BinaryIO):
     """Wrapper for file-like object that remembers the SHA1 of its data."""
 
-    def __init__(self, f: Union[BinaryIO, IO[bytes]]) -> None:
+    def __init__(self, f: BinaryIO | IO[bytes]) -> None:
         """Initialize SHA1Writer.
 
         Args:
@@ -2293,9 +2527,9 @@ class SHA1Writer(BinaryIO):
         self.f = f
         self.length = 0
         self.sha1 = sha1(b"")
-        self.digest: Optional[bytes] = None
+        self.digest: bytes | None = None
 
-    def write(self, data: Union[bytes, bytearray, memoryview], /) -> int:  # type: ignore[override]
+    def write(self, data: bytes | bytearray | memoryview, /) -> int:  # type: ignore[override]
         """Write data and update SHA1.
 
         Args:
@@ -2407,12 +2641,12 @@ class SHA1Writer(BinaryIO):
 
     def __exit__(
         self,
-        type: Optional[type],
-        value: Optional[BaseException],
-        traceback: Optional[TracebackType],
+        type: type | None,
+        value: BaseException | None,
+        traceback: TracebackType | None,
     ) -> None:
         """Exit context manager and close file."""
-        self.close()
+        self.f.close()
 
     def __iter__(self) -> "SHA1Writer":
         """Return iterator."""
@@ -2434,7 +2668,174 @@ class SHA1Writer(BinaryIO):
         """Check if file is a terminal."""
         return getattr(self.f, "isatty", lambda: False)()
 
-    def truncate(self, size: Optional[int] = None) -> int:
+    def truncate(self, size: int | None = None) -> int:
+        """Not supported for write-only file.
+
+        Raises:
+            UnsupportedOperation: Always raised
+        """
+        raise UnsupportedOperation("truncate")
+
+
+class HashWriter(BinaryIO):
+    """Wrapper for file-like object that computes hash of its data.
+
+    This is a generic version that works with any hash algorithm.
+    """
+
+    def __init__(
+        self, f: BinaryIO | IO[bytes], hash_func: Callable[[], "HashObject"]
+    ) -> None:
+        """Initialize HashWriter.
+
+        Args:
+            f: File-like object to wrap
+            hash_func: Hash function (e.g., sha1, sha256)
+        """
+        self.f = f
+        self.length = 0
+        self.hash_obj = hash_func()
+        self.digest: bytes | None = None
+
+    def write(self, data: bytes | bytearray | memoryview, /) -> int:  # type: ignore[override]
+        """Write data and update hash.
+
+        Args:
+            data: Data to write
+
+        Returns:
+            Number of bytes written
+        """
+        self.hash_obj.update(data)
+        written = self.f.write(data)
+        self.length += written
+        return written
+
+    def write_hash(self) -> bytes:
+        """Write the hash digest to the file.
+
+        Returns:
+            The hash digest bytes
+        """
+        digest = self.hash_obj.digest()
+        self.f.write(digest)
+        self.length += len(digest)
+        return digest
+
+    def close(self) -> None:
+        """Close the pack file and finalize the hash."""
+        self.digest = self.write_hash()
+        self.f.close()
+
+    def offset(self) -> int:
+        """Get the total number of bytes written.
+
+        Returns:
+            Total bytes written
+        """
+        return self.length
+
+    def tell(self) -> int:
+        """Return current file position."""
+        return self.f.tell()
+
+    # BinaryIO abstract methods
+    def readable(self) -> bool:
+        """Check if file is readable."""
+        return False
+
+    def writable(self) -> bool:
+        """Check if file is writable."""
+        return True
+
+    def seekable(self) -> bool:
+        """Check if file is seekable."""
+        return getattr(self.f, "seekable", lambda: False)()
+
+    def seek(self, offset: int, whence: int = 0) -> int:
+        """Seek to position in file.
+
+        Args:
+            offset: Position offset
+            whence: Reference point (0=start, 1=current, 2=end)
+
+        Returns:
+            New file position
+        """
+        return self.f.seek(offset, whence)
+
+    def flush(self) -> None:
+        """Flush the file buffer."""
+        if hasattr(self.f, "flush"):
+            self.f.flush()
+
+    def readline(self, size: int = -1) -> bytes:
+        """Not supported for write-only file.
+
+        Raises:
+            UnsupportedOperation: Always raised
+        """
+        raise UnsupportedOperation("readline")
+
+    def readlines(self, hint: int = -1) -> list[bytes]:
+        """Not supported for write-only file.
+
+        Raises:
+            UnsupportedOperation: Always raised
+        """
+        raise UnsupportedOperation("readlines")
+
+    def writelines(self, lines: Iterable[bytes], /) -> None:  # type: ignore[override]
+        """Write multiple lines to the file.
+
+        Args:
+            lines: Iterable of lines to write
+        """
+        for line in lines:
+            self.write(line)
+
+    def read(self, size: int = -1) -> bytes:
+        """Not supported for write-only file.
+
+        Raises:
+            UnsupportedOperation: Always raised
+        """
+        raise UnsupportedOperation("read")
+
+    def __enter__(self) -> "HashWriter":
+        """Enter context manager."""
+        return self
+
+    def __exit__(
+        self,
+        type: type | None,
+        value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
+        """Exit context manager and close file."""
+        self.close()
+
+    def __iter__(self) -> "HashWriter":
+        """Return iterator."""
+        return self
+
+    def __next__(self) -> bytes:
+        """Not supported for write-only file.
+
+        Raises:
+            UnsupportedOperation: Always raised
+        """
+        raise UnsupportedOperation("__next__")
+
+    def fileno(self) -> int:
+        """Return file descriptor number."""
+        return self.f.fileno()
+
+    def isatty(self) -> bool:
+        """Check if file is a terminal."""
+        return getattr(self.f, "isatty", lambda: False)()
+
+    def truncate(self, size: int | None = None) -> int:
         """Not supported for write-only file.
 
         Raises:
@@ -2444,7 +2845,10 @@ class SHA1Writer(BinaryIO):
 
 
 def pack_object_header(
-    type_num: int, delta_base: Optional[Union[bytes, int]], size: int
+    type_num: int,
+    delta_base: bytes | int | None,
+    size: int,
+    object_format: "ObjectFormat",
 ) -> bytearray:
     """Create a pack object header for the given object info.
 
@@ -2452,6 +2856,7 @@ def pack_object_header(
       type_num: Numeric type of the object.
       delta_base: Delta base offset or ref, or None for whole objects.
       size: Uncompressed object size.
+      object_format: Object format (hash algorithm) to use.
     Returns: A header for a packed object.
     """
     header = []
@@ -2473,14 +2878,16 @@ def pack_object_header(
         header.extend(ret)
     elif type_num == REF_DELTA:
         assert isinstance(delta_base, bytes)
-        assert len(delta_base) == 20
+        assert len(delta_base) == object_format.oid_length
         header += delta_base
     return bytearray(header)
 
 
 def pack_object_chunks(
     type: int,
-    object: Union[list[bytes], tuple[Union[bytes, int], list[bytes]]],
+    object: list[bytes] | tuple[bytes | int, list[bytes]],
+    object_format: "ObjectFormat",
+    *,
     compression_level: int = -1,
 ) -> Iterator[bytes]:
     """Generate chunks for a pack object.
@@ -2488,6 +2895,7 @@ def pack_object_chunks(
     Args:
       type: Numeric type of the object
       object: Object to write
+      object_format: Object format (hash algorithm) to use
       compression_level: the zlib compression level
     Returns: Chunks
     """
@@ -2510,7 +2918,11 @@ def pack_object_chunks(
         # Shouldn't reach here with proper typing
         raise TypeError(f"Unexpected object type: {object.__class__.__name__}")
 
-    yield bytes(pack_object_header(type, delta_base, sum(map(len, chunks))))
+    yield bytes(
+        pack_object_header(
+            type, delta_base, sum(map(len, chunks)), object_format=object_format
+        )
+    )
     compressor = zlib.compressobj(level=compression_level)
     for data in chunks:
         yield compressor.compress(data)
@@ -2520,8 +2932,10 @@ def pack_object_chunks(
 def write_pack_object(
     write: Callable[[bytes], int],
     type: int,
-    object: Union[list[bytes], tuple[Union[bytes, int], list[bytes]]],
-    sha: Optional["HashObject"] = None,
+    object: list[bytes] | tuple[bytes | int, list[bytes]],
+    object_format: "ObjectFormat",
+    *,
+    sha: "HashObject | None" = None,
     compression_level: int = -1,
 ) -> int:
     """Write pack object to a file.
@@ -2530,12 +2944,15 @@ def write_pack_object(
       write: Write function to use
       type: Numeric type of the object
       object: Object to write
+      object_format: Object format (hash algorithm) to use
       sha: Optional SHA-1 hasher to update
       compression_level: the zlib compression level
     Returns: CRC32 checksum of the written object
     """
     crc32 = 0
-    for chunk in pack_object_chunks(type, object, compression_level=compression_level):
+    for chunk in pack_object_chunks(
+        type, object, compression_level=compression_level, object_format=object_format
+    ):
         write(chunk)
         if sha is not None:
             sha.update(chunk)
@@ -2545,10 +2962,11 @@ def write_pack_object(
 
 def write_pack(
     filename: str,
-    objects: Union[Sequence[ShaFile], Sequence[tuple[ShaFile, Optional[bytes]]]],
+    objects: Sequence[ShaFile] | Sequence[tuple[ShaFile, bytes | None]],
+    object_format: "ObjectFormat",
     *,
-    deltify: Optional[bool] = None,
-    delta_window_size: Optional[int] = None,
+    deltify: bool | None = None,
+    delta_window_size: int | None = None,
     compression_level: int = -1,
 ) -> tuple[bytes, bytes]:
     """Write a new pack data file.
@@ -2556,6 +2974,7 @@ def write_pack(
     Args:
       filename: Path to the new pack file (without .pack extension)
       objects: Objects to write to the pack
+      object_format: Object format
       delta_window_size: Delta window size
       deltify: Whether to deltify pack objects
       compression_level: the zlib compression level
@@ -2568,6 +2987,7 @@ def write_pack(
             delta_window_size=delta_window_size,
             deltify=deltify,
             compression_level=compression_level,
+            object_format=object_format,
         )
     entries_list = sorted([(k, v[0], v[1]) for (k, v) in entries.items()])
     with GitFile(filename + ".idx", "wb") as f:
@@ -2583,7 +3003,7 @@ def pack_header_chunks(num_objects: int) -> Iterator[bytes]:
 
 
 def write_pack_header(
-    write: Union[Callable[[bytes], int], IO[bytes]], num_objects: int
+    write: Callable[[bytes], int] | IO[bytes], num_objects: int
 ) -> None:
     """Write a pack header for the given number of objects."""
     write_fn: Callable[[bytes], int]
@@ -2602,10 +3022,10 @@ def write_pack_header(
 
 def find_reusable_deltas(
     container: PackedObjectContainer,
-    object_ids: Set[bytes],
+    object_ids: Set[ObjectID],
     *,
-    other_haves: Optional[Set[bytes]] = None,
-    progress: Optional[Callable[..., None]] = None,
+    other_haves: Set[ObjectID] | None = None,
+    progress: Callable[..., None] | None = None,
 ) -> Iterator[UnpackedObject]:
     """Find deltas in a pack that can be reused.
 
@@ -2638,10 +3058,10 @@ def find_reusable_deltas(
 
 
 def deltify_pack_objects(
-    objects: Union[Iterator[ShaFile], Iterator[tuple[ShaFile, Optional[bytes]]]],
+    objects: Iterator[ShaFile] | Iterator[tuple[ShaFile, bytes | None]],
     *,
-    window_size: Optional[int] = None,
-    progress: Optional[Callable[..., None]] = None,
+    window_size: int | None = None,
+    progress: Callable[..., None] | None = None,
 ) -> Iterator[UnpackedObject]:
     """Generate deltas for pack objects.
 
@@ -2653,7 +3073,7 @@ def deltify_pack_objects(
         delta_base is None for full text entries
     """
 
-    def objects_with_hints() -> Iterator[tuple[ShaFile, tuple[int, Optional[bytes]]]]:
+    def objects_with_hints() -> Iterator[tuple[ShaFile, tuple[int, bytes | None]]]:
         for e in objects:
             if isinstance(e, ShaFile):
                 yield (e, (e.type_num, None))
@@ -2669,8 +3089,8 @@ def deltify_pack_objects(
 
 
 def sort_objects_for_delta(
-    objects: Union[Iterator[ShaFile], Iterator[tuple[ShaFile, Optional[PackHint]]]],
-) -> Iterator[tuple[ShaFile, Optional[bytes]]]:
+    objects: Iterator[ShaFile] | Iterator[tuple[ShaFile, PackHint | None]],
+) -> Iterator[tuple[ShaFile, bytes | None]]:
     """Sort objects for optimal delta compression.
 
     Args:
@@ -2700,9 +3120,9 @@ def sort_objects_for_delta(
 
 
 def deltas_from_sorted_objects(
-    objects: Iterator[tuple[ShaFile, Optional[bytes]]],
-    window_size: Optional[int] = None,
-    progress: Optional[Callable[..., None]] = None,
+    objects: Iterator[tuple[ShaFile, bytes | None]],
+    window_size: int | None = None,
+    progress: Callable[..., None] | None = None,
 ) -> Iterator[UnpackedObject]:
     """Create deltas from sorted objects.
 
@@ -2753,16 +3173,14 @@ def deltas_from_sorted_objects(
 
 
 def pack_objects_to_data(
-    objects: Union[
-        Sequence[ShaFile],
-        Sequence[tuple[ShaFile, Optional[bytes]]],
-        Sequence[tuple[ShaFile, Optional[PackHint]]],
-    ],
+    objects: Sequence[ShaFile]
+    | Sequence[tuple[ShaFile, bytes | None]]
+    | Sequence[tuple[ShaFile, PackHint | None]],
     *,
-    deltify: Optional[bool] = None,
-    delta_window_size: Optional[int] = None,
+    deltify: bool | None = None,
+    delta_window_size: int | None = None,
     ofs_delta: bool = True,
-    progress: Optional[Callable[..., None]] = None,
+    progress: Callable[..., None] | None = None,
 ) -> tuple[int, Iterator[UnpackedObject]]:
     """Create pack data from objects.
 
@@ -2803,13 +3221,13 @@ def pack_objects_to_data(
 
 def generate_unpacked_objects(
     container: PackedObjectContainer,
-    object_ids: Sequence[tuple[ObjectID, Optional[PackHint]]],
-    delta_window_size: Optional[int] = None,
-    deltify: Optional[bool] = None,
+    object_ids: Sequence[tuple[ObjectID, PackHint | None]],
+    delta_window_size: int | None = None,
+    deltify: bool | None = None,
     reuse_deltas: bool = True,
     ofs_delta: bool = True,
-    other_haves: Optional[set[bytes]] = None,
-    progress: Optional[Callable[..., None]] = None,
+    other_haves: set[ObjectID] | None = None,
+    progress: Callable[..., None] | None = None,
 ) -> Iterator[UnpackedObject]:
     """Create pack data from objects.
 
@@ -2820,7 +3238,7 @@ def generate_unpacked_objects(
         for unpack in find_reusable_deltas(
             container, set(todo), other_haves=other_haves, progress=progress
         ):
-            del todo[sha_to_hex(unpack.sha())]
+            del todo[sha_to_hex(RawObjectID(unpack.sha()))]
             yield unpack
     if deltify is None:
         # PERFORMANCE/TODO(jelmer): This should be enabled but is *much* too
@@ -2860,18 +3278,18 @@ def full_unpacked_object(o: ShaFile) -> UnpackedObject:
 
 
 def write_pack_from_container(
-    write: Union[
-        Callable[[bytes], None],
-        Callable[[Union[bytes, bytearray, memoryview]], int],
-        IO[bytes],
-    ],
+    write: Callable[[bytes], None]
+    | Callable[[bytes | bytearray | memoryview], int]
+    | IO[bytes],
     container: PackedObjectContainer,
-    object_ids: Sequence[tuple[ObjectID, Optional[PackHint]]],
-    delta_window_size: Optional[int] = None,
-    deltify: Optional[bool] = None,
+    object_ids: Sequence[tuple[ObjectID, PackHint | None]],
+    object_format: "ObjectFormat",
+    *,
+    delta_window_size: int | None = None,
+    deltify: bool | None = None,
     reuse_deltas: bool = True,
     compression_level: int = -1,
-    other_haves: Optional[set[bytes]] = None,
+    other_haves: set[ObjectID] | None = None,
 ) -> tuple[dict[bytes, tuple[int, int]], bytes]:
     """Write a new pack data file.
 
@@ -2879,6 +3297,7 @@ def write_pack_from_container(
       write: write function to use
       container: PackedObjectContainer
       object_ids: Sequence of (object_id, hint) tuples to write
+      object_format: Object format (hash algorithm) to use
       delta_window_size: Sliding window size for searching for deltas;
                          Set to None for default window size.
       deltify: Whether to deltify objects
@@ -2902,15 +3321,17 @@ def write_pack_from_container(
         pack_contents,
         num_records=pack_contents_count,
         compression_level=compression_level,
+        object_format=object_format,
     )
 
 
 def write_pack_objects(
-    write: Union[Callable[[bytes], None], IO[bytes]],
-    objects: Union[Sequence[ShaFile], Sequence[tuple[ShaFile, Optional[bytes]]]],
+    write: Callable[[bytes], None] | IO[bytes],
+    objects: Sequence[ShaFile] | Sequence[tuple[ShaFile, bytes | None]],
+    object_format: "ObjectFormat",
     *,
-    delta_window_size: Optional[int] = None,
-    deltify: Optional[bool] = None,
+    delta_window_size: int | None = None,
+    deltify: bool | None = None,
     compression_level: int = -1,
 ) -> tuple[dict[bytes, tuple[int, int]], bytes]:
     """Write a new pack data file.
@@ -2918,6 +3339,7 @@ def write_pack_objects(
     Args:
       write: write function to use
       objects: Sequence of (object, path) tuples to write
+      object_format: Object format (hash algorithm) to use
       delta_window_size: Sliding window size for searching for deltas;
                          Set to None for default window size.
       deltify: Whether to deltify objects
@@ -2931,6 +3353,7 @@ def write_pack_objects(
         pack_contents,
         num_records=pack_contents_count,
         compression_level=compression_level,
+        object_format=object_format,
     )
 
 
@@ -2939,9 +3362,10 @@ class PackChunkGenerator:
 
     def __init__(
         self,
-        num_records: Optional[int] = None,
-        records: Optional[Iterator[UnpackedObject]] = None,
-        progress: Optional[Callable[..., None]] = None,
+        object_format: "ObjectFormat",
+        num_records: int | None = None,
+        records: Iterator[UnpackedObject] | None = None,
+        progress: Callable[..., None] | None = None,
         compression_level: int = -1,
         reuse_compressed: bool = True,
     ) -> None:
@@ -2953,8 +3377,10 @@ class PackChunkGenerator:
             progress: Optional progress callback
             compression_level: Compression level (-1 for default)
             reuse_compressed: Whether to reuse compressed chunks
+            object_format: Object format (hash algorithm) to use
         """
-        self.cs = sha1(b"")
+        self.object_format = object_format
+        self.cs = object_format.new_hash()
         self.entries: dict[bytes, tuple[int, int]] = {}
         if records is None:
             records = iter([])  # Empty iterator if None
@@ -2978,8 +3404,8 @@ class PackChunkGenerator:
         self,
         records: Iterator[UnpackedObject],
         *,
-        num_records: Optional[int] = None,
-        progress: Optional[Callable[..., None]] = None,
+        num_records: int | None = None,
+        progress: Callable[..., None] | None = None,
         compression_level: int = -1,
         reuse_compressed: bool = True,
     ) -> Iterator[bytes]:
@@ -3006,7 +3432,7 @@ class PackChunkGenerator:
             type_num = unpacked.pack_type_num
             if progress is not None and i % 1000 == 0:
                 progress((f"writing pack data: {i}/{num_records}\r").encode("ascii"))
-            raw: Union[list[bytes], tuple[int, list[bytes]], tuple[bytes, list[bytes]]]
+            raw: list[bytes] | tuple[int, list[bytes]] | tuple[bytes, list[bytes]]
             if unpacked.delta_base is not None:
                 assert isinstance(unpacked.delta_base, bytes), (
                     f"Expected bytes, got {type(unpacked.delta_base)}"
@@ -3022,12 +3448,15 @@ class PackChunkGenerator:
                     raw = (offset - base_offset, unpacked.decomp_chunks)
             else:
                 raw = unpacked.decomp_chunks
-            chunks: Union[list[bytes], Iterator[bytes]]
+            chunks: list[bytes] | Iterator[bytes]
             if unpacked.comp_chunks is not None and reuse_compressed:
                 chunks = unpacked.comp_chunks
             else:
                 chunks = pack_object_chunks(
-                    type_num, raw, compression_level=compression_level
+                    type_num,
+                    raw,
+                    compression_level=compression_level,
+                    object_format=self.object_format,
                 )
             crc32 = 0
             object_size = 0
@@ -3048,15 +3477,14 @@ class PackChunkGenerator:
 
 
 def write_pack_data(
-    write: Union[
-        Callable[[bytes], None],
-        Callable[[Union[bytes, bytearray, memoryview]], int],
-        IO[bytes],
-    ],
+    write: Callable[[bytes], None]
+    | Callable[[bytes | bytearray | memoryview], int]
+    | IO[bytes],
     records: Iterator[UnpackedObject],
+    object_format: "ObjectFormat",
     *,
-    num_records: Optional[int] = None,
-    progress: Optional[Callable[..., None]] = None,
+    num_records: int | None = None,
+    progress: Callable[..., None] | None = None,
     compression_level: int = -1,
 ) -> tuple[dict[bytes, tuple[int, int]], bytes]:
     """Write a new pack data file.
@@ -3065,6 +3493,7 @@ def write_pack_data(
       write: Write function to use
       num_records: Number of records (defaults to len(records) if None)
       records: Iterator over type_num, object_id, delta_base, raw
+      object_format: Object format (hash algorithm) to use
       progress: Function to report progress to
       compression_level: the zlib compression level
     Returns: Dict mapping id -> (offset, crc32 checksum), pack checksum
@@ -3074,6 +3503,7 @@ def write_pack_data(
         records=records,
         progress=progress,
         compression_level=compression_level,
+        object_format=object_format,
     )
     for chunk in chunk_generator:
         if callable(write):
@@ -3085,7 +3515,7 @@ def write_pack_data(
 
 def write_pack_index_v1(
     f: IO[bytes],
-    entries: Iterable[tuple[bytes, int, Union[int, None]]],
+    entries: Iterable[tuple[bytes, int, int | None]],
     pack_checksum: bytes,
 ) -> bytes:
     """Write a new pack index file.
@@ -3106,6 +3536,8 @@ def write_pack_index_v1(
         f.write(struct.pack(">L", fan_out_table[i]))
         fan_out_table[i + 1] += fan_out_table[i]
     for name, offset, _entry_checksum in entries:
+        if len(name) != 20:
+            raise TypeError("pack index v1 only supports SHA-1 names")
         if not (offset <= 0xFFFFFFFF):
             raise TypeError("pack format 1 only supports offsets < 2Gb")
         f.write(struct.pack(">L20s", offset, name))
@@ -3196,7 +3628,7 @@ create_delta = _create_delta_py
 
 
 def apply_delta(
-    src_buf: Union[bytes, list[bytes]], delta: Union[bytes, list[bytes]]
+    src_buf: bytes | list[bytes], delta: bytes | list[bytes]
 ) -> list[bytes]:
     """Based on the similar function in git's patch-delta.c.
 
@@ -3273,7 +3705,7 @@ def apply_delta(
 
 def write_pack_index_v2(
     f: IO[bytes],
-    entries: Iterable[tuple[bytes, int, Union[int, None]]],
+    entries: Iterable[tuple[bytes, int, int | None]],
     pack_checksum: bytes,
 ) -> bytes:
     """Write a new pack index file.
@@ -3283,41 +3715,62 @@ def write_pack_index_v2(
       entries: List of tuples with object name (sha), offset_in_pack, and
         crc32_checksum.
       pack_checksum: Checksum of the pack file.
-    Returns: The SHA of the index file written
+    Returns: The checksum of the index file written
     """
-    f = SHA1Writer(f)
-    f.write(b"\377tOc")  # Magic!
-    f.write(struct.pack(">L", 2))
+    # Determine hash algorithm from pack_checksum length
+    if len(pack_checksum) == 20:
+        hash_func = sha1
+    elif len(pack_checksum) == 32:
+        hash_func = sha256
+    else:
+        raise ValueError(f"Unsupported pack checksum length: {len(pack_checksum)}")
+
+    f_writer = HashWriter(f, hash_func)
+    f_writer.write(b"\377tOc")  # Magic!
+    f_writer.write(struct.pack(">L", 2))
+
+    # Convert to list to allow multiple iterations
+    entries_list = list(entries)
+
     fan_out_table: dict[int, int] = defaultdict(lambda: 0)
-    for name, offset, entry_checksum in entries:
+    for name, offset, entry_checksum in entries_list:
         fan_out_table[ord(name[:1])] += 1
+
+    if entries_list:
+        hash_size = len(entries_list[0][0])
+    else:
+        hash_size = len(pack_checksum)  # Use pack_checksum length as hash size
+
     # Fan-out table
     largetable: list[int] = []
     for i in range(0x100):
-        f.write(struct.pack(b">L", fan_out_table[i]))
+        f_writer.write(struct.pack(b">L", fan_out_table[i]))
         fan_out_table[i + 1] += fan_out_table[i]
-    for name, offset, entry_checksum in entries:
-        f.write(name)
-    for name, offset, entry_checksum in entries:
-        f.write(struct.pack(b">L", entry_checksum))
-    for name, offset, entry_checksum in entries:
+    for name, offset, entry_checksum in entries_list:
+        if len(name) != hash_size:
+            raise TypeError(
+                f"Object name has wrong length: expected {hash_size}, got {len(name)}"
+            )
+        f_writer.write(name)
+    for name, offset, entry_checksum in entries_list:
+        f_writer.write(struct.pack(b">L", entry_checksum))
+    for name, offset, entry_checksum in entries_list:
         if offset < 2**31:
-            f.write(struct.pack(b">L", offset))
+            f_writer.write(struct.pack(b">L", offset))
         else:
-            f.write(struct.pack(b">L", 2**31 + len(largetable)))
+            f_writer.write(struct.pack(b">L", 2**31 + len(largetable)))
             largetable.append(offset)
     for offset in largetable:
-        f.write(struct.pack(b">Q", offset))
-    assert len(pack_checksum) == 20
-    f.write(pack_checksum)
-    return f.write_sha()
+        f_writer.write(struct.pack(b">Q", offset))
+    f_writer.write(pack_checksum)
+    return f_writer.write_hash()
 
 
 def write_pack_index_v3(
     f: IO[bytes],
-    entries: Iterable[tuple[bytes, int, Union[int, None]]],
+    entries: Iterable[tuple[bytes, int, int | None]],
     pack_checksum: bytes,
-    hash_algorithm: int = 1,
+    hash_format: int = 1,
 ) -> bytes:
     """Write a new pack index file in v3 format.
 
@@ -3326,18 +3779,18 @@ def write_pack_index_v3(
       entries: List of tuples with object name (sha), offset_in_pack, and
         crc32_checksum.
       pack_checksum: Checksum of the pack file.
-      hash_algorithm: Hash algorithm identifier (1 = SHA-1, 2 = SHA-256)
+      hash_format: Hash algorithm identifier (1 = SHA-1, 2 = SHA-256)
     Returns: The SHA of the index file written
     """
-    if hash_algorithm == 1:
+    if hash_format == 1:
         hash_size = 20  # SHA-1
         writer_cls = SHA1Writer
-    elif hash_algorithm == 2:
+    elif hash_format == 2:
         hash_size = 32  # SHA-256
         # TODO: Add SHA256Writer when SHA-256 support is implemented
         raise NotImplementedError("SHA-256 support not yet implemented")
     else:
-        raise ValueError(f"Unknown hash algorithm {hash_algorithm}")
+        raise ValueError(f"Unknown hash algorithm {hash_format}")
 
     # Convert entries to list to allow multiple iterations
     entries_list = list(entries)
@@ -3349,7 +3802,7 @@ def write_pack_index_v3(
     f = writer_cls(f)
     f.write(b"\377tOc")  # Magic!
     f.write(struct.pack(">L", 3))  # Version 3
-    f.write(struct.pack(">L", hash_algorithm))  # Hash algorithm
+    f.write(struct.pack(">L", hash_format))  # Hash algorithm
     f.write(struct.pack(">L", shortened_oid_len))  # Shortened OID length
 
     fan_out_table: dict[int, int] = defaultdict(lambda: 0)
@@ -3395,10 +3848,10 @@ def write_pack_index_v3(
 
 def write_pack_index(
     f: IO[bytes],
-    entries: Iterable[tuple[bytes, int, Union[int, None]]],
+    entries: Iterable[tuple[bytes, int, int | None]],
     pack_checksum: bytes,
-    progress: Optional[Callable[..., None]] = None,
-    version: Optional[int] = None,
+    progress: Callable[..., None] | None = None,
+    version: int | None = None,
 ) -> bytes:
     """Write a pack index file.
 
@@ -3411,6 +3864,9 @@ def write_pack_index(
 
     Returns:
       SHA of the written index file
+
+    Raises:
+      ValueError: If an unsupported version is specified
     """
     if version is None:
         version = DEFAULT_PACK_INDEX_VERSION
@@ -3428,29 +3884,31 @@ def write_pack_index(
 class Pack:
     """A Git pack object."""
 
-    _data_load: Optional[Callable[[], PackData]]
-    _idx_load: Optional[Callable[[], PackIndex]]
+    _data_load: Callable[[], PackData] | None
+    _idx_load: Callable[[], PackIndex] | None
 
-    _data: Optional[PackData]
-    _idx: Optional[PackIndex]
-    _bitmap: Optional["PackBitmap"]
+    _data: PackData | None
+    _idx: PackIndex | None
+    _bitmap: "PackBitmap | None"
 
     def __init__(
         self,
         basename: str,
-        resolve_ext_ref: Optional[ResolveExtRefFn] = None,
         *,
-        delta_window_size: Optional[int] = None,
-        window_memory: Optional[int] = None,
-        delta_cache_size: Optional[int] = None,
-        depth: Optional[int] = None,
-        threads: Optional[int] = None,
-        big_file_threshold: Optional[int] = None,
+        object_format: ObjectFormat,
+        resolve_ext_ref: ResolveExtRefFn | None = None,
+        delta_window_size: int | None = None,
+        window_memory: int | None = None,
+        delta_cache_size: int | None = None,
+        depth: int | None = None,
+        threads: int | None = None,
+        big_file_threshold: int | None = None,
     ) -> None:
         """Initialize a Pack object.
 
         Args:
           basename: Base path for pack files (without .pack/.idx extension)
+          object_format: Hash algorithm used by the repository
           resolve_ext_ref: Optional function to resolve external references
           delta_window_size: Size of the delta compression window
           window_memory: Memory limit for delta compression window
@@ -3460,6 +3918,7 @@ class Pack:
           big_file_threshold: Size threshold for big file handling
         """
         self._basename = basename
+        self.object_format = object_format
         self._data = None
         self._idx = None
         self._bitmap = None
@@ -3472,6 +3931,7 @@ class Pack:
         self.depth = depth
         self.threads = threads
         self.big_file_threshold = big_file_threshold
+        self._idx_load = lambda: load_pack_index(self._idx_path, object_format)
         self._data_load = lambda: PackData(
             self._data_path,
             delta_window_size=delta_window_size,
@@ -3480,24 +3940,29 @@ class Pack:
             depth=depth,
             threads=threads,
             big_file_threshold=big_file_threshold,
+            object_format=object_format,
         )
-        self._idx_load = lambda: load_pack_index(self._idx_path)
         self.resolve_ext_ref = resolve_ext_ref
 
     @classmethod
     def from_lazy_objects(
-        cls, data_fn: Callable[[], PackData], idx_fn: Callable[[], PackIndex]
+        cls,
+        data_fn: Callable[[], PackData],
+        idx_fn: Callable[[], PackIndex],
     ) -> "Pack":
         """Create a new pack object from callables to load pack data and index objects."""
-        ret = cls("")
+        # Load index to get object format
+        idx = idx_fn()
+        ret = cls("", object_format=idx.object_format)
         ret._data_load = data_fn
-        ret._idx_load = idx_fn
+        ret._idx = idx
+        ret._idx_load = None
         return ret
 
     @classmethod
     def from_objects(cls, data: PackData, idx: PackIndex) -> "Pack":
         """Create a new pack object from pack data and index objects."""
-        ret = cls("")
+        ret = cls("", object_format=idx.object_format)
         ret._data = data
         ret._data_load = None
         ret._idx = idx
@@ -3530,7 +3995,7 @@ class Pack:
         return self._idx
 
     @property
-    def bitmap(self) -> Optional["PackBitmap"]:
+    def bitmap(self) -> "PackBitmap | None":
         """The bitmap being used, if available.
 
         Returns:
@@ -3545,6 +4010,58 @@ class Pack:
             self._bitmap = read_bitmap(self._bitmap_path, pack_index=self.index)
         return self._bitmap
 
+    def ensure_bitmap(
+        self,
+        object_store: "BaseObjectStore",
+        refs: dict["Ref", "ObjectID"],
+        commit_interval: int | None = None,
+        progress: Callable[[str], None] | None = None,
+    ) -> "PackBitmap":
+        """Ensure a bitmap exists for this pack, generating one if needed.
+
+        Args:
+          object_store: Object store to read objects from
+          refs: Dictionary of ref names to commit SHAs
+          commit_interval: Include every Nth commit in bitmap index
+          progress: Optional progress reporting callback
+
+        Returns:
+          PackBitmap instance (either existing or newly generated)
+        """
+        from .bitmap import generate_bitmap, write_bitmap
+
+        # Check if bitmap already exists
+        try:
+            existing = self.bitmap
+            if existing is not None:
+                return existing
+        except FileNotFoundError:
+            pass  # No bitmap, we'll generate one
+
+        # Generate new bitmap
+        if progress:
+            progress(f"Generating bitmap for {self.name().decode('utf-8')}...\n")
+
+        pack_bitmap = generate_bitmap(
+            self.index,
+            object_store,
+            refs,
+            self.get_stored_checksum(),
+            commit_interval=commit_interval,
+            progress=progress,
+        )
+
+        # Write bitmap file
+        write_bitmap(self._bitmap_path, pack_bitmap)
+
+        if progress:
+            progress(f"Wrote {self._bitmap_path}\n")
+
+        # Update cached bitmap
+        self._bitmap = pack_bitmap
+
+        return pack_bitmap
+
     def close(self) -> None:
         """Close the pack file and index."""
         if self._data is not None:
@@ -3558,9 +4075,9 @@ class Pack:
 
     def __exit__(
         self,
-        exc_type: Optional[type],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: type | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         """Exit context manager."""
         self.close()
@@ -3579,7 +4096,7 @@ class Pack:
         """Return string representation of this pack."""
         return f"{self.__class__.__name__}({self._basename!r})"
 
-    def __iter__(self) -> Iterator[bytes]:
+    def __iter__(self) -> Iterator[ObjectID]:
         """Iterate over all the sha1s of the objects in this pack."""
         return iter(self.index)
 
@@ -3595,8 +4112,8 @@ class Pack:
             and idx_stored_checksum != data_stored_checksum
         ):
             raise ChecksumMismatch(
-                sha_to_hex(idx_stored_checksum),
-                sha_to_hex(data_stored_checksum),
+                sha_to_hex(RawObjectID(idx_stored_checksum)),
+                sha_to_hex(RawObjectID(data_stored_checksum)),
             )
 
     def check(self) -> None:
@@ -3619,7 +4136,7 @@ class Pack:
         """Return pack tuples for all objects in pack."""
         return [(o, None) for o in self.iterobjects()]
 
-    def __contains__(self, sha1: bytes) -> bool:
+    def __contains__(self, sha1: ObjectID | RawObjectID) -> bool:
         """Check whether this pack contains a particular SHA1."""
         try:
             self.index.object_offset(sha1)
@@ -3627,14 +4144,14 @@ class Pack:
         except KeyError:
             return False
 
-    def get_raw(self, sha1: bytes) -> tuple[int, bytes]:
+    def get_raw(self, sha1: RawObjectID | ObjectID) -> tuple[int, bytes]:
         """Get raw object data by SHA1."""
         offset = self.index.object_offset(sha1)
         obj_type, obj = self.data.get_object_at(offset)
         type_num, chunks = self.resolve_object(offset, obj_type, obj)
         return type_num, b"".join(chunks)  # type: ignore[arg-type]
 
-    def __getitem__(self, sha1: bytes) -> ShaFile:
+    def __getitem__(self, sha1: "ObjectID | RawObjectID") -> ShaFile:
         """Retrieve the specified SHA1."""
         type, uncomp = self.get_raw(sha1)
         return ShaFile.from_raw_string(type, uncomp, sha=sha1)
@@ -3662,7 +4179,7 @@ class Pack:
 
     def iter_unpacked_subset(
         self,
-        shas: Iterable[ObjectID],
+        shas: Iterable[ObjectID | RawObjectID],
         *,
         include_comp: bool = False,
         allow_missing: bool = False,
@@ -3671,12 +4188,12 @@ class Pack:
         """Iterate over unpacked objects in subset."""
         ofs_pending: dict[int, list[UnpackedObject]] = defaultdict(list)
         ofs: dict[int, bytes] = {}
-        todo = set(shas)
+        todo: set[ObjectID | RawObjectID] = set(shas)
         for unpacked in self.iter_unpacked(include_comp=include_comp):
             sha = unpacked.sha()
             if unpacked.offset is not None:
                 ofs[unpacked.offset] = sha
-            hexsha = sha_to_hex(sha)
+            hexsha = sha_to_hex(RawObjectID(sha))
             if hexsha in todo:
                 if unpacked.pack_type_num == OFS_DELTA:
                     assert isinstance(unpacked.delta_base, int)
@@ -3712,7 +4229,7 @@ class Pack:
             unpacked.crc32 = crc32
             yield unpacked
 
-    def keep(self, msg: Optional[bytes] = None) -> str:
+    def keep(self, msg: bytes | None = None) -> str:
         """Add a .keep file for the pack, preventing git from garbage collecting it.
 
         Args:
@@ -3727,7 +4244,9 @@ class Pack:
                 keepfile.write(b"\n")
         return keepfile_name
 
-    def get_ref(self, sha: bytes) -> tuple[Optional[int], int, OldUnpackedObject]:
+    def get_ref(
+        self, sha: RawObjectID | ObjectID
+    ) -> tuple[int | None, int, OldUnpackedObject]:
         """Get the object for a ref SHA, only looking in this pack."""
         # TODO: cache these results
         try:
@@ -3747,9 +4266,10 @@ class Pack:
         offset: int,
         type: int,
         obj: OldUnpackedObject,
-        get_ref: Optional[
-            Callable[[bytes], tuple[Optional[int], int, OldUnpackedObject]]
-        ] = None,
+        get_ref: Callable[
+            [RawObjectID | ObjectID], tuple[int | None, int, OldUnpackedObject]
+        ]
+        | None = None,
     ) -> tuple[int, OldUnpackedObject]:
         """Resolve an object, possibly resolving deltas when necessary.
 
@@ -3757,7 +4277,7 @@ class Pack:
         """
         # Walk down the delta chain, building a stack of deltas to reach
         # the requested object.
-        base_offset = offset
+        base_offset: int | None = offset
         base_type = type
         base_obj = obj
         delta_stack = []
@@ -3771,14 +4291,20 @@ class Pack:
                 assert isinstance(delta_offset, int), (
                     f"Expected int, got {delta_offset.__class__}"
                 )
+                assert base_offset is not None
                 base_offset = base_offset - delta_offset
                 base_type, base_obj = self.data.get_object_at(base_offset)
                 assert isinstance(base_type, int)
             elif base_type == REF_DELTA:
                 (basename, delta) = base_obj
-                assert isinstance(basename, bytes) and len(basename) == 20
-                base_offset, base_type, base_obj = get_ref(basename)  # type: ignore[assignment]
+                assert (
+                    isinstance(basename, bytes)
+                    and len(basename) == self.object_format.oid_length
+                )
+                base_offset_temp, base_type, base_obj = get_ref(RawObjectID(basename))
                 assert isinstance(base_type, int)
+                # base_offset_temp can be None for thin packs (external references)
+                base_offset = base_offset_temp
                 if base_offset == prev_offset:  # object is based on itself
                     raise UnresolvedDeltas([basename])
             delta_stack.append((prev_offset, base_type, delta))
@@ -3808,7 +4334,7 @@ class Pack:
         return base_type, chunks
 
     def entries(
-        self, progress: Optional[Callable[[int, int], None]] = None
+        self, progress: Callable[[int, int], None] | None = None
     ) -> Iterator[PackIndexEntry]:
         """Yield entries summarizing the contents of this pack.
 
@@ -3822,7 +4348,7 @@ class Pack:
         )
 
     def sorted_entries(
-        self, progress: Optional[ProgressFn] = None
+        self, progress: Callable[[int, int], None] | None = None
     ) -> Iterator[PackIndexEntry]:
         """Return entries in this pack, sorted by SHA.
 
@@ -3838,7 +4364,11 @@ class Pack:
         )
 
     def get_unpacked_object(
-        self, sha: bytes, *, include_comp: bool = False, convert_ofs_delta: bool = True
+        self,
+        sha: ObjectID | RawObjectID,
+        *,
+        include_comp: bool = False,
+        convert_ofs_delta: bool = True,
     ) -> UnpackedObject:
         """Get the unpacked object for a sha.
 
@@ -3858,12 +4388,13 @@ class Pack:
 
 def extend_pack(
     f: BinaryIO,
-    object_ids: Set[ObjectID],
-    get_raw: Callable[[ObjectID], tuple[int, bytes]],
+    object_ids: Set["RawObjectID"],
+    get_raw: Callable[["RawObjectID | ObjectID"], tuple[int, bytes]],
+    object_format: "ObjectFormat",
     *,
     compression_level: int = -1,
-    progress: Optional[Callable[[bytes], None]] = None,
-) -> tuple[bytes, list[tuple[bytes, int, int]]]:
+    progress: Callable[[bytes], None] | None = None,
+) -> tuple[bytes, list[tuple[RawObjectID, int, int]]]:
     """Extend a pack file with more objects.
 
     The caller should make sure that object_ids does not contain any objects
@@ -3881,7 +4412,9 @@ def extend_pack(
         f.flush()
 
     # Rescan the rest of the pack, computing the SHA with the new header.
-    new_sha = compute_file_sha(f, end_ofs=-20)
+    new_sha = compute_file_sha(
+        f, hash_func=object_format.hash_func, end_ofs=-object_format.oid_length
+    )
 
     # Must reposition before writing (http://bugs.python.org/issue3207)
     f.seek(0, os.SEEK_CUR)
@@ -3894,7 +4427,7 @@ def extend_pack(
             progress(
                 (f"writing extra base objects: {i}/{len(object_ids)}\r").encode("ascii")
             )
-        assert len(object_id) == 20
+        assert len(object_id) == object_format.oid_length
         type_num, data = get_raw(object_id)
         offset = f.tell()
         crc32 = write_pack_object(
@@ -3903,6 +4436,7 @@ def extend_pack(
             [data],  # Convert bytes to list[bytes]
             sha=new_sha,
             compression_level=compression_level,
+            object_format=object_format,
         )
         extra_entries.append((object_id, offset, crc32))
     pack_sha = new_sha.digest()

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ty
-Version: 0.0.2
+Version: 0.0.3
 Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -42,7 +42,7 @@ An extremely fast Python type checker and language server, written in Rust.
 <br />
 
 <p align="center">
-  <img alt="Shows a bar chart with benchmark results." width="500px" src="https://raw.githubusercontent.com/astral-sh/ty/0.0.2/docs/assets/ty-benchmark-cli.svg">
+  <img alt="Shows a bar chart with benchmark results." width="500px" src="https://raw.githubusercontent.com/astral-sh/ty/0.0.3/docs/assets/ty-benchmark-cli.svg">
 </p>
 
 <p align="center">
@@ -80,9 +80,9 @@ To learn more about using ty, see the [documentation](https://docs.astral.sh/ty/
 
 ## Installation
 
-To install ty, see the [installation](https://github.com/astral-sh/ty/blob/0.0.2/installation.md) documentation.
+To install ty, see the [installation](https://docs.astral.sh/ty/installation/) documentation.
 
-To add the ty language server to your editor, see the [editor integration](https://github.com/astral-sh/ty/blob/0.0.2/editors.md) guide.
+To add the ty language server to your editor, see the [editor integration](https://docs.astral.sh/ty/editors/) guide.
 
 ## Getting help
 
@@ -98,13 +98,17 @@ at this time. Please [open pull requests](https://github.com/astral-sh/ruff/pull
 to anything in the `ruff` submodule (which includes all of the Rust source code).
 
 See the
-[contributing guide](https://github.com/astral-sh/ty/blob/0.0.2/CONTRIBUTING.md) for more details.
+[contributing guide](https://github.com/astral-sh/ty/blob/0.0.3/CONTRIBUTING.md) for more details.
 
 ## FAQ
 
 <!-- We intentionally use smaller headings for the FAQ items -->
 
 <!-- markdownlint-disable MD001 -->
+
+#### Why is ty doing \_\_\_\_\_?
+
+See our [typing FAQ](https://docs.astral.sh/ty/reference/typing-faq).
 
 #### How do you pronounce ty?
 
@@ -118,7 +122,7 @@ Just "ty", please.
 
 ## License
 
-ty is licensed under the MIT license ([LICENSE](https://github.com/astral-sh/ty/blob/0.0.2/LICENSE) or
+ty is licensed under the MIT license ([LICENSE](https://github.com/astral-sh/ty/blob/0.0.3/LICENSE) or
 <https://opensource.org/licenses/MIT>).
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in ty

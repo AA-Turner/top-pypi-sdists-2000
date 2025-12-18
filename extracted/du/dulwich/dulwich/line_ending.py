@@ -137,9 +137,29 @@ Sources:
 - https://adaptivepatchwork.com/2012/03/01/mind-the-end-of-your-line/
 """
 
+__all__ = [
+    "CRLF",
+    "LF",
+    "BlobNormalizer",
+    "LineEndingFilter",
+    "TreeBlobNormalizer",
+    "check_safecrlf",
+    "convert_crlf_to_lf",
+    "convert_lf_to_crlf",
+    "get_checkin_filter",
+    "get_checkin_filter_autocrlf",
+    "get_checkout_filter",
+    "get_checkout_filter_autocrlf",
+    "get_clean_filter",
+    "get_clean_filter_autocrlf",
+    "get_smudge_filter",
+    "get_smudge_filter_autocrlf",
+    "normalize_blob",
+]
+
 import logging
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Callable, Optional, Union
+from collections.abc import Callable, Mapping
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .config import StackedConfig
@@ -163,8 +183,8 @@ class LineEndingFilter(FilterDriver):
 
     def __init__(
         self,
-        clean_conversion: Optional[Callable[[bytes], bytes]] = None,
-        smudge_conversion: Optional[Callable[[bytes], bytes]] = None,
+        clean_conversion: Callable[[bytes], bytes] | None = None,
+        smudge_conversion: Callable[[bytes], bytes] | None = None,
         binary_detection: bool = True,
         safecrlf: bytes = b"false",
     ):
@@ -176,7 +196,7 @@ class LineEndingFilter(FilterDriver):
 
     @classmethod
     def from_config(
-        cls, config: Optional["StackedConfig"], for_text_attr: bool = False
+        cls, config: "StackedConfig | None", for_text_attr: bool = False
     ) -> "LineEndingFilter":
         """Create a LineEndingFilter from git configuration.
 
@@ -237,7 +257,7 @@ class LineEndingFilter(FilterDriver):
             # For text attribute: always normalize to LF on checkin
             # Smudge behavior depends on core.eol and core.autocrlf
             smudge_filter = get_smudge_filter(core_eol, autocrlf)
-            clean_filter: Optional[Callable[[bytes], bytes]] = convert_crlf_to_lf
+            clean_filter: Callable[[bytes], bytes] | None = convert_crlf_to_lf
         else:
             # Normal autocrlf behavior
             smudge_filter = get_smudge_filter(core_eol, autocrlf)
@@ -373,7 +393,7 @@ def check_safecrlf(
 
 def get_smudge_filter(
     core_eol: str, core_autocrlf: bytes
-) -> Optional[Callable[[bytes], bytes]]:
+) -> Callable[[bytes], bytes] | None:
     """Returns the correct smudge filter based on the passed arguments."""
     # Git attributes handling is done by the filter infrastructure
     return get_smudge_filter_autocrlf(core_autocrlf)
@@ -381,7 +401,7 @@ def get_smudge_filter(
 
 def get_clean_filter(
     core_eol: str, core_autocrlf: bytes
-) -> Optional[Callable[[bytes], bytes]]:
+) -> Callable[[bytes], bytes] | None:
     """Returns the correct clean filter based on the passed arguments."""
     # Git attributes handling is done by the filter infrastructure
     return get_clean_filter_autocrlf(core_autocrlf)
@@ -389,7 +409,7 @@ def get_clean_filter(
 
 def get_smudge_filter_autocrlf(
     core_autocrlf: bytes,
-) -> Optional[Callable[[bytes], bytes]]:
+) -> Callable[[bytes], bytes] | None:
     """Returns the correct smudge filter base on autocrlf value.
 
     Args:
@@ -406,7 +426,7 @@ def get_smudge_filter_autocrlf(
 
 def get_clean_filter_autocrlf(
     core_autocrlf: bytes,
-) -> Optional[Callable[[bytes], bytes]]:
+) -> Callable[[bytes], bytes] | None:
     """Returns the correct clean filter base on autocrlf value.
 
     Args:
@@ -425,8 +445,8 @@ def get_clean_filter_autocrlf(
 # Backwards compatibility wrappers
 @replace_me(since="0.23.1", remove_in="0.25.0")
 def get_checkout_filter(
-    core_eol: str, core_autocrlf: Union[bool, str], git_attributes: Mapping[str, Any]
-) -> Optional[Callable[[bytes], bytes]]:
+    core_eol: str, core_autocrlf: bool | str, git_attributes: Mapping[str, Any]
+) -> Callable[[bytes], bytes] | None:
     """Deprecated: Use get_smudge_filter instead."""
     # Convert core_autocrlf to bytes for compatibility
     if isinstance(core_autocrlf, bool):
@@ -442,8 +462,8 @@ def get_checkout_filter(
 
 @replace_me(since="0.23.1", remove_in="0.25.0")
 def get_checkin_filter(
-    core_eol: str, core_autocrlf: Union[bool, str], git_attributes: Mapping[str, Any]
-) -> Optional[Callable[[bytes], bytes]]:
+    core_eol: str, core_autocrlf: bool | str, git_attributes: Mapping[str, Any]
+) -> Callable[[bytes], bytes] | None:
     """Deprecated: Use get_clean_filter instead."""
     # Convert core_autocrlf to bytes for compatibility
     if isinstance(core_autocrlf, bool):
@@ -460,7 +480,7 @@ def get_checkin_filter(
 @replace_me(since="0.23.1", remove_in="0.25.0")
 def get_checkout_filter_autocrlf(
     core_autocrlf: bytes,
-) -> Optional[Callable[[bytes], bytes]]:
+) -> Callable[[bytes], bytes] | None:
     """Deprecated: Use get_smudge_filter_autocrlf instead."""
     return get_smudge_filter_autocrlf(core_autocrlf)
 
@@ -468,7 +488,7 @@ def get_checkout_filter_autocrlf(
 @replace_me(since="0.23.1", remove_in="0.25.0")
 def get_checkin_filter_autocrlf(
     core_autocrlf: bytes,
-) -> Optional[Callable[[bytes], bytes]]:
+) -> Callable[[bytes], bytes] | None:
     """Deprecated: Use get_clean_filter_autocrlf instead."""
     return get_clean_filter_autocrlf(core_autocrlf)
 
@@ -640,7 +660,7 @@ class TreeBlobNormalizer(BlobNormalizer):
         config_stack: "StackedConfig",
         git_attributes: Mapping[str, Any],
         object_store: "BaseObjectStore",
-        tree: Optional[ObjectID] = None,
+        tree: ObjectID | None = None,
         core_eol: str = "native",
         autocrlf: bytes = b"false",
         safecrlf: bytes = b"false",

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mistralai
-Version: 1.9.11
+Version: 1.10.0
 Summary: Python Client SDK for the Mistral AI API.
 License-File: LICENSE
 Author: Mistral
@@ -21,6 +21,10 @@ Requires-Dist: griffe (>=1.7.3,<2.0) ; extra == "agents"
 Requires-Dist: httpx (>=0.28.1)
 Requires-Dist: invoke (>=2.2.0,<3.0.0)
 Requires-Dist: mcp (>=1.0,<2.0) ; (python_version >= "3.10") and (extra == "agents")
+Requires-Dist: opentelemetry-api (>=1.33.1,<2.0.0)
+Requires-Dist: opentelemetry-exporter-otlp-proto-http (>=1.37.0,<2.0.0)
+Requires-Dist: opentelemetry-sdk (>=1.33.1,<2.0.0)
+Requires-Dist: opentelemetry-semantic-conventions (>=0.59b0,<0.60)
 Requires-Dist: pydantic (>=2.10.3)
 Requires-Dist: python-dateutil (>=2.8.2)
 Requires-Dist: pyyaml (>=6.0.2,<7.0.0)
@@ -176,12 +180,14 @@ with Mistral(
     api_key=os.getenv("MISTRAL_API_KEY", ""),
 ) as mistral:
 
-    res = mistral.chat.complete(model="mistral-small-latest", messages=[
+    res = mistral.chat.complete(model="mistral-large-latest", messages=[
         {
             "content": "Who is the best French painter? Answer in one short sentence.",
             "role": "user",
         },
-    ], stream=False)
+    ], stream=False, response_format={
+        "type": "text",
+    })
 
     # Handle response
     print(res)
@@ -202,12 +208,14 @@ async def main():
         api_key=os.getenv("MISTRAL_API_KEY", ""),
     ) as mistral:
 
-        res = await mistral.chat.complete_async(model="mistral-small-latest", messages=[
+        res = await mistral.chat.complete_async(model="mistral-large-latest", messages=[
             {
                 "content": "Who is the best French painter? Answer in one short sentence.",
                 "role": "user",
             },
-        ], stream=False)
+        ], stream=False, response_format={
+            "type": "text",
+        })
 
         # Handle response
         print(res)
@@ -283,7 +291,9 @@ with Mistral(
             "content": "Who is the best French painter? Answer in one short sentence.",
             "role": "user",
         },
-    ], agent_id="<id>", stream=False)
+    ], agent_id="<id>", stream=False, response_format={
+        "type": "text",
+    })
 
     # Handle response
     print(res)
@@ -309,7 +319,9 @@ async def main():
                 "content": "Who is the best French painter? Answer in one short sentence.",
                 "role": "user",
             },
-        ], agent_id="<id>", stream=False)
+        ], agent_id="<id>", stream=False, response_format={
+            "type": "text",
+        })
 
         # Handle response
         print(res)
@@ -479,7 +491,7 @@ The documentation for the GCP SDK is available [here](https://github.com/mistral
 #### [audio.transcriptions](https://github.com/mistralai/client-python/blob/master/docs/sdks/transcriptions/README.md)
 
 * [complete](https://github.com/mistralai/client-python/blob/master/docs/sdks/transcriptions/README.md#complete) - Create Transcription
-* [stream](https://github.com/mistralai/client-python/blob/master/docs/sdks/transcriptions/README.md#stream) - Create streaming transcription (SSE)
+* [stream](https://github.com/mistralai/client-python/blob/master/docs/sdks/transcriptions/README.md#stream) - Create Streaming Transcription (SSE)
 
 ### [batch](https://github.com/mistralai/client-python/blob/master/docs/sdks/batch/README.md)
 
@@ -500,6 +512,7 @@ The documentation for the GCP SDK is available [here](https://github.com/mistral
 * [list](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md#list) - List agent entities.
 * [get](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md#get) - Retrieve an agent entity.
 * [update](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md#update) - Update an agent entity.
+* [delete](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md#delete) - Delete an agent entity.
 * [update_version](https://github.com/mistralai/client-python/blob/master/docs/sdks/mistralagents/README.md#update_version) - Update an agent version.
 
 #### [beta.conversations](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md)
@@ -507,6 +520,7 @@ The documentation for the GCP SDK is available [here](https://github.com/mistral
 * [start](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#start) - Create a conversation and append entries to it.
 * [list](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#list) - List all created conversations.
 * [get](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#get) - Retrieve a conversation information.
+* [delete](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#delete) - Delete a conversation.
 * [append](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#append) - Append new entries to an existing conversation.
 * [get_history](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#get_history) - Retrieve all entries in a conversation.
 * [get_messages](https://github.com/mistralai/client-python/blob/master/docs/sdks/conversations/README.md#get_messages) - Retrieve all messages in a conversation.
@@ -531,7 +545,7 @@ The documentation for the GCP SDK is available [here](https://github.com/mistral
 
 #### [beta.libraries.documents](https://github.com/mistralai/client-python/blob/master/docs/sdks/documents/README.md)
 
-* [list](https://github.com/mistralai/client-python/blob/master/docs/sdks/documents/README.md#list) - List document in a given library.
+* [list](https://github.com/mistralai/client-python/blob/master/docs/sdks/documents/README.md#list) - List documents in a given library.
 * [upload](https://github.com/mistralai/client-python/blob/master/docs/sdks/documents/README.md#upload) - Upload a new document.
 * [get](https://github.com/mistralai/client-python/blob/master/docs/sdks/documents/README.md#get) - Retrieve the metadata of a specific document.
 * [update](https://github.com/mistralai/client-python/blob/master/docs/sdks/documents/README.md#update) - Update the metadata of a specific document.
@@ -628,7 +642,11 @@ with Mistral(
             "tool_call_id": "<id>",
             "result": "<value>",
         },
-    ], stream=True)
+    ], stream=True, completion_args={
+        "response_format": {
+            "type": "text",
+        },
+    })
 
     with res as event_stream:
         for event in event_stream:
@@ -743,7 +761,7 @@ with Mistral(
     res = None
     try:
 
-        res = mistral.models.list()
+        res = mistral.models.retrieve(model_id="ft:open-mistral-7b:587a6b29:20240514:7e773925")
 
         # Handle response
         print(res)
@@ -777,7 +795,7 @@ with Mistral(
 
 
 **Inherit from [`MistralError`](https://github.com/mistralai/client-python/blob/master/./src/mistralai/models/mistralerror.py)**:
-* [`HTTPValidationError`](https://github.com/mistralai/client-python/blob/master/./src/mistralai/models/httpvalidationerror.py): Validation Error. Status code `422`. Applicable to 47 of 68 methods.*
+* [`HTTPValidationError`](https://github.com/mistralai/client-python/blob/master/./src/mistralai/models/httpvalidationerror.py): Validation Error. Status code `422`. Applicable to 48 of 70 methods.*
 * [`ResponseValidationError`](https://github.com/mistralai/client-python/blob/master/./src/mistralai/models/responsevalidationerror.py): Type mismatch between the response data and the expected Pydantic model. Provides access to the Pydantic validation error via the `cause` attribute.
 
 </details>

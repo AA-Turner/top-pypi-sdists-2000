@@ -6,6 +6,18 @@
 # General Public License as published by the Free Software Foundation; version 2.0
 # or (at your option) any later version. You can redistribute it and/or
 # modify it under the terms of either of these two licenses.
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# You should have received a copy of the licenses; if not, see
+# <http://www.gnu.org/licenses/> for a copy of the GNU General Public License
+# and <http://www.apache.org/licenses/LICENSE-2.0> for a copy of the Apache
+# License, Version 2.0.
+#
 
 """Git commit graph file format support.
 
@@ -16,17 +28,49 @@ The commit graph format is documented at:
 https://git-scm.com/docs/gitformat-commit-graph
 """
 
+__all__ = [
+    "CHUNK_BASE_GRAPHS_LIST",
+    "CHUNK_BLOOM_FILTER_DATA",
+    "CHUNK_BLOOM_FILTER_INDEX",
+    "CHUNK_COMMIT_DATA",
+    "CHUNK_EXTRA_EDGE_LIST",
+    "CHUNK_GENERATION_DATA",
+    "CHUNK_GENERATION_DATA_OVERFLOW",
+    "CHUNK_OID_FANOUT",
+    "CHUNK_OID_LOOKUP",
+    "COMMIT_GRAPH_SIGNATURE",
+    "COMMIT_GRAPH_VERSION",
+    "GENERATION_NUMBER_INFINITY",
+    "GENERATION_NUMBER_V1_MAX",
+    "GENERATION_NUMBER_ZERO",
+    "GRAPH_EXTRA_EDGES_NEEDED",
+    "GRAPH_LAST_EDGE",
+    "GRAPH_PARENT_MISSING",
+    "GRAPH_PARENT_NONE",
+    "HASH_VERSION_SHA1",
+    "HASH_VERSION_SHA256",
+    "CommitGraph",
+    "CommitGraphChunk",
+    "CommitGraphEntry",
+    "find_commit_graph_file",
+    "generate_commit_graph",
+    "get_reachable_commits",
+    "read_commit_graph",
+    "write_commit_graph",
+]
+
 import os
 import struct
 from collections.abc import Iterator, Sequence
-from typing import TYPE_CHECKING, BinaryIO, Optional, Union
+from typing import TYPE_CHECKING, BinaryIO
 
 from .file import _GitFile
+from .object_format import ObjectFormat
 
 if TYPE_CHECKING:
     from .object_store import BaseObjectStore
 
-from .objects import Commit, ObjectID, hex_to_sha, sha_to_hex
+from .objects import Commit, ObjectID, RawObjectID, hex_to_sha, sha_to_hex
 
 # File format constants
 COMMIT_GRAPH_SIGNATURE = b"CGPH"
@@ -113,26 +157,38 @@ class CommitGraphChunk:
 class CommitGraph:
     """Git commit graph file reader/writer."""
 
-    def __init__(self, hash_version: int = HASH_VERSION_SHA1) -> None:
+    def __init__(self, *, object_format: ObjectFormat | None = None) -> None:
         """Initialize CommitGraph.
 
         Args:
-          hash_version: Hash version to use (SHA1 or SHA256)
+          object_format: Object format to use (defaults to SHA1)
         """
-        self.hash_version = hash_version
+        import warnings
+
+        from .object_format import DEFAULT_OBJECT_FORMAT, SHA256
+
+        if object_format is None:
+            warnings.warn(
+                "CommitGraph() should be called with object_format parameter",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            object_format = DEFAULT_OBJECT_FORMAT
+        self.object_format = object_format
+        self.hash_version = (
+            HASH_VERSION_SHA256 if object_format == SHA256 else HASH_VERSION_SHA1
+        )
         self.chunks: dict[bytes, CommitGraphChunk] = {}
         self.entries: list[CommitGraphEntry] = []
-        self._oid_to_index: dict[ObjectID, int] = {}
-        self._hash_size = 20 if hash_version == HASH_VERSION_SHA1 else 32
+        self._oid_to_index: dict[RawObjectID, int] = {}
 
     @classmethod
     def from_file(cls, f: BinaryIO) -> "CommitGraph":
         """Read commit graph from file."""
-        graph = cls()
-        graph._read_from_file(f)
-        return graph
+        return cls._read_from_file(f)
 
-    def _read_from_file(self, f: BinaryIO) -> None:
+    @classmethod
+    def _read_from_file(cls, f: BinaryIO) -> "CommitGraph":
         """Read commit graph data from file."""
         # Read header
         signature = f.read(4)
@@ -143,11 +199,21 @@ class CommitGraph:
         if version != COMMIT_GRAPH_VERSION:
             raise ValueError(f"Unsupported commit graph version: {version}")
 
-        self.hash_version = struct.unpack(">B", f.read(1))[0]
-        if self.hash_version not in (HASH_VERSION_SHA1, HASH_VERSION_SHA256):
-            raise ValueError(f"Unsupported hash version: {self.hash_version}")
+        hash_version = struct.unpack(">B", f.read(1))[0]
 
-        self._hash_size = 20 if self.hash_version == HASH_VERSION_SHA1 else 32
+        # Set object_format based on hash_version from file
+        from .object_format import SHA1, SHA256
+
+        if hash_version == HASH_VERSION_SHA1:
+            object_format = SHA1
+        elif hash_version == HASH_VERSION_SHA256:
+            object_format = SHA256
+        else:
+            raise ValueError(f"Unsupported hash version: {hash_version}")
+
+        # Create instance with correct object_format
+        graph = cls(object_format=object_format)
+        graph.hash_version = hash_version
 
         num_chunks = struct.unpack(">B", f.read(1))[0]
         struct.unpack(">B", f.read(1))[0]
@@ -168,10 +234,12 @@ class CommitGraph:
 
             f.seek(offset)
             chunk_data = f.read(chunk_size)
-            self.chunks[chunk_id] = CommitGraphChunk(chunk_id, chunk_data)
+            graph.chunks[chunk_id] = CommitGraphChunk(chunk_id, chunk_data)
 
         # Parse chunks
-        self._parse_chunks()
+        graph._parse_chunks()
+
+        return graph
 
     def _parse_chunks(self) -> None:
         """Parse chunk data into entries."""
@@ -182,19 +250,19 @@ class CommitGraph:
 
         # Parse OID lookup chunk
         oid_lookup_data = self.chunks[CHUNK_OID_LOOKUP].data
-        num_commits = len(oid_lookup_data) // self._hash_size
+        num_commits = len(oid_lookup_data) // self.object_format.oid_length
 
         oids = []
         for i in range(num_commits):
-            start = i * self._hash_size
-            end = start + self._hash_size
-            oid = oid_lookup_data[start:end]
+            start = i * self.object_format.oid_length
+            end = start + self.object_format.oid_length
+            oid = RawObjectID(oid_lookup_data[start:end])
             oids.append(oid)
             self._oid_to_index[oid] = i
 
         # Parse commit data chunk
         commit_data = self.chunks[CHUNK_COMMIT_DATA].data
-        expected_size = num_commits * (self._hash_size + 16)
+        expected_size = num_commits * (self.object_format.oid_length + 16)
         if len(commit_data) != expected_size:
             raise ValueError(
                 f"Invalid commit data chunk size: {len(commit_data)}, expected {expected_size}"
@@ -202,11 +270,11 @@ class CommitGraph:
 
         self.entries = []
         for i in range(num_commits):
-            offset = i * (self._hash_size + 16)
+            offset = i * (self.object_format.oid_length + 16)
 
             # Tree OID
-            tree_id = commit_data[offset : offset + self._hash_size]
-            offset += self._hash_size
+            tree_id = commit_data[offset : offset + self.object_format.oid_length]
+            offset += self.object_format.oid_length
 
             # Parent positions (2 x 4 bytes)
             parent1_pos, parent2_pos = struct.unpack(
@@ -239,14 +307,16 @@ class CommitGraph:
 
             entry = CommitGraphEntry(
                 commit_id=sha_to_hex(oids[i]),
-                tree_id=sha_to_hex(tree_id),
+                tree_id=sha_to_hex(RawObjectID(tree_id)),
                 parents=[sha_to_hex(p) for p in parents],
                 generation=generation,
                 commit_time=commit_time,
             )
             self.entries.append(entry)
 
-    def _parse_extra_edges(self, offset: int, oids: Sequence[bytes]) -> list[bytes]:
+    def _parse_extra_edges(
+        self, offset: int, oids: Sequence[RawObjectID]
+    ) -> list[RawObjectID]:
         """Parse extra parent edges for commits with 3+ parents."""
         if CHUNK_EXTRA_EDGE_LIST not in self.chunks:
             return []
@@ -269,31 +339,31 @@ class CommitGraph:
 
         return parents
 
-    def get_entry_by_oid(self, oid: ObjectID) -> Optional[CommitGraphEntry]:
+    def get_entry_by_oid(self, oid: ObjectID) -> CommitGraphEntry | None:
         """Get commit graph entry by commit OID."""
         # Convert hex ObjectID to binary if needed for lookup
-        if isinstance(oid, bytes) and len(oid) == 40:
+        if isinstance(oid, bytes) and len(oid) == self.object_format.hex_length:
             # Input is hex ObjectID, convert to binary for internal lookup
-            lookup_oid = hex_to_sha(oid)
+            lookup_oid: RawObjectID = hex_to_sha(oid)
         else:
             # Input is already binary
-            lookup_oid = oid
+            lookup_oid = RawObjectID(oid)
         index = self._oid_to_index.get(lookup_oid)
         if index is not None:
             return self.entries[index]
         return None
 
-    def get_generation_number(self, oid: ObjectID) -> Optional[int]:
+    def get_generation_number(self, oid: ObjectID) -> int | None:
         """Get generation number for a commit."""
         entry = self.get_entry_by_oid(oid)
         return entry.generation if entry else None
 
-    def get_parents(self, oid: ObjectID) -> Optional[list[bytes]]:
+    def get_parents(self, oid: ObjectID) -> list[ObjectID] | None:
         """Get parent commit IDs for a commit."""
         entry = self.get_entry_by_oid(oid)
         return entry.parents if entry else None
 
-    def write_to_file(self, f: Union[BinaryIO, _GitFile]) -> None:
+    def write_to_file(self, f: BinaryIO | _GitFile) -> None:
         """Write commit graph to file."""
         if not self.entries:
             raise ValueError("Cannot write empty commit graph")
@@ -391,7 +461,7 @@ class CommitGraph:
         return iter(self.entries)
 
 
-def read_commit_graph(path: Union[str, bytes]) -> Optional[CommitGraph]:
+def read_commit_graph(path: str | bytes) -> CommitGraph | None:
     """Read commit graph from file path."""
     if isinstance(path, str):
         path = path.encode()
@@ -403,7 +473,7 @@ def read_commit_graph(path: Union[str, bytes]) -> Optional[CommitGraph]:
         return CommitGraph.from_file(f)
 
 
-def find_commit_graph_file(git_dir: Union[str, bytes]) -> Optional[bytes]:
+def find_commit_graph_file(git_dir: str | bytes) -> bytes | None:
     """Find commit graph file in a Git repository."""
     if isinstance(git_dir, str):
         git_dir = git_dir.encode()
@@ -436,27 +506,28 @@ def generate_commit_graph(
     Returns:
         CommitGraph object containing the specified commits
     """
-    graph = CommitGraph()
+    graph = CommitGraph(object_format=object_store.object_format)
 
     if not commit_ids:
         return graph
 
     # Ensure all commit_ids are in the correct format for object store access
-    # DiskObjectStore expects hex ObjectIDs (40-byte hex strings)
+    hex_length = object_store.object_format.hex_length
+    oid_length = object_store.object_format.oid_length
     normalized_commit_ids = []
     for commit_id in commit_ids:
-        if isinstance(commit_id, bytes) and len(commit_id) == 40:
+        if isinstance(commit_id, bytes) and len(commit_id) == hex_length:
             # Already hex ObjectID
             normalized_commit_ids.append(commit_id)
-        elif isinstance(commit_id, bytes) and len(commit_id) == 20:
+        elif isinstance(commit_id, bytes) and len(commit_id) == oid_length:
             # Binary SHA, convert to hex ObjectID
-            normalized_commit_ids.append(sha_to_hex(commit_id))
+            normalized_commit_ids.append(sha_to_hex(RawObjectID(commit_id)))
         else:
             # Assume it's already correct format
-            normalized_commit_ids.append(commit_id)
+            normalized_commit_ids.append(ObjectID(commit_id))
 
     # Build a map of all commits and their metadata
-    commit_map: dict[bytes, Commit] = {}
+    commit_map: dict[ObjectID, Commit] = {}
     for commit_id in normalized_commit_ids:
         try:
             commit_obj = object_store[commit_id]
@@ -503,21 +574,11 @@ def generate_commit_graph(
     # Build commit graph entries
     for commit_id, commit_obj in commit_map.items():
         # commit_id is already hex ObjectID from normalized_commit_ids
-        commit_hex = commit_id
+        commit_hex: ObjectID = commit_id
 
-        # Handle tree ID - might already be hex ObjectID
-        if isinstance(commit_obj.tree, bytes) and len(commit_obj.tree) == 40:
-            tree_hex = commit_obj.tree  # Already hex ObjectID
-        else:
-            tree_hex = sha_to_hex(commit_obj.tree)  # Binary, convert to hex
-
-        # Handle parent IDs - might already be hex ObjectIDs
-        parents_hex = []
-        for parent_id in commit_obj.parents:
-            if isinstance(parent_id, bytes) and len(parent_id) == 40:
-                parents_hex.append(parent_id)  # Already hex ObjectID
-            else:
-                parents_hex.append(sha_to_hex(parent_id))  # Binary, convert to hex
+        # commit_obj.tree and commit_obj.parents are already ObjectIDs
+        tree_hex = commit_obj.tree
+        parents_hex: list[ObjectID] = commit_obj.parents
 
         entry = CommitGraphEntry(
             commit_id=commit_hex,
@@ -531,14 +592,14 @@ def generate_commit_graph(
     # Build the OID to index mapping for lookups
     graph._oid_to_index = {}
     for i, entry in enumerate(graph.entries):
-        binary_oid = hex_to_sha(entry.commit_id.decode())
-        graph._oid_to_index[binary_oid] = i
+        # Convert hex ObjectID to binary RawObjectID for consistent lookup
+        graph._oid_to_index[hex_to_sha(entry.commit_id)] = i
 
     return graph
 
 
 def write_commit_graph(
-    git_dir: Union[str, bytes],
+    git_dir: str | bytes,
     object_store: "BaseObjectStore",
     commit_ids: Sequence[ObjectID],
 ) -> None:
@@ -582,25 +643,29 @@ def get_reachable_commits(
     Returns:
         List of all reachable commit IDs (including the starting commits)
     """
-    visited = set()
-    reachable = []
-    stack = []
+    visited: set[ObjectID] = set()
+    reachable: list[ObjectID] = []
+    stack: list[ObjectID] = []
+
+    hex_length = object_store.object_format.hex_length
+    oid_length = object_store.object_format.oid_length
 
     # Normalize commit IDs for object store access and tracking
     for commit_id in start_commits:
-        if isinstance(commit_id, bytes) and len(commit_id) == 40:
+        if isinstance(commit_id, bytes) and len(commit_id) == hex_length:
             # Hex ObjectID - use directly for object store access
             if commit_id not in visited:
                 stack.append(commit_id)
-        elif isinstance(commit_id, bytes) and len(commit_id) == 20:
+        elif isinstance(commit_id, bytes) and len(commit_id) == oid_length:
             # Binary SHA, convert to hex ObjectID for object store access
-            hex_id = sha_to_hex(commit_id)
+            hex_id = sha_to_hex(RawObjectID(commit_id))
             if hex_id not in visited:
                 stack.append(hex_id)
         else:
             # Assume it's already correct format
-            if commit_id not in visited:
-                stack.append(commit_id)
+            oid = ObjectID(commit_id)
+            if oid not in visited:
+                stack.append(oid)
 
     while stack:
         commit_id = stack.pop()

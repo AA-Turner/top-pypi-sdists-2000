@@ -33,6 +33,7 @@ from datadog_api_client.v2.model.aws_assume_role_update import AWSAssumeRoleUpda
 from datadog_api_client.v2.model.aws_auth_config import AWSAuthConfig
 from datadog_api_client.v2.model.aws_auth_config_keys import AWSAuthConfigKeys
 from datadog_api_client.v2.model.aws_auth_config_role import AWSAuthConfigRole
+from datadog_api_client.v2.model.awsccm_config import AWSCCMConfig
 from datadog_api_client.v2.model.aws_credentials import AWSCredentials
 from datadog_api_client.v2.model.aws_credentials_update import AWSCredentialsUpdate
 from datadog_api_client.v2.model.aws_event_bridge_account_configuration import AWSEventBridgeAccountConfiguration
@@ -781,6 +782,9 @@ from datadog_api_client.v2.model.cloud_workload_security_agent_rule_action_metad
 from datadog_api_client.v2.model.cloud_workload_security_agent_rule_action_set import (
     CloudWorkloadSecurityAgentRuleActionSet,
 )
+from datadog_api_client.v2.model.cloud_workload_security_agent_rule_action_set_value import (
+    CloudWorkloadSecurityAgentRuleActionSetValue,
+)
 from datadog_api_client.v2.model.cloud_workload_security_agent_rule_attributes import (
     CloudWorkloadSecurityAgentRuleAttributes,
 )
@@ -1000,26 +1004,20 @@ from datadog_api_client.v2.model.create_deployment_rule_params_data import Creat
 from datadog_api_client.v2.model.create_deployment_rule_params_data_attributes import (
     CreateDeploymentRuleParamsDataAttributes,
 )
+from datadog_api_client.v2.model.create_email_notification_channel_config import CreateEmailNotificationChannelConfig
 from datadog_api_client.v2.model.create_incident_notification_rule_request import CreateIncidentNotificationRuleRequest
 from datadog_api_client.v2.model.create_incident_notification_template_request import (
     CreateIncidentNotificationTemplateRequest,
 )
 from datadog_api_client.v2.model.create_jira_issue_request_array import CreateJiraIssueRequestArray
-from datadog_api_client.v2.model.create_jira_issue_request_array_included import CreateJiraIssueRequestArrayIncluded
 from datadog_api_client.v2.model.create_jira_issue_request_data import CreateJiraIssueRequestData
 from datadog_api_client.v2.model.create_jira_issue_request_data_attributes import CreateJiraIssueRequestDataAttributes
-from datadog_api_client.v2.model.create_jira_issue_request_data_attributes_fields import (
-    CreateJiraIssueRequestDataAttributesFields,
-)
 from datadog_api_client.v2.model.create_jira_issue_request_data_relationships import (
     CreateJiraIssueRequestDataRelationships,
 )
-from datadog_api_client.v2.model.create_jira_issue_request_data_relationships_case import (
-    CreateJiraIssueRequestDataRelationshipsCase,
-)
-from datadog_api_client.v2.model.create_jira_issue_request_data_relationships_case_data import (
-    CreateJiraIssueRequestDataRelationshipsCaseData,
-)
+from datadog_api_client.v2.model.create_notification_channel_attributes import CreateNotificationChannelAttributes
+from datadog_api_client.v2.model.create_notification_channel_config import CreateNotificationChannelConfig
+from datadog_api_client.v2.model.create_notification_channel_data import CreateNotificationChannelData
 from datadog_api_client.v2.model.create_notification_rule_parameters import CreateNotificationRuleParameters
 from datadog_api_client.v2.model.create_notification_rule_parameters_data import CreateNotificationRuleParametersData
 from datadog_api_client.v2.model.create_notification_rule_parameters_data_attributes import (
@@ -1036,6 +1034,7 @@ from datadog_api_client.v2.model.create_page_request_data_type import CreatePage
 from datadog_api_client.v2.model.create_page_response import CreatePageResponse
 from datadog_api_client.v2.model.create_page_response_data import CreatePageResponseData
 from datadog_api_client.v2.model.create_page_response_data_type import CreatePageResponseDataType
+from datadog_api_client.v2.model.create_phone_notification_channel_config import CreatePhoneNotificationChannelConfig
 from datadog_api_client.v2.model.create_rule_request import CreateRuleRequest
 from datadog_api_client.v2.model.create_rule_request_data import CreateRuleRequestData
 from datadog_api_client.v2.model.create_rule_response import CreateRuleResponse
@@ -1101,6 +1100,7 @@ from datadog_api_client.v2.model.create_upload_response import CreateUploadRespo
 from datadog_api_client.v2.model.create_upload_response_data import CreateUploadResponseData
 from datadog_api_client.v2.model.create_upload_response_data_attributes import CreateUploadResponseDataAttributes
 from datadog_api_client.v2.model.create_upload_response_data_type import CreateUploadResponseDataType
+from datadog_api_client.v2.model.create_user_notification_channel_request import CreateUserNotificationChannelRequest
 from datadog_api_client.v2.model.create_workflow_request import CreateWorkflowRequest
 from datadog_api_client.v2.model.create_workflow_response import CreateWorkflowResponse
 from datadog_api_client.v2.model.creator import Creator
@@ -1318,6 +1318,7 @@ from datadog_api_client.v2.model.dashboard_type import DashboardType
 from datadog_api_client.v2.model.data_deletion_response_item import DataDeletionResponseItem
 from datadog_api_client.v2.model.data_deletion_response_item_attributes import DataDeletionResponseItemAttributes
 from datadog_api_client.v2.model.data_deletion_response_meta import DataDeletionResponseMeta
+from datadog_api_client.v2.model.data_export_config import DataExportConfig
 from datadog_api_client.v2.model.data_relationships_teams import DataRelationshipsTeams
 from datadog_api_client.v2.model.data_relationships_teams_data_items import DataRelationshipsTeamsDataItems
 from datadog_api_client.v2.model.data_relationships_teams_data_items_type import DataRelationshipsTeamsDataItemsType
@@ -1381,6 +1382,7 @@ from datadog_api_client.v2.model.deployment_gate_response_data_attributes_create
 from datadog_api_client.v2.model.deployment_gate_response_data_attributes_updated_by import (
     DeploymentGateResponseDataAttributesUpdatedBy,
 )
+from datadog_api_client.v2.model.deployment_gate_rules_response import DeploymentGateRulesResponse
 from datadog_api_client.v2.model.deployment_metadata import DeploymentMetadata
 from datadog_api_client.v2.model.deployment_relationship import DeploymentRelationship
 from datadog_api_client.v2.model.deployment_relationship_data import DeploymentRelationshipData
@@ -1997,6 +1999,9 @@ from datadog_api_client.v2.model.get_rule_version_history_data import GetRuleVer
 from datadog_api_client.v2.model.get_rule_version_history_data_type import GetRuleVersionHistoryDataType
 from datadog_api_client.v2.model.get_rule_version_history_response import GetRuleVersionHistoryResponse
 from datadog_api_client.v2.model.get_sbom_response import GetSBOMResponse
+from datadog_api_client.v2.model.get_suppression_version_history_data import GetSuppressionVersionHistoryData
+from datadog_api_client.v2.model.get_suppression_version_history_data_type import GetSuppressionVersionHistoryDataType
+from datadog_api_client.v2.model.get_suppression_version_history_response import GetSuppressionVersionHistoryResponse
 from datadog_api_client.v2.model.get_team_memberships_sort import GetTeamMembershipsSort
 from datadog_api_client.v2.model.get_workflow_response import GetWorkflowResponse
 from datadog_api_client.v2.model.github_webhook_trigger import GithubWebhookTrigger
@@ -2434,6 +2439,11 @@ from datadog_api_client.v2.model.list_connections_response_data_attributes_conne
     ListConnectionsResponseDataAttributesConnectionsItemsJoin,
 )
 from datadog_api_client.v2.model.list_connections_response_data_type import ListConnectionsResponseDataType
+from datadog_api_client.v2.model.list_deployment_rule_response_data import ListDeploymentRuleResponseData
+from datadog_api_client.v2.model.list_deployment_rules_data_type import ListDeploymentRulesDataType
+from datadog_api_client.v2.model.list_deployment_rules_response_data_attributes import (
+    ListDeploymentRulesResponseDataAttributes,
+)
 from datadog_api_client.v2.model.list_devices_response import ListDevicesResponse
 from datadog_api_client.v2.model.list_devices_response_metadata import ListDevicesResponseMetadata
 from datadog_api_client.v2.model.list_devices_response_metadata_page import ListDevicesResponseMetadataPage
@@ -2445,6 +2455,7 @@ from datadog_api_client.v2.model.list_findings_meta import ListFindingsMeta
 from datadog_api_client.v2.model.list_findings_page import ListFindingsPage
 from datadog_api_client.v2.model.list_findings_response import ListFindingsResponse
 from datadog_api_client.v2.model.list_kind_catalog_response import ListKindCatalogResponse
+from datadog_api_client.v2.model.list_notification_channels_response import ListNotificationChannelsResponse
 from datadog_api_client.v2.model.list_pipelines_response import ListPipelinesResponse
 from datadog_api_client.v2.model.list_pipelines_response_meta import ListPipelinesResponseMeta
 from datadog_api_client.v2.model.list_powerpacks_response import ListPowerpacksResponse
@@ -2829,6 +2840,18 @@ from datadog_api_client.v2.model.monthly_cost_attribution_meta import MonthlyCos
 from datadog_api_client.v2.model.monthly_cost_attribution_pagination import MonthlyCostAttributionPagination
 from datadog_api_client.v2.model.monthly_cost_attribution_response import MonthlyCostAttributionResponse
 from datadog_api_client.v2.model.notebook_trigger_wrapper import NotebookTriggerWrapper
+from datadog_api_client.v2.model.notification_channel import NotificationChannel
+from datadog_api_client.v2.model.notification_channel_attributes import NotificationChannelAttributes
+from datadog_api_client.v2.model.notification_channel_config import NotificationChannelConfig
+from datadog_api_client.v2.model.notification_channel_data import NotificationChannelData
+from datadog_api_client.v2.model.notification_channel_email_config import NotificationChannelEmailConfig
+from datadog_api_client.v2.model.notification_channel_email_config_type import NotificationChannelEmailConfigType
+from datadog_api_client.v2.model.notification_channel_email_format_type import NotificationChannelEmailFormatType
+from datadog_api_client.v2.model.notification_channel_phone_config import NotificationChannelPhoneConfig
+from datadog_api_client.v2.model.notification_channel_phone_config_type import NotificationChannelPhoneConfigType
+from datadog_api_client.v2.model.notification_channel_push_config import NotificationChannelPushConfig
+from datadog_api_client.v2.model.notification_channel_push_config_type import NotificationChannelPushConfigType
+from datadog_api_client.v2.model.notification_channel_type import NotificationChannelType
 from datadog_api_client.v2.model.notification_rule import NotificationRule
 from datadog_api_client.v2.model.notification_rule_attributes import NotificationRuleAttributes
 from datadog_api_client.v2.model.notification_rule_response import NotificationRuleResponse
@@ -2902,6 +2925,9 @@ from datadog_api_client.v2.model.observability_pipeline_aws_auth import Observab
 from datadog_api_client.v2.model.observability_pipeline_config import ObservabilityPipelineConfig
 from datadog_api_client.v2.model.observability_pipeline_config_destination_item import (
     ObservabilityPipelineConfigDestinationItem,
+)
+from datadog_api_client.v2.model.observability_pipeline_config_processor_group import (
+    ObservabilityPipelineConfigProcessorGroup,
 )
 from datadog_api_client.v2.model.observability_pipeline_config_processor_item import (
     ObservabilityPipelineConfigProcessorItem,
@@ -3902,8 +3928,6 @@ from datadog_api_client.v2.model.rule_type import RuleType
 from datadog_api_client.v2.model.rule_types_items import RuleTypesItems
 from datadog_api_client.v2.model.rule_user import RuleUser
 from datadog_api_client.v2.model.rule_version_history import RuleVersionHistory
-from datadog_api_client.v2.model.rule_version_update import RuleVersionUpdate
-from datadog_api_client.v2.model.rule_version_update_type import RuleVersionUpdateType
 from datadog_api_client.v2.model.rule_versions import RuleVersions
 from datadog_api_client.v2.model.rules_validate_query_request import RulesValidateQueryRequest
 from datadog_api_client.v2.model.rules_validate_query_request_data import RulesValidateQueryRequestData
@@ -4507,6 +4531,13 @@ from datadog_api_client.v2.model.service_definition_v2_slack_type import Service
 from datadog_api_client.v2.model.service_definition_v2_version import ServiceDefinitionV2Version
 from datadog_api_client.v2.model.service_definitions_create_request import ServiceDefinitionsCreateRequest
 from datadog_api_client.v2.model.service_definitions_list_response import ServiceDefinitionsListResponse
+from datadog_api_client.v2.model.service_list import ServiceList
+from datadog_api_client.v2.model.service_list_data import ServiceListData
+from datadog_api_client.v2.model.service_list_data_attributes import ServiceListDataAttributes
+from datadog_api_client.v2.model.service_list_data_attributes_metadata_items import (
+    ServiceListDataAttributesMetadataItems,
+)
+from datadog_api_client.v2.model.service_list_data_type import ServiceListDataType
 from datadog_api_client.v2.model.service_now_basic_auth import ServiceNowBasicAuth
 from datadog_api_client.v2.model.service_now_basic_auth_type import ServiceNowBasicAuthType
 from datadog_api_client.v2.model.service_now_basic_auth_update import ServiceNowBasicAuthUpdate
@@ -4645,6 +4676,8 @@ from datadog_api_client.v2.model.statsig_integration_update import StatsigIntegr
 from datadog_api_client.v2.model.step import Step
 from datadog_api_client.v2.model.step_display import StepDisplay
 from datadog_api_client.v2.model.step_display_bounds import StepDisplayBounds
+from datadog_api_client.v2.model.suppression_version_history import SuppressionVersionHistory
+from datadog_api_client.v2.model.suppression_versions import SuppressionVersions
 from datadog_api_client.v2.model.table_result_v2 import TableResultV2
 from datadog_api_client.v2.model.table_result_v2_array import TableResultV2Array
 from datadog_api_client.v2.model.table_result_v2_data import TableResultV2Data
@@ -5012,6 +5045,8 @@ from datadog_api_client.v2.model.v2_event_response import V2EventResponse
 from datadog_api_client.v2.model.validation_error import ValidationError
 from datadog_api_client.v2.model.validation_error_meta import ValidationErrorMeta
 from datadog_api_client.v2.model.validation_response import ValidationResponse
+from datadog_api_client.v2.model.version_history_update import VersionHistoryUpdate
+from datadog_api_client.v2.model.version_history_update_type import VersionHistoryUpdateType
 from datadog_api_client.v2.model.virus_total_api_key import VirusTotalAPIKey
 from datadog_api_client.v2.model.virus_total_api_key_type import VirusTotalAPIKeyType
 from datadog_api_client.v2.model.virus_total_api_key_update import VirusTotalAPIKeyUpdate
@@ -5104,6 +5139,7 @@ __all__ = [
     "AWSAuthConfig",
     "AWSAuthConfigKeys",
     "AWSAuthConfigRole",
+    "AWSCCMConfig",
     "AWSCredentials",
     "AWSCredentialsUpdate",
     "AWSEventBridgeAccountConfiguration",
@@ -5654,6 +5690,7 @@ __all__ = [
     "CloudWorkloadSecurityAgentRuleActionHash",
     "CloudWorkloadSecurityAgentRuleActionMetadata",
     "CloudWorkloadSecurityAgentRuleActionSet",
+    "CloudWorkloadSecurityAgentRuleActionSetValue",
     "CloudWorkloadSecurityAgentRuleAttributes",
     "CloudWorkloadSecurityAgentRuleCreateAttributes",
     "CloudWorkloadSecurityAgentRuleCreateData",
@@ -5825,16 +5862,16 @@ __all__ = [
     "CreateDeploymentRuleParams",
     "CreateDeploymentRuleParamsData",
     "CreateDeploymentRuleParamsDataAttributes",
+    "CreateEmailNotificationChannelConfig",
     "CreateIncidentNotificationRuleRequest",
     "CreateIncidentNotificationTemplateRequest",
     "CreateJiraIssueRequestArray",
-    "CreateJiraIssueRequestArrayIncluded",
     "CreateJiraIssueRequestData",
     "CreateJiraIssueRequestDataAttributes",
-    "CreateJiraIssueRequestDataAttributesFields",
     "CreateJiraIssueRequestDataRelationships",
-    "CreateJiraIssueRequestDataRelationshipsCase",
-    "CreateJiraIssueRequestDataRelationshipsCaseData",
+    "CreateNotificationChannelAttributes",
+    "CreateNotificationChannelConfig",
+    "CreateNotificationChannelData",
     "CreateNotificationRuleParameters",
     "CreateNotificationRuleParametersData",
     "CreateNotificationRuleParametersDataAttributes",
@@ -5849,6 +5886,7 @@ __all__ = [
     "CreatePageResponse",
     "CreatePageResponseData",
     "CreatePageResponseDataType",
+    "CreatePhoneNotificationChannelConfig",
     "CreateRuleRequest",
     "CreateRuleRequestData",
     "CreateRuleResponse",
@@ -5884,6 +5922,7 @@ __all__ = [
     "CreateUploadResponseData",
     "CreateUploadResponseDataAttributes",
     "CreateUploadResponseDataType",
+    "CreateUserNotificationChannelRequest",
     "CreateWorkflowRequest",
     "CreateWorkflowResponse",
     "Creator",
@@ -6017,6 +6056,7 @@ __all__ = [
     "DataDeletionResponseItem",
     "DataDeletionResponseItemAttributes",
     "DataDeletionResponseMeta",
+    "DataExportConfig",
     "DataRelationshipsTeams",
     "DataRelationshipsTeamsDataItems",
     "DataRelationshipsTeamsDataItemsType",
@@ -6074,6 +6114,7 @@ __all__ = [
     "DeploymentGateResponseDataAttributes",
     "DeploymentGateResponseDataAttributesCreatedBy",
     "DeploymentGateResponseDataAttributesUpdatedBy",
+    "DeploymentGateRulesResponse",
     "DeploymentMetadata",
     "DeploymentRelationship",
     "DeploymentRelationshipData",
@@ -6558,6 +6599,9 @@ __all__ = [
     "GetRuleVersionHistoryDataType",
     "GetRuleVersionHistoryResponse",
     "GetSBOMResponse",
+    "GetSuppressionVersionHistoryData",
+    "GetSuppressionVersionHistoryDataType",
+    "GetSuppressionVersionHistoryResponse",
     "GetTeamMembershipsSort",
     "GetWorkflowResponse",
     "GithubWebhookTrigger",
@@ -6921,6 +6965,9 @@ __all__ = [
     "ListConnectionsResponseDataAttributesConnectionsItems",
     "ListConnectionsResponseDataAttributesConnectionsItemsJoin",
     "ListConnectionsResponseDataType",
+    "ListDeploymentRuleResponseData",
+    "ListDeploymentRulesDataType",
+    "ListDeploymentRulesResponseDataAttributes",
     "ListDevicesResponse",
     "ListDevicesResponseMetadata",
     "ListDevicesResponseMetadataPage",
@@ -6932,6 +6979,7 @@ __all__ = [
     "ListFindingsPage",
     "ListFindingsResponse",
     "ListKindCatalogResponse",
+    "ListNotificationChannelsResponse",
     "ListPipelinesResponse",
     "ListPipelinesResponseMeta",
     "ListPowerpacksResponse",
@@ -7222,6 +7270,18 @@ __all__ = [
     "MonthlyCostAttributionPagination",
     "MonthlyCostAttributionResponse",
     "NotebookTriggerWrapper",
+    "NotificationChannel",
+    "NotificationChannelAttributes",
+    "NotificationChannelConfig",
+    "NotificationChannelData",
+    "NotificationChannelEmailConfig",
+    "NotificationChannelEmailConfigType",
+    "NotificationChannelEmailFormatType",
+    "NotificationChannelPhoneConfig",
+    "NotificationChannelPhoneConfigType",
+    "NotificationChannelPushConfig",
+    "NotificationChannelPushConfigType",
+    "NotificationChannelType",
     "NotificationRule",
     "NotificationRuleAttributes",
     "NotificationRuleResponse",
@@ -7260,6 +7320,7 @@ __all__ = [
     "ObservabilityPipelineAwsAuth",
     "ObservabilityPipelineConfig",
     "ObservabilityPipelineConfigDestinationItem",
+    "ObservabilityPipelineConfigProcessorGroup",
     "ObservabilityPipelineConfigProcessorItem",
     "ObservabilityPipelineConfigSourceItem",
     "ObservabilityPipelineCrowdStrikeNextGenSiemDestination",
@@ -7871,8 +7932,6 @@ __all__ = [
     "RuleTypesItems",
     "RuleUser",
     "RuleVersionHistory",
-    "RuleVersionUpdate",
-    "RuleVersionUpdateType",
     "RuleVersions",
     "RulesValidateQueryRequest",
     "RulesValidateQueryRequestData",
@@ -8284,6 +8343,11 @@ __all__ = [
     "ServiceDefinitionV2Version",
     "ServiceDefinitionsCreateRequest",
     "ServiceDefinitionsListResponse",
+    "ServiceList",
+    "ServiceListData",
+    "ServiceListDataAttributes",
+    "ServiceListDataAttributesMetadataItems",
+    "ServiceListDataType",
     "ServiceNowBasicAuth",
     "ServiceNowBasicAuthType",
     "ServiceNowBasicAuthUpdate",
@@ -8406,6 +8470,8 @@ __all__ = [
     "Step",
     "StepDisplay",
     "StepDisplayBounds",
+    "SuppressionVersionHistory",
+    "SuppressionVersions",
     "TableResultV2",
     "TableResultV2Array",
     "TableResultV2Data",
@@ -8699,6 +8765,8 @@ __all__ = [
     "ValidationError",
     "ValidationErrorMeta",
     "ValidationResponse",
+    "VersionHistoryUpdate",
+    "VersionHistoryUpdateType",
     "VirusTotalAPIKey",
     "VirusTotalAPIKeyType",
     "VirusTotalAPIKeyUpdate",

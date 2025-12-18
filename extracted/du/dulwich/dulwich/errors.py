@@ -22,13 +22,36 @@
 
 """Dulwich-related exception classes and utility functions."""
 
+__all__ = [
+    "ApplyDeltaError",
+    "ChecksumMismatch",
+    "CommitError",
+    "FileFormatException",
+    "GitProtocolError",
+    "HangupException",
+    "HookError",
+    "MissingCommitError",
+    "NoIndexPresent",
+    "NotBlobError",
+    "NotCommitError",
+    "NotGitRepository",
+    "NotTagError",
+    "NotTreeError",
+    "ObjectFormatException",
+    "ObjectMissing",
+    "PackedRefsException",
+    "RefFormatError",
+    "SendPackError",
+    "UnexpectedCommandError",
+    "WorkingTreeModifiedError",
+    "WrongObjectException",
+]
 
 # Please do not add more errors here, but instead add them close to the code
 # that raises the error.
 
 import binascii
 from collections.abc import Sequence
-from typing import Optional, Union
 
 
 class ChecksumMismatch(Exception):
@@ -36,9 +59,9 @@ class ChecksumMismatch(Exception):
 
     def __init__(
         self,
-        expected: Union[bytes, str],
-        got: Union[bytes, str],
-        extra: Optional[str] = None,
+        expected: bytes | str,
+        got: bytes | str,
+        extra: str | None = None,
     ) -> None:
         """Initialize a ChecksumMismatch exception.
 
@@ -47,13 +70,13 @@ class ChecksumMismatch(Exception):
             got: The actual checksum value (bytes or hex string).
             extra: Optional additional error information.
         """
-        if isinstance(expected, bytes) and len(expected) == 20:
+        if isinstance(expected, bytes) and len(expected) in (20, 32):
             expected_str = binascii.hexlify(expected).decode("ascii")
         else:
             expected_str = (
                 expected if isinstance(expected, str) else expected.decode("ascii")
             )
-        if isinstance(got, bytes) and len(got) == 20:
+        if isinstance(got, bytes) and len(got) in (20, 32):
             got_str = binascii.hexlify(got).decode("ascii")
         else:
             got_str = got if isinstance(got, str) else got.decode("ascii")
@@ -198,7 +221,7 @@ class SendPackError(GitProtocolError):
 class HangupException(GitProtocolError):
     """Hangup exception."""
 
-    def __init__(self, stderr_lines: Optional[Sequence[bytes]] = None) -> None:
+    def __init__(self, stderr_lines: Sequence[bytes] | None = None) -> None:
         """Initialize a HangupException.
 
         Args:
@@ -232,7 +255,7 @@ class HangupException(GitProtocolError):
 class UnexpectedCommandError(GitProtocolError):
     """Unexpected command received in a proto line."""
 
-    def __init__(self, command: Optional[str]) -> None:
+    def __init__(self, command: str | None) -> None:
         """Initialize an UnexpectedCommandError.
 
         Args:

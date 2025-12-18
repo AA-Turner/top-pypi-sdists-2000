@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: datamodel-code-generator
-Version: 0.43.1
+Version: 0.44.0
 Summary: Datamodel Code Generator
 Project-URL: Homepage, https://github.com/koxudaxi/datamodel-code-generator
 Project-URL: Source, https://github.com/koxudaxi/datamodel-code-generator
@@ -380,6 +380,8 @@ This method needs the [http extra option](#http-extra-option)
 
 ## All Command Options
 
+> 📖 **For detailed documentation with examples, see the [CLI Reference](https://koxudaxi.github.io/datamodel-code-generator/cli-reference/).**
+
 The `datamodel-codegen` command:
 
 <!-- start command help -->
@@ -413,6 +415,12 @@ Options:
   --url URL             Input file URL. `--input` is ignored when `--url` is used
 
 Typing customization:
+  --allof-merge-mode {constraints,all,none}
+                        Mode for field merging in allOf schemas. ''constraints'': merge only
+                        constraints (minItems, maxItems, pattern, etc.) from parent
+                        (default). ''all'': merge constraints plus annotations (default,
+                        examples) from parent. ''none'': do not merge any fields from parent
+                        properties.
   --base-class BASE_CLASS
                         Base Class (default: pydantic.BaseModel)
   --disable-future-imports
@@ -432,6 +440,10 @@ Typing customization:
                         times.
   --use-annotated       Use typing.Annotated for Field(). Also, `--field-constraints` option
                         will be enabled.
+  --use-decimal-for-multiple-of
+                        Use condecimal instead of confloat for float/number fields with
+                        multipleOf constraint (Pydantic only). Avoids floating-point
+                        precision issues in validation.
   --use-enum-values-in-discriminator
                         Use enum member literals in discriminator fields instead of string
                         literals

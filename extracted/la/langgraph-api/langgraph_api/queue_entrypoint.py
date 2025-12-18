@@ -9,12 +9,12 @@ if not (
     truststore.inject_into_ssl()
 
 import asyncio
+import functools
 import json
 import logging.config
 import pathlib
 import signal
 import socket
-from contextlib import AsyncExitStack
 
 import structlog
 
@@ -164,27 +164,25 @@ async def entrypoint(
     cancel_event: asyncio.Event | None = None,
 ):
     from langgraph_api import logging as lg_logging
+    from langgraph_api import timing
     from langgraph_api.api import user_router
+    from langgraph_api.server import app
 
     lg_logging.set_logging_context({"entrypoint": entrypoint_name})
     tasks: set[asyncio.Task] = set()
+    user_lifespan = None if user_router is None else user_router.router.lifespan_context
+    wrapped_lifespan = timing.combine_lifespans(
+        functools.partial(
+            lifespan.lifespan,
+            with_cron_scheduler=False,
+            grpc_port=grpc_port,
+            taskset=tasks,
+            cancel_event=cancel_event,
+        ),
+        user_lifespan,
+    )
 
-    original_lifespan = user_router.router.lifespan_context if user_router else None
-
-    async with AsyncExitStack() as stack:
-        await stack.enter_async_context(
-            lifespan.lifespan(
-                None,
-                with_cron_scheduler=False,
-                grpc_port=grpc_port,
-                taskset=tasks,
-                cancel_event=cancel_event,
-            )
-        )
-
-        if original_lifespan:
-            await stack.enter_async_context(original_lifespan(user_router))
-
+    async with wrapped_lifespan(app):
         tasks.add(asyncio.create_task(health_and_metrics_server()))
         await asyncio.gather(*tasks)
 

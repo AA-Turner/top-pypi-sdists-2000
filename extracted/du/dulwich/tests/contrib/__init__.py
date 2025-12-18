@@ -24,7 +24,7 @@ import unittest
 
 def test_suite() -> unittest.TestSuite:
     names = [
-        "diffstat",
+        "greenthreads",
         "paramiko_vendor",
         "release_robot",
         "swift",

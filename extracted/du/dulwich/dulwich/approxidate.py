@@ -29,12 +29,13 @@ formats for specifying dates and times, including:
 - Special keywords: "now", "today", "yesterday"
 """
 
+__all__ = ["parse_approxidate", "parse_relative_time"]
+
 import time
 from datetime import datetime
-from typing import Union
 
 
-def parse_approxidate(time_spec: Union[str, bytes]) -> int:
+def parse_approxidate(time_spec: str | bytes) -> int:
     """Parse a Git approxidate specification and return a Unix timestamp.
 
     Args:
